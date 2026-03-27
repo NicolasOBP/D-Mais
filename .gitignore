@@ -3,6 +3,9 @@
 # dependencies
 node_modules/
 
+#VS Code
+mcp.json
+
 # Expo
 .expo/
 dist/
