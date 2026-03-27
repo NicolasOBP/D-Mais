@@ -52,6 +52,7 @@ const theme = createTheme({
     title: palette.blue,
     text: palette.black,
     contrastPrimary: palette.white,
+    tabBar: palette.blue,
 
     // Raw palette for direct access
     ...palette,
@@ -77,82 +78,71 @@ const theme = createTheme({
   textVariants: {
     defaults: {
       color: "text",
-      fontFamily: "Inter",
+      fontFamily: "InterRegular",
       fontSize: 16,
-      lineHeight: 22,
+      lineHeight: 18,
     },
     // Headings - 24px Bold/Extra Bold
-    heading24Bold: {
+    title24Bold: {
       fontSize: 24,
-      fontFamily: "Inter",
-      fontWeight: "900",
-      lineHeight: 28,
+      fontFamily: "InterBold",
+      lineHeight: 26,
       color: "title",
     },
-    heading24SemiBold: {
+    title24: {
       fontSize: 24,
-      fontFamily: "Inter",
-      fontWeight: "700",
-      lineHeight: 28,
+      fontFamily: "InterSemiBold",
+      lineHeight: 26,
       color: "title",
     },
-    // Body text - 16px
-    body16Regular: {
-      fontSize: 16,
-      fontFamily: "Inter",
-      fontWeight: "400",
+    title20: {
+      fontSize: 20,
+      fontFamily: "InterSemiBold",
       lineHeight: 22,
-      color: "text",
+      color: "title",
     },
-    body16Medium: {
+    title16: {
       fontSize: 16,
-      fontFamily: "Inter",
-      fontWeight: "500",
-      lineHeight: 22,
-      color: "text",
+      fontFamily: "InterSemiBold",
+      lineHeight: 18,
+      color: "title",
     },
-    body16Light: {
-      fontSize: 16,
-      fontFamily: "Inter",
-      fontWeight: "200",
-      lineHeight: 22,
-      color: "text",
-    },
-    body16Bold: {
-      fontSize: 16,
-      fontFamily: "Inter",
-      fontWeight: "700",
-      lineHeight: 22,
-      color: "text",
-    },
-    // Small text - 12px
-    body12Medium: {
+    title12: {
       fontSize: 12,
-      fontFamily: "Inter",
-      fontWeight: "500",
-      lineHeight: 15,
-      color: "text",
-    },
-    body12Bold: {
-      fontSize: 12,
-      fontFamily: "Inter",
-      fontWeight: "700",
-      lineHeight: 15,
-      color: "text",
-    },
-    // Extra small text - 10px
-    body10Bold: {
-      fontSize: 10,
-      fontFamily: "Inter",
-      fontWeight: "700",
+      fontFamily: "InterSemiBold",
       lineHeight: 14,
-      color: "text",
+      color: "title",
+    },
+
+    // Small text - 12px
+    text12: {
+      fontSize: 12,
+      lineHeight: 14,
+    },
+    text12Bold: {
+      fontSize: 12,
+      fontFamily: "InterSemiBold",
+      lineHeight: 14,
+    },
+
+    // Extra small text - 10px
+    text10: {
+      fontSize: 10,
+      lineHeight: 12,
+    },
+
+    // Tab bar text - 12px SemiBold
+    tabBar: {
+      fontSize: 12,
+      fontFamily: "InterSemiBold",
+      lineHeight: 14,
+      color: "tabBar",
     },
   },
 
   borderRadii: {
     default: 16,
-    inputField: 16,
+    inputField: 12,
     rounded: 500,
   },
 });
