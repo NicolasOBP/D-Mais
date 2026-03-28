@@ -77,65 +77,65 @@ const theme = createTheme({
 
   textVariants: {
     defaults: {
-      color: "text",
       fontFamily: "InterRegular",
       fontSize: 16,
-      lineHeight: 18,
+      lineHeight: 22,
+      color: "text",
     },
     // Headings - 24px Bold/Extra Bold
     title24Bold: {
       fontSize: 24,
       fontFamily: "InterBold",
-      lineHeight: 26,
+      lineHeight: 30,
       color: "title",
     },
     title24: {
       fontSize: 24,
       fontFamily: "InterSemiBold",
-      lineHeight: 26,
+      lineHeight: 30,
       color: "title",
     },
     title20: {
       fontSize: 20,
       fontFamily: "InterSemiBold",
-      lineHeight: 22,
+      lineHeight: 26,
       color: "title",
     },
     title16: {
       fontSize: 16,
       fontFamily: "InterSemiBold",
-      lineHeight: 18,
+      lineHeight: 22,
       color: "title",
     },
     title12: {
       fontSize: 12,
       fontFamily: "InterSemiBold",
-      lineHeight: 14,
+      lineHeight: 18,
       color: "title",
     },
 
     // Small text - 12px
     text12: {
       fontSize: 12,
-      lineHeight: 14,
+      lineHeight: 18,
     },
     text12Bold: {
       fontSize: 12,
       fontFamily: "InterSemiBold",
-      lineHeight: 14,
+      lineHeight: 18,
     },
 
     // Extra small text - 10px
     text10: {
       fontSize: 10,
-      lineHeight: 12,
+      lineHeight: 16,
     },
 
     // Tab bar text - 12px SemiBold
     tabBar: {
       fontSize: 12,
       fontFamily: "InterSemiBold",
-      lineHeight: 14,
+      lineHeight: 18,
       color: "tabBar",
     },
   },
