@@ -10,6 +10,8 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
+  const isLogedIn = false;
+
   const [loaded] = useFonts({
     InterRegular: require("../assets/fonts/Inter_18pt-Regular.ttf"),
     InterBold: require("../assets/fonts/Inter_18pt-Bold.ttf"),
@@ -20,12 +22,17 @@ export default function RootLayout() {
     return null;
   }
 
+  const initialRouteName = isLogedIn ? "(tabs)" : "SignInScreen";
+
   return (
     <ThemeProvider theme={theme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name={initialRouteName}
+          options={{ headerShown: false }}
+        />
       </Stack>
-      <StatusBar style="auto" />
+      <StatusBar style="dark" />
     </ThemeProvider>
   );
 }

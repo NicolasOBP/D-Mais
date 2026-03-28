@@ -1,10 +1,14 @@
-import { Text } from "@core-components";
-import { View } from "react-native";
+import { Screen } from "@containers";
+import { Box, Text } from "@core-components";
 
 export default function HomeScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text variant="title24Bold">Login</Text>
-    </View>
+    <Screen>
+      <Box alignItems="center">
+        <Text pt="s56" variant="title24Bold">
+          Home Screen
+        </Text>
+      </Box>
+    </Screen>
   );
 }
