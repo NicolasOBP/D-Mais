@@ -70,8 +70,12 @@ const theme = createTheme({
     s24: 24,
     s32: 32,
     s40: 40,
+    s42: 42,
+    s46: 46,
     s48: 48,
     s56: 56,
+    s62: 62,
+    s80: 80,
     default: 16,
   },
 
@@ -112,6 +116,12 @@ const theme = createTheme({
       fontFamily: "InterSemiBold",
       lineHeight: 18,
       color: "title",
+    },
+
+    // Text - 16px
+    text16Bold: {
+      fontFamily: "InterSemiBold",
+      color: "contrastPrimary",
     },
 
     // Small text - 12px
