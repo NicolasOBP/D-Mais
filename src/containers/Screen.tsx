@@ -1,7 +1,9 @@
-import { Box, BoxProps } from "@core-components";
 import { PropsWithChildren } from "react";
 import { Keyboard, Pressable, ScrollView } from "react-native";
+
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { Box, BoxProps } from "@core-components";
 
 export function Screen({
   children,

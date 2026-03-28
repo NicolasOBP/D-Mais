@@ -1,6 +1,7 @@
+import { Box, Button, Text } from "@core-components";
+
 import { LoginInput } from "@components";
 import { Screen } from "@containers";
-import { Box, Button, Text } from "@core-components";
 
 export default function SignInScreen() {
   return (

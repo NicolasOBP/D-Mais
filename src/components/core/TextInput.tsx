@@ -1,9 +1,11 @@
-import { useAppTheme } from "@theme";
 import { useRef } from "react";
 import {
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
 } from "react-native";
+
+import { useAppTheme } from "@theme";
+
 import { Box, BoxProps } from "./Box";
 import { PressableBox } from "./PressableBox";
 import { Text } from "./Text";
