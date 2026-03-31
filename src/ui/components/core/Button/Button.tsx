@@ -1,6 +1,6 @@
-import { BoxProps } from "./Box/Box";
-import { PressableBox, PressableBoxProps } from "./PressableBox";
-import { Text } from "./Text";
+import { BoxProps } from "../Box/Box";
+import { PressableBox, PressableBoxProps } from "../Box/PressableBox";
+import { Text } from "../Text/Text";
 
 type ButtonProps = PressableBoxProps & {
   lable: string;
