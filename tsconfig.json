@@ -4,9 +4,10 @@
     "baseUrl": "./",
     "strict": true,
     "paths": {
-      "@core-components": ["src/components/core"],
-      "@components": ["src/components"],
-      "@containers": ["src/containers"],
+      "@core-components": ["src/ui/components/core"],
+      "@components": ["src/ui/components"],
+      "@containers": ["src/ui/containers"],
+      "@screens": ["src/ui/screens"],
       "@theme": ["src/theme"]
     }
   },

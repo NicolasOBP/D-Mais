@@ -1,4 +1,4 @@
-import { BoxProps } from "./Box";
+import { BoxProps } from "./Box/Box";
 import { PressableBox, PressableBoxProps } from "./PressableBox";
 import { Text } from "./Text";
 

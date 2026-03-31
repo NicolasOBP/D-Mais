@@ -3,7 +3,7 @@ import { Box, Button, Text } from "@core-components";
 import { LoginInput } from "@components";
 import { Screen } from "@containers";
 
-export default function SignInScreen() {
+export function SignInScreen() {
   return (
     <Screen>
       <Box alignItems="center">

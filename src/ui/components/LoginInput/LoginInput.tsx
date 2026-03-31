@@ -1,6 +1,6 @@
 import { BoxProps } from "@core-components";
 
-import { TextInput, TextInputProps } from "./core/TextInput";
+import { TextInput, TextInputProps } from "../core/TextInput/TextInput";
 
 export function LoginInput({ placeholder }: TextInputProps) {
   const boxProps: BoxProps = {

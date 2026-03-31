@@ -6,9 +6,9 @@ import {
 
 import { useAppTheme } from "@theme";
 
-import { Box, BoxProps } from "./Box";
-import { PressableBox } from "./PressableBox";
-import { Text } from "./Text";
+import { Box, BoxProps } from "../Box/Box";
+import { PressableBox } from "../Box/PressableBox";
+import { Text } from "../Text/Text";
 
 export interface TextInputProps extends RNTextInputProps {
   label?: string;
