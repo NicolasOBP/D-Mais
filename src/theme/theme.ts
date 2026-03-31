@@ -47,6 +47,7 @@ const theme = createTheme({
 
     // Neutral/Background colors
     background: palette.white,
+    backgroundContrast: palette.black,
 
     // Text colors
     title: palette.blue,

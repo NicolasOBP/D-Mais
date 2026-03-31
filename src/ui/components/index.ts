@@ -1,1 +1,2 @@
-export * from "./LoginInput/LoginInput";
+export { IconBase } from "./Icon/Icon";
+export { PasswordInput } from "./PasswordInput/PasswordInput";

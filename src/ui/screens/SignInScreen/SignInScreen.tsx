@@ -1,8 +1,8 @@
 import { useRouter } from "expo-router";
 
-import { Box, Button, Text } from "@core-components";
+import { Box, BoxProps, Button, Text, TextInput } from "@core-components";
 
-import { LoginInput } from "@components";
+import { PasswordInput } from "@components";
 import { Screen } from "@containers";
 
 export function SignInScreen() {
@@ -24,11 +24,11 @@ export function SignInScreen() {
       </Box>
 
       <Box pt="s62" pb="s80" gap="s42">
-        <LoginInput placeholder="Empresa" />
+        <TextInput boxProps={inputStyle} placeholder="Empresa" />
 
-        <LoginInput placeholder="Usuário" />
+        <TextInput boxProps={inputStyle} placeholder="Usuário" />
 
-        <LoginInput placeholder="Senha" />
+        <PasswordInput boxProps={inputStyle} placeholder="Senha" />
       </Box>
 
       <Button
@@ -41,3 +41,10 @@ export function SignInScreen() {
     </Screen>
   );
 }
+
+const inputStyle: BoxProps = {
+  borderColor: "gray4",
+  borderRadius: "inputField",
+  borderWidth: 1,
+  padding: "s16",
+};

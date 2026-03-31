@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import {
+  Pressable,
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
 } from "react-native";
@@ -7,7 +8,6 @@ import {
 import { useAppTheme } from "@theme";
 
 import { Box, BoxProps } from "../Box/Box";
-import { PressableBox } from "../Box/PressableBox";
 import { Text } from "../Text/Text";
 
 export interface TextInputProps extends RNTextInputProps {
@@ -31,22 +31,40 @@ export function TextInput({
     inputRef.current?.focus();
   };
   return (
-    <PressableBox onPress={focusInput} {...boxProps}>
-      {label && (
-        <Text variant="title12" mb="s4">
-          {label}
-        </Text>
-      )}
+    <Box flexGrow={1} flexShrink={1} {...boxProps}>
+      <Pressable onPress={focusInput}>
+        {label && (
+          <Text variant="title12" mb="s4">
+            {label}
+          </Text>
+        )}
 
-      <RNTextInput
-        ref={inputRef}
-        autoCapitalize="none"
-        style={[textVariants.defaults, { padding: 0, margin: 0 }]}
-        placeholderTextColor={colors.gray2}
-        {...textInputProps}
-      />
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          flexGrow={1}
+          flexShrink={1}
+          alignItems="center"
+          gap="s8"
+        >
+          <RNTextInput
+            ref={inputRef}
+            autoCapitalize="none"
+            style={[
+              textVariants.defaults,
+              { padding: 0, margin: 0, flexGrow: 1, flexShrink: 1 },
+            ]}
+            placeholderTextColor={colors.gray2}
+            {...textInputProps}
+          />
 
-      {RighComponent && <Box justifyContent="center">{RighComponent}</Box>}
-    </PressableBox>
+          {RighComponent && (
+            <Box justifyContent="center" alignItems="center">
+              {RighComponent}
+            </Box>
+          )}
+        </Box>
+      </Pressable>
+    </Box>
   );
 }
