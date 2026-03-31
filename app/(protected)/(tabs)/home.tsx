@@ -1,5 +1,6 @@
-import { Screen } from "@containers";
 import { Box, Text } from "@core-components";
+
+import { Screen } from "@containers";
 
 export default function HomeScreen() {
   return (
