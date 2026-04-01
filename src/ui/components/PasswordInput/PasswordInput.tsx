@@ -1,9 +1,12 @@
 import { useState } from "react";
 
+import { useSharedValue, withTiming } from "react-native-reanimated";
+
 import { TextInput } from "@core-components";
 
 import { TextInputProps } from "../core/TextInput/TextInput";
-import { Icon } from "../Icon/Icon";
+
+import { EyeIcon } from "./components/EyeIcon";
 
 export type PasswordInputProps = Omit<
   TextInputProps,
@@ -12,8 +15,13 @@ export type PasswordInputProps = Omit<
 
 export function PasswordInput(props: PasswordInputProps) {
   const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
+  const opacityValue = useSharedValue(1);
 
   function toggleIsSecure() {
+    opacityValue.value = withTiming(isSecureTextEntry ? 0 : 1, {
+      duration: 600,
+    });
+
     setIsSecureTextEntry((prev) => !prev);
   }
 
@@ -22,12 +30,7 @@ export function PasswordInput(props: PasswordInputProps) {
       secureTextEntry={isSecureTextEntry}
       {...props}
       RighComponent={
-        <Icon
-          onPress={toggleIsSecure}
-          name={isSecureTextEntry ? "eyeOff" : "eyeOn"}
-          color="gray1"
-          size={23}
-        />
+        <EyeIcon opacityValue={opacityValue} toggleIsSecure={toggleIsSecure} />
       }
     />
   );
