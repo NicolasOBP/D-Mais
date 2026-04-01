@@ -2,9 +2,7 @@ import { useState } from "react";
 
 import { useSharedValue, withTiming } from "react-native-reanimated";
 
-import { TextInput } from "@core-components";
-
-import { TextInputProps } from "../core/TextInput/TextInput";
+import { TextInput, TextInputProps } from "@core-components";
 
 import { EyeIcon } from "./components/EyeIcon";
 

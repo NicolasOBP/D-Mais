@@ -1,4 +1,4 @@
-export { Box, BoxProps } from "./Box/Box";
-export { Button } from "./Button/Button";
-export { Text } from "./Text/Text";
-export { TextInput } from "./TextInput/TextInput";
+export * from "./Box/Box";
+export * from "./Button/Button";
+export * from "./Text/Text";
+export * from "./TextInput/TextInput";
