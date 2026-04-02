@@ -1,2 +1,2 @@
-export * from ".//PasswordInput";
 export * from "./Icon";
+export * from "./PasswordInput";
