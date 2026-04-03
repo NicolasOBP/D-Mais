@@ -1,15 +1,5 @@
-import { Box, Text } from "@core-components";
+import { HomeScreen } from "@screens";
 
-import { Screen } from "@containers";
-
-export default function HomeScreen() {
-  return (
-    <Screen>
-      <Box alignItems="center">
-        <Text pt="s56" variant="title24Bold">
-          Home Screen
-        </Text>
-      </Box>
-    </Screen>
-  );
+export default function Home() {
+  return <HomeScreen />;
 }

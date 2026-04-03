@@ -5,10 +5,10 @@ import { StatusBar } from "expo-status-bar";
 import { ThemeProvider } from "@shopify/restyle";
 
 import "react-native-reanimated";
-import theme from "src/theme/theme";
+import theme from "../src/theme/theme";
 
 const Routes = () => {
-  const auth = null;
+  const auth = true;
 
   return (
     <Stack>
