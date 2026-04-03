@@ -1,0 +1,16 @@
+import { Path, Svg } from "react-native-svg";
+
+import { IconBase } from "@components";
+
+export function HomeFillIcon({ size = 20, color = "black" }: IconBase) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 20 20" fill="none">
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M7.12305 0.724403C8.58406 -0.241466 10.4159 -0.241469 11.877 0.724403L16.791 3.97245C18.1624 4.87907 18.9999 6.50158 19 8.25077V14.9969C19 17.7597 16.9468 19.9997 14.4141 19.9998H13V16.4998C13 14.5668 11.433 12.9998 9.5 12.9998C7.567 12.9998 6 14.5668 6 16.4998V19.9998H4.58594C2.05317 19.9997 0 17.7597 0 14.9969V8.25077C0.00014307 6.50158 0.837649 4.87907 2.20898 3.97245L7.12305 0.724403Z"
+        fill={color}
+      />
+    </Svg>
+  );
+}
