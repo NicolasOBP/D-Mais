@@ -8,11 +8,6 @@ import { Screen } from "@containers";
 export function SignInScreen() {
   const { navigate } = useRouter();
 
-  function a() {
-    console.log("aasdsadaa");
-
-    navigate("/home");
-  }
   return (
     <Screen>
       <Box alignItems="center">
@@ -37,7 +32,7 @@ export function SignInScreen() {
         paddingVertical="s14"
         paddingHorizontal="s20"
         lable="Entrar"
-        onPress={a}
+        onPress={() => navigate("/home")}
       />
     </Screen>
   );

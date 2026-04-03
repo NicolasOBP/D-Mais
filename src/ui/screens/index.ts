@@ -1,2 +1,3 @@
-export { HomeScreen } from "./HomeScreen/HomeScreen";
-export { SignInScreen } from "./SignInScreen/SignInScreen";
+export * from "./HomeScreen";
+export * from "./OrderScreen";
+export * from "./SignInScreen";
