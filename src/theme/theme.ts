@@ -125,6 +125,12 @@ const theme = createTheme({
       color: "contrastPrimary",
     },
 
+    // Small text - 14px
+    text14: {
+      fontSize: 14,
+      lineHeight: 20,
+    },
+
     // Small text - 12px
     text12: {
       fontSize: 12,
@@ -134,6 +140,7 @@ const theme = createTheme({
       fontSize: 12,
       fontFamily: "InterSemiBold",
       lineHeight: 18,
+      color: "contrastPrimary",
     },
 
     // Extra small text - 10px
@@ -159,5 +166,6 @@ const theme = createTheme({
 });
 
 export type Theme = typeof theme;
+export type ThemeVariants = keyof Theme["textVariants"];
 export type ThemeColor = keyof Theme["colors"];
 export default theme;

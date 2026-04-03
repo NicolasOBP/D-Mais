@@ -14,6 +14,7 @@ export interface TextInputProps extends RNTextInputProps {
   label?: string;
   errorMessage?: string;
   RighComponent?: React.ReactElement;
+  LeftComponent?: React.ReactElement;
   boxProps?: BoxProps;
 }
 
@@ -22,6 +23,7 @@ export function TextInput({
   label,
   errorMessage,
   RighComponent,
+  LeftComponent,
   ...textInputProps
 }: TextInputProps) {
   const { textVariants, colors } = useAppTheme();
@@ -47,15 +49,22 @@ export function TextInput({
           alignItems="center"
           gap="s8"
         >
+          {LeftComponent && (
+            <Box justifyContent="center" alignItems="center">
+              {LeftComponent}
+            </Box>
+          )}
+
           <RNTextInput
             ref={inputRef}
             autoCapitalize="none"
+            placeholderTextColor={colors.gray2}
+            {...textInputProps}
             style={[
               textVariants.defaults,
               { padding: 0, margin: 0, flexGrow: 1, flexShrink: 1 },
+              textInputProps.style,
             ]}
-            placeholderTextColor={colors.gray2}
-            {...textInputProps}
           />
 
           {RighComponent && (
