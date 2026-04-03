@@ -32,6 +32,7 @@ export function SignInScreen() {
       </Box>
 
       <Button
+        variant="primary"
         marginHorizontal="s8"
         paddingVertical="s14"
         paddingHorizontal="s20"
