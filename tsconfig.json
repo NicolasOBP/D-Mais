@@ -1,14 +1,14 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "baseUrl": "./",
     "strict": true,
     "paths": {
-      "@core-components": ["src/ui/components/core"],
-      "@components": ["src/ui/components"],
-      "@containers": ["src/ui/containers"],
-      "@screens": ["src/ui/screens"],
-      "@theme": ["src/theme"]
+      "@core-components": ["./src/ui/components/core"],
+      "@components": ["./src/ui/components"],
+      "@containers": ["./src/ui/containers"],
+      "@screens": ["./src/ui/screens"],
+      "@mock-data": ["./src/data"],
+      "@theme": ["./src/theme"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
