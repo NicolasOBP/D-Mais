@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   Pressable,
   TextInput as RNTextInput,
@@ -26,6 +26,7 @@ export function TextInput({
   LeftComponent,
   ...textInputProps
 }: TextInputProps) {
+  const [absoluteTopSpacing, setAbsoluteTopSpacing] = useState(0);
   const { textVariants, colors } = useAppTheme();
   const inputRef = useRef<RNTextInput>(null);
 
@@ -33,7 +34,7 @@ export function TextInput({
     inputRef.current?.focus();
   };
   return (
-    <Box flexGrow={1} flexShrink={1} {...boxProps}>
+    <Box flexGrow={1} flexShrink={1}>
       <Pressable onPress={focusInput} hitSlop={10}>
         {label && (
           <Text variant="title12" mb="s4">
@@ -44,10 +45,10 @@ export function TextInput({
         <Box
           flexDirection="row"
           justifyContent="space-between"
-          flexGrow={1}
-          flexShrink={1}
           alignItems="center"
           gap="s8"
+          {...boxProps}
+          onLayout={(e) => setAbsoluteTopSpacing(e.nativeEvent.layout.height)}
         >
           {LeftComponent && (
             <Box justifyContent="center" alignItems="center">
@@ -73,6 +74,13 @@ export function TextInput({
             </Box>
           )}
         </Box>
+        {errorMessage && (
+          <Box position="absolute" top={absoluteTopSpacing}>
+            <Text variant="text10" color="error" ml="s10">
+              {errorMessage}
+            </Text>
+          </Box>
+        )}
       </Pressable>
     </Box>
   );

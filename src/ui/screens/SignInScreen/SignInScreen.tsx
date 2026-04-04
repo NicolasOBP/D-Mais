@@ -1,12 +1,31 @@
 import { useRouter } from "expo-router";
 
-import { Box, BoxProps, Button, Text, TextInput } from "@core-components";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import { PasswordInput } from "@components";
+import { Box, BoxProps, Button, Text } from "@core-components";
+
+import { FormTextInput } from "@components";
 import { Screen } from "@containers";
+
+import { signInSchema, SignInSchema } from "./signInSchema";
 
 export function SignInScreen() {
   const { navigate } = useRouter();
+
+  const { control, formState, handleSubmit } = useForm<SignInSchema>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      company: "",
+      user: "",
+      password: "",
+    },
+    mode: "onChange",
+  });
+
+  function onSubmit({ company, password, user }: SignInSchema) {
+    console.log({ company, password, user });
+  }
 
   return (
     <Screen>
@@ -19,11 +38,29 @@ export function SignInScreen() {
       </Box>
 
       <Box pt="s62" pb="s80" gap="s42">
-        <TextInput boxProps={inputStyle} placeholder="Empresa" />
+        <FormTextInput
+          control={control}
+          name="company"
+          boxProps={inputStyle}
+          placeholder="Empresa"
+        />
 
-        <TextInput boxProps={inputStyle} placeholder="Usuário" />
+        <FormTextInput
+          control={control}
+          name="user"
+          boxProps={inputStyle}
+          placeholder="Usuário"
+        />
 
-        <PasswordInput boxProps={inputStyle} placeholder="Senha" />
+        <FormTextInput
+          control={control}
+          name="password"
+          boxProps={inputStyle}
+          placeholder="Usuário"
+          isPassword
+        />
+
+        {/* <PasswordInput boxProps={inputStyle} placeholder="Senha" /> */}
       </Box>
 
       <Button
@@ -32,7 +69,7 @@ export function SignInScreen() {
         paddingVertical="s14"
         paddingHorizontal="s20"
         lable="Entrar"
-        onPress={() => navigate("/home")}
+        onPress={handleSubmit(onSubmit)}
       />
     </Screen>
   );
