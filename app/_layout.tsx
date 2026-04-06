@@ -5,7 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { ThemeProvider } from "@shopify/restyle";
 
 import "react-native-reanimated";
-import theme from "../src/theme/theme";
+import theme from "../src/ui/theme/theme";
 
 const Routes = () => {
   const auth = true;
