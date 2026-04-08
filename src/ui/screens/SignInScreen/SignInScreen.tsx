@@ -9,6 +9,7 @@ import { FormTextInput } from "@components";
 import { Screen } from "@containers";
 
 import { signInSchema, SignInSchema } from "./signInSchema";
+import { useSignInScreen } from "./useSignInScreen";
 
 export function SignInScreen() {
   const { navigate } = useRouter();
@@ -23,9 +24,7 @@ export function SignInScreen() {
     mode: "onChange",
   });
 
-  function onSubmit({ company, password, user }: SignInSchema) {
-    console.log({ company, password, user });
-  }
+  const { isFormValid, onSubmit } = useSignInScreen;
 
   return (
     <Screen>
@@ -62,7 +61,7 @@ export function SignInScreen() {
       </Box>
 
       <Button
-        disabled={!formState.isValid}
+        disabled={isFormValid({ formState })}
         variant="primary"
         marginHorizontal="s8"
         paddingVertical="s14"
