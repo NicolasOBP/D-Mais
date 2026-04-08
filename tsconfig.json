@@ -8,6 +8,8 @@
       "@containers": ["./src/ui/containers"],
       "@screens": ["./src/ui/screens"],
       "@mock-data": ["./src/data"],
+      "@domain": ["./src/domain"],
+      "@infra": ["./src/infra"],
       "@theme": ["./src/ui/theme"]
     }
   },
