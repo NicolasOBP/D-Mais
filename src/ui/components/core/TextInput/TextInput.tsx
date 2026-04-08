@@ -35,7 +35,7 @@ export function TextInput({
   };
   return (
     <Box flexGrow={1} flexShrink={1}>
-      <Pressable onPress={focusInput} hitSlop={10}>
+      <Pressable onPress={focusInput}>
         {label && (
           <Text variant="title12" mb="s4">
             {label}

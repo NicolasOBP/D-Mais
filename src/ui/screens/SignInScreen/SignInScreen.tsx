@@ -59,11 +59,10 @@ export function SignInScreen() {
           placeholder="Usuário"
           isPassword
         />
-
-        {/* <PasswordInput boxProps={inputStyle} placeholder="Senha" /> */}
       </Box>
 
       <Button
+        disabled={!formState.isValid}
         variant="primary"
         marginHorizontal="s8"
         paddingVertical="s14"
