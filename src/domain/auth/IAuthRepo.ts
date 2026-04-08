@@ -2,7 +2,7 @@ import { AuthUser } from "./AuthUser";
 
 export interface IAuthRepo {
   signIn: (
-    email: string,
+    company: string,
     password: string,
     userName: string,
   ) => Promise<AuthUser>;

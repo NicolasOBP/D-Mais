@@ -1,8 +1,6 @@
 // eslint-disable-next-line import/named
 import { FormState } from "react-hook-form";
 
-import { SignInSchema } from "./signInSchema";
-
 type Params = {
   formState: FormState<{
     company: string;
@@ -19,8 +17,4 @@ function isFormValid({ formState }: Params): boolean {
   );
 }
 
-function onSubmit({ company, password, user }: SignInSchema) {
-  console.log({ company, password, user });
-}
-
-export const useSignInScreen = { isFormValid, onSubmit };
+export const useSignInScreen = { isFormValid };

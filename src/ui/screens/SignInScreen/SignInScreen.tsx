@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { Box, BoxProps, Button, Text } from "@core-components";
+import { useAuthSignIn } from "@domain";
 
 import { FormTextInput } from "@components";
 import { Screen } from "@containers";
@@ -13,18 +14,31 @@ import { useSignInScreen } from "./useSignInScreen";
 
 export function SignInScreen() {
   const { navigate } = useRouter();
+  const { signIn } = useAuthSignIn({
+    onSuccess(data) {
+      console.log({ data });
+      navigate("/home");
+    },
+    onError(message) {
+      console.log({ message });
+    },
+  });
 
   const { control, formState, handleSubmit } = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       company: "",
-      user: "",
+      userName: "",
       password: "",
     },
     mode: "onChange",
   });
 
-  const { isFormValid, onSubmit } = useSignInScreen;
+  const { isFormValid } = useSignInScreen;
+
+  function onSubmit({ company, password, userName }: SignInSchema) {
+    signIn({ company, password, userName });
+  }
 
   return (
     <Screen>
@@ -46,7 +60,7 @@ export function SignInScreen() {
 
         <FormTextInput
           control={control}
-          name="user"
+          name="userName"
           boxProps={inputStyle}
           placeholder="Usuário"
         />
@@ -55,7 +69,7 @@ export function SignInScreen() {
           control={control}
           name="password"
           boxProps={inputStyle}
-          placeholder="Usuário"
+          placeholder="Senha"
           isPassword
         />
       </Box>
