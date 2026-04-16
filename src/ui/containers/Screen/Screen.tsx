@@ -1,29 +1,29 @@
 import { PropsWithChildren } from "react";
-import { Keyboard, Pressable, ScrollView } from "react-native";
+import { Keyboard, Pressable, ScrollView, View, ViewStyle } from "react-native";
 
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import { Box, BoxProps } from "@core-components";
+import { useAppTheme } from "@theme";
 
 export function Screen({
   children,
   scrollable = false,
-  ...boxProps
-}: PropsWithChildren & BoxProps & { scrollable?: boolean }) {
-  const { top } = useSafeAreaInsets();
+  ...viewProps
+}: PropsWithChildren<ViewStyle> & { scrollable?: boolean }) {
+  const { colors, spacing } = useAppTheme();
 
   function hideKeyboard() {
     Keyboard.dismiss();
   }
 
-  const Container = scrollable ? ScrollView : Box;
+  const Container = scrollable ? ScrollView : View;
+  // TODO: KEYBOARDAVOIDINGVIEW
   return (
     <Container
-      flex={1}
-      backgroundColor="background"
-      paddingHorizontal="default"
-      style={{ paddingTop: top }}
-      {...boxProps}
+      {...viewProps}
+      style={{
+        flex: 1,
+        backgroundColor: colors.background,
+        paddingHorizontal: spacing.default,
+      }}
     >
       <Pressable style={{ flex: 1 }} onPress={hideKeyboard}>
         {children}
