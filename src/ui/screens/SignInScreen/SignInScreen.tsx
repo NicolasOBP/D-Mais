@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 
 import { Box, BoxProps, Button, Text } from "@core-components";
 import { useAuthSignIn } from "@domain";
+import { useFeedbackService } from "@infra";
 
 import { FormTextInput } from "@components";
 import { Screen } from "@containers";
@@ -13,7 +14,9 @@ import { signInSchema, SignInSchema } from "./signInSchema";
 import { useSignInScreen } from "./useSignInScreen";
 
 export function SignInScreen() {
+  const { send } = useFeedbackService();
   const { navigate } = useRouter();
+
   const { signIn } = useAuthSignIn({
     onSuccess(data) {
       console.log({ data });
@@ -21,6 +24,8 @@ export function SignInScreen() {
     },
     onError(message) {
       console.log({ message });
+
+      send({ message, type: "error" });
     },
   });
 
@@ -41,9 +46,9 @@ export function SignInScreen() {
   }
 
   return (
-    <Screen>
+    <Screen scrollable>
       <Box alignItems="center">
-        <Text pt="s56" variant="title24Bold">
+        <Text pt="s46" variant="title24Bold">
           Login
         </Text>
 
