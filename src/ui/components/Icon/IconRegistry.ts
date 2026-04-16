@@ -1,3 +1,4 @@
+import { CloseIcon } from "../../../../assets/icons/CloseIcon";
 import { EyeOffIcon } from "../../../../assets/icons/EyeOffIcon";
 import { EyeOnIcon } from "../../../../assets/icons/EyeOnIcon";
 import { HomeFillIcon } from "../../../../assets/icons/HomeFillIcon";
@@ -14,6 +15,7 @@ export const iconRegistry = {
   homeFill: HomeFillIcon,
   order: OrderIcon,
   orderFill: OrderFillIcon,
+  close: CloseIcon,
 };
 
 export type IconType = typeof iconRegistry;

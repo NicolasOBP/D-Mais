@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FlatList, ListRenderItemInfo } from "react-native";
 
 import { Product, useProductsList } from "@domain";
+import { useDebounce } from "@utils";
 
 import { SearchBar } from "@components";
 import { Screen } from "@containers";
@@ -11,7 +12,8 @@ import { ProductCard } from "./components/ProductCard/ProductCard";
 export function HomeScreen() {
   const { spacing } = useAppTheme();
   const [searchText, setSearchText] = useState("");
-  const { products } = useProductsList();
+  const searchDebounced = useDebounce(searchText);
+  const { products } = useProductsList(searchDebounced);
 
   function renderItem({ item }: ListRenderItemInfo<Product>) {
     return <ProductCard id={item.id} price={item.price} title={item.title} />;

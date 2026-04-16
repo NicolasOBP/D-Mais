@@ -1,5 +1,5 @@
 import { Product } from "./ProductTypes";
 
 export interface IProductRepo {
-  list: () => Promise<Product[]>;
+  list: (searchProduct: string | null) => Promise<Product[]>;
 }

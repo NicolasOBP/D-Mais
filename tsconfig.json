@@ -10,6 +10,7 @@
       "@mock-data": ["./src/data"],
       "@domain": ["./src/domain"],
       "@infra": ["./src/infra"],
+      "@utils": ["./src/utils"],
       "@theme": ["./src/ui/theme"]
     }
   },
