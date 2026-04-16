@@ -1,10 +1,12 @@
+import { useSharedValue, withTiming } from "react-native-reanimated";
+
 import { Box, BoxProps, TextInput } from "@core-components";
 
-import { Icon } from "../Icon";
+import { SearchIconAnimation } from "./components/SearchIconAnimation";
 
 export interface SearchBarProps {
   placeholder?: string;
-  onChangeText?: (text: string) => void;
+  onChangeText: (text: string) => void;
   searchText: string;
   containerProps?: BoxProps;
 }
@@ -15,6 +17,8 @@ export function SearchBar({
   containerProps,
   searchText,
 }: SearchBarProps) {
+  const hasSearchTextValue = useSharedValue(searchText ? 1 : 0);
+
   const searchStyle: BoxProps = {
     flexDirection: "row",
     alignItems: "center",
@@ -27,13 +31,30 @@ export function SearchBar({
     gap: "s12",
   };
 
+  function handleChangeText(text: string) {
+    hasSearchTextValue.value = withTiming(text ? 1 : 0, {
+      duration: 300,
+    });
+    onChangeText(text);
+  }
+
+  function clearSearchText() {
+    onChangeText("");
+    hasSearchTextValue.value = 0;
+  }
+
   return (
     <Box {...searchStyle} {...containerProps}>
       <TextInput
-        onChangeText={onChangeText}
+        onChangeText={handleChangeText}
         value={searchText}
         placeholder={placeholder}
-        LeftComponent={<Icon name="search" color="gray1" />}
+        RighComponent={
+          <SearchIconAnimation
+            hasSearchText={hasSearchTextValue}
+            onClearPress={clearSearchText}
+          />
+        }
       />
     </Box>
   );
