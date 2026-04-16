@@ -37,22 +37,16 @@ export function TabBar({
 }: BottomTabBarProps) {
   const { boxShadow } = useAppTheme();
   return (
-    <Box
-      backgroundColor="background"
-      height={70}
-      paddingHorizontal="s16"
-      pb="s20"
-    >
+    <Box backgroundColor="background" height={50} paddingHorizontal="s16">
       <Box
         borderRadius="rounded"
         flex={1}
         borderWidth={1}
-        borderColor="gray4"
+        borderColor="gray2"
         flexDirection="row"
         alignItems="center"
         justifyContent="space-evenly"
         backgroundColor="gray5"
-        style={{ boxShadow: boxShadow.primary }}
       >
         {state.routes.map((route, index) => {
           const isFocused = state.index === index;

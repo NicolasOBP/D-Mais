@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FlatList, ListRenderItemInfo } from "react-native";
 
-import { Box } from "@core-components";
 import { Product, PRODUCTS_DATA } from "@mock-data";
 
 import { SearchBar } from "@components";
@@ -20,13 +19,11 @@ export function HomeScreen() {
 
   return (
     <Screen>
-      <Box pt="s10">
-        <SearchBar
-          placeholder="Buscar combustível"
-          onChangeText={setSearchText}
-          searchText={searchText}
-        />
-      </Box>
+      <SearchBar
+        placeholder="Buscar combustível"
+        onChangeText={setSearchText}
+        searchText={searchText}
+      />
 
       <FlatList
         data={PRODUCTS_DATA}

@@ -42,6 +42,7 @@ function useBehavior() {
       showListener.remove();
       hideListener.remove();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return behaviour;
