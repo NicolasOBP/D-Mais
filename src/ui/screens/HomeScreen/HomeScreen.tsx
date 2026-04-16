@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { FlatList, ListRenderItemInfo } from "react-native";
 
-import { Product, PRODUCTS_DATA } from "@mock-data";
+import { Product, useProductsList } from "@domain";
 
 import { SearchBar } from "@components";
 import { Screen } from "@containers";
 import { useAppTheme } from "@theme";
 
 import { ProductCard } from "./components/ProductCard/ProductCard";
-
 export function HomeScreen() {
   const { spacing } = useAppTheme();
   const [searchText, setSearchText] = useState("");
+  const { products } = useProductsList();
 
   function renderItem({ item }: ListRenderItemInfo<Product>) {
     return <ProductCard id={item.id} price={item.price} title={item.title} />;
@@ -26,7 +26,7 @@ export function HomeScreen() {
       />
 
       <FlatList
-        data={PRODUCTS_DATA}
+        data={products}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={{
