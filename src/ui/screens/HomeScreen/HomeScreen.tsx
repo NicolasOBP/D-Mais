@@ -23,7 +23,7 @@ export function HomeScreen() {
   useScrollToTop(flatListRef);
 
   function onAddCart() {
-    showModal();
+    showModal({ title: "Litros" });
   }
 
   function renderItem({ item }: ListRenderItemInfo<Product>) {

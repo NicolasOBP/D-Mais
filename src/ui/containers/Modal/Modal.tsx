@@ -1,68 +1,71 @@
 import { useEffect } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 
 import Animated, {
-  useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
-  withDelay,
   withTiming,
 } from "react-native-reanimated";
 
 import { Box } from "@core-components";
 
+import { ModalBody } from "./components/ModalBody";
+import { ModalFooter } from "./components/ModalFooter";
+import { ModalHeader } from "./components/ModalHeader";
 import { useModal } from "./useModal";
+import { useModalAnimations } from "./useModalAnimations";
 
 const DURATION = 600;
 
 export function Modal() {
-  const { isModalOpen, closeModal } = useModal();
-
+  const { modal, closeModal } = useModal();
   const modalOpen = useSharedValue(false);
   const progress = useDerivedValue(() =>
     withTiming(Number(!modalOpen.value), { duration: DURATION }),
   );
 
-  const backdropAnimatedStyle = useAnimatedStyle(() => ({
-    zIndex: modalOpen.value
-      ? 1
-      : withDelay(DURATION, withTiming(-1, { duration: 0 })),
-    opacity: 1 - progress.value,
-  }));
+  const { backdropAnimatedStyle, modalAnimatedStyle } = useModalAnimations({
+    DURATION,
+    modalOpen,
+    progress,
+  });
 
   useEffect(() => {
-    if (isModalOpen || modalOpen.value) {
+    if (modal.isModalOpen || modalOpen.value) {
       modalOpen.value = !modalOpen.value;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isModalOpen]);
+  }, [modal.isModalOpen]);
 
   return (
     <Animated.View style={[styles.backdrop, backdropAnimatedStyle]}>
-      <TouchableOpacity
+      <Pressable
         onPress={closeModal}
-        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
       >
-        <Box
-          backgroundColor="carrot"
-          justifyContent="center"
-          alignItems="center"
-          width={200}
-          height={200}
-        />
-      </TouchableOpacity>
+        <Animated.View style={modalAnimatedStyle}>
+          <Box
+            p="s16"
+            borderRadius="default"
+            backgroundColor="background"
+            justifyContent="space-between"
+            style={{ width: "100%", height: "100%" }}
+          >
+            <ModalHeader title={modal.title} />
+
+            <ModalBody />
+
+            <ModalFooter />
+          </Box>
+        </Animated.View>
+      </Pressable>
     </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-  sheet: {
-    position: "absolute",
-    width: "100%",
-    bottom: 0,
-  },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
   },
 });
