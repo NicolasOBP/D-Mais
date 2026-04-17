@@ -40,7 +40,9 @@ export function SearchBar({
 
   function clearSearchText() {
     onChangeText("");
-    hasSearchTextValue.value = 0;
+    hasSearchTextValue.value = withTiming(0, {
+      duration: 300,
+    });
   }
 
   return (
