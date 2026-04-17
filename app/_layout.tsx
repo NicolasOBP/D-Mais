@@ -13,7 +13,7 @@ import {
   ToastFeedback,
 } from "@infra";
 
-import { WrapperApp } from "@containers";
+import { Modal, WrapperApp } from "@containers";
 
 import theme from "../src/ui/theme/theme";
 
@@ -50,6 +50,7 @@ export default function RootLayout() {
         <ThemeProvider theme={theme}>
           <FeedbackProvider value={ToastFeedback}>
             <WrapperApp>
+              <Modal />
               <Routes />
               <StatusBar style="dark" translucent />
             </WrapperApp>
