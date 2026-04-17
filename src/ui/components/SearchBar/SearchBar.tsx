@@ -19,18 +19,6 @@ export function SearchBar({
 }: SearchBarProps) {
   const hasSearchTextValue = useSharedValue(searchText ? 1 : 0);
 
-  const searchStyle: BoxProps = {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: "s16",
-    paddingVertical: "s12",
-    borderRadius: "inputField",
-    backgroundColor: "background",
-    borderWidth: 1,
-    borderColor: "gray4",
-    gap: "s12",
-  };
-
   function handleChangeText(text: string) {
     hasSearchTextValue.value = withTiming(text ? 1 : 0, {
       duration: 300,
@@ -46,7 +34,7 @@ export function SearchBar({
   }
 
   return (
-    <Box {...searchStyle} {...containerProps}>
+    <Box {...containerProps}>
       <TextInput
         onChangeText={handleChangeText}
         value={searchText}

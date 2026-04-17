@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { Box, BoxProps, Button, Text } from "@core-components";
+import { Box, Button, Text } from "@core-components";
 import { useAuthSignIn } from "@domain";
 import { useFeedbackService } from "@infra";
 
@@ -56,24 +56,17 @@ export function SignInScreen() {
       </Box>
 
       <Box pt="s62" pb="s80" gap="s42">
-        <FormTextInput
-          control={control}
-          name="company"
-          boxProps={inputStyle}
-          placeholder="Empresa"
-        />
+        <FormTextInput control={control} name="company" placeholder="Empresa" />
 
         <FormTextInput
           control={control}
           name="userName"
-          boxProps={inputStyle}
           placeholder="Usuário"
         />
 
         <FormTextInput
           control={control}
           name="password"
-          boxProps={inputStyle}
           placeholder="Senha"
           isPassword
         />
@@ -91,10 +84,3 @@ export function SignInScreen() {
     </Screen>
   );
 }
-
-const inputStyle: BoxProps = {
-  borderColor: "gray4",
-  borderRadius: "inputField",
-  borderWidth: 1,
-  padding: "s16",
-};

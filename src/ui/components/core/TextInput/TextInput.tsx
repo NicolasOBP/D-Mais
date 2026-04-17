@@ -10,12 +10,15 @@ import { useAppTheme } from "@theme";
 import { Box, BoxProps } from "../Box/Box";
 import { Text } from "../Text/Text";
 
+import { textInputVariant, TextInputVariant } from "./TextInputVariant";
+
 export interface TextInputProps extends RNTextInputProps {
   label?: string;
   errorMessage?: string;
   RighComponent?: React.ReactElement;
   LeftComponent?: React.ReactElement;
   boxProps?: BoxProps;
+  variant?: TextInputVariant;
 }
 
 export function TextInput({
@@ -24,11 +27,14 @@ export function TextInput({
   errorMessage,
   RighComponent,
   LeftComponent,
+  variant = "primary",
   ...textInputProps
 }: TextInputProps) {
   const [absoluteTopSpacing, setAbsoluteTopSpacing] = useState(0);
   const { textVariants, colors } = useAppTheme();
   const inputRef = useRef<RNTextInput>(null);
+
+  const inputVariant = textInputVariant[variant];
 
   const focusInput = () => {
     inputRef.current?.focus();
@@ -48,6 +54,7 @@ export function TextInput({
           alignItems="center"
           gap="s8"
           {...boxProps}
+          {...inputVariant}
           onLayout={(e) => setAbsoluteTopSpacing(e.nativeEvent.layout.height)}
         >
           {LeftComponent && (
