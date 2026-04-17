@@ -1,5 +1,8 @@
-import { useState } from "react";
-import { FlatList, ListRenderItemInfo, RefreshControl } from "react-native";
+import { useRef, useState } from "react";
+import { ListRenderItemInfo, RefreshControl } from "react-native";
+
+import { useScrollToTop } from "@react-navigation/native";
+import Animated, { LinearTransition } from "react-native-reanimated";
 
 import { Product, useProductsList } from "@domain";
 import { useDebounce } from "@utils";
@@ -15,6 +18,9 @@ export function HomeScreen() {
   const searchDebounced = useDebounce(searchText);
   const { products, isLoading, refetch } = useProductsList(searchDebounced);
   const { showModal } = useModal();
+  const flatListRef = useRef(null);
+
+  useScrollToTop(flatListRef);
 
   function onAddCart() {
     showModal();
@@ -39,7 +45,7 @@ export function HomeScreen() {
         searchText={searchText}
       />
 
-      <FlatList
+      <Animated.FlatList
         data={products}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
@@ -52,6 +58,8 @@ export function HomeScreen() {
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={refetch} />
         }
+        itemLayoutAnimation={LinearTransition.duration(500)}
+        ref={flatListRef}
       />
     </Screen>
   );
