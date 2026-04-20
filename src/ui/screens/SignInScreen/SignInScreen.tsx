@@ -6,12 +6,12 @@ import { useForm } from "react-hook-form";
 import { Box, Button, Text } from "@core-components";
 import { useAuthSignIn } from "@domain";
 import { useFeedbackService } from "@infra";
+import { isFormValid } from "@utils";
 
 import { FormTextInput } from "@components";
 import { Screen } from "@containers";
 
 import { signInSchema, SignInSchema } from "./signInSchema";
-import { useSignInScreen } from "./useSignInScreen";
 
 export function SignInScreen() {
   const { send } = useFeedbackService();
@@ -38,8 +38,6 @@ export function SignInScreen() {
     },
     mode: "onChange",
   });
-
-  const { isFormValid } = useSignInScreen;
 
   function onSubmit({ company, password, userName }: SignInSchema) {
     signIn({ company, password, userName });
