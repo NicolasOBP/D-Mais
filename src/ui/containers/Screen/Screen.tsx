@@ -1,5 +1,7 @@
 import { PropsWithChildren } from "react";
-import { Keyboard, Pressable, ScrollView, View, ViewStyle } from "react-native";
+import { Pressable, ScrollView, View, ViewStyle } from "react-native";
+
+import { useHideKeyboard } from "@utils";
 
 import { useAppTheme } from "@theme";
 
@@ -10,12 +12,8 @@ export function Screen({
 }: PropsWithChildren<ViewStyle> & { scrollable?: boolean }) {
   const { colors, spacing } = useAppTheme();
 
-  function hideKeyboard() {
-    Keyboard.dismiss();
-  }
-
   const Container = scrollable ? ScrollView : View;
-  // TODO: KEYBOARDAVOIDINGVIEW
+
   return (
     <Container
       {...viewProps}
@@ -25,7 +23,7 @@ export function Screen({
         paddingHorizontal: spacing.default,
       }}
     >
-      <Pressable style={{ flex: 1 }} onPress={hideKeyboard}>
+      <Pressable style={{ flex: 1 }} onPress={useHideKeyboard}>
         {children}
       </Pressable>
     </Container>
