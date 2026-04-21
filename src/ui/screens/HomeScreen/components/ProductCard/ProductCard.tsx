@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { Box, BoxProps, Button, PressableBox, Text } from "@core-components";
 import { Product } from "@domain";
 
 import { useModal } from "@containers";
+import { Box, BoxProps, Button, PressableBox, Text } from "@core-components";
 
 import { ModalBody } from "../ModalContent/ModalBody";
 

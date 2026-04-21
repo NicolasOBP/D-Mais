@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 
-import { Box, Button } from "@core-components";
 import { isFormValid } from "@utils";
+
+import { Box, Button } from "@core-components";
 
 import { useModal } from "../useModal";
 

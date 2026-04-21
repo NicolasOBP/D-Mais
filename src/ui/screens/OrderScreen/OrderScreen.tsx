@@ -1,6 +1,5 @@
-import { Text } from "@core-components";
-
 import { Screen } from "@containers";
+import { Text } from "@core-components";
 
 export function OrderScreen() {
   return (

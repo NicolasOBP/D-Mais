@@ -3,13 +3,13 @@ import { useRouter } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { Box, Button, Text } from "@core-components";
 import { useAuthSignIn } from "@domain";
 import { useFeedbackService } from "@infra";
 import { isFormValid } from "@utils";
 
 import { FormTextInput } from "@components";
 import { Screen } from "@containers";
+import { Box, Button, Text } from "@core-components";
 
 import { signInSchema, SignInSchema } from "./signInSchema";
 

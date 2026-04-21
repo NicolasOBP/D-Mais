@@ -3,8 +3,6 @@ import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
 import { Box, PressableBox, Text } from "@core-components";
 
-import { useAppTheme } from "@theme";
-
 import { Icon } from "../Icon";
 import { IconNames } from "../Icon/IconRegistry";
 
@@ -29,13 +27,7 @@ const tabBarIconMap: TabBarIconMap = {
   },
 };
 
-export function TabBar({
-  descriptors,
-  insets,
-  navigation,
-  state,
-}: BottomTabBarProps) {
-  const { boxShadow } = useAppTheme();
+export function TabBar({ navigation, state }: BottomTabBarProps) {
   return (
     <Box backgroundColor="background" height={50} paddingHorizontal="s16">
       <Box

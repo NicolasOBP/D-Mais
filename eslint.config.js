@@ -26,10 +26,9 @@ module.exports = defineConfig([
               position: "before",
             },
             {
-              pattern:
-                "@+(routes|screens|components|containers|hooks|theme|shopify*)",
-              group: "internal",
-              position: "after",
+              pattern: "@+(screens|components|containers|core-components)",
+              group: "parent",
+              position: "before",
             },
             {
               pattern: "@/src/components/**",

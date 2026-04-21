@@ -5,11 +5,11 @@ import { useScrollToTop } from "@react-navigation/native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
 import { Product, useProductsList } from "@domain";
+import { useAppTheme } from "@theme";
 import { useDebounce } from "@utils";
 
 import { SearchBar } from "@components";
 import { Screen } from "@containers";
-import { useAppTheme } from "@theme";
 
 import { ProductCard } from "./components/ProductCard/ProductCard";
 

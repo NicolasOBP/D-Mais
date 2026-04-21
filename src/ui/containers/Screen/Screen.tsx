@@ -1,9 +1,8 @@
 import { PropsWithChildren } from "react";
 import { Pressable, ScrollView, View, ViewStyle } from "react-native";
 
-import { useHideKeyboard } from "@utils";
-
 import { useAppTheme } from "@theme";
+import { useHideKeyboard } from "@utils";
 
 export function Screen({
   children,

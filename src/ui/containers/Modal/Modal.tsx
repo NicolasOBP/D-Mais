@@ -7,8 +7,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { Box } from "@core-components";
 import { useHideKeyboard } from "@utils";
+
+import { Box } from "@core-components";
 
 import { ModalFooter } from "./components/ModalFooter";
 import { ModalHeader } from "./components/ModalHeader";

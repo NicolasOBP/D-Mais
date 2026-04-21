@@ -1,6 +1,5 @@
-import { Box, Text } from "@core-components";
-
 import { Icon } from "@components";
+import { Box, Text } from "@core-components";
 
 import { useModal } from "../useModal";
 
