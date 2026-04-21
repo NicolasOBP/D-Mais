@@ -71,7 +71,7 @@ export function SignInScreen() {
       </Box>
 
       <Button
-        disabled={isFormValid({ formState })}
+        disabled={isFormValid(formState)}
         variant="primary"
         marginHorizontal="s8"
         paddingVertical="s14"

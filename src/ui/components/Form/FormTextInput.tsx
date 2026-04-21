@@ -7,13 +7,16 @@ import { TextInput, TextInputProps } from "@core-components";
 
 import { PasswordInput } from "../PasswordInput";
 
+export type ControllerProps<FormType extends FieldValues> =
+  UseControllerProps<FormType>;
+
 export function FormTextInput<FormType extends FieldValues>({
   control,
   name,
   rules,
   isPassword,
   ...textInputProps
-}: TextInputProps & UseControllerProps<FormType> & { isPassword?: boolean }) {
+}: TextInputProps & ControllerProps<FormType> & { isPassword?: boolean }) {
   const InputType = isPassword ? PasswordInput : TextInput;
   return (
     <Controller

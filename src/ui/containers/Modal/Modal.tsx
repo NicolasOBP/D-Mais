@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 import Animated, {
   useDerivedValue,
@@ -9,7 +9,6 @@ import Animated, {
 
 import { Box } from "@core-components";
 
-import { ModalBody } from "./components/ModalBody";
 import { ModalFooter } from "./components/ModalFooter";
 import { ModalHeader } from "./components/ModalHeader";
 import { useModal } from "./useModal";
@@ -39,26 +38,25 @@ export function Modal() {
 
   return (
     <Animated.View style={[styles.backdrop, backdropAnimatedStyle]}>
-      <Pressable
-        onPress={closeModal}
-        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-      >
-        <Animated.View style={modalAnimatedStyle}>
-          <Box
-            p="s16"
-            borderRadius="default"
-            backgroundColor="background"
-            justifyContent="space-between"
-            style={{ width: "100%", height: "100%" }}
-          >
-            <ModalHeader title={modal.title} />
+      <Animated.View style={modalAnimatedStyle}>
+        <Box
+          p="s16"
+          borderRadius="default"
+          backgroundColor="background"
+          justifyContent="space-between"
+          style={{ width: "100%", height: "100%" }}
+        >
+          {modal.HeaderComponent ? (
+            modal.HeaderComponent
+          ) : (
+            <ModalHeader title={modal.headerTitle} />
+          )}
 
-            <ModalBody />
+          {modal.BodyComponent}
 
-            <ModalFooter />
-          </Box>
-        </Animated.View>
-      </Pressable>
+          {modal.footerButton && <ModalFooter {...modal.footerButton} />}
+        </Box>
+      </Animated.View>
     </Animated.View>
   );
 }
@@ -67,5 +65,7 @@ const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 0, 0, 0.7)",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

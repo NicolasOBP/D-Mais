@@ -1,20 +1,41 @@
 import { create } from "zustand";
 
-const initialState = { modal: { isModalOpen: false, title: "" } };
+import { ModalFooterProps } from "./components/ModalFooter";
 
-type showModalParams = Omit<(typeof initialState)["modal"], "isModalOpen">;
+type Modal = {
+  modal: {
+    isModalOpen: boolean;
+    headerTitle?: string;
+    HeaderComponent?: React.ReactElement;
+    FooterComponent?: React.ReactElement;
+    BodyComponent: React.ReactElement | undefined;
+    footerButton?: ModalFooterProps;
+  };
+};
+
+const initialState: Modal = {
+  modal: {
+    isModalOpen: false,
+    headerTitle: "",
+    HeaderComponent: undefined,
+    BodyComponent: undefined,
+    FooterComponent: undefined,
+    footerButton: undefined,
+  },
+};
+
+type ShowModalParams = Omit<Modal["modal"], "isModalOpen">;
 
 type ModalStore = typeof initialState & {
-  showModal: ({ title }: showModalParams) => void;
+  showModal: (modal: ShowModalParams) => void;
   closeModal: () => void;
-  reset: () => void;
 };
 
 export const useModal = create<ModalStore>()((set) => ({
   ...initialState,
-  closeModal: () =>
-    set((prev) => ({ modal: { ...prev.modal, isModalOpen: false } })),
-  showModal: ({ title }) =>
-    set(() => ({ modal: { isModalOpen: true, title } })),
-  reset: () => set(() => initialState),
+  closeModal: () => set(() => initialState),
+  showModal: (modal) =>
+    set(() => ({
+      modal: { isModalOpen: true, ...modal },
+    })),
 }));

@@ -5,7 +5,7 @@ import { Icon } from "@components";
 import { useModal } from "../useModal";
 
 type Props = {
-  title: string;
+  title?: string;
 };
 
 export function ModalHeader({ title }: Props) {
