@@ -11,6 +11,7 @@ type Modal = {
     BodyComponent: React.ReactElement | undefined;
     footerButton?: ModalFooterProps;
   };
+  modalData?: any;
 };
 
 const initialState: Modal = {
@@ -22,20 +23,27 @@ const initialState: Modal = {
     FooterComponent: undefined,
     footerButton: undefined,
   },
+  modalData: undefined,
 };
 
 type ShowModalParams = Omit<Modal["modal"], "isModalOpen">;
 
 type ModalStore = typeof initialState & {
-  showModal: (modal: ShowModalParams) => void;
+  showModal: (modal: ShowModalParams, modalData?: any) => void;
+  updateModalData: (modalData: any) => void;
   closeModal: () => void;
 };
 
 export const useModal = create<ModalStore>()((set) => ({
   ...initialState,
   closeModal: () => set(() => initialState),
-  showModal: (modal) =>
+  showModal: (modal, modalData) =>
     set(() => ({
       modal: { isModalOpen: true, ...modal },
+      modalData,
+    })),
+  updateModalData: (modalData) =>
+    set((state) => ({
+      modalData,
     })),
 }));

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -23,17 +25,25 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
     },
     mode: "onChange",
   });
-  const { showModal } = useModal();
+  const { showModal, updateModalData } = useModal();
+
+  useEffect(() => {
+    updateModalData({ formState });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formState]);
 
   function onAddCart() {
-    showModal({
-      headerTitle: "Litros",
-      BodyComponent: <ModalBody name="volume" control={control} />,
-      footerButton: {
-        label: "Confirmar",
-        onPress: handleSubmit(onSubmit),
+    showModal(
+      {
+        headerTitle: "Litros",
+        BodyComponent: <ModalBody name="volume" control={control} />,
+        footerButton: {
+          label: "Confirmar",
+          onPress: handleSubmit(onSubmit),
+        },
       },
-    });
+      { formState },
+    );
   }
 
   function onSubmit(data: AddCartSchema) {
