@@ -6,13 +6,9 @@ import { ThemeProvider } from "@shopify/restyle";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "react-native-reanimated";
 
-import {
-  FeedbackProvider,
-  InMemoryRepositories,
-  RepositoryProvider,
-  ToastFeedback,
-} from "@infra";
+import { InMemoryRepositories, RepositoryProvider } from "@infra";
 
+import { Toast } from "@components";
 import { Modal, WrapperApp } from "@containers";
 
 import theme from "../src/ui/theme/theme";
@@ -48,13 +44,13 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <RepositoryProvider value={InMemoryRepositories}>
         <ThemeProvider theme={theme}>
-          <FeedbackProvider value={ToastFeedback}>
-            <WrapperApp>
-              <Modal />
-              <Routes />
-              <StatusBar style="dark" translucent />
-            </WrapperApp>
-          </FeedbackProvider>
+          <WrapperApp>
+            <StatusBar style="dark" translucent />
+            <Routes />
+
+            <Modal />
+            <Toast />
+          </WrapperApp>
         </ThemeProvider>
       </RepositoryProvider>
     </QueryClientProvider>

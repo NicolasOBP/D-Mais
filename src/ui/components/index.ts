@@ -3,3 +3,4 @@ export * from "./Icon";
 export * from "./PasswordInput";
 export * from "./SearchBar";
 export * from "./TabBar";
+export * from "./Toast";

@@ -4,30 +4,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { useAuthSignIn } from "@domain";
-import { useFeedbackService } from "@infra";
 import { isFormValid } from "@utils";
 
-import { FormTextInput } from "@components";
+import { FormTextInput, useToast } from "@components";
 import { Screen } from "@containers";
 import { Box, Button, Text } from "@core-components";
 
 import { signInSchema, SignInSchema } from "./signInSchema";
 
 export function SignInScreen() {
-  const { send } = useFeedbackService();
   const { navigate } = useRouter();
-
-  const { signIn } = useAuthSignIn({
-    onSuccess(data) {
-      console.log({ data });
-      navigate("/home");
-    },
-    onError(message) {
-      console.log({ message });
-
-      send({ message, type: "error" });
-    },
-  });
+  const { showToast } = useToast();
 
   const { control, formState, handleSubmit } = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
@@ -37,6 +24,16 @@ export function SignInScreen() {
       password: "",
     },
     mode: "onChange",
+  });
+
+  const { signIn } = useAuthSignIn({
+    onSuccess(data) {
+      console.log({ data });
+      navigate("/home");
+    },
+    onError(message) {
+      showToast({ message: message, type: "success" });
+    },
   });
 
   function onSubmit({ company, password, userName }: SignInSchema) {
