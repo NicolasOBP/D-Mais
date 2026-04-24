@@ -16,7 +16,7 @@ import { ModalHeader } from "./components/ModalHeader";
 import { useModal } from "./useModal";
 import { useModalAnimations } from "./useModalAnimations";
 
-const DURATION = 600;
+const DURATION = 1000;
 
 export function Modal() {
   const { modal } = useModal();
