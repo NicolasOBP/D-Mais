@@ -1,5 +1,5 @@
 export type AuthUser = {
-  nome: string;
+  name: string;
   email: string;
   id: string;
   company: string;

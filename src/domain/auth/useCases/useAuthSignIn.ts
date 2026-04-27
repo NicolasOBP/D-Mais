@@ -41,7 +41,10 @@ export function useAuthSignIn(options?: MutationOptions<AuthUser>) {
     },
 
     onSuccess: (authCredentials) => {
-      console.log({ authCredentials });
+      showToast({
+        message: `Bem vindo ${authCredentials.name}`,
+        type: "success",
+      });
       navigate("/home");
 
       if (options?.onSuccess) {
