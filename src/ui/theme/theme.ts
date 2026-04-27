@@ -19,12 +19,14 @@ const palette = {
   carrotLight: "#FAE6DD",
 
   // Success
-  green: "#4ABC86",
-  lightGreen: "#D8FFEC",
+  green: "#008d4b",
+  darkGreen: "#013b1f",
+  lightGreen: "#4abc87dd",
 
   // Error
-  red: "#EA3838",
-  lightRed: "#FBECEC",
+  red: "#ff0000",
+  darkRed: "#7e0000",
+  lightRed: "#ff0000a5",
 
   transparent: "transparent",
 };
@@ -41,8 +43,11 @@ const theme = createTheme({
 
     // Status colors
     success: palette.green,
+    successText: palette.darkGreen,
     successLight: palette.lightGreen,
+
     error: palette.red,
+    errorText: palette.darkRed,
     errorLight: palette.lightRed,
 
     // Neutral/Background colors

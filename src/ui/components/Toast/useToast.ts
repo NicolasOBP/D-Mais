@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type ToastTypes = "success" | "error";
+export type ToastTypes = "success" | "error";
 
 type Toast = {
   message: string;

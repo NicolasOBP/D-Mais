@@ -1,21 +1,16 @@
-import { useRouter } from "expo-router";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { useAuthSignIn } from "@domain";
 import { isFormValid } from "@utils";
 
-import { FormTextInput, useToast } from "@components";
+import { FormTextInput } from "@components";
 import { Screen } from "@containers";
 import { Box, Button, Text } from "@core-components";
 
 import { signInSchema, SignInSchema } from "./signInSchema";
 
 export function SignInScreen() {
-  const { navigate } = useRouter();
-  const { showToast } = useToast();
-
   const { control, formState, handleSubmit } = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -26,15 +21,7 @@ export function SignInScreen() {
     mode: "onChange",
   });
 
-  const { signIn } = useAuthSignIn({
-    onSuccess(data) {
-      console.log({ data });
-      navigate("/home");
-    },
-    onError(message) {
-      showToast({ message: message, type: "success" });
-    },
-  });
+  const { signIn } = useAuthSignIn();
 
   function onSubmit({ company, password, userName }: SignInSchema) {
     signIn({ company, password, userName });
