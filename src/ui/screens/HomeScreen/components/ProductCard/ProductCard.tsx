@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { Product } from "@domain";
+import { Product, useCartAdd } from "@domain";
 
 import { useModal } from "@containers";
 import { Box, BoxProps, Button, PressableBox, Text } from "@core-components";
@@ -25,7 +25,12 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
     },
     mode: "onChange",
   });
-  const { showModal, updateModalData } = useModal();
+  const { showModal, updateModalData, closeModal } = useModal();
+  const { addCart } = useCartAdd({
+    onSuccess: () => {
+      closeModal();
+    },
+  });
 
   useEffect(() => {
     updateModalData({ formState });
@@ -46,8 +51,10 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
     );
   }
 
-  function onSubmit(data: AddCartSchema) {
-    console.log({ data });
+  function onSubmit({ volume }: AddCartSchema) {
+    const volumeNumber = Number.parseInt(volume);
+
+    addCart({ ...product, volume: volumeNumber });
   }
 
   return (
