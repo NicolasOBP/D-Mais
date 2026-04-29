@@ -18,6 +18,11 @@ export function useCartAdd(options?: MutationOptions<ProductCart>) {
     mutationFn: (prod) => cart.add(prod),
     retry: false,
     onSuccess: (prod) => {
+      showToast({
+        type: "success",
+        message: "Produto adicionado ao carrinho!",
+        duration: 1000,
+      });
       console.log(`foi com`, { prod });
 
       options?.onSuccess?.(prod);

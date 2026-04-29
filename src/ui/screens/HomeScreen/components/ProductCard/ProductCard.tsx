@@ -28,6 +28,7 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
   const { showModal, updateModalData, closeModal } = useModal();
   const { addCart } = useCartAdd({
     onSuccess: () => {
+      reset();
       closeModal();
     },
   });
