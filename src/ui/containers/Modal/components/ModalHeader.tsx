@@ -8,7 +8,12 @@ type Props = {
 };
 
 export function ModalHeader({ title }: Props) {
-  const { closeModal } = useModal();
+  const { closeModal, modalData } = useModal();
+
+  function handleClose() {
+    modalData?.reset?.();
+    closeModal();
+  }
 
   return (
     <Box alignItems="center" justifyContent="space-between" flexDirection="row">
@@ -17,7 +22,7 @@ export function ModalHeader({ title }: Props) {
         <Text variant="title20">{title}</Text>
       </Box>
       <Box>
-        <Icon name="close" color="primary" onPress={closeModal} />
+        <Icon name="close" color="primary" onPress={handleClose} />
       </Box>
     </Box>
   );

@@ -18,7 +18,7 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({ product, containerProps }: ProductCardProps) {
-  const { control, handleSubmit, formState } = useForm<AddCartSchema>({
+  const { control, handleSubmit, formState, reset } = useForm<AddCartSchema>({
     resolver: zodResolver(addCartSchema),
     defaultValues: {
       volume: "",
@@ -47,7 +47,7 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
           onPress: handleSubmit(onSubmit),
         },
       },
-      { formState },
+      { formState, reset },
     );
   }
 

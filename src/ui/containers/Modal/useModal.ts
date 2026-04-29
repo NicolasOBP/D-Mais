@@ -44,6 +44,6 @@ export const useModal = create<ModalStore>()((set) => ({
     })),
   updateModalData: (modalData) =>
     set((state) => ({
-      modalData,
+      modalData: { ...state.modalData, ...modalData },
     })),
 }));
