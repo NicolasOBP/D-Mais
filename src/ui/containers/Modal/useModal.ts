@@ -26,7 +26,7 @@ const initialState: Modal = {
   modalData: undefined,
 };
 
-type ShowModalParams = Omit<Modal["modal"], "isModalOpen">;
+export type ShowModalParams = Omit<Modal["modal"], "isModalOpen">;
 
 type ModalStore = typeof initialState & {
   showModal: (modal: ShowModalParams, modalData?: any) => void;

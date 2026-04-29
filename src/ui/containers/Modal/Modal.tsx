@@ -15,6 +15,7 @@ import { ModalFooter } from "./components/ModalFooter";
 import { ModalHeader } from "./components/ModalHeader";
 import { useModal } from "./useModal";
 import { useModalAnimations } from "./useModalAnimations";
+import { validateModalState } from "./useModalError";
 
 const DURATION = 1000;
 
@@ -33,6 +34,8 @@ export function Modal() {
 
   useEffect(() => {
     if (modal.isModalOpen || modalOpen.value) {
+      validateModalState(modal);
+
       modalOpen.value = !modalOpen.value;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
