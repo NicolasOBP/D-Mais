@@ -1,6 +1,6 @@
 import { Cart, ICartRepo, ProductCart } from "@domain";
 
-let InnerCart: Cart = { cartProducts: [], totalPrice: 0, totalItems: 99 };
+let InnerCart: Cart = { cartProducts: [], totalPrice: 0, totalItems: 0 };
 
 export class InMemoryCartRepo implements ICartRepo {
   async add(product: ProductCart): Promise<ProductCart> {
