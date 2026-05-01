@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { MutationOptions, useRepository } from "@infra";
+import { MutationOptions, QueryKeys, useRepository } from "@infra";
 
 import { useToast } from "@components";
 
@@ -9,6 +9,7 @@ import { ProductCart } from "..";
 export function useCartAdd(options?: MutationOptions<ProductCart>) {
   const { cart } = useRepository();
   const { showToast } = useToast();
+  const queryClient = useQueryClient();
 
   const { mutate, isError, isSuccess, isPending } = useMutation<
     ProductCart,
@@ -23,6 +24,7 @@ export function useCartAdd(options?: MutationOptions<ProductCart>) {
         message: "Produto adicionado ao carrinho!",
         duration: 1000,
       });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.NumberCart] });
       console.log(`foi com`, { prod });
 
       options?.onSuccess?.(prod);

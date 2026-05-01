@@ -7,4 +7,5 @@ export interface ProductCart extends Product {
 export type Cart = {
   totalPrice: number;
   cartProducts: (ProductCart & { cartId: number })[];
+  totalItems: number;
 };
