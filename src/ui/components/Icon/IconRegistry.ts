@@ -1,3 +1,5 @@
+import { CartFillIcon } from "../../../../assets/icons/CartFillIcon";
+import { CartIcon } from "../../../../assets/icons/CartIcon";
 import { CloseIcon } from "../../../../assets/icons/CloseIcon";
 import { EyeOffIcon } from "../../../../assets/icons/EyeOffIcon";
 import { EyeOnIcon } from "../../../../assets/icons/EyeOnIcon";
@@ -16,6 +18,8 @@ export const iconRegistry = {
   order: OrderIcon,
   orderFill: OrderFillIcon,
   close: CloseIcon,
+  cart: CartIcon,
+  cartFill: CartFillIcon,
 };
 
 export type IconType = typeof iconRegistry;

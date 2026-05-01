@@ -6,6 +6,8 @@ import { Box, PressableBox, Text } from "@core-components";
 import { Icon } from "../Icon";
 import { IconNames } from "../Icon/IconRegistry";
 
+import { TabBadge } from "./components/TabBadge";
+
 type TabBarIconMap = {
   [key: string]: {
     iconUnfocus: IconNames;
@@ -25,9 +27,14 @@ const tabBarIconMap: TabBarIconMap = {
     iconUnfocus: "order",
     label: "Pedidos",
   },
+  cart: {
+    iconFocus: "cartFill",
+    iconUnfocus: "cart",
+    label: "Carrinho",
+  },
 };
 
-export function TabBar({ navigation, state }: BottomTabBarProps) {
+export function TabBar({ navigation, state, descriptors }: BottomTabBarProps) {
   return (
     <Box backgroundColor="background" height={50} paddingHorizontal="s16">
       <Box
@@ -44,6 +51,8 @@ export function TabBar({ navigation, state }: BottomTabBarProps) {
           const isFocused = state.index === index;
           const { iconFocus, iconUnfocus, label } = tabBarIconMap[route.name];
 
+          const tabBadgeNumber = descriptors[route.key].options.tabBarBadge;
+
           function onPress() {
             const event = navigation.emit({
               type: "tabPress",
@@ -58,6 +67,7 @@ export function TabBar({ navigation, state }: BottomTabBarProps) {
 
           return (
             <PressableBox key={route.key} alignItems="center" onPress={onPress}>
+              <TabBadge number={tabBadgeNumber} />
               <Icon
                 name={isFocused ? iconFocus : iconUnfocus}
                 color="primary"
