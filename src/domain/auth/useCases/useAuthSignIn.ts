@@ -1,5 +1,3 @@
-import { useRouter } from "expo-router";
-
 import { useMutation } from "@tanstack/react-query";
 
 import { MutationOptions, useRepository } from "@infra";
@@ -16,7 +14,6 @@ interface Variables {
 
 export function useAuthSignIn(options?: MutationOptions<AuthUser>) {
   const { auth } = useRepository();
-  const { navigate } = useRouter();
   const { showToast } = useToast();
 
   const { mutate, isError, isSuccess, isPending } = useMutation<
@@ -45,7 +42,6 @@ export function useAuthSignIn(options?: MutationOptions<AuthUser>) {
         message: `Bem vindo ${authCredentials.name}`,
         type: "success",
       });
-      navigate("/home");
 
       if (options?.onSuccess) {
         options.onSuccess(authCredentials);

@@ -1,3 +1,5 @@
+import { router } from "expo-router";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -21,7 +23,11 @@ export function SignInScreen() {
     mode: "onChange",
   });
 
-  const { signIn } = useAuthSignIn();
+  const { signIn } = useAuthSignIn({
+    onSuccess: () => {
+      router.navigate("/home");
+    },
+  });
 
   function onSubmit({ company, password, userName }: SignInSchema) {
     signIn({ company, password, userName });
