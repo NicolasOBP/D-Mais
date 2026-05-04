@@ -11,6 +11,7 @@ import { useDebounce } from "@utils";
 import { SearchBar } from "@components";
 import { Screen } from "@containers";
 
+import { EmptyComponent } from "./components/EmptyComponent";
 import { ProductCard } from "./components/ProductCard/ProductCard";
 
 export function HomeScreen() {
@@ -50,6 +51,7 @@ export function HomeScreen() {
         }
         itemLayoutAnimation={LinearTransition.duration(500)}
         ref={flatListRef}
+        ListEmptyComponent={<EmptyComponent />}
       />
     </Screen>
   );
