@@ -1,6 +1,7 @@
-import { ProductCart } from "./CartTypes";
+import { Cart, ProductCart, ProductCartVariables } from "./CartTypes";
 
 export interface ICartRepo {
-  add: (product: ProductCart) => Promise<ProductCart>;
+  add: (product: ProductCartVariables) => Promise<ProductCart>;
   totalItems: () => Promise<number | null>;
+  getCart: () => Promise<Cart>;
 }
