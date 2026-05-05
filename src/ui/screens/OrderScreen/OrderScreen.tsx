@@ -1,10 +1,10 @@
+import { ScreenHeader } from "@components";
 import { Screen } from "@containers";
-import { Text } from "@core-components";
 
 export function OrderScreen() {
   return (
     <Screen>
-      <Text variant="title24">Pedidos</Text>
+      <ScreenHeader title="Pedidos" />
     </Screen>
   );
 }
