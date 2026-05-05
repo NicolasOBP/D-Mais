@@ -167,6 +167,7 @@ const theme = createTheme({
   borderRadii: {
     default: 16,
     inputField: 12,
+    checkbox: 8,
     rounded: 999,
   },
 

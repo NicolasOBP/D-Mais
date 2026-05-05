@@ -1,10 +1,5 @@
-import { Screen } from "@containers";
-import { Text } from "@core-components";
+import { CartScreen } from "@screens";
 
 export default function Cart() {
-  return (
-    <Screen>
-      <Text>tela carrinho</Text>
-    </Screen>
-  );
+  return <CartScreen />;
 }
