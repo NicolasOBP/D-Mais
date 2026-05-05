@@ -1,4 +1,4 @@
-import { Pressable } from "react-native";
+import { Pressable, ViewStyle } from "react-native";
 
 import { ThemeColor, useAppTheme } from "@theme";
 
@@ -16,6 +16,7 @@ export interface IconProps {
   fillColor?: ThemeColor;
   size?: number;
   onPress?: () => void;
+  style?: ViewStyle;
 }
 
 export function Icon({
@@ -24,6 +25,7 @@ export function Icon({
   fillColor = "transparent",
   onPress,
   size,
+  style,
 }: IconProps) {
   const SVGIcon = iconRegistry[name];
   const { colors } = useAppTheme();
@@ -36,7 +38,7 @@ export function Icon({
 
   if (onPress) {
     return (
-      <Pressable onPress={onPress} hitSlop={10}>
+      <Pressable onPress={onPress} hitSlop={10} style={style}>
         <SVGIcon {...iconProps} />
       </Pressable>
     );

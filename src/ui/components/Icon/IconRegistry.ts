@@ -1,3 +1,4 @@
+import { ArrowLeftIcon } from "../../../../assets/icons/ArrowLeftIcon";
 import { CartFillIcon } from "../../../../assets/icons/CartFillIcon";
 import { CartIcon } from "../../../../assets/icons/CartIcon";
 import { CloseIcon } from "../../../../assets/icons/CloseIcon";
@@ -20,6 +21,7 @@ export const iconRegistry = {
   close: CloseIcon,
   cart: CartIcon,
   cartFill: CartFillIcon,
+  arrowLeft: ArrowLeftIcon,
 };
 
 export type IconType = typeof iconRegistry;
