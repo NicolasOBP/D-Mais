@@ -1,9 +1,9 @@
-import { Cart, ICartRepo, ProductCart } from "@domain";
+import { Cart, ICartRepo, ProductCart, ProductCartVariables } from "@domain";
 
 let InnerCart: Cart = { cartProducts: [], totalPrice: 0, totalItems: 0 };
 
 export class InMemoryCartRepo implements ICartRepo {
-  async add(product: ProductCart): Promise<ProductCart> {
+  async add(product: ProductCartVariables): Promise<ProductCart> {
     const productCart = { ...product, cartId: InnerCart.cartProducts.length };
 
     InnerCart.cartProducts.push(productCart);
@@ -18,5 +18,8 @@ export class InMemoryCartRepo implements ICartRepo {
   }
   async totalItems(): Promise<number | null> {
     return InnerCart.totalItems > 0 ? InnerCart.totalItems : null;
+  }
+  async getCart(): Promise<Cart> {
+    return InnerCart;
   }
 }

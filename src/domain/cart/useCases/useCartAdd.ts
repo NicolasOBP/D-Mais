@@ -4,7 +4,7 @@ import { MutationOptions, QueryKeys, useRepository } from "@infra";
 
 import { useToast } from "@components";
 
-import { ProductCart } from "..";
+import { ProductCart, ProductCartVariables } from "..";
 
 export function useCartAdd(options?: MutationOptions<ProductCart>) {
   const { cart } = useRepository();
@@ -14,7 +14,7 @@ export function useCartAdd(options?: MutationOptions<ProductCart>) {
   const { mutate, isError, isSuccess, isPending } = useMutation<
     ProductCart,
     Error,
-    ProductCart
+    ProductCartVariables
   >({
     mutationFn: (prod) => cart.add(prod),
     retry: false,
@@ -24,8 +24,12 @@ export function useCartAdd(options?: MutationOptions<ProductCart>) {
         message: "Produto adicionado ao carrinho!",
         duration: 1000,
       });
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.NumberCart] });
-      console.log(`foi com`, { prod });
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.NumberCart],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.CartList],
+      });
 
       options?.onSuccess?.(prod);
     },
@@ -38,7 +42,7 @@ export function useCartAdd(options?: MutationOptions<ProductCart>) {
   });
 
   return {
-    addCart: (prod: ProductCart) => mutate(prod),
+    addCart: (prod: ProductCartVariables) => mutate(prod),
     isError,
     isSuccess,
     isPending,
