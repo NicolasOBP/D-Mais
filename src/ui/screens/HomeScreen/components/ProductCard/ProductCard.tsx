@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { Product, useCartAdd } from "@domain";
+import { useNumberFormat } from "@utils";
 
 import { useModal } from "@containers";
 import { Box, BoxProps, Button, PressableBox, Text } from "@core-components";
@@ -64,7 +65,7 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
         <Text>{product.title}</Text>
 
         <Text variant="text14" color="gray2" pb="s24">
-          Preço por litro R$ {product.price.toFixed(2)}
+          Preço por litro {useNumberFormat.toBRLCurrency(product.price)}
         </Text>
 
         <Button
