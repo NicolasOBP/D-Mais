@@ -20,6 +20,8 @@ import theme from "../../theme/theme";
 import { toastVariants } from "./toastVariants";
 import { useToast } from "./useToast";
 
+const TOP_OFFSET = 35;
+
 export function Toast() {
   const { colors } = useAppTheme();
   const { toast, closeToast } = useToast();
@@ -46,7 +48,7 @@ export function Toast() {
   useEffect(() => {
     if (isToastOpen) {
       progress.value = withSequence(
-        withTiming(10, {
+        withTiming(TOP_OFFSET, {
           duration: 1000,
           easing: Easing.elastic(1.8),
         }),
