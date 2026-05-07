@@ -12,7 +12,7 @@ export function ScreenHeader({
   canGoBack?: boolean;
 }) {
   return (
-    <Box mt="s10" ml="s10">
+    <Box mt="s10" ml="s10" paddingHorizontal="default">
       <Text variant="title24Bold" mb="s16">
         {title}
       </Text>

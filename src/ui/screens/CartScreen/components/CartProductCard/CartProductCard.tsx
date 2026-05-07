@@ -34,7 +34,7 @@ export function CartProductCard({
       flexDirection="row"
       justifyContent="space-between"
       alignItems="center"
-      paddingVertical="s12"
+      pb="s12"
       marginBottom="s12"
       gap="s16"
     >

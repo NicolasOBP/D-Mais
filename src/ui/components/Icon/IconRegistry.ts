@@ -2,6 +2,7 @@ import { ArrowLeftIcon } from "../../../../assets/icons/ArrowLeftIcon";
 import { CartFillIcon } from "../../../../assets/icons/CartFillIcon";
 import { CartIcon } from "../../../../assets/icons/CartIcon";
 import { CheckIcon } from "../../../../assets/icons/CheckIcon";
+import { ChevronRightIcon } from "../../../../assets/icons/ChevronRightIcon";
 import { CloseIcon } from "../../../../assets/icons/CloseIcon";
 import { EyeOffIcon } from "../../../../assets/icons/EyeOffIcon";
 import { EyeOnIcon } from "../../../../assets/icons/EyeOnIcon";
@@ -28,6 +29,7 @@ export const iconRegistry = {
   pencil: PencilIcon,
   check: CheckIcon,
   trash: TrashIcon,
+  chevronRight: ChevronRightIcon,
 };
 
 export type IconType = typeof iconRegistry;

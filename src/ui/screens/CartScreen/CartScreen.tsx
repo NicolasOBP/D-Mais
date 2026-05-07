@@ -9,9 +9,10 @@ import { useAppTheme } from "@theme";
 
 import { ScreenHeader } from "@components";
 import { Screen } from "@containers";
-import { Box, Button, Text } from "@core-components";
+import { Box, Text } from "@core-components";
 
 import { CartProductCard } from "./components";
+import { CartFooter } from "./components/CartFooter";
 
 type CartItem = ProductCart & { isSelected?: boolean };
 
@@ -53,33 +54,38 @@ export function CartScreen() {
   }
 
   return (
-    <Screen>
+    <Screen noHorizontalPadding paddingBottom={spacing.s8}>
       <ScreenHeader title="Carrinho" />
 
-      <Animated.FlatList
-        data={cartItems}
-        keyExtractor={(item) => item.cartId.toString()}
-        renderItem={renderItem}
-        contentContainerStyle={{
-          paddingBottom: spacing.s24,
-        }}
-        showsVerticalScrollIndicator={false}
-        itemLayoutAnimation={LinearTransition.duration(500)}
-        ref={flatListRef}
-        ListEmptyComponent={
-          <Box
-            flex={1}
-            justifyContent="center"
-            alignItems="center"
-            paddingVertical="s56"
-          >
-            <Text variant="title16">Seu carrinho está vazio</Text>
-          </Box>
-        }
+      <Box flex={1} paddingHorizontal="default">
+        <Animated.FlatList
+          data={cartItems}
+          keyExtractor={(item) => item.cartId.toString()}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+          itemLayoutAnimation={LinearTransition.duration(500)}
+          ref={flatListRef}
+          ListEmptyComponent={
+            <Box
+              flex={1}
+              justifyContent="center"
+              alignItems="center"
+              paddingVertical="s56"
+            >
+              <Text variant="title16">Seu carrinho está vazio</Text>
+            </Box>
+          }
+        />
+      </Box>
+
+      <CartFooter
+        onCheckout={() => {}}
+        totalItems={cart.totalItems}
+        totalPrice={cart.totalPrice}
       />
 
       {/* Footer with Total and Checkout */}
-      {cart.totalItems > 0 && (
+      {/* {cart.totalItems > 0 && (
         <Box
           paddingHorizontal="s16"
           paddingVertical="s16"
@@ -105,7 +111,7 @@ export function CartScreen() {
             }}
           />
         </Box>
-      )}
+      )} */}
     </Screen>
   );
 }

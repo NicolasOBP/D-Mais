@@ -7,8 +7,12 @@ import { useHideKeyboard } from "@utils";
 export function Screen({
   children,
   scrollable = false,
+  noHorizontalPadding = false,
   ...viewProps
-}: PropsWithChildren<ViewStyle> & { scrollable?: boolean }) {
+}: PropsWithChildren<ViewStyle> & {
+  scrollable?: boolean;
+  noHorizontalPadding?: boolean;
+}) {
   const { colors, spacing } = useAppTheme();
 
   const Container = scrollable ? ScrollView : View;
@@ -19,7 +23,7 @@ export function Screen({
       style={{
         flex: 1,
         backgroundColor: colors.background,
-        paddingHorizontal: spacing.default,
+        paddingHorizontal: noHorizontalPadding ? 0 : spacing.default,
       }}
     >
       <Pressable style={{ flex: 1 }} onPress={useHideKeyboard}>
