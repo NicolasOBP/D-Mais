@@ -1,17 +1,12 @@
 import { useEffect } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
 import { Product, useCartAdd } from "@domain";
+import { CartSchema, useProductForm } from "@schemas";
 import { useNumberFormat } from "@utils";
 
+import { ProductModalBody } from "@components";
 import { useModal } from "@containers";
 import { Box, BoxProps, Button, PressableBox, Text } from "@core-components";
-
-import { ModalBody } from "../ModalContent/ModalBody";
-
-import { addCartSchema, AddCartSchema } from "./addCartSchema";
 
 export interface ProductCardProps {
   product: Product;
@@ -19,12 +14,8 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({ product, containerProps }: ProductCardProps) {
-  const { control, handleSubmit, formState, reset } = useForm<AddCartSchema>({
-    resolver: zodResolver(addCartSchema),
-    defaultValues: {
-      volume: "",
-    },
-    mode: "onChange",
+  const { control, handleSubmit, formState, reset } = useProductForm({
+    defaultVolume: "",
   });
   const { showModal, updateModalData, closeModal } = useModal();
   const { addCart } = useCartAdd({
@@ -43,7 +34,7 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
     showModal(
       {
         headerTitle: `Litros - ${product.title}`,
-        BodyComponent: <ModalBody name="volume" control={control} />,
+        BodyComponent: <ProductModalBody name="volume" control={control} />,
         footerButton: {
           label: "Confirmar",
           onPress: handleSubmit(onSubmit),
@@ -53,7 +44,7 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
     );
   }
 
-  function onSubmit({ volume }: AddCartSchema) {
+  function onSubmit({ volume }: CartSchema) {
     const volumeNumber = Number.parseInt(volume);
 
     addCart({ ...product, volume: volumeNumber });

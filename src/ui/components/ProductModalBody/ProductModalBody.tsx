@@ -4,7 +4,7 @@ import { FieldValues } from "react-hook-form";
 import { ControllerProps, FormTextInput } from "@components";
 import { Box } from "@core-components";
 
-export function ModalBody<FormType extends FieldValues>({
+export function ProductModalBody<FormType extends FieldValues>({
   control,
   name,
 }: ControllerProps<FormType>) {

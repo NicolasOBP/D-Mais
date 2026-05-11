@@ -11,6 +11,7 @@
       "@domain": ["./src/domain"],
       "@infra": ["./src/infra"],
       "@utils": ["./src/utils"],
+      "@schemas": ["./src/schemas"],
       "@theme": ["./src/ui/theme"]
     }
   },
