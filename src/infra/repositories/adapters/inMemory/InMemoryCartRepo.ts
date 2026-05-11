@@ -22,4 +22,38 @@ export class InMemoryCartRepo implements ICartRepo {
   async getCart(): Promise<Cart> {
     return InnerCart;
   }
+  async editVolume(
+    productCartId: ProductCart["cartId"],
+    newVolume: number,
+  ): Promise<void> {
+    let itemCart = InnerCart.cartProducts.filter(
+      (prod) => prod.cartId === productCartId,
+    );
+
+    if (itemCart.length === 0) {
+      throw new Error("Product not found in cart");
+    }
+
+    const item = itemCart[0];
+
+    if (item.volume === newVolume) {
+      return;
+    }
+
+    const oldPrice = item.price * item.volume;
+    const newPrice = item.price * newVolume;
+
+    InnerCart.totalPrice = Number(
+      (InnerCart.totalPrice - oldPrice + newPrice).toFixed(2),
+    );
+
+    item.volume = newVolume;
+
+    if (newVolume === 0) {
+      InnerCart.cartProducts = InnerCart.cartProducts.filter(
+        (prod) => prod.cartId !== productCartId,
+      );
+      InnerCart.totalItems--;
+    }
+  }
 }

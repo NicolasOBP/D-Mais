@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { ProductCart } from "@domain";
+import { ProductCart, useCartEditVolume } from "@domain";
 import { CartSchema, useProductForm } from "@schemas";
 
 import { Icon, ProductModalBody } from "@components";
@@ -25,6 +25,7 @@ export function CartProductCard({
   const { control, formState, handleSubmit, reset } = useProductForm({
     defaultVolume: product.volume.toString(),
   });
+  const { editVolume } = useCartEditVolume();
 
   const { showModal, updateModalData } = useModal();
 
@@ -52,9 +53,9 @@ export function CartProductCard({
   }
 
   function onSubmit({ volume }: CartSchema) {
-    const volumeNumber = Number.parseInt(volume);
+    const newVolumeNumber = Number.parseInt(volume);
 
-    console.log(volumeNumber);
+    editVolume({ productCartId: product.cartId, newVolume: newVolumeNumber });
   }
 
   useEffect(() => {

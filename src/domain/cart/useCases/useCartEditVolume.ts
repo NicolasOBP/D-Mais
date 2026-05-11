@@ -1,0 +1,36 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { MutationOptions, QueryKeys, useRepository } from "@infra";
+
+export function useCartEditVolume(options?: MutationOptions<void>) {
+  const { cart } = useRepository();
+  const queryClient = useQueryClient();
+
+  const { mutate, isError, isSuccess, isPending } = useMutation<
+    void,
+    Error,
+    { productCartId: number; newVolume: number }
+  >({
+    mutationFn: ({ productCartId, newVolume }) =>
+      cart.editVolume(productCartId, newVolume),
+    retry: false,
+    onSuccess: (prod) => {
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.CartList],
+      });
+
+      options?.onSuccess?.(prod);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  return {
+    editVolume: (prod: { productCartId: number; newVolume: number }) =>
+      mutate(prod),
+    isError,
+    isSuccess,
+    isPending,
+  };
+}
