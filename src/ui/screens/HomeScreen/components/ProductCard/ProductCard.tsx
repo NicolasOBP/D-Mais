@@ -42,7 +42,7 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
   function onAddCart() {
     showModal(
       {
-        headerTitle: "Litros",
+        headerTitle: `Litros - ${product.title}`,
         BodyComponent: <ModalBody name="volume" control={control} />,
         footerButton: {
           label: "Confirmar",
