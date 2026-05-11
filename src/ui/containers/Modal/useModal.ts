@@ -6,6 +6,7 @@ type Modal = {
   modal: {
     isModalOpen: boolean;
     headerTitle?: string;
+    headerSubtitle?: string;
     HeaderComponent?: React.ReactElement;
     FooterComponent?: React.ReactElement;
     BodyComponent: React.ReactElement | undefined;
@@ -18,6 +19,7 @@ const initialState: Modal = {
   modal: {
     isModalOpen: false,
     headerTitle: "",
+    headerSubtitle: "",
     HeaderComponent: undefined,
     BodyComponent: undefined,
     FooterComponent: undefined,

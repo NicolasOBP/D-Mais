@@ -4,7 +4,12 @@ import { useNumberFormat } from "@utils";
 import { Icon } from "@components";
 import { Box, BoxProps, Text } from "@core-components";
 
-export function ProductCartDetails({ product }: { product: ProductCart }) {
+type Props = {
+  product: ProductCart;
+  handleEditProduct: () => void;
+};
+
+export function ProductCartDetails({ product, handleEditProduct }: Props) {
   const totalProductPrice = useNumberFormat.toBRLCurrency(
     product.price * product.volume,
   );
@@ -31,7 +36,7 @@ export function ProductCartDetails({ product }: { product: ProductCart }) {
           </Text>
         </Box>
 
-        <Icon name="pencil" color="primary" />
+        <Icon name="pencil" color="primary" onPress={handleEditProduct} />
       </Box>
     </Box>
   );

@@ -58,7 +58,10 @@ export function Modal() {
             {modal.HeaderComponent ? (
               modal.HeaderComponent
             ) : (
-              <ModalHeader title={modal.headerTitle} />
+              <ModalHeader
+                title={modal.headerTitle}
+                subtitle={modal.headerSubtitle}
+              />
             )}
 
             {modal.BodyComponent}

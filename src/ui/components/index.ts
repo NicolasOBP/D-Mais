@@ -1,6 +1,7 @@
 export * from "./Form";
 export * from "./Icon";
 export * from "./PasswordInput";
+export * from "./ProductModalBody";
 export * from "./ScreenHeader";
 export * from "./SearchBar";
 export * from "./TabBar";
