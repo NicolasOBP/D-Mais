@@ -21,6 +21,12 @@ export function useCartEditVolume(options?: MutationOptions<ProductCart>) {
         queryKey: [QueryKeys.CartList],
       });
 
+      if (prod.volume === 0) {
+        queryClient.invalidateQueries({
+          queryKey: [QueryKeys.NumberCart],
+        });
+      }
+
       options?.onSuccess?.(prod);
     },
     onError: (error) => {

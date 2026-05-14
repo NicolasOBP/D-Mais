@@ -47,14 +47,14 @@ export class InMemoryCartRepo implements ICartRepo {
       (InnerCart.totalPrice - oldPrice + newPrice).toFixed(2),
     );
 
-    item.volume = newVolume;
-
     if (newVolume === 0) {
       InnerCart.cartProducts = InnerCart.cartProducts.filter(
         (prod) => prod.cartId !== productCartId,
       );
       InnerCart.totalItems--;
     }
+
+    item.volume = newVolume;
 
     return item;
   }

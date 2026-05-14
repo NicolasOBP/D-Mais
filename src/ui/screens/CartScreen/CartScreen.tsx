@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { ListRenderItemInfo } from "react-native";
 
 import { useScrollToTop } from "@react-navigation/native";
@@ -20,19 +20,19 @@ export function CartScreen() {
   const { spacing } = useAppTheme();
   const { cart } = useCartGetAll();
 
-  const [cartItems, setCartItems] = useState<CartItem[] | undefined>(
-    cart?.cartProducts,
-  );
+  // const [cartItems, setCartItems] = useState<CartItem[] | undefined>(
+  //   cart?.cartProducts,
+  // );
 
   const flatListRef = useRef(null);
   useScrollToTop(flatListRef);
 
   const handleSelectChange = (index: number, selected: boolean) => {
-    if (cartItems) {
-      const newItems = [...cartItems];
-      newItems[index].isSelected = selected;
-      setCartItems(newItems);
-    }
+    // if (cartItems) {
+    //   const newItems = [...cartItems];
+    //   newItems[index].isSelected = selected;
+    //   setCartItems(newItems);
+    // }
   };
 
   function renderItem({ item, index }: ListRenderItemInfo<CartItem>) {
@@ -45,9 +45,9 @@ export function CartScreen() {
     );
   }
 
-  useEffect(() => {
-    setCartItems(cart?.cartProducts);
-  }, [cart]);
+  // useEffect(() => {
+  //   setCartItems(cart?.cartProducts);
+  // }, [cart]);
 
   if (!cart) {
     return null;
@@ -59,7 +59,7 @@ export function CartScreen() {
 
       <Box flex={1} paddingHorizontal="default">
         <Animated.FlatList
-          data={cartItems}
+          data={cart.cartProducts}
           keyExtractor={(item) => item.cartId.toString()}
           contentContainerStyle={{ paddingTop: spacing.s16 }}
           renderItem={renderItem}
