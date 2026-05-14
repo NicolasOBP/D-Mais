@@ -12,6 +12,7 @@
       "@infra": ["./src/infra"],
       "@utils": ["./src/utils"],
       "@schemas": ["./src/schemas"],
+      "@hooks": ["./src/hooks"],
       "@theme": ["./src/ui/theme"]
     }
   },

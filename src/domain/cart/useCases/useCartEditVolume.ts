@@ -2,12 +2,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { MutationOptions, QueryKeys, useRepository } from "@infra";
 
-export function useCartEditVolume(options?: MutationOptions<void>) {
+import { ProductCart } from "..";
+
+export function useCartEditVolume(options?: MutationOptions<ProductCart>) {
   const { cart } = useRepository();
   const queryClient = useQueryClient();
 
   const { mutate, isError, isSuccess, isPending } = useMutation<
-    void,
+    ProductCart,
     Error,
     { productCartId: number; newVolume: number }
   >({

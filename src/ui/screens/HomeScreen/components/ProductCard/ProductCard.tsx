@@ -1,11 +1,8 @@
-import { useEffect } from "react";
-
 import { Product, useCartAdd } from "@domain";
-import { CartSchema, useProductForm } from "@schemas";
+import { useProductVolumeModal } from "@hooks";
+import { CartSchema } from "@schemas";
 import { useNumberFormat } from "@utils";
 
-import { ProductModalBody } from "@components";
-import { useModal } from "@containers";
 import { Box, BoxProps, Button, PressableBox, Text } from "@core-components";
 
 export interface ProductCardProps {
@@ -14,35 +11,22 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({ product, containerProps }: ProductCardProps) {
-  const { control, handleSubmit, formState, reset } = useProductForm({
+  const {
+    closeModal,
+    reset: resetForm,
+    handleShowModal,
+  } = useProductVolumeModal({
     defaultVolume: "",
+    product,
+    onSubmit,
   });
-  const { showModal, updateModalData, closeModal } = useModal();
+
   const { addCart } = useCartAdd({
     onSuccess: () => {
-      reset();
+      resetForm();
       closeModal();
     },
   });
-
-  useEffect(() => {
-    updateModalData({ formState });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formState]);
-
-  function onAddCart() {
-    showModal(
-      {
-        headerTitle: `Litros - ${product.title}`,
-        BodyComponent: <ProductModalBody name="volume" control={control} />,
-        footerButton: {
-          label: "Confirmar",
-          onPress: handleSubmit(onSubmit),
-        },
-      },
-      { formState, reset },
-    );
-  }
 
   function onSubmit({ volume }: CartSchema) {
     const volumeNumber = Number.parseInt(volume);
@@ -62,7 +46,7 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
         <Button
           variant="secondary"
           lable="Adicionar ao carrinho"
-          onPress={onAddCart}
+          onPress={handleShowModal}
           paddingVertical="s10"
           marginHorizontal="s32"
         />

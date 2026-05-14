@@ -1,8 +1,9 @@
 // eslint-disable-next-line import/named
 import { FieldValues } from "react-hook-form";
 
-import { ControllerProps, FormTextInput } from "@components";
 import { Box } from "@core-components";
+
+import { ControllerProps, FormTextInput } from "../Form/FormTextInput";
 
 export function ProductModalBody<FormType extends FieldValues>({
   control,

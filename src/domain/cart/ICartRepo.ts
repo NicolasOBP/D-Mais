@@ -7,5 +7,5 @@ export interface ICartRepo {
   editVolume: (
     productCartId: ProductCart["cartId"],
     newVolume: number,
-  ) => Promise<void>;
+  ) => Promise<ProductCart>;
 }

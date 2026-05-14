@@ -5,10 +5,9 @@ import { QueryKeys, useRepository } from "@infra";
 export function useCartGetAll() {
   const { cart } = useRepository();
 
-  const { data, isLoading, isError, isFetching } = useQuery({
+  const { data, isLoading, isError, isFetching, refetch } = useQuery({
     queryKey: [QueryKeys.CartList],
     queryFn: () => cart.getCart(),
-    staleTime: 1000 * 30,
   });
 
   return {
@@ -16,5 +15,6 @@ export function useCartGetAll() {
     isLoading,
     isError,
     isFetching,
+    refetch,
   };
 }

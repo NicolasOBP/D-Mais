@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { ProductCart, useCartEditVolume } from "@domain";
-import { CartSchema, useProductForm } from "@schemas";
+import { useProductVolumeModal } from "@hooks";
+import { CartSchema } from "@schemas";
 
-import { Icon, ProductModalBody } from "@components";
-import { useModal } from "@containers";
+import { Icon } from "@components";
 import { Box } from "@core-components";
 
 import { ProductCartCheckbox } from "./components/ProductCartCheckbox";
@@ -22,12 +22,24 @@ export function CartProductCard({
   onSelectChange,
 }: CartProductCardProps) {
   const [selected, setSelected] = useState(isSelected);
-  const { control, formState, handleSubmit, reset } = useProductForm({
-    defaultVolume: product.volume.toString(),
-  });
-  const { editVolume } = useCartEditVolume();
 
-  const { showModal, updateModalData } = useModal();
+  const {
+    closeModal,
+    reset: resetForm,
+    handleShowModal: handleEditProduct,
+  } = useProductVolumeModal({
+    defaultVolume: product.volume.toString(),
+    product,
+    onSubmit: onSubmitEdit,
+    isEdit: true,
+  });
+
+  const { editVolume } = useCartEditVolume({
+    onSuccess: (product) => {
+      closeModal();
+      resetForm({ volume: product.volume.toString() });
+    },
+  });
 
   const handleSelectChange = () => {
     const newState = !selected;
@@ -37,31 +49,11 @@ export function CartProductCard({
 
   function handleRemoveProduct() {}
 
-  function handleEditProduct() {
-    showModal(
-      {
-        headerTitle: `Editar Litros`,
-        headerSubtitle: product.title,
-        BodyComponent: <ProductModalBody name="volume" control={control} />,
-        footerButton: {
-          label: "Confirmar",
-          onPress: handleSubmit(onSubmit),
-        },
-      },
-      { formState, reset },
-    );
-  }
-
-  function onSubmit({ volume }: CartSchema) {
+  function onSubmitEdit({ volume }: CartSchema) {
     const newVolumeNumber = Number.parseInt(volume);
 
     editVolume({ productCartId: product.cartId, newVolume: newVolumeNumber });
   }
-
-  useEffect(() => {
-    updateModalData({ formState });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formState]);
 
   return (
     <Box

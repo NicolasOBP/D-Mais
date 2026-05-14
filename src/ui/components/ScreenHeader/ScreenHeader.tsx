@@ -13,11 +13,9 @@ export function ScreenHeader({
 }) {
   return (
     <Box mt="s10" ml="s10" paddingHorizontal="default">
-      <Text variant="title24Bold" mb="s16">
-        {title}
-      </Text>
+      <Text variant="title24Bold">{title}</Text>
       {canGoBack && (
-        <Box ml="s10">
+        <Box ml="s10" mt="s16">
           <Icon name="arrowLeft" onPress={router.back} />
         </Box>
       )}

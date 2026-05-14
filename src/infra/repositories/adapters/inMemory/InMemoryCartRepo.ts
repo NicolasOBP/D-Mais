@@ -25,7 +25,7 @@ export class InMemoryCartRepo implements ICartRepo {
   async editVolume(
     productCartId: ProductCart["cartId"],
     newVolume: number,
-  ): Promise<void> {
+  ): Promise<ProductCart> {
     let itemCart = InnerCart.cartProducts.filter(
       (prod) => prod.cartId === productCartId,
     );
@@ -37,7 +37,7 @@ export class InMemoryCartRepo implements ICartRepo {
     const item = itemCart[0];
 
     if (item.volume === newVolume) {
-      return;
+      return item;
     }
 
     const oldPrice = item.price * item.volume;
@@ -55,5 +55,7 @@ export class InMemoryCartRepo implements ICartRepo {
       );
       InnerCart.totalItems--;
     }
+
+    return item;
   }
 }

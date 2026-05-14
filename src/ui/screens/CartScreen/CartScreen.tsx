@@ -61,9 +61,10 @@ export function CartScreen() {
         <Animated.FlatList
           data={cartItems}
           keyExtractor={(item) => item.cartId.toString()}
+          contentContainerStyle={{ paddingTop: spacing.s16 }}
           renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
           itemLayoutAnimation={LinearTransition.duration(500)}
+          showsVerticalScrollIndicator={false}
           ref={flatListRef}
           ListEmptyComponent={
             <Box
@@ -83,35 +84,6 @@ export function CartScreen() {
         totalItems={cart.totalItems}
         totalPrice={cart.totalPrice}
       />
-
-      {/* Footer with Total and Checkout */}
-      {/* {cart.totalItems > 0 && (
-        <Box
-          paddingHorizontal="s16"
-          paddingVertical="s16"
-          borderTopWidth={1}
-          borderTopColor="gray2"
-          backgroundColor="background"
-        >
-          <Box
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            marginBottom="s16"
-          >
-            <Text variant="text12">Total do carrinho:</Text>
-            <Text variant="title16">{cart?.totalPrice}</Text>
-          </Box>
-
-          <Button
-            lable="Finalizar Compra"
-            variant="primary"
-            onPress={() => {
-              // TODO: Handle checkout
-            }}
-          />
-        </Box>
-      )} */}
     </Screen>
   );
 }
