@@ -28,7 +28,8 @@ export function ProductCartDetails({ product, handleEditProduct }: Props) {
       <Box flexDirection="row" justifyContent="space-between" mt="s14">
         <Box>
           <Text variant="text12Bold" color="text" mb="s4">
-            Quantidade: {product.volume} L
+            Quantidade:{" "}
+            {useNumberFormat.formatNumberWithThousands(product.volume)} L
           </Text>
 
           <Text variant="text12Bold" color="text">

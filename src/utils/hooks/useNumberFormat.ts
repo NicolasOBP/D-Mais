@@ -11,4 +11,17 @@ function toBRLCurrency(value: number | string): string {
   }).format(numValue);
 }
 
-export const useNumberFormat = { toBRLCurrency };
+function formatNumberWithThousands(value: number | string): string {
+  const numValue = typeof value === "string" ? parseFloat(value) : value;
+
+  if (isNaN(numValue)) {
+    return "0";
+  }
+
+  return new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(numValue);
+}
+
+export const useNumberFormat = { toBRLCurrency, formatNumberWithThousands };
