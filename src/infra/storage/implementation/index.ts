@@ -1,0 +1,1 @@
+export { MMKVStorage } from "./MMKVStorage";
