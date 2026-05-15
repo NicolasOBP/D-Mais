@@ -8,6 +8,7 @@ const palette = {
   gray3: "#B3B3B3",
   gray4: "#E1E1E1",
   gray5: "#F5F5F5",
+  gray6: "rgba(255, 255, 255, 0.4)",
   white: "#FFFFFF",
 
   // Primary
@@ -59,6 +60,9 @@ const theme = createTheme({
     text: palette.black,
     contrastPrimary: palette.white,
     tabBar: palette.blue,
+
+    //Loading Background
+    loadingBackground: palette.gray6,
 
     // Raw palette for direct access
     ...palette,

@@ -57,7 +57,7 @@ export function LoadingListState() {
               top: 0,
               bottom: 0,
               width: 100,
-              backgroundColor: "rgba(255, 255, 255, 0.4)",
+              backgroundColor: colors.loadingBackground,
               zIndex: 10,
             },
             shimmerStyle,
