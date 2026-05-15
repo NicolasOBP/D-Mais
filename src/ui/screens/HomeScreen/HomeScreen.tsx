@@ -8,7 +8,7 @@ import { Product, useProductsList } from "@domain";
 import { useAppTheme } from "@theme";
 import { useDebounce } from "@utils";
 
-import { SearchBar } from "@components";
+import { LoadingListState, SearchBar } from "@components";
 import { Screen } from "@containers";
 
 import { EmptyComponent } from "./components/EmptyComponent";
@@ -36,23 +36,27 @@ export function HomeScreen() {
         searchText={searchText}
       />
 
-      <Animated.FlatList
-        data={products}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={{
-          gap: spacing.s20,
-          paddingTop: spacing.s24,
-          paddingBottom: spacing.s14,
-        }}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={refetch} />
-        }
-        itemLayoutAnimation={LinearTransition.duration(500)}
-        ref={flatListRef}
-        ListEmptyComponent={<EmptyComponent />}
-      />
+      {isLoading ? (
+        <LoadingListState />
+      ) : (
+        <Animated.FlatList
+          data={products}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={{
+            gap: spacing.s20,
+            paddingTop: spacing.s24,
+            paddingBottom: spacing.s14,
+          }}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+          }
+          itemLayoutAnimation={LinearTransition.duration(500)}
+          ref={flatListRef}
+          ListEmptyComponent={<EmptyComponent />}
+        />
+      )}
     </Screen>
   );
 }
