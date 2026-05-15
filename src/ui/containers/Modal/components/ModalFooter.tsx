@@ -48,14 +48,14 @@ function TwoButtonFooter(props: ModalFooterProps["twoButtonFooter"]) {
   return (
     <Box alignItems="center" flexDirection="row" justifyContent="space-around">
       <Button
-        variant="primary"
+        variant="error"
         lable={props!.labelCancel}
         paddingVertical="s10"
         paddingHorizontal="s24"
         onPress={closeModal}
       />
       <Button
-        variant="primary"
+        variant="success"
         lable={props!.labelConfirm}
         paddingVertical="s10"
         paddingHorizontal="s24"

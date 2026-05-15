@@ -1,8 +1,11 @@
-import { ThemeVariants } from "@theme";
-
 import { BoxProps } from "../Box/Box";
 
-export type ButtonVariant = "primary" | "secondary" | "disabled";
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "disabled"
+  | "success"
+  | "error";
 
 const boxStyleDefault: BoxProps = {
   backgroundColor: "primary",
@@ -13,7 +16,7 @@ const boxStyleDefault: BoxProps = {
 
 type VariantStyle = {
   boxStyle: BoxProps;
-  textVariant?: ThemeVariants;
+  textVariant?: "text16Bold" | "text12Bold" | "text16Bold";
 };
 
 export const buttonVariants: Record<ButtonVariant, VariantStyle> = {
@@ -24,6 +27,20 @@ export const buttonVariants: Record<ButtonVariant, VariantStyle> = {
   secondary: {
     boxStyle: boxStyleDefault,
     textVariant: "text12Bold",
+  },
+  error: {
+    boxStyle: {
+      ...boxStyleDefault,
+      backgroundColor: "error",
+    },
+    textVariant: "text16Bold",
+  },
+  success: {
+    boxStyle: {
+      ...boxStyleDefault,
+      backgroundColor: "success",
+    },
+    textVariant: "text16Bold",
   },
   disabled: {
     boxStyle: {

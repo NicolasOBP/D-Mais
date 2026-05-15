@@ -17,7 +17,7 @@ export function Button({
   ...buttonProps
 }: ButtonProps) {
   const boxVariant = buttonVariants[variant].boxStyle;
-  // const textVariant = buttonVariants[variant].textVariant;
+  const textVariant = buttonVariants[variant].textVariant;
 
   const disableStyle = disabled ? buttonVariants["disabled"].boxStyle : null;
 
@@ -29,9 +29,7 @@ export function Button({
       {...disableStyle}
       disabled={disabled}
     >
-      <Text variant={variant === "primary" ? "text16Bold" : "text12Bold"}>
-        {lable}
-      </Text>
+      <Text variant={textVariant}>{lable}</Text>
     </PressableBox>
   );
 }
