@@ -24,13 +24,13 @@ export function CartProductCard({
 }: CartProductCardProps) {
   const [selected, setSelected] = useState(isSelected);
   const { showModal } = useModal();
-  const { editVolume } = useCartEditVolume({
+  const { editVolume, isPending: isPendingEdit } = useCartEditVolume({
     onSuccess: (product) => {
       closeModal();
       resetForm({ volume: product.volume.toString() });
     },
   });
-  const { deleteItem } = useCartDeleteItem({
+  const { deleteItem, isPending: isPendingDelete } = useCartDeleteItem({
     onSuccess: () => {
       closeModal();
     },
@@ -44,6 +44,7 @@ export function CartProductCard({
     product,
     onSubmit: onSubmitEdit,
     isEdit: true,
+    isLoading: isPendingEdit,
   });
 
   const handleSelectChange = () => {
@@ -53,26 +54,29 @@ export function CartProductCard({
   };
 
   function handleRemoveProduct() {
-    showModal({
-      headerTitle: "Remover produto",
-      headerSubtitle: product.title,
-      BodyComponent: (
-        <Box paddingHorizontal="s48">
-          <Text variant="title16" color="errorText" textAlign="center">
-            Deseja realmente excluir esse item do carrinho?
-          </Text>
-        </Box>
-      ),
-      footerButton: {
-        twoButtonFooter: {
-          labelCancel: "Cancelar",
-          labelConfirm: "Deletar",
-          onConfirm: () => {
-            deleteItem(product.cartId);
+    showModal(
+      {
+        headerTitle: "Remover produto",
+        headerSubtitle: product.title,
+        BodyComponent: (
+          <Box paddingHorizontal="s48">
+            <Text variant="title16" color="errorText" textAlign="center">
+              Deseja realmente excluir esse item do carrinho?
+            </Text>
+          </Box>
+        ),
+        footerButton: {
+          twoButtonFooter: {
+            labelCancel: "Cancelar",
+            labelConfirm: "Deletar",
+            onConfirm: () => {
+              deleteItem(product.cartId);
+            },
           },
         },
       },
-    });
+      { isPendingDelete },
+    );
   }
 
   function onSubmitEdit({ volume }: CartSchema) {

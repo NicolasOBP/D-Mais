@@ -11,6 +11,13 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({ product, containerProps }: ProductCardProps) {
+  const { addCart, isPending } = useCartAdd({
+    onSuccess: () => {
+      resetForm();
+      closeModal();
+    },
+  });
+
   const {
     closeModal,
     reset: resetForm,
@@ -19,13 +26,7 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
     defaultVolume: "",
     product,
     onSubmit,
-  });
-
-  const { addCart } = useCartAdd({
-    onSuccess: () => {
-      resetForm();
-      closeModal();
-    },
+    isLoading: isPending,
   });
 
   function onSubmit({ volume }: CartSchema) {

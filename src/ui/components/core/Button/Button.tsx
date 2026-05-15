@@ -62,7 +62,7 @@ export function Button({
       {...boxVariant}
       {...buttonProps}
       disabled={disabled}
-      style={animatedBackgroundColor}
+      style={[animatedBackgroundColor, buttonProps.style]}
     >
       {isLoading ? (
         <ActivityIndicator color={colors.contrastPrimary} size={22} />

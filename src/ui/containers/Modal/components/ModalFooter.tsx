@@ -31,18 +31,26 @@ export function ModalFooter({ ...modalFooterProps }: ModalFooterProps) {
   }, [modalData.formState, modalFooterProps.oneButtonFooter?.disabled]);
 
   if (modalFooterProps.twoButtonFooter) {
-    return <TwoButtonFooter {...modalFooterProps.twoButtonFooter} />;
+    return (
+      <TwoButtonFooter
+        {...modalFooterProps.twoButtonFooter}
+        isLoading={modalData.isLoading}
+      />
+    );
   } else if (modalFooterProps.oneButtonFooter) {
     return (
       <OneButtonFooter
         {...modalFooterProps.oneButtonFooter}
         disabled={isDisabled}
+        isLoading={modalData.isLoading}
       />
     );
   }
 }
 
-function TwoButtonFooter(props: ModalFooterProps["twoButtonFooter"]) {
+function TwoButtonFooter(
+  props: ModalFooterProps["twoButtonFooter"] & { isLoading: boolean },
+) {
   const { closeModal } = useModal();
 
   return (
@@ -60,20 +68,25 @@ function TwoButtonFooter(props: ModalFooterProps["twoButtonFooter"]) {
         paddingVertical="s10"
         paddingHorizontal="s24"
         onPress={props!.onConfirm}
+        isLoading={props!.isLoading}
       />
     </Box>
   );
 }
-function OneButtonFooter(props: ModalFooterProps["oneButtonFooter"]) {
+function OneButtonFooter(
+  props: ModalFooterProps["oneButtonFooter"] & { isLoading: boolean },
+) {
   return (
     <Box alignItems="center">
       <Button
+        isLoading={props!.isLoading}
         variant="primary"
         lable={props!.label}
         paddingVertical="s10"
         paddingHorizontal="s24"
         onPress={props!.onPress}
         disabled={props!.disabled}
+        style={{ minWidth: 125 }}
       />
     </Box>
   );

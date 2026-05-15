@@ -11,6 +11,7 @@ type ProductVolumeModalProps = {
   product: Product;
   onSubmit: ({ volume }: { volume: string }) => void;
   isEdit?: boolean;
+  isLoading: boolean;
 };
 
 export function useProductVolumeModal({
@@ -18,6 +19,7 @@ export function useProductVolumeModal({
   product,
   onSubmit,
   isEdit,
+  isLoading,
 }: ProductVolumeModalProps) {
   const { control, handleSubmit, formState, reset } = useProductForm({
     defaultVolume,
@@ -39,7 +41,7 @@ export function useProductVolumeModal({
             },
           },
         },
-        { formState, reset },
+        { formState, reset, isLoading },
       );
     } else {
       showModal(
@@ -53,15 +55,15 @@ export function useProductVolumeModal({
             },
           },
         },
-        { formState, reset },
+        { formState, reset, isLoading },
       );
     }
   }
 
   useEffect(() => {
-    updateModalData({ formState });
+    updateModalData({ formState, isLoading });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formState]);
+  }, [formState, isLoading]);
 
   return { handleShowModal, closeModal, reset };
 }
