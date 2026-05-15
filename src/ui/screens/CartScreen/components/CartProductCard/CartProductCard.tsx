@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { ProductCart, useCartEditVolume } from "@domain";
+import { ProductCart, useCartDeleteItem, useCartEditVolume } from "@domain";
 import { useProductVolumeModal } from "@hooks";
 import { CartSchema } from "@schemas";
 
@@ -24,7 +24,17 @@ export function CartProductCard({
 }: CartProductCardProps) {
   const [selected, setSelected] = useState(isSelected);
   const { showModal } = useModal();
-
+  const { editVolume } = useCartEditVolume({
+    onSuccess: (product) => {
+      closeModal();
+      resetForm({ volume: product.volume.toString() });
+    },
+  });
+  const { deleteItem } = useCartDeleteItem({
+    onSuccess: () => {
+      closeModal();
+    },
+  });
   const {
     closeModal,
     reset: resetForm,
@@ -34,13 +44,6 @@ export function CartProductCard({
     product,
     onSubmit: onSubmitEdit,
     isEdit: true,
-  });
-
-  const { editVolume } = useCartEditVolume({
-    onSuccess: (product) => {
-      closeModal();
-      resetForm({ volume: product.volume.toString() });
-    },
   });
 
   const handleSelectChange = () => {
@@ -65,7 +68,7 @@ export function CartProductCard({
           labelCancel: "Cancelar",
           labelConfirm: "Deletar",
           onConfirm: () => {
-            console.log("DELETADO");
+            deleteItem(product.cartId);
           },
         },
       },

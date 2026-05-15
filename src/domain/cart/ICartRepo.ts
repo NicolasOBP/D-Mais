@@ -8,4 +8,5 @@ export interface ICartRepo {
     productCartId: ProductCart["cartId"],
     newVolume: number,
   ) => Promise<ProductCart>;
+  deleteItem: (productCartId: ProductCart["cartId"]) => Promise<void>;
 }

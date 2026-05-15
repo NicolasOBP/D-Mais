@@ -58,4 +58,28 @@ export class InMemoryCartRepo implements ICartRepo {
 
     return item;
   }
+  async deleteItem(productCartId: ProductCart["cartId"]): Promise<void> {
+    const product = InnerCart.cartProducts.find(
+      (prod) => prod.cartId === productCartId,
+    );
+
+    if (!product) {
+      throw new Error("Produto não encontrado");
+    }
+
+    const cartInitialLenght = InnerCart.cartProducts.length;
+
+    InnerCart.cartProducts = InnerCart.cartProducts.filter(
+      (prod) => prod.cartId !== productCartId,
+    );
+
+    const cartCurrentlLenght = InnerCart.cartProducts.length;
+
+    if (cartInitialLenght === cartCurrentlLenght) {
+      throw new Error("Erro ao excluir produto");
+    }
+
+    InnerCart.totalItems--;
+    InnerCart.totalPrice -= product.price * product.volume;
+  }
 }
