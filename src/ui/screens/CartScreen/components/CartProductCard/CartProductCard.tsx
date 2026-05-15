@@ -5,7 +5,8 @@ import { useProductVolumeModal } from "@hooks";
 import { CartSchema } from "@schemas";
 
 import { Icon } from "@components";
-import { Box } from "@core-components";
+import { useModal } from "@containers";
+import { Box, Text } from "@core-components";
 
 import { ProductCartCheckbox } from "./components/ProductCartCheckbox";
 import { ProductCartDetails } from "./components/ProductCartDetails";
@@ -22,6 +23,7 @@ export function CartProductCard({
   onSelectChange,
 }: CartProductCardProps) {
   const [selected, setSelected] = useState(isSelected);
+  const { showModal } = useModal();
 
   const {
     closeModal,
@@ -47,7 +49,28 @@ export function CartProductCard({
     onSelectChange?.(newState);
   };
 
-  function handleRemoveProduct() {}
+  function handleRemoveProduct() {
+    showModal({
+      headerTitle: "Remover produto",
+      headerSubtitle: product.title,
+      BodyComponent: (
+        <Box paddingHorizontal="s48">
+          <Text variant="title16" color="errorText" textAlign="center">
+            Deseja realmente excluir esse item do carrinho?
+          </Text>
+        </Box>
+      ),
+      footerButton: {
+        twoButtonFooter: {
+          labelCancel: "Cancelar",
+          labelConfirm: "Deletar",
+          onConfirm: () => {
+            console.log("DELETADO");
+          },
+        },
+      },
+    });
+  }
 
   function onSubmitEdit({ volume }: CartSchema) {
     const newVolumeNumber = Number.parseInt(volume);

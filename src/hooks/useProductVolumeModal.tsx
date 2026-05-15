@@ -33,8 +33,10 @@ export function useProductVolumeModal({
           headerSubtitle: product.title,
           BodyComponent: <ProductModalBody name="volume" control={control} />,
           footerButton: {
-            label: "Confirmar",
-            onPress: handleSubmit(onSubmit),
+            oneButtonFooter: {
+              label: "Confirmar",
+              onPress: handleSubmit(onSubmit),
+            },
           },
         },
         { formState, reset },
@@ -45,8 +47,10 @@ export function useProductVolumeModal({
           headerTitle: `Litros - ${product.title}`,
           BodyComponent: <ProductModalBody name="volume" control={control} />,
           footerButton: {
-            label: "Confirmar",
-            onPress: handleSubmit(onSubmit),
+            oneButtonFooter: {
+              label: "Confirmar",
+              onPress: handleSubmit(onSubmit),
+            },
           },
         },
         { formState, reset },
