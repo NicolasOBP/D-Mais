@@ -26,7 +26,7 @@ const palette = {
   // Error
   red: "#ff0000",
   darkRed: "#7e0000",
-  lightRed: "#ff0000a5",
+  lightRed: "#ff4343e4",
 
   transparent: "transparent",
 };

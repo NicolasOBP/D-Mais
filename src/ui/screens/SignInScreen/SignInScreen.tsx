@@ -23,7 +23,7 @@ export function SignInScreen() {
     mode: "onChange",
   });
 
-  const { signIn } = useAuthSignIn({
+  const { signIn, isPending } = useAuthSignIn({
     onSuccess: () => {
       router.navigate("/home");
     },
@@ -61,6 +61,7 @@ export function SignInScreen() {
       </Box>
 
       <Button
+        isLoading={isPending}
         disabled={isFormValid(formState)}
         variant="primary"
         marginHorizontal="s8"

@@ -1,9 +1,12 @@
 import { Cart, ICartRepo, ProductCart, ProductCartVariables } from "@domain";
 
+const delay = () => new Promise((resolve) => setTimeout(resolve, 2000));
+
 let InnerCart: Cart = { cartProducts: [], totalPrice: 0, totalItems: 0 };
 
 export class InMemoryCartRepo implements ICartRepo {
   async add(product: ProductCartVariables): Promise<ProductCart> {
+    await delay();
     const productCart = { ...product, cartId: InnerCart.cartProducts.length };
 
     InnerCart.cartProducts.push(productCart);
@@ -17,15 +20,18 @@ export class InMemoryCartRepo implements ICartRepo {
     return productCart;
   }
   async totalItems(): Promise<number | null> {
+    await delay();
     return InnerCart.totalItems > 0 ? InnerCart.totalItems : null;
   }
   async getCart(): Promise<Cart> {
+    await delay();
     return InnerCart;
   }
   async editVolume(
     productCartId: ProductCart["cartId"],
     newVolume: number,
   ): Promise<ProductCart> {
+    await delay();
     let itemCart = InnerCart.cartProducts.filter(
       (prod) => prod.cartId === productCartId,
     );
@@ -59,6 +65,7 @@ export class InMemoryCartRepo implements ICartRepo {
     return item;
   }
   async deleteItem(productCartId: ProductCart["cartId"]): Promise<void> {
+    await delay();
     const product = InnerCart.cartProducts.find(
       (prod) => prod.cartId === productCartId,
     );
