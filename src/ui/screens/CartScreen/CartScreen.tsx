@@ -4,10 +4,10 @@ import { ListRenderItemInfo } from "react-native";
 import { useScrollToTop } from "@react-navigation/native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
-import { ProductCart, useCartGetAll } from "@domain";
+import { ProductCart, useCartGetItems } from "@domain";
 import { useAppTheme } from "@theme";
 
-import { ScreenHeader } from "@components";
+import { LoadingListState, ScreenHeader } from "@components";
 import { Screen } from "@containers";
 import { Box, Text } from "@core-components";
 
@@ -18,7 +18,8 @@ type CartItem = ProductCart & { isSelected?: boolean };
 
 export function CartScreen() {
   const { spacing } = useAppTheme();
-  const { cart } = useCartGetAll();
+  // const { cart, isLoading } = useCartGetAll();
+  const { cartItems, isLoading } = useCartGetItems();
 
   // const [cartItems, setCartItems] = useState<CartItem[] | undefined>(
   //   cart?.cartProducts,
@@ -49,41 +50,37 @@ export function CartScreen() {
   //   setCartItems(cart?.cartProducts);
   // }, [cart]);
 
-  if (!cart) {
-    return null;
-  }
-
   return (
     <Screen noHorizontalPadding paddingBottom={spacing.s8}>
       <ScreenHeader title="Carrinho" />
 
       <Box flex={1} paddingHorizontal="default">
-        <Animated.FlatList
-          data={cart.cartProducts}
-          keyExtractor={(item) => item.cartId.toString()}
-          contentContainerStyle={{ paddingTop: spacing.s16 }}
-          renderItem={renderItem}
-          itemLayoutAnimation={LinearTransition.duration(500)}
-          showsVerticalScrollIndicator={false}
-          ref={flatListRef}
-          ListEmptyComponent={
-            <Box
-              flex={1}
-              justifyContent="center"
-              alignItems="center"
-              paddingVertical="s56"
-            >
-              <Text variant="title16">Seu carrinho está vazio</Text>
-            </Box>
-          }
-        />
+        {isLoading ? (
+          <LoadingListState screen="Cart" />
+        ) : (
+          <Animated.FlatList
+            data={cartItems}
+            keyExtractor={(item) => item.cartId.toString()}
+            contentContainerStyle={{ paddingTop: spacing.s16 }}
+            renderItem={renderItem}
+            itemLayoutAnimation={LinearTransition.duration(500)}
+            showsVerticalScrollIndicator={false}
+            ref={flatListRef}
+            ListEmptyComponent={
+              <Box
+                flex={1}
+                justifyContent="center"
+                alignItems="center"
+                paddingVertical="s56"
+              >
+                <Text variant="title16">Seu carrinho está vazio</Text>
+              </Box>
+            }
+          />
+        )}
       </Box>
 
-      <CartFooter
-        onCheckout={() => {}}
-        totalItems={cart.totalItems}
-        totalPrice={cart.totalPrice}
-      />
+      <CartFooter onCheckout={() => {}} totalItems={0} totalPrice={0} />
     </Screen>
   );
 }

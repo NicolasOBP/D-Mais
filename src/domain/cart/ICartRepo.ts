@@ -4,6 +4,7 @@ export interface ICartRepo {
   add: (product: ProductCartVariables) => Promise<ProductCart>;
   totalItems: () => Promise<number | null>;
   getCart: () => Promise<Cart>;
+  getCartItems: () => Promise<ProductCart[]>;
   editVolume: (
     productCartId: ProductCart["cartId"],
     newVolume: number,

@@ -19,14 +19,22 @@ export class InMemoryCartRepo implements ICartRepo {
 
     return productCart;
   }
+
   async totalItems(): Promise<number | null> {
     await delay();
     return InnerCart.totalItems > 0 ? InnerCart.totalItems : null;
   }
+
   async getCart(): Promise<Cart> {
     await delay();
     return InnerCart;
   }
+
+  async getCartItems(): Promise<ProductCart[]> {
+    await delay();
+    return InnerCart.cartProducts;
+  }
+
   async editVolume(
     productCartId: ProductCart["cartId"],
     newVolume: number,
@@ -64,6 +72,7 @@ export class InMemoryCartRepo implements ICartRepo {
 
     return item;
   }
+
   async deleteItem(productCartId: ProductCart["cartId"]): Promise<void> {
     await delay();
     const product = InnerCart.cartProducts.find(
