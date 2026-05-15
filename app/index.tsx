@@ -1,11 +1,13 @@
 import { Redirect } from "expo-router";
 
+import { useAuthCredentials } from "@infra";
+
 import { SignInScreen } from "@screens";
 
 export default function SignIn() {
-  const auth = null;
+  const { user } = useAuthCredentials();
 
-  if (auth) {
+  if (user) {
     return <Redirect href={"/home"} />;
   }
 

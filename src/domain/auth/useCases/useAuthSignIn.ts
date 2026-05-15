@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 
-import { MutationOptions, useRepository } from "@infra";
+import { MutationOptions, useAuthCredentials, useRepository } from "@infra";
 
 import { useToast } from "@components";
 
@@ -15,6 +15,7 @@ interface Variables {
 export function useAuthSignIn(options?: MutationOptions<AuthUser>) {
   const { auth } = useRepository();
   const { showToast } = useToast();
+  const { saveCredentials } = useAuthCredentials();
 
   const { mutate, isError, isSuccess, isPending } = useMutation<
     AuthUser,
@@ -42,6 +43,8 @@ export function useAuthSignIn(options?: MutationOptions<AuthUser>) {
         message: `Bem vindo ${authCredentials.name}`,
         type: "success",
       });
+
+      saveCredentials(authCredentials);
 
       if (options?.onSuccess) {
         options.onSuccess(authCredentials);
