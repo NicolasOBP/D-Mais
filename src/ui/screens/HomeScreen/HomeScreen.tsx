@@ -37,7 +37,7 @@ export function HomeScreen() {
       />
 
       {isLoading ? (
-        <LoadingListState />
+        <LoadingListState screen="Home" />
       ) : (
         <Animated.FlatList
           data={products}
