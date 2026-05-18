@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { useRef } from "react";
 import { ListRenderItemInfo } from "react-native";
 
@@ -46,6 +47,10 @@ export function CartScreen() {
     );
   }
 
+  function onCheckout() {
+    router.navigate("/sell");
+  }
+
   // useEffect(() => {
   //   setCartItems(cart?.cartProducts);
   // }, [cart]);
@@ -81,7 +86,7 @@ export function CartScreen() {
       </Box>
 
       <CartFooter
-        onCheckout={() => {}}
+        onCheckout={onCheckout}
         totalItems={cartMetadata?.totalItems}
         totalPrice={cartMetadata?.totalPrice}
       />

@@ -7,12 +7,14 @@ import { Icon } from "../Icon";
 export function ScreenHeader({
   title,
   canGoBack,
+  noMargin,
 }: {
   title: string;
   canGoBack?: boolean;
+  noMargin?: boolean;
 }) {
   return (
-    <Box mt="s10" ml="s10" paddingHorizontal="default">
+    <Box mt="s10" ml={noMargin ? undefined : "s10"} paddingHorizontal="default">
       <Text variant="title24Bold">{title}</Text>
       {canGoBack && (
         <Box ml="s10" mt="s16">

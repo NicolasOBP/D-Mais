@@ -37,7 +37,12 @@ export function CartFooter({ onCheckout, totalItems, totalPrice }: Props) {
         borderLeftColor="white"
         alignItems="center"
       >
-        <Icon name="chevronRight" color="white" size={50} />
+        <Icon
+          name="chevronRight"
+          color="white"
+          size={50}
+          onPress={onCheckout}
+        />
       </Box>
     </Box>
   );

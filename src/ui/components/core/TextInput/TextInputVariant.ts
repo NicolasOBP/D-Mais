@@ -9,5 +9,11 @@ export const textInputVariant: Record<TextInputVariant, BoxProps> = {
     borderWidth: 1,
     padding: "s16",
   },
-  secundary: {},
+  secundary: {
+    backgroundColor: "gray4",
+    borderWidth: 1,
+    borderRadius: "inputField",
+    borderColor: "primary",
+    padding: "s4",
+  },
 };

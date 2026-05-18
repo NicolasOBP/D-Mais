@@ -15,6 +15,7 @@ export function FormTextInput<FormType extends FieldValues>({
   name,
   rules,
   isPassword,
+  variant,
   ...textInputProps
 }: TextInputProps & ControllerProps<FormType> & { isPassword?: boolean }) {
   const InputType = isPassword ? PasswordInput : TextInput;
@@ -25,6 +26,7 @@ export function FormTextInput<FormType extends FieldValues>({
       rules={rules}
       render={({ fieldState, field }) => (
         <InputType
+          variant={variant}
           value={field.value}
           onChangeText={field.onChange}
           errorMessage={fieldState.error?.message}
