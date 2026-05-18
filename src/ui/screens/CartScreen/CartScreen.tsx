@@ -4,7 +4,7 @@ import { ListRenderItemInfo } from "react-native";
 import { useScrollToTop } from "@react-navigation/native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
-import { ProductCart, useCartGetItems } from "@domain";
+import { ProductCart, useCartGetItems, useCartGetMetadata } from "@domain";
 import { useAppTheme } from "@theme";
 
 import { LoadingListState, ScreenHeader } from "@components";
@@ -18,8 +18,8 @@ type CartItem = ProductCart & { isSelected?: boolean };
 
 export function CartScreen() {
   const { spacing } = useAppTheme();
-  // const { cart, isLoading } = useCartGetAll();
   const { cartItems, isLoading } = useCartGetItems();
+  const { cartMetadata } = useCartGetMetadata();
 
   // const [cartItems, setCartItems] = useState<CartItem[] | undefined>(
   //   cart?.cartProducts,
@@ -80,7 +80,11 @@ export function CartScreen() {
         )}
       </Box>
 
-      <CartFooter onCheckout={() => {}} totalItems={0} totalPrice={0} />
+      <CartFooter
+        onCheckout={() => {}}
+        totalItems={cartMetadata?.totalItems}
+        totalPrice={cartMetadata?.totalPrice}
+      />
     </Screen>
   );
 }

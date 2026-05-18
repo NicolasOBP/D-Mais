@@ -34,11 +34,6 @@ export class InMemoryCartRepo implements ICartRepo {
     };
   }
 
-  async getCart(): Promise<Cart> {
-    await delay();
-    return InnerCart;
-  }
-
   async getCartItems(): Promise<ProductCart[]> {
     await delay();
     return InnerCart.cartProducts;

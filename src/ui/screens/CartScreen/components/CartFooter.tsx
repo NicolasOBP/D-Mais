@@ -4,8 +4,8 @@ import { Icon } from "@components";
 import { Box, Text } from "@core-components";
 
 type Props = {
-  totalPrice: number;
-  totalItems: number;
+  totalPrice: number | undefined;
+  totalItems: number | undefined;
   onCheckout: () => void;
 };
 
@@ -21,10 +21,10 @@ export function CartFooter({ onCheckout, totalItems, totalPrice }: Props) {
     >
       <Box bg="primary" flex={1} paddingVertical="s8" pl="s10">
         <Text mb="s20" variant="text12Bold">
-          Total: {useNumberFormat.toBRLCurrency(totalPrice)}
+          Total: {useNumberFormat.toBRLCurrency(totalPrice ?? 0)}
         </Text>
         <Text variant="text12Bold">
-          {totalItems} {totalItemsText}
+          {totalItems ?? 0} {totalItemsText}
         </Text>
       </Box>
 

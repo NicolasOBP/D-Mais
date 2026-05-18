@@ -8,6 +8,14 @@ import { TabBar } from "@components";
 export default function TabLayout() {
   const { cartMetadata } = useCartGetMetadata();
 
+  function badgeNumber() {
+    if (!cartMetadata) {
+      return undefined;
+    }
+
+    return cartMetadata.totalItems >= 1 ? cartMetadata.totalItems : undefined;
+  }
+
   return (
     <Tabs
       initialRouteName="home"
@@ -22,7 +30,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="cart"
         options={{
-          tabBarBadge: cartMetadata ? `${cartMetadata.totalItems}` : undefined,
+          tabBarBadge: badgeNumber(),
         }}
       />
     </Tabs>

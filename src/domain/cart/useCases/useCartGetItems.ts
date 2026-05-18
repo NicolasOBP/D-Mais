@@ -12,9 +12,8 @@ export function useCartGetItems() {
 
   return {
     cartItems: data,
-    isLoading,
+    isLoading: isFetching || isLoading,
     isError,
-    isFetching,
     refetch,
   };
 }
