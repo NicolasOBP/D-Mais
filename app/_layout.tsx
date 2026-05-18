@@ -7,12 +7,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "react-native-reanimated";
 
 import {
-  AuthCredentialsProvider,
+  AuthProvider,
   initializeStorage,
   InMemoryRepositories,
   MMKVStorage,
   RepositoryProvider,
-  useAuthCredentials,
+  useAuth,
 } from "@infra";
 
 import { Toast } from "@components";
@@ -24,12 +24,12 @@ const queryClient = new QueryClient();
 initializeStorage(MMKVStorage);
 
 const Routes = () => {
-  const { user } = useAuthCredentials();
+  const { authUser } = useAuth();
 
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Protected guard={!!user}>
+      <Stack.Protected guard={!!authUser}>
         <Stack.Screen options={{ headerShown: false }} name="(protected)" />
       </Stack.Protected>
     </Stack>
@@ -48,9 +48,9 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthCredentialsProvider>
-      <QueryClientProvider client={queryClient}>
-        <RepositoryProvider value={InMemoryRepositories}>
+    <QueryClientProvider client={queryClient}>
+      <RepositoryProvider value={InMemoryRepositories}>
+        <AuthProvider>
           <ThemeProvider theme={theme}>
             <WrapperApp>
               <StatusBar style="dark" translucent />
@@ -60,8 +60,8 @@ export default function RootLayout() {
               <Toast />
             </WrapperApp>
           </ThemeProvider>
-        </RepositoryProvider>
-      </QueryClientProvider>
-    </AuthCredentialsProvider>
+        </AuthProvider>
+      </RepositoryProvider>
+    </QueryClientProvider>
   );
 }

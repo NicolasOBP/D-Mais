@@ -17,4 +17,4 @@ async function remove(): Promise<void> {
   await storage.removeItem(AUTH_KEY);
 }
 
-export const authCredentialsStorage = { set, get, remove };
+export const authContextStorage = { set, get, remove };
