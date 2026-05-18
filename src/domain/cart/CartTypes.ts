@@ -6,9 +6,10 @@ export interface ProductCart extends Product {
 }
 
 export type ProductCartVariables = Omit<ProductCart, "cartId">;
+export type CartMetadata = Omit<Cart, "cartProducts">;
 
 export type Cart = {
-  totalPrice: number;
   cartProducts: ProductCart[];
+  totalPrice: number;
   totalItems: number;
 };

@@ -1,4 +1,10 @@
-import { Cart, ICartRepo, ProductCart, ProductCartVariables } from "@domain";
+import {
+  Cart,
+  CartMetadata,
+  ICartRepo,
+  ProductCart,
+  ProductCartVariables,
+} from "@domain";
 
 const delay = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -20,9 +26,12 @@ export class InMemoryCartRepo implements ICartRepo {
     return productCart;
   }
 
-  async totalItems(): Promise<number | null> {
+  async getCartMetadata(): Promise<CartMetadata> {
     await delay();
-    return InnerCart.totalItems > 0 ? InnerCart.totalItems : null;
+    return {
+      totalItems: InnerCart.totalItems,
+      totalPrice: InnerCart.totalPrice,
+    };
   }
 
   async getCart(): Promise<Cart> {

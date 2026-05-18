@@ -18,14 +18,8 @@ export function useCartEditVolume(options?: MutationOptions<ProductCart>) {
     retry: false,
     onSuccess: (prod) => {
       queryClient.invalidateQueries({
-        queryKey: [QueryKeys.CartList],
+        queryKey: [QueryKeys.Cart],
       });
-
-      if (prod.volume === 0) {
-        queryClient.invalidateQueries({
-          queryKey: [QueryKeys.NumberCart],
-        });
-      }
 
       options?.onSuccess?.(prod);
     },

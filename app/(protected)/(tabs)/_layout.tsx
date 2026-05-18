@@ -1,12 +1,12 @@
 import { Tabs } from "expo-router";
 import React from "react";
 
-import { useCartTotalNumber } from "@domain";
+import { useCartGetMetadata } from "@domain";
 
 import { TabBar } from "@components";
 
 export default function TabLayout() {
-  const { totalItens } = useCartTotalNumber();
+  const { cartMetadata } = useCartGetMetadata();
 
   return (
     <Tabs
@@ -22,7 +22,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="cart"
         options={{
-          tabBarBadge: totalItens ? `${totalItens}` : undefined,
+          tabBarBadge: cartMetadata ? `${cartMetadata.totalItems}` : undefined,
         }}
       />
     </Tabs>

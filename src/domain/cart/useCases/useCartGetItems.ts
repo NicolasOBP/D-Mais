@@ -6,7 +6,7 @@ export function useCartGetItems() {
   const { cart } = useRepository();
 
   const { data, isLoading, isError, isFetching, refetch } = useQuery({
-    queryKey: [QueryKeys.CartList],
+    queryKey: [QueryKeys.Cart, QueryKeys.CartList],
     queryFn: () => cart.getCartItems(),
   });
 

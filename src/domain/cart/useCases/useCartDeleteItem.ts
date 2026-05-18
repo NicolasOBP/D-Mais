@@ -25,10 +25,7 @@ export function useCartDeleteItem(options?: MutationOptions<void>) {
         duration: 1000,
       });
       queryClient.invalidateQueries({
-        queryKey: [QueryKeys.NumberCart],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QueryKeys.CartList],
+        queryKey: [QueryKeys.Cart],
       });
 
       options?.onSuccess?.(prod);

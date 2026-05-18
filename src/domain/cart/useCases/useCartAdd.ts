@@ -25,10 +25,7 @@ export function useCartAdd(options?: MutationOptions<ProductCart>) {
         duration: 1000,
       });
       queryClient.invalidateQueries({
-        queryKey: [QueryKeys.NumberCart],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QueryKeys.CartList],
+        queryKey: [QueryKeys.Cart],
       });
 
       options?.onSuccess?.(prod);
