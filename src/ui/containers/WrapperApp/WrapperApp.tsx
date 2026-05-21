@@ -8,11 +8,17 @@ import {
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAppTheme } from "@theme";
+
 export function WrapperApp({ children }: React.PropsWithChildren) {
   const behaviour = useBehavior();
+  const { colors } = useAppTheme();
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={behaviour}>
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: colors.background }}
+      behavior={behaviour}
+    >
       <SafeAreaView style={{ flex: 1 }}>{children}</SafeAreaView>
     </KeyboardAvoidingView>
   );

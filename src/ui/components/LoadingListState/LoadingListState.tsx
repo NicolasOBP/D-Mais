@@ -63,8 +63,8 @@ export function LoadingListState({ screen }: LoadingListStateProps) {
       scrollEnabled={false}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{
-        gap: spacing.s20,
-        paddingTop: spacing.s24,
+        gap: screen === "Cart" ? undefined : spacing.s20,
+        paddingTop: screen === "Cart" ? spacing.s16 : spacing.s24,
         paddingBottom: spacing.s14,
       }}
       itemLayoutAnimation={LinearTransition.duration(500)}

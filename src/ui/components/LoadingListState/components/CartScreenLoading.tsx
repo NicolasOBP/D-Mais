@@ -79,11 +79,13 @@ export function CartScreenLoading(shimmerStyle: {
         {/* Title skeleton */}
         <View
           style={{
+            marginTop: spacing.s2,
             height: 16,
             backgroundColor: colors.gray4,
             borderRadius: 8,
             marginBottom: spacing.s8,
-            width: "80%",
+            width: "50%",
+            alignSelf: "center",
           }}
         />
 
@@ -115,6 +117,7 @@ export function CartScreenLoading(shimmerStyle: {
             {/* Total skeleton */}
             <View
               style={{
+                marginTop: spacing.s8,
                 height: 12,
                 backgroundColor: colors.gray4,
                 borderRadius: 6,
@@ -122,17 +125,6 @@ export function CartScreenLoading(shimmerStyle: {
               }}
             />
           </View>
-
-          {/* Edit icon skeleton */}
-          <View
-            style={{
-              width: 20,
-              height: 20,
-              backgroundColor: colors.gray4,
-              borderRadius: 4,
-              marginLeft: spacing.s8,
-            }}
-          />
         </View>
       </View>
 

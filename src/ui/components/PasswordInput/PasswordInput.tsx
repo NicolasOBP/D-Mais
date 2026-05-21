@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { useSharedValue, withTiming } from "react-native-reanimated";
 
+import { useAppTheme } from "@theme";
+
 import { TextInput, TextInputProps } from "@core-components";
 
 import { EyeIcon } from "./components/EyeIcon";
@@ -12,6 +14,7 @@ export type PasswordInputProps = Omit<
 >;
 
 export function PasswordInput(props: PasswordInputProps) {
+  const { colors } = useAppTheme();
   const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
   const opacityValue = useSharedValue(1);
 
@@ -27,6 +30,7 @@ export function PasswordInput(props: PasswordInputProps) {
     <TextInput
       secureTextEntry={isSecureTextEntry}
       {...props}
+      style={{ color: colors.text }}
       RighComponent={
         <EyeIcon opacityValue={opacityValue} toggleIsSecure={toggleIsSecure} />
       }

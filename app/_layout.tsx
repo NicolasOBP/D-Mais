@@ -53,7 +53,7 @@ export default function RootLayout() {
         <AuthProvider>
           <ThemeProvider theme={theme}>
             <WrapperApp>
-              <StatusBar style="dark" translucent />
+              <StatusBar style="dark" />
               <Routes />
 
               <Modal />
