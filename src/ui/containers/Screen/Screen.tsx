@@ -25,6 +25,8 @@ export function Screen({
         backgroundColor: colors.background,
         paddingHorizontal: noHorizontalPadding ? 0 : spacing.default,
       }}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
     >
       <Pressable style={{ flex: 1 }} onPress={useHideKeyboard}>
         {children}

@@ -1,7 +1,7 @@
 import { useSellForm } from "@schemas";
 import { isFormValid } from "@utils";
 
-import { FormTextInput, Icon, ScreenHeader } from "@components";
+import { DropDownTextInput, FormTextInput, ScreenHeader } from "@components";
 import { Screen } from "@containers";
 import { Box, Button, Text } from "@core-components";
 
@@ -17,17 +17,12 @@ export function SellsScreen() {
     <Screen scrollable>
       <ScreenHeader title="Venda" canGoBack noMargin />
 
-      <Box pt="s12" pb="s80" gap="s20">
-        <FormTextInput
+      <Box pt="s14" pb="s80" gap="s20">
+        <DropDownTextInput
           control={control}
           name="cliente"
           label="Cliente"
           variant="secundary"
-          RighComponent={
-            <Box pr="s4">
-              <Icon name="chevronDown" />
-            </Box>
-          }
         />
 
         <Box flexDirection="row" gap="s12">
@@ -60,57 +55,37 @@ export function SellsScreen() {
 
         <Box flexDirection="row" gap="s12">
           <Box flex={1}>
-            <FormTextInput
+            <DropDownTextInput
               control={control}
               name="caminhao"
               label="Caminhão"
               variant="secundary"
-              RighComponent={
-                <Box pr="s4">
-                  <Icon name="chevronDown" />
-                </Box>
-              }
             />
           </Box>
           <Box flex={1}>
-            <FormTextInput
+            <DropDownTextInput
               control={control}
               name="carreta"
               label="Carreta"
               variant="secundary"
-              RighComponent={
-                <Box pr="s4">
-                  <Icon name="chevronDown" />
-                </Box>
-              }
             />
           </Box>
         </Box>
 
         {/* Motorista */}
-        <FormTextInput
+        <DropDownTextInput
           control={control}
           name="motorista"
           label="Motorista"
           variant="secundary"
-          RighComponent={
-            <Box pr="s4">
-              <Icon name="chevronDown" />
-            </Box>
-          }
         />
 
         {/* Transportadora */}
-        <FormTextInput
+        <DropDownTextInput
           control={control}
           name="transportadora"
           label="Transportadora"
           variant="secundary"
-          RighComponent={
-            <Box pr="s4">
-              <Icon name="chevronDown" />
-            </Box>
-          }
         />
 
         {/* Produto */}

@@ -1,9 +1,17 @@
 import { useRef, useState } from "react";
 import {
+  LayoutChangeEvent,
   Pressable,
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
+  StyleProp,
+  ViewStyle,
 } from "react-native";
+
+import {
+  AnimatedStyle,
+  createAnimatedComponent,
+} from "react-native-reanimated";
 
 import { useAppTheme } from "@theme";
 
@@ -19,7 +27,11 @@ export interface TextInputProps extends RNTextInputProps {
   LeftComponent?: React.ReactElement;
   boxProps?: BoxProps;
   variant?: TextInputVariant;
+  onLayout?: (e: LayoutChangeEvent) => void;
+  animatedStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
 }
+
+const AnimatedBox = createAnimatedComponent(Box);
 
 export function TextInput({
   boxProps,
@@ -28,6 +40,8 @@ export function TextInput({
   RighComponent,
   LeftComponent,
   variant = "primary",
+  onLayout,
+  animatedStyle,
   ...textInputProps
 }: TextInputProps) {
   const [absoluteTopSpacing, setAbsoluteTopSpacing] = useState(0);
@@ -40,22 +54,25 @@ export function TextInput({
     inputRef.current?.focus();
   };
   return (
-    <Box flexGrow={1} flexShrink={1}>
-      <Pressable onPress={focusInput}>
+    <Box flexGrow={1} flexShrink={1} onLayout={onLayout}>
+      <Pressable
+        onPress={focusInput}
+        onLayout={(e) => setAbsoluteTopSpacing(e.nativeEvent.layout.height)}
+      >
         {label && (
           <Text variant="title12" mb="s4">
             {label}
           </Text>
         )}
 
-        <Box
+        <AnimatedBox
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center"
           gap="s8"
           {...boxProps}
           {...inputVariant}
-          onLayout={(e) => setAbsoluteTopSpacing(e.nativeEvent.layout.height)}
+          style={animatedStyle}
         >
           {LeftComponent && (
             <Box justifyContent="center" alignItems="center">
@@ -69,9 +86,14 @@ export function TextInput({
             placeholderTextColor={colors.gray2}
             {...textInputProps}
             style={[
-              textVariants.defaults,
-              { padding: 0, margin: 0, flexGrow: 1, flexShrink: 1 },
+              {
+                padding: 0,
+                margin: 0,
+                flexGrow: 1,
+                flexShrink: 1,
+              },
               textInputProps.style,
+              textVariants.defaults,
             ]}
           />
 
@@ -80,7 +102,7 @@ export function TextInput({
               {RighComponent}
             </Box>
           )}
-        </Box>
+        </AnimatedBox>
         {errorMessage && (
           <Box position="absolute" top={absoluteTopSpacing}>
             <Text variant="text10" color="error" ml="s10">

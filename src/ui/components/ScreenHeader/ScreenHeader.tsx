@@ -17,8 +17,8 @@ export function ScreenHeader({
     <Box mt="s10" ml={noMargin ? undefined : "s10"} paddingHorizontal="default">
       <Text variant="title24Bold">{title}</Text>
       {canGoBack && (
-        <Box ml="s10" mt="s16">
-          <Icon name="arrowLeft" onPress={router.back} />
+        <Box ml="s10" mt="s12" alignItems="flex-start">
+          <Icon name="arrowLeft" onPress={router.back} hitSlop={2} />
         </Box>
       )}
     </Box>

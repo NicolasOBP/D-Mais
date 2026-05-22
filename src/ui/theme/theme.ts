@@ -5,7 +5,7 @@ const palette = {
   black: "#000000",
   gray1: "#636363",
   gray2: "#8E8E8E",
-  gray3: "#B3B3B3",
+  gray3: "#c7c4c4",
   gray4: "#E1E1E1",
   gray5: "#F5F5F5",
   gray6: "rgba(255, 255, 255, 0.4)",

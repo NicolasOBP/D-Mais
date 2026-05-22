@@ -17,6 +17,7 @@ export interface IconProps {
   size?: number;
   onPress?: () => void;
   style?: ViewStyle;
+  hitSlop?: number;
 }
 
 export function Icon({
@@ -26,6 +27,7 @@ export function Icon({
   onPress,
   size,
   style,
+  hitSlop = 10,
 }: IconProps) {
   const SVGIcon = iconRegistry[name];
   const { colors } = useAppTheme();
@@ -38,7 +40,7 @@ export function Icon({
 
   if (onPress) {
     return (
-      <Pressable onPress={onPress} hitSlop={10} style={style}>
+      <Pressable onPress={onPress} hitSlop={hitSlop} style={style}>
         <SVGIcon {...iconProps} />
       </Pressable>
     );
