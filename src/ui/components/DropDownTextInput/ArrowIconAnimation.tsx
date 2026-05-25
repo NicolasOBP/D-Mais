@@ -8,7 +8,11 @@ import { Box } from "@core-components";
 
 import { Icon } from "../Icon";
 
-export function ArrowIcon({ progress }: { progress: SharedValue<number> }) {
+export function ArrowIconAnimation({
+  progress,
+}: {
+  progress: SharedValue<number>;
+}) {
   const arrowAnimattion = useAnimatedStyle(() => ({
     transform: [
       { rotate: interpolate(progress.value, [0, 1], [0, -180]) + "deg" },
