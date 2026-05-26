@@ -17,15 +17,20 @@ import { ControllerProps } from "../Form";
 import { ArrowIconAnimation } from "./ArrowIconAnimation";
 import { useDropDownTextInput } from "./useDropDownTextInput";
 
-export function DropDownTextInput<FormType extends FieldValues>({
+export function DropDownTextInput<
+  FormType extends FieldValues,
+  TValue extends { value: string; id: string },
+>({
   control,
   name,
   rules,
   variant,
+  dropdownItens,
   ...textInputProps
-}: Omit<TextInputProps, "RighComponent"> & ControllerProps<FormType>) {
+}: Omit<TextInputProps, "RighComponent"> &
+  ControllerProps<FormType> & { dropdownItens: TValue[] }) {
   const { colors, borderRadii } = useAppTheme();
-  const [selectedValue, setSelectedValue] = useState("Selecione");
+  const [selectedValue, setSelectedValue] = useState<TValue>();
 
   const {
     bodyProgress,
@@ -34,6 +39,7 @@ export function DropDownTextInput<FormType extends FieldValues>({
     progress,
     setTopOffset,
     topOffset,
+    isOpen,
   } = useDropDownTextInput();
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -65,10 +71,17 @@ export function DropDownTextInput<FormType extends FieldValues>({
           <>
             <TextInput
               variant={variant}
-              value={selectedValue}
+              value={selectedValue?.value}
               onChangeText={field.onChange}
               errorMessage={fieldState.error?.message}
-              RighComponent={<ArrowIconAnimation progress={progress} />}
+              RighComponent={
+                <ArrowIconAnimation
+                  closeDropdown={closeDropdown}
+                  isOpen={isOpen}
+                  openDropdown={openDropdown}
+                  progress={progress}
+                />
+              }
               onLayout={(e) => {
                 setTopOffset(e.nativeEvent.layout.height);
               }}
@@ -91,13 +104,3 @@ export function DropDownTextInput<FormType extends FieldValues>({
     </Box>
   );
 }
-
-const dropdownItens = [
-  { value: "DROPDOWN 1" },
-  { value: "DROPDOWN 2" },
-  { value: "DROPDOWN 3" },
-  { value: "DROPDOWN 4" },
-  { value: "DROPDOWN 5" },
-  { value: "DROPDOWN 6" },
-  { value: "DROPDOWN 7" },
-];

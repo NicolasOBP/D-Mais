@@ -7,16 +7,16 @@ import { Text } from "../Text";
 
 import { useDropDownAnimation } from "./useDropDownAnimation";
 
-type DropDownProps<TValue extends { value: string }> = {
+type DropDownProps<TValue extends { value: string; id: string }> = {
   progress: SharedValue<number>;
   topOffset: number;
-  onSelectItem: (value: string) => void;
-  setSelectedValue: (value: string) => void;
+  onSelectItem: (value: TValue) => void;
+  setSelectedValue: React.Dispatch<React.SetStateAction<TValue | undefined>>;
   closeDropdown: () => void;
   items: TValue[];
 };
 
-export function DropDown<TValue extends { value: string }>({
+export function DropDown<TValue extends { value: string; id: string }>({
   progress,
   topOffset,
   onSelectItem,
@@ -51,7 +51,7 @@ export function DropDown<TValue extends { value: string }>({
 
               return (
                 <Box
-                  key={item.value}
+                  key={item.id}
                   flex={1}
                   bg={diffColors ? "gray3" : "gray4"}
                   paddingHorizontal="s8"
@@ -59,8 +59,8 @@ export function DropDown<TValue extends { value: string }>({
                 >
                   <Pressable
                     onPress={() => {
-                      onSelectItem(item.value);
-                      setSelectedValue(item.value);
+                      onSelectItem(item);
+                      setSelectedValue(item);
                       closeDropdown();
                     }}
                   >

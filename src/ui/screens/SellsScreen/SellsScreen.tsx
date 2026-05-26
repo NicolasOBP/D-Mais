@@ -13,6 +13,16 @@ export function SellsScreen() {
     // TODO: Send sell data to API
   }
 
+  const dropdownItens = [
+    { value: "DROPDOWN 1", id: "1" },
+    { value: "DROPDOWN 2", id: "2" },
+    { value: "DROPDOWN 3", id: "3" },
+    { value: "DROPDOWN 4", id: "4" },
+    { value: "DROPDOWN 5", id: "5" },
+    { value: "DROPDOWN 6", id: "6" },
+    { value: "DROPDOWN 7", id: "7" },
+  ];
+
   return (
     <Screen scrollable>
       <ScreenHeader title="Venda" canGoBack noMargin />
@@ -23,6 +33,7 @@ export function SellsScreen() {
           name="cliente"
           label="Cliente"
           variant="secundary"
+          dropdownItens={dropdownItens}
         />
 
         <Box flexDirection="row" gap="s12">
@@ -60,6 +71,7 @@ export function SellsScreen() {
               name="caminhao"
               label="Caminhão"
               variant="secundary"
+              dropdownItens={dropdownItens}
             />
           </Box>
           <Box flex={1}>
@@ -68,6 +80,7 @@ export function SellsScreen() {
               name="carreta"
               label="Carreta"
               variant="secundary"
+              dropdownItens={dropdownItens}
             />
           </Box>
         </Box>
@@ -78,6 +91,7 @@ export function SellsScreen() {
           name="motorista"
           label="Motorista"
           variant="secundary"
+          dropdownItens={dropdownItens}
         />
 
         {/* Transportadora */}
@@ -86,6 +100,7 @@ export function SellsScreen() {
           name="transportadora"
           label="Transportadora"
           variant="secundary"
+          dropdownItens={dropdownItens}
         />
 
         {/* Produto */}

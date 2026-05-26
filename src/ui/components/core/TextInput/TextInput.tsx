@@ -86,14 +86,15 @@ export function TextInput({
             placeholderTextColor={colors.gray2}
             {...textInputProps}
             style={[
+              textInputProps.style,
               {
                 padding: 0,
                 margin: 0,
                 flexGrow: 1,
                 flexShrink: 1,
+                ...textVariants.defaults,
+                color: colors["text"],
               },
-              textInputProps.style,
-              textVariants.defaults,
             ]}
           />
 
