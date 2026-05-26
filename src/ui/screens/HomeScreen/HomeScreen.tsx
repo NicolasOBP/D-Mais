@@ -18,7 +18,11 @@ export function HomeScreen() {
   const { spacing } = useAppTheme();
   const [searchText, setSearchText] = useState("");
   const searchDebounced = useDebounce(searchText);
-  const { products, isLoading, refetch } = useProductsList(searchDebounced);
+  const {
+    data: products,
+    isLoading,
+    refetch,
+  } = useProductsList(searchDebounced);
 
   const flatListRef = useRef(null);
 

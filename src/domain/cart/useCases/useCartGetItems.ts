@@ -1,19 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-
-import { QueryKeys, useRepository } from "@infra";
+import { QueryKeys, useAppQuery, useRepository } from "@infra";
 
 export function useCartGetItems() {
   const { cart } = useRepository();
 
-  const { data, isLoading, isError, isFetching, refetch } = useQuery({
+  return useAppQuery({
     queryKey: [QueryKeys.Cart, QueryKeys.CartList],
-    queryFn: () => cart.getCartItems(),
+    fetchData: cart.getCartItems,
   });
-
-  return {
-    cartItems: data,
-    isLoading: isFetching || isLoading,
-    isError,
-    refetch,
-  };
 }

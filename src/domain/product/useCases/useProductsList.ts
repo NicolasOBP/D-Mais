@@ -1,21 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-
-import { QueryKeys, useRepository } from "@infra";
+import { QueryKeys, useAppQuery, useRepository } from "@infra";
 
 export function useProductsList(searchDebounced: string) {
   const { product } = useRepository();
 
-  const { data, isLoading, isError, refetch, isFetching } = useQuery({
+  return useAppQuery({
     queryKey: [QueryKeys.ProductList, searchDebounced],
-    queryFn: () => product.list(searchDebounced),
+    fetchData: () => product.list(searchDebounced),
     staleTime: 1000 * 30,
   });
-
-  return {
-    products: data,
-    isLoading,
-    isError,
-    refetch,
-    isFetching,
-  };
 }

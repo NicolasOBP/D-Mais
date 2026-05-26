@@ -13,7 +13,10 @@ let InnerCart: Cart = { cartProducts: [], totalPrice: 0, totalItems: 0 };
 export class InMemoryCartRepo implements ICartRepo {
   async add(product: ProductCartVariables): Promise<ProductCart> {
     await delay();
-    const productCart = { ...product, cartId: InnerCart.cartProducts.length };
+    const productCart = {
+      ...product,
+      cartId: InnerCart.cartProducts.length + Math.random(),
+    };
 
     InnerCart.cartProducts.push(productCart);
     InnerCart.totalItems++;

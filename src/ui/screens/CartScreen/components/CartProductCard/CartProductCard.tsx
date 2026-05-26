@@ -62,8 +62,6 @@ export function CartProductCard({
   }
 
   useEffect(() => {
-    console.log({ isPending });
-
     updateModalData({ isLoading: isPending });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPending]);

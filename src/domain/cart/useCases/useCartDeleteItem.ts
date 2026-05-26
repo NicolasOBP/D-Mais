@@ -1,6 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
-import { MutationOptions, QueryKeys, useRepository } from "@infra";
+import {
+  MutationOptions,
+  QueryKeys,
+  useAppMutation,
+  useRepository,
+} from "@infra";
 
 import { useToast } from "@components";
 
@@ -11,13 +16,8 @@ export function useCartDeleteItem(options?: MutationOptions<void>) {
   const { showToast } = useToast();
   const queryClient = useQueryClient();
 
-  const { mutate, isError, isSuccess, isPending } = useMutation<
-    void,
-    Error,
-    { productCartId: ProductCart["cartId"] }
-  >({
+  return useAppMutation<void, { productCartId: ProductCart["cartId"] }>({
     mutationFn: (prod) => cart.deleteItem(prod.productCartId),
-    retry: false,
     onSuccess: (prod) => {
       showToast({
         type: "success",
@@ -37,12 +37,4 @@ export function useCartDeleteItem(options?: MutationOptions<void>) {
       });
     },
   });
-
-  return {
-    deleteItem: (productCartId: ProductCart["cartId"]) =>
-      mutate({ productCartId }),
-    isError,
-    isSuccess,
-    isPending,
-  };
 }

@@ -1,6 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
-
-import { MutationOptions, useAuth, useRepository } from "@infra";
+import {
+  MutationOptions,
+  useAppMutation,
+  useAuth,
+  useRepository,
+} from "@infra";
 
 import { useToast } from "@components";
 
@@ -17,14 +20,17 @@ export function useAuthSignIn(options?: MutationOptions<AuthUser>) {
   const { showToast } = useToast();
   const { saveAuthUser } = useAuth();
 
-  const { mutate, isError, isSuccess, isPending } = useMutation<
-    AuthUser,
-    { message: string; cause: string | undefined },
-    Variables
-  >({
+  return useAppMutation<AuthUser, Variables>({
     mutationFn: ({ company, password, userName }) =>
       auth.signIn(company, password, userName),
-    retry: false,
+    onSuccess: (authUser) => {
+      showToast({
+        message: `Bem vindo ${authUser.name}`,
+        type: "success",
+      });
+      saveAuthUser(authUser);
+      options?.onSuccess?.(authUser);
+    },
     onError: (error) => {
       showToast({
         message: error.message,
@@ -33,29 +39,7 @@ export function useAuthSignIn(options?: MutationOptions<AuthUser>) {
         duration: 4000,
       });
 
-      if (options?.onError) {
-        options.onError(error.message);
-      }
-    },
-
-    onSuccess: (authUser) => {
-      showToast({
-        message: `Bem vindo ${authUser.name}`,
-        type: "success",
-      });
-
-      saveAuthUser(authUser);
-
-      if (options?.onSuccess) {
-        options.onSuccess(authUser);
-      }
+      options?.onError?.(error.message);
     },
   });
-
-  return {
-    signIn: (variables: Variables) => mutate(variables),
-    isPending,
-    isSuccess,
-    isError,
-  };
 }

@@ -11,7 +11,7 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({ product, containerProps }: ProductCardProps) {
-  const { addCart, isPending } = useCartAdd({
+  const { mutate: addCart, isPending } = useCartAdd({
     onSuccess: () => {
       resetForm();
       closeModal();

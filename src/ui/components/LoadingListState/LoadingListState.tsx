@@ -28,7 +28,7 @@ export function LoadingListState({ screen }: LoadingListStateProps) {
   useEffect(() => {
     shimmerPosition.value = withRepeat(
       withTiming(2, {
-        duration: 1700,
+        duration: 1500,
         easing: Easing.inOut(Easing.ease),
       }),
     );

@@ -19,8 +19,8 @@ type CartItem = ProductCart & { isSelected?: boolean };
 
 export function CartScreen() {
   const { spacing } = useAppTheme();
-  const { cartItems, isLoading } = useCartGetItems();
-  const { cartMetadata } = useCartGetMetadata();
+  const { data: cartItems, isLoading } = useCartGetItems();
+  const { data: cartMetadata } = useCartGetMetadata();
 
   // const [cartItems, setCartItems] = useState<CartItem[] | undefined>(
   //   cart?.cartProducts,

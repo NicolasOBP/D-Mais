@@ -23,7 +23,7 @@ export function SignInScreen() {
     mode: "onChange",
   });
 
-  const { signIn, isPending } = useAuthSignIn({
+  const { mutate: signIn, isPending } = useAuthSignIn({
     onSuccess: () => {
       router.navigate("/home");
     },

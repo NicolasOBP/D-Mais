@@ -1,6 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
-import { MutationOptions, QueryKeys, useRepository } from "@infra";
+import {
+  MutationOptions,
+  QueryKeys,
+  useAppMutation,
+  useRepository,
+} from "@infra";
 
 import { useToast } from "@components";
 
@@ -11,13 +16,8 @@ export function useCartAdd(options?: MutationOptions<ProductCart>) {
   const { showToast } = useToast();
   const queryClient = useQueryClient();
 
-  const { mutate, isError, isSuccess, isPending } = useMutation<
-    ProductCart,
-    Error,
-    ProductCartVariables
-  >({
+  return useAppMutation<ProductCart, ProductCartVariables>({
     mutationFn: (prod) => cart.add(prod),
-    retry: false,
     onSuccess: (prod) => {
       showToast({
         type: "success",
@@ -37,11 +37,4 @@ export function useCartAdd(options?: MutationOptions<ProductCart>) {
       });
     },
   });
-
-  return {
-    addCart: (prod: ProductCartVariables) => mutate(prod),
-    isError,
-    isSuccess,
-    isPending,
-  };
 }
