@@ -1,8 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { ProductCart, useCartDeleteItem, useCartEditVolume } from "@domain";
-import { useProductVolumeModal } from "@hooks";
-import { CartSchema } from "@schemas";
+import { ProductCart, useCartDeleteItem } from "@domain";
 
 import { Icon } from "@components";
 import { useModal } from "@containers";
@@ -23,28 +21,12 @@ export function CartProductCard({
   onSelectChange,
 }: CartProductCardProps) {
   const [selected, setSelected] = useState(isSelected);
-  const { showModal } = useModal();
-  const { editVolume, isPending: isPendingEdit } = useCartEditVolume({
-    onSuccess: (product) => {
-      closeModal();
-      resetForm({ volume: product.volume.toString() });
-    },
-  });
-  const { deleteItem, isPending: isPendingDelete } = useCartDeleteItem({
+  const { showModal, updateModalData, closeModal } = useModal();
+
+  const { mutate: deleteItem, isPending } = useCartDeleteItem({
     onSuccess: () => {
       closeModal();
     },
-  });
-  const {
-    closeModal,
-    reset: resetForm,
-    handleShowModal: handleEditProduct,
-  } = useProductVolumeModal({
-    defaultVolume: product.volume.toString(),
-    product,
-    onSubmit: onSubmitEdit,
-    isEdit: true,
-    isLoading: isPendingEdit,
   });
 
   const handleSelectChange = () => {
@@ -70,20 +52,21 @@ export function CartProductCard({
             labelCancel: "Cancelar",
             labelConfirm: "Deletar",
             onConfirm: () => {
-              deleteItem(product.cartId);
+              deleteItem({ productCartId: product.cartId });
             },
           },
         },
       },
-      { isPendingDelete },
+      { isLoading: isPending },
     );
   }
 
-  function onSubmitEdit({ volume }: CartSchema) {
-    const newVolumeNumber = Number.parseInt(volume);
+  useEffect(() => {
+    console.log({ isPending });
 
-    editVolume({ productCartId: product.cartId, newVolume: newVolumeNumber });
-  }
+    updateModalData({ isLoading: isPending });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPending]);
 
   return (
     <Box
@@ -99,10 +82,7 @@ export function CartProductCard({
         selected={selected}
       />
 
-      <ProductCartDetails
-        product={product}
-        handleEditProduct={handleEditProduct}
-      />
+      <ProductCartDetails product={product} />
 
       <Icon
         name="trash"

@@ -17,6 +17,7 @@ export type ModalFooterProps = {
     labelConfirm: string;
     labelCancel: string;
     onConfirm: () => void;
+    disabled?: boolean;
   };
 };
 
@@ -34,6 +35,7 @@ export function ModalFooter({ ...modalFooterProps }: ModalFooterProps) {
     return (
       <TwoButtonFooter
         {...modalFooterProps.twoButtonFooter}
+        disabled={modalData.isLoading}
         isLoading={modalData.isLoading}
       />
     );
@@ -61,6 +63,7 @@ function TwoButtonFooter(
         paddingVertical="s10"
         paddingHorizontal="s24"
         onPress={closeModal}
+        style={{ minWidth: 120 }}
       />
       <Button
         variant="success"
@@ -69,6 +72,7 @@ function TwoButtonFooter(
         paddingHorizontal="s24"
         onPress={props!.onConfirm}
         isLoading={props!.isLoading}
+        style={{ minWidth: 120 }}
       />
     </Box>
   );
