@@ -1,6 +1,6 @@
 import { AuthUser, IAuthRepo } from "@domain";
 
-import { authUsers } from "./data/authUsers";
+import { mockAuthUsers } from "./data/mockAuthUsers";
 
 const delay = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -11,7 +11,7 @@ export class InMemoryAuthRepo implements IAuthRepo {
     userName: string,
   ): Promise<AuthUser> {
     await delay();
-    const user = authUsers.find(
+    const user = mockAuthUsers.find(
       (user) => user.company === company && user.userName === userName,
     );
 

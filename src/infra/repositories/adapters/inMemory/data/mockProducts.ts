@@ -1,6 +1,6 @@
 import { Product } from "@domain";
 
-export const PRODUCTS_DATA: Product[] = [
+export const mockProducts: Product[] = [
   {
     id: "1",
     title: "Gasolina Premium",

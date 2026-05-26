@@ -1,6 +1,6 @@
 import { AuthUser } from "@domain";
 
-export const authUsers: AuthUser[] = [
+export const mockAuthUsers: AuthUser[] = [
   {
     email: "esse@gmail.com",
     name: "Fulano da Silva",

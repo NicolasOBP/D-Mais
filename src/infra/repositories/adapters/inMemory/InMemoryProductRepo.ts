@@ -1,13 +1,13 @@
 import { IProductRepo, Product } from "@domain";
 
-import { PRODUCTS_DATA } from "./data/products";
+import { mockProducts } from "./data/mockProducts";
 
 const delay = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
 export class InMemoryProductRepo implements IProductRepo {
   async list(searchProduct: string | null): Promise<Product[]> {
     await delay();
-    const products = PRODUCTS_DATA;
+    const products = mockProducts;
 
     if (searchProduct) {
       return products.filter((prod) =>
