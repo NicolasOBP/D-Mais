@@ -4,4 +4,6 @@ export enum QueryKeys {
   CartList = "CartList",
   CartMetadata = "CartMetadata",
   Cart = "Cart",
+  Sells = "Sells",
+  SellsClientList = "SellsClientList",
 }

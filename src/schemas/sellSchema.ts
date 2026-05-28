@@ -14,28 +14,37 @@ import { z } from "zod";
 
 export const sellSchema = z.object({
   cliente: z.object({
-    id: z.string(),
-    value: z.string(),
+    name: z.string(),
+    corporateReason: z.string(),
+    cnpjCpf: z.string(),
   }),
   condicaoPagamento: z.string().optional(),
   tabela: z.string().optional(),
   valorFrete: z.string().optional(),
-  caminhao: z.object({
-    id: z.string(),
-    value: z.string(),
-  }),
-  carreta: z.object({
-    id: z.string(),
-    value: z.string(),
-  }),
-  motorista: z.object({
-    id: z.string(),
-    value: z.string(),
-  }),
-  transportadora: z.object({
-    id: z.string(),
-    value: z.string(),
-  }),
+  caminhao: z
+    .object({
+      id: z.string(),
+      value: z.string(),
+    })
+    .optional(),
+  carreta: z
+    .object({
+      id: z.string(),
+      value: z.string(),
+    })
+    .optional(),
+  motorista: z
+    .object({
+      id: z.string(),
+      value: z.string(),
+    })
+    .optional(),
+  transportadora: z
+    .object({
+      id: z.string(),
+      value: z.string(),
+    })
+    .optional(),
   produto: z.string().min(1, "Produto é obrigatório"),
 });
 

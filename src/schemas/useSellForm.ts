@@ -7,7 +7,7 @@ export function useSellForm() {
   const { control, handleSubmit, formState, reset } = useForm<SellSchema>({
     resolver: zodResolver(sellSchema),
     defaultValues: {
-      cliente: { id: "", value: "" },
+      cliente: { cnpjCpf: "", corporateReason: "", name: "" },
       condicaoPagamento: "",
       tabela: "",
       valorFrete: "",
