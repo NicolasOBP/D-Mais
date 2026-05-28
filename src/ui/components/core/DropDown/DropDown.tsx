@@ -1,28 +1,32 @@
-import { Pressable, ScrollView } from "react-native";
+import { Keyboard, Pressable, ScrollView } from "react-native";
 
 import Animated, { SharedValue, useSharedValue } from "react-native-reanimated";
+
+import { StringOrNumberKeyConstraint } from "@utils";
 
 import { Box } from "../Box";
 import { Text } from "../Text";
 
 import { useDropDownAnimation } from "./useDropDownAnimation";
 
-type DropDownProps<TValue extends { value: string; id: string }> = {
+export type DropDownProps<TValue extends any[]> = {
   progress: SharedValue<number>;
   topOffset: number;
-  onSelectItem: (value: TValue) => void;
-  setSelectedValue: React.Dispatch<React.SetStateAction<TValue | undefined>>;
+  onSelectItem: (value: TValue[number]) => void;
   closeDropdown: () => void;
-  items: TValue[];
+  dropdownItems: TValue | undefined;
+  valueKey: StringOrNumberKeyConstraint<TValue[number]>;
+  idKey: StringOrNumberKeyConstraint<TValue[number]>;
 };
 
-export function DropDown<TValue extends { value: string; id: string }>({
+export function DropDown<TValue extends any[]>({
   progress,
   topOffset,
   onSelectItem,
-  setSelectedValue,
   closeDropdown,
-  items,
+  dropdownItems,
+  valueKey,
+  idKey,
 }: DropDownProps<TValue>) {
   const height = useSharedValue(0);
 
@@ -46,12 +50,14 @@ export function DropDown<TValue extends { value: string; id: string }>({
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="always"
           >
-            {items.map((item) => {
+            {dropdownItems?.map((item) => {
               diffColors = !diffColors;
+              const itemId = String(item[idKey]);
+              const itemValue = String(item[valueKey]);
 
               return (
                 <Box
-                  key={item.id}
+                  key={itemId}
                   flex={1}
                   bg={diffColors ? "gray3" : "gray4"}
                   paddingHorizontal="s8"
@@ -60,11 +66,11 @@ export function DropDown<TValue extends { value: string; id: string }>({
                   <Pressable
                     onPress={() => {
                       onSelectItem(item);
-                      setSelectedValue(item);
                       closeDropdown();
+                      Keyboard.dismiss();
                     }}
                   >
-                    <Text variant="text14">{item.value}</Text>
+                    <Text variant="text14">{itemValue}</Text>
                   </Pressable>
                 </Box>
               );

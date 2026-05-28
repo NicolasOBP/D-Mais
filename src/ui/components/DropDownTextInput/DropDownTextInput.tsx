@@ -1,36 +1,42 @@
 /* eslint-disable import/named */
-import { useState } from "react";
 
 import { Controller, FieldValues } from "react-hook-form";
+
 import {
-  interpolate,
-  interpolateColor,
-  useAnimatedStyle,
-} from "react-native-reanimated";
-
-import { useAppTheme } from "@theme";
-
-import { Box, DropDown, TextInput, TextInputProps } from "@core-components";
+  Box,
+  DropDown,
+  DropDownProps,
+  TextInput,
+  TextInputProps,
+} from "@core-components";
 
 import { ControllerProps } from "../Form";
 
 import { ArrowIconAnimation } from "./ArrowIconAnimation";
+import { useDropDownInputAnimation } from "./useDropDownInputAnimation";
 import { useDropDownTextInput } from "./useDropDownTextInput";
+
+type DropDownTextInputProps<
+  FormType extends FieldValues,
+  TValue extends any[],
+> = Omit<TextInputProps, "RighComponent"> &
+  ControllerProps<FormType> &
+  Pick<DropDownProps<TValue>, "dropdownItems" | "valueKey" | "idKey">;
 
 export function DropDownTextInput<
   FormType extends FieldValues,
-  TValue extends { value: string; id: string },
+  TValue extends any[],
 >({
   control,
   name,
   rules,
   variant,
-  dropdownItens,
+  dropdownItems,
+  valueKey,
+  idKey,
   ...textInputProps
-}: Omit<TextInputProps, "RighComponent"> &
-  ControllerProps<FormType> & { dropdownItens: TValue[] }) {
-  const { colors, borderRadii } = useAppTheme();
-  const [selectedValue, setSelectedValue] = useState<TValue>();
+}: DropDownTextInputProps<FormType, TValue>) {
+  // const [selectedValue, setSelectedValue] = useState<TValue>();
 
   const {
     bodyProgress,
@@ -42,24 +48,7 @@ export function DropDownTextInput<
     isOpen,
   } = useDropDownTextInput();
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(
-      progress.value,
-      [0, 1],
-      [colors.gray4, colors.gray3],
-    ),
-    borderBottomLeftRadius: interpolate(
-      progress.value,
-      [0, 1],
-      [borderRadii.inputField, 0],
-    ),
-    borderBottomRightRadius: interpolate(
-      progress.value,
-      [0, 1],
-      [borderRadii.inputField, 0],
-    ),
-    borderBottomWidth: interpolate(progress.value, [0, 1], [1, 2]),
-  }));
+  const animatedStyle = useDropDownInputAnimation(progress);
 
   return (
     <Box>
@@ -71,7 +60,7 @@ export function DropDownTextInput<
           <>
             <TextInput
               variant={variant}
-              value={selectedValue?.value}
+              value={field.value[valueKey]}
               onChangeText={field.onChange}
               errorMessage={fieldState.error?.message}
               RighComponent={
@@ -94,9 +83,10 @@ export function DropDownTextInput<
               progress={bodyProgress}
               topOffset={topOffset}
               onSelectItem={field.onChange}
-              setSelectedValue={setSelectedValue}
               closeDropdown={closeDropdown}
-              items={dropdownItens}
+              valueKey={valueKey}
+              idKey={idKey}
+              dropdownItems={dropdownItems}
             />
           </>
         )}
