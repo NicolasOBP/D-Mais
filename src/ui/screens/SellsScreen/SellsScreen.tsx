@@ -1,5 +1,5 @@
 import { SellSchema, useSellForm } from "@schemas";
-import { isFormValid } from "@utils";
+import { useFormUtils } from "@utils";
 
 import { DropDownTextInput, FormTextInput, ScreenHeader } from "@components";
 import { Screen } from "@containers";
@@ -135,7 +135,7 @@ export function SellsScreen() {
 
       <Box position="absolute" bottom={0} left={0} right={0} padding="default">
         <Button
-          disabled={isFormValid(formState)}
+          disabled={useFormUtils.isFormValid(formState)}
           variant="primary"
           paddingVertical="s14"
           paddingHorizontal="s20"

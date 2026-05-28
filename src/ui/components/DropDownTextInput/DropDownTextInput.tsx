@@ -2,6 +2,8 @@
 
 import { Controller, FieldValues } from "react-hook-form";
 
+import { useFormUtils } from "@utils";
+
 import {
   Box,
   DropDown,
@@ -62,7 +64,7 @@ export function DropDownTextInput<
               variant={variant}
               value={field.value[valueKey]}
               onChangeText={field.onChange}
-              errorMessage={fieldState.error?.message}
+              errorMessage={useFormUtils.getFirstErrorMessage(fieldState.error)}
               RighComponent={
                 <ArrowIconAnimation
                   closeDropdown={closeDropdown}

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { isFormValid } from "@utils";
+import { useFormUtils } from "@utils";
 
 import { Box, Button } from "@core-components";
 
@@ -26,7 +26,7 @@ export function ModalFooter({ ...modalFooterProps }: ModalFooterProps) {
 
   const isDisabled = useMemo(() => {
     if (modalData?.formState) {
-      return isFormValid(modalData.formState);
+      return useFormUtils.isFormValid(modalData.formState);
     }
     return modalFooterProps.oneButtonFooter?.disabled ?? false;
   }, [modalData.formState, modalFooterProps.oneButtonFooter?.disabled]);

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { useAuthSignIn } from "@domain";
-import { isFormValid } from "@utils";
+import { useFormUtils } from "@utils";
 
 import { FormTextInput } from "@components";
 import { Screen } from "@containers";
@@ -62,7 +62,7 @@ export function SignInScreen() {
 
       <Button
         isLoading={isPending}
-        disabled={isFormValid(formState)}
+        disabled={useFormUtils.isFormValid(formState)}
         variant="primary"
         marginHorizontal="s8"
         paddingVertical="s14"
