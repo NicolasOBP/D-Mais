@@ -14,37 +14,29 @@ import { z } from "zod";
 
 export const sellSchema = z.object({
   cliente: z.object({
-    name: z.string(),
-    corporateReason: z.string(),
-    cnpjCpf: z.string(),
+    name: z.string().min(1, "Cliente inválido"),
+    corporateReason: z.string().min(1, "Cliente inválido"),
+    cnpjCpf: z.string().min(1, "Cliente inválido"),
   }),
-  condicaoPagamento: z.string().optional(),
-  tabela: z.string().optional(),
-  valorFrete: z.string().optional(),
-  caminhao: z
-    .object({
-      id: z.string(),
-      value: z.string(),
-    })
-    .optional(),
-  carreta: z
-    .object({
-      id: z.string(),
-      value: z.string(),
-    })
-    .optional(),
-  motorista: z
-    .object({
-      id: z.string(),
-      value: z.string(),
-    })
-    .optional(),
-  transportadora: z
-    .object({
-      id: z.string(),
-      value: z.string(),
-    })
-    .optional(),
+  condicaoPagamento: z.string().min(1, "Campo obrigatório"),
+  tabela: z.string().min(1, "Campo obrigatório"),
+  valorFrete: z.string().min(1, "Campo obrigatório"),
+  caminhao: z.object({
+    id: z.string().min(1, "Caminhão inválido"),
+    value: z.string().min(1, "Caminhão inválido"),
+  }),
+  carreta: z.object({
+    id: z.string().min(1, "Carreta inválido"),
+    value: z.string().min(1, "Carreta inválido"),
+  }),
+  motorista: z.object({
+    id: z.string().min(1, "Motorista inválido"),
+    value: z.string().min(1, "Motorista inválido"),
+  }),
+  transportadora: z.object({
+    id: z.string().min(1, "Transportadora inválido"),
+    value: z.string().min(1, "Transportadora inválido"),
+  }),
   produto: z.string().min(1, "Produto é obrigatório"),
 });
 
