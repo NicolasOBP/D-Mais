@@ -6,4 +6,8 @@ export enum QueryKeys {
   Cart = "Cart",
   Sells = "Sells",
   SellsClientList = "SellsClientList",
+  SellsTruckList = "SellsTruckList",
+  SellsPickupList = "SellsPickupList",
+  SellsDriverList = "SellsDriverList",
+  SellsCompanyList = "SellsCompanyList",
 }

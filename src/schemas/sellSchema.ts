@@ -22,20 +22,18 @@ export const sellSchema = z.object({
   tabela: z.string().min(1, "Campo obrigatório"),
   valorFrete: z.string().min(1, "Campo obrigatório"),
   caminhao: z.object({
-    id: z.string().min(1, "Caminhão inválido"),
-    value: z.string().min(1, "Caminhão inválido"),
+    licensePlate: z.string().min(1, "Caminhão inválido"),
   }),
   carreta: z.object({
-    id: z.string().min(1, "Carreta inválido"),
-    value: z.string().min(1, "Carreta inválido"),
+    licensePlate: z.string().min(1, "Caminhão inválido"),
   }),
   motorista: z.object({
-    id: z.string().min(1, "Motorista inválido"),
-    value: z.string().min(1, "Motorista inválido"),
+    name: z.string().min(1, "Motorista inválido"),
+    cpf: z.string().min(1, "Motorista inválido"),
   }),
   transportadora: z.object({
-    id: z.string().min(1, "Transportadora inválido"),
-    value: z.string().min(1, "Transportadora inválido"),
+    name: z.string().min(1, "Transportadora inválido"),
+    cnpj: z.string().min(1, "Transportadora inválido"),
   }),
   produto: z.string().min(1, "Produto é obrigatório"),
 });
