@@ -18,7 +18,7 @@ export function ScreenHeader({
       <Text variant="title24Bold">{title}</Text>
       {canGoBack && (
         <Box ml="s10" mt="s12" alignItems="flex-start">
-          <Icon name="arrowLeft" onPress={router.back} hitSlop={2} />
+          <Icon name="arrowLeft" onPress={router.back} hitSlop={4} />
         </Box>
       )}
     </Box>

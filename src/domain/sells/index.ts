@@ -1,2 +1,3 @@
 export { ISellsRepo } from "./ISellsRepo";
-export { Client } from "./SellsType";
+export * from "./SellsType";
+export * from "./useCases";
