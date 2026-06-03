@@ -20,4 +20,9 @@ export const toastVariants: Record<
     borderColor: "success",
     textColor: "darkGreen",
   },
+  warning: {
+    backgroundColor: "warningLight",
+    borderColor: "warning",
+    textColor: "darkOrange",
+  },
 };

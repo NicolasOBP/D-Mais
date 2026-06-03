@@ -8,7 +8,7 @@ import Animated, { LinearTransition } from "react-native-reanimated";
 import { ProductCart, useCartGetItems, useCartGetMetadata } from "@domain";
 import { useAppTheme } from "@theme";
 
-import { LoadingListState, ScreenHeader } from "@components";
+import { LoadingListState, ScreenHeader, useToast } from "@components";
 import { Screen } from "@containers";
 import { Box, Text } from "@core-components";
 
@@ -19,6 +19,7 @@ type CartItem = ProductCart & { isSelected?: boolean };
 
 export function CartScreen() {
   const { spacing } = useAppTheme();
+  const { showToast } = useToast();
   const { data: cartItems, isLoading } = useCartGetItems();
   const { data: cartMetadata } = useCartGetMetadata();
 
@@ -48,7 +49,21 @@ export function CartScreen() {
   }
 
   function onCheckout() {
-    router.navigate("/sell");
+    if (!cartItems || cartItems.length === 0) {
+      showToast({
+        type: "warning",
+        message: "Seu carrinho está vazio",
+        duration: 4000,
+      });
+      return;
+    }
+
+    router.navigate({
+      pathname: "/sell",
+      params: {
+        cartItems: JSON.stringify(cartItems),
+      },
+    });
   }
 
   // useEffect(() => {

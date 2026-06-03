@@ -29,6 +29,11 @@ const palette = {
   darkRed: "#7e0000",
   lightRed: "#ff4343e4",
 
+  // Warning
+  orange: "#929500",
+  darkOrange: "#575600",
+  lightOrange: "#fefb54df",
+
   transparent: "transparent",
 };
 
@@ -50,6 +55,10 @@ const theme = createTheme({
     error: palette.red,
     errorText: palette.darkRed,
     errorLight: palette.lightRed,
+
+    warning: palette.orange,
+    warningText: palette.darkOrange,
+    warningLight: palette.lightOrange,
 
     // Neutral/Background colors
     background: palette.white,

@@ -1,3 +1,5 @@
+import { useLocalSearchParams } from "expo-router";
+
 import {
   useSellClientList,
   useSellCompanyList,
@@ -13,6 +15,10 @@ import { Screen } from "@containers";
 import { Box, Button, Text } from "@core-components";
 
 export function SellsScreen() {
+  const params = useLocalSearchParams<{ cartItems: string }>();
+
+  console.log(JSON.parse(params.cartItems));
+
   const { control, formState, handleSubmit } = useSellForm();
   const { data: clientList } = useSellClientList();
   const { data: truckList } = useSellTruckList();
