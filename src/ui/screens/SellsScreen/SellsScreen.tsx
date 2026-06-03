@@ -93,7 +93,6 @@ export function SellsScreen() {
           </Box>
         </Box>
 
-        {/* Motorista */}
         <DropDownTextInput
           control={control}
           name="motorista"
@@ -104,7 +103,6 @@ export function SellsScreen() {
           variant="secundary"
         />
 
-        {/* Transportadora */}
         <DropDownTextInput
           control={control}
           name="transportadora"
@@ -115,7 +113,6 @@ export function SellsScreen() {
           variant="secundary"
         />
 
-        {/* Produto */}
         <Box>
           <Text variant="title12" mb="s4">
             Produto

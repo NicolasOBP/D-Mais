@@ -18,17 +18,14 @@ import { ArrowIconAnimation } from "./ArrowIconAnimation";
 import { useDropDownInputAnimation } from "./useDropDownInputAnimation";
 import { useDropDownTextInput } from "./useDropDownTextInput";
 
-type DropDownTextInputProps<
-  FormType extends FieldValues,
-  TValue extends any[],
-> = Omit<TextInputProps, "RighComponent"> &
+type DropDownTextInputProps<FormType extends FieldValues, TValue> = Omit<
+  TextInputProps,
+  "RighComponent"
+> &
   ControllerProps<FormType> &
   Pick<DropDownProps<TValue>, "dropdownItems" | "valueKey" | "idKey">;
 
-export function DropDownTextInput<
-  FormType extends FieldValues,
-  TValue extends any[],
->({
+export function DropDownTextInput<FormType extends FieldValues, TValue>({
   control,
   name,
   rules,
@@ -89,6 +86,7 @@ export function DropDownTextInput<
               valueKey={valueKey}
               idKey={idKey}
               dropdownItems={dropdownItems}
+              searchText={field.value}
             />
           </>
         )}
