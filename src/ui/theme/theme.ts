@@ -131,6 +131,12 @@ const theme = createTheme({
       lineHeight: 22,
       color: "title",
     },
+    title14: {
+      fontSize: 14,
+      fontFamily: "InterSemiBold",
+      lineHeight: 20,
+      color: "title",
+    },
     title12: {
       fontSize: 12,
       fontFamily: "InterSemiBold",

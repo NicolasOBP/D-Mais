@@ -1,6 +1,8 @@
 import { useLocalSearchParams } from "expo-router";
+import { ScrollView } from "react-native";
 
 import {
+  ProductCart,
   useSellClientList,
   useSellCompanyList,
   useSellDriverList,
@@ -8,16 +10,20 @@ import {
   useSellTruckList,
 } from "@domain";
 import { SellSchema, useSellForm } from "@schemas";
+import { useAppTheme } from "@theme";
 import { useFormUtils } from "@utils";
 
 import { DropDownTextInput, FormTextInput, ScreenHeader } from "@components";
 import { Screen } from "@containers";
 import { Box, Button, Text } from "@core-components";
 
-export function SellsScreen() {
-  const params = useLocalSearchParams<{ cartItems: string }>();
+import { SellsProductCard } from "./components/SellsProductCard";
 
-  console.log(JSON.parse(params.cartItems));
+export function SellsScreen() {
+  const { spacing } = useAppTheme();
+  const cartItems = JSON.parse(
+    useLocalSearchParams<{ cartItems: string }>().cartItems,
+  ) as ProductCart[];
 
   const { control, formState, handleSubmit } = useSellForm();
   const { data: clientList } = useSellClientList();
@@ -37,8 +43,8 @@ export function SellsScreen() {
 
       <Box pt="s14" pb="s80" gap="s20">
         <DropDownTextInput
-          control={control}
           name="cliente"
+          control={control}
           label="Cliente"
           dropdownItems={clientList}
           idKey="cnpjCpf"
@@ -49,24 +55,24 @@ export function SellsScreen() {
         <Box flexDirection="row" gap="s12">
           <Box flex={1}>
             <FormTextInput
-              control={control}
               name="condicaoPagamento"
+              control={control}
               label="Cond. de Pagto."
               variant="secundary"
             />
           </Box>
           <Box flex={1}>
             <FormTextInput
-              control={control}
               name="tabela"
+              control={control}
               label="Tabela"
               variant="secundary"
             />
           </Box>
           <Box flex={1}>
             <FormTextInput
-              control={control}
               name="valorFrete"
+              control={control}
               label="Valor do frete"
               keyboardType="decimal-pad"
               variant="secundary"
@@ -77,8 +83,8 @@ export function SellsScreen() {
         <Box flexDirection="row" gap="s12">
           <Box flex={1}>
             <DropDownTextInput
-              control={control}
               name="caminhao"
+              control={control}
               label="Caminhão"
               dropdownItems={truckList}
               idKey="licensePlate"
@@ -88,8 +94,8 @@ export function SellsScreen() {
           </Box>
           <Box flex={1}>
             <DropDownTextInput
-              control={control}
               name="carreta"
+              control={control}
               label="Carreta"
               dropdownItems={pickupList}
               idKey="licensePlate"
@@ -100,8 +106,8 @@ export function SellsScreen() {
         </Box>
 
         <DropDownTextInput
-          control={control}
           name="motorista"
+          control={control}
           label="Motorista"
           dropdownItems={driverList}
           idKey="cpf"
@@ -110,8 +116,8 @@ export function SellsScreen() {
         />
 
         <DropDownTextInput
-          control={control}
           name="transportadora"
+          control={control}
           label="Transportadora"
           dropdownItems={companyList}
           idKey="cnpj"
@@ -120,18 +126,19 @@ export function SellsScreen() {
         />
 
         <Box>
-          <Text variant="title12" mb="s4">
-            Produto
+          <Text variant="title12" mb="s12">
+            Produtos
           </Text>
-          <FormTextInput
-            control={control}
-            name="produto"
-            multiline
-            numberOfLines={8}
-            boxProps={{
-              minHeight: 200,
-            }}
-          />
+          <ScrollView
+            style={{ maxHeight: 300 }}
+            contentContainerStyle={{ gap: spacing.s8 }}
+            nestedScrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+          >
+            {cartItems.map((item) => (
+              <SellsProductCard key={item.cartId} item={item} />
+            ))}
+          </ScrollView>
         </Box>
       </Box>
 

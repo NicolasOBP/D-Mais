@@ -15,7 +15,6 @@ export function useSellForm() {
       carreta: { licensePlate: "" },
       motorista: { cpf: "", name: "" },
       transportadora: { cnpj: "", name: "" },
-      produto: "",
     },
     mode: "onChange",
   });
