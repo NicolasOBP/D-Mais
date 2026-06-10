@@ -1,7 +1,7 @@
 import { ProductCart } from "@domain";
 import { useNumberFormat } from "@utils";
 
-import { Box, Text } from "@core-components";
+import { Box, PressableBox, Text } from "@core-components";
 
 interface SellsProductCardProps {
   item: ProductCart;
@@ -11,7 +11,7 @@ export function SellsProductCard({ item }: SellsProductCardProps) {
   const finalPrice = item.price * item.volume;
 
   return (
-    <Box
+    <PressableBox
       padding="s16"
       paddingVertical="s8"
       borderRadius="default"
@@ -19,6 +19,8 @@ export function SellsProductCard({ item }: SellsProductCardProps) {
       borderWidth={1}
       borderColor="gray3"
       gap="s4"
+      marginRight="s12"
+      width={250}
     >
       <Text variant="title14" numberOfLines={1}>
         {item.title}
@@ -52,6 +54,6 @@ export function SellsProductCard({ item }: SellsProductCardProps) {
           </Text>
         </Box>
       </Box>
-    </Box>
+    </PressableBox>
   );
 }

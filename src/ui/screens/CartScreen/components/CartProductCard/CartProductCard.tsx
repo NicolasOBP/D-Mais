@@ -4,7 +4,7 @@ import { ProductCart, useCartDeleteItem } from "@domain";
 
 import { Icon } from "@components";
 import { useModal } from "@containers";
-import { Box, Text } from "@core-components";
+import { Box, PressableBox, Text } from "@core-components";
 
 import { ProductCartCheckbox } from "./components/ProductCartCheckbox";
 import { ProductCartDetails } from "./components/ProductCartDetails";
@@ -67,7 +67,7 @@ export function CartProductCard({
   }, [isPending]);
 
   return (
-    <Box
+    <PressableBox
       flexDirection="row"
       justifyContent="space-between"
       alignItems="center"
@@ -88,6 +88,6 @@ export function CartProductCard({
         color="primary"
         onPress={handleRemoveProduct}
       />
-    </Box>
+    </PressableBox>
   );
 }
