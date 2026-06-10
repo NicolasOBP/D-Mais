@@ -27,34 +27,37 @@ export function SellsScreen() {
   }
 
   return (
-    <Screen scrollable>
+    <Screen scrollable noHorizontalPadding>
       <ScreenHeader title="Venda" canGoBack noMargin />
 
       <SellsForm control={control} />
 
-      <Text variant="title12" mb="s12">
-        Produtos
-      </Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        directionalLockEnabled={true}
-        alwaysBounceVertical={false}
-      >
-        <FlatList
-          data={cartItems}
-          renderItem={({ item }) => (
-            <SellsProductCard key={item.cartId} item={item} />
-          )}
-          keyExtractor={(item) => item.cartId.toString()}
-          numColumns={Math.ceil(cartItems.length / 2)}
-          contentContainerStyle={{
-            gap: spacing.s12,
-          }}
-        />
-      </ScrollView>
+      <Box pb="s8">
+        <Text variant="title12" mb="s12" paddingHorizontal="default">
+          Produtos
+        </Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          directionalLockEnabled={true}
+          alwaysBounceVertical={false}
+        >
+          <FlatList
+            data={cartItems}
+            renderItem={({ item }) => (
+              <SellsProductCard key={item.cartId} item={item} />
+            )}
+            keyExtractor={(item) => item.cartId.toString()}
+            numColumns={Math.ceil(cartItems.length / 2)}
+            contentContainerStyle={{
+              gap: spacing.s12,
+            }}
+            style={{ paddingLeft: spacing.default }}
+          />
+        </ScrollView>
+      </Box>
 
-      <Box padding="default">
+      <Box padding="default" paddingHorizontal="s32">
         <Button
           disabled={useFormUtils.isFormValid(formState)}
           variant="primary"

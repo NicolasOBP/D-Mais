@@ -20,7 +20,7 @@ export function SellsForm({
   const { data: companyList } = useSellCompanyList();
 
   return (
-    <Box pt="s14" pb="s20" gap="s20">
+    <Box pt="s14" pb="s20" gap="s20" paddingHorizontal="default">
       <DropDownTextInput
         name="cliente"
         control={control}
