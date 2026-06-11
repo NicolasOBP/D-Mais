@@ -18,25 +18,25 @@ export function SellsProductCard({ item }: SellsProductCardProps) {
       backgroundColor="gray5"
       borderWidth={1}
       borderColor="gray3"
-      gap="s4"
+      gap="s8"
       marginRight="s12"
-      width={250}
+      width={180}
     >
       <Text variant="title14" numberOfLines={1}>
         {item.title}
       </Text>
 
       <Box flexDirection="row" justifyContent="space-between" gap="s12">
-        <Box flex={1}>
+        <Box>
           <Text variant="text12" color="gray1" mb="s4">
             Volume
           </Text>
           <Text variant="title12" numberOfLines={1}>
-            {item.volume} L
+            {useNumberFormat.formatNumberWithThousands(item.volume)} L
           </Text>
         </Box>
 
-        <Box flex={1}>
+        <Box>
           <Text variant="text12" color="gray1" mb="s4">
             Preço
           </Text>
@@ -44,15 +44,14 @@ export function SellsProductCard({ item }: SellsProductCardProps) {
             {useNumberFormat.toBRLCurrency(item.price)}
           </Text>
         </Box>
-
-        <Box flex={1}>
-          <Text variant="text12" color="gray1" mb="s4">
-            Total
-          </Text>
-          <Text variant="title12" color="green" numberOfLines={1}>
-            {useNumberFormat.toBRLCurrency(finalPrice)}
-          </Text>
-        </Box>
+      </Box>
+      <Box>
+        <Text variant="text12" color="gray1" mb="s4">
+          Total
+        </Text>
+        <Text variant="title12" color="green" numberOfLines={1}>
+          {useNumberFormat.toBRLCurrency(finalPrice)}
+        </Text>
       </Box>
     </PressableBox>
   );

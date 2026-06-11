@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Keyboard, Pressable, ScrollView } from "react-native";
+import { Keyboard, ScrollView } from "react-native";
 
 import Animated, { SharedValue, useSharedValue } from "react-native-reanimated";
 
 import { StringOrNumberKeyConstraint, useDebounce } from "@utils";
 
-import { Box } from "../Box";
+import { Box, PressableBox } from "../Box";
 import { Text } from "../Text";
 
 import { useDropDownAnimation } from "./useDropDownAnimation";
@@ -85,23 +85,20 @@ export function DropDown<TValue>({
               const itemValue = String(item[valueKey]);
 
               return (
-                <Box
+                <PressableBox
                   key={itemId}
                   flex={1}
-                  bg={diffColors ? "gray3" : "gray4"}
+                  backgroundColor={diffColors ? "gray3" : "gray4"}
                   paddingHorizontal="s8"
                   paddingVertical="s4"
+                  onPress={() => {
+                    onSelectItem(item);
+                    closeDropdown();
+                    Keyboard.dismiss();
+                  }}
                 >
-                  <Pressable
-                    onPress={() => {
-                      onSelectItem(item);
-                      closeDropdown();
-                      Keyboard.dismiss();
-                    }}
-                  >
-                    <Text variant="text14">{itemValue}</Text>
-                  </Pressable>
-                </Box>
+                  <Text variant="text14">{itemValue}</Text>
+                </PressableBox>
               );
             })}
           </ScrollView>

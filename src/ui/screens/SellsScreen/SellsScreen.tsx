@@ -52,7 +52,7 @@ export function SellsScreen() {
             contentContainerStyle={{
               gap: spacing.s12,
             }}
-            style={{ paddingLeft: spacing.default }}
+            style={{ paddingLeft: spacing.default, paddingRight: spacing.s8 }}
           />
         </ScrollView>
       </Box>
