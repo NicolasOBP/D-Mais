@@ -9,7 +9,7 @@
     "web": "expo start --web",
     "tsc": "npx tsc -noEmit",
     "lint": "expo lint",
-    "build:dev": "eas build --platform android --profile development"
+    "eas:dev": "eas build --platform android --profile development"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
