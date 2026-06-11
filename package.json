@@ -9,7 +9,9 @@
     "web": "expo start --web",
     "tsc": "npx tsc -noEmit",
     "lint": "expo lint",
-    "eas:dev": "eas build --platform android --profile development"
+    "eas:dev": "eas build --platform android --profile development",
+    "eas:prev": "eas build --platform android --profile preview",
+    "up:prev": "npx eas update --channel preview --message"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
