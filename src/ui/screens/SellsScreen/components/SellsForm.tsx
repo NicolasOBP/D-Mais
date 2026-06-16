@@ -29,6 +29,7 @@ export function SellsForm({
         idKey="cnpjCpf"
         valueKey="corporateReason"
         variant="secundary"
+        isRequired
       />
 
       <Box flexDirection="row" gap="s12">
@@ -38,6 +39,7 @@ export function SellsForm({
             control={control}
             label="Cond. de Pagto."
             variant="secundary"
+            isRequired
           />
         </Box>
         <Box flex={1}>
@@ -46,6 +48,7 @@ export function SellsForm({
             control={control}
             label="Tabela"
             variant="secundary"
+            isRequired
           />
         </Box>
         <Box flex={1}>
@@ -55,6 +58,7 @@ export function SellsForm({
             label="Valor do frete"
             keyboardType="decimal-pad"
             variant="secundary"
+            isRequired
           />
         </Box>
       </Box>
@@ -69,6 +73,7 @@ export function SellsForm({
             idKey="licensePlate"
             valueKey="licensePlate"
             variant="secundary"
+            isRequired
           />
         </Box>
         <Box flex={1}>
@@ -80,6 +85,7 @@ export function SellsForm({
             idKey="licensePlate"
             valueKey="licensePlate"
             variant="secundary"
+            isRequired
           />
         </Box>
       </Box>
@@ -92,6 +98,7 @@ export function SellsForm({
         idKey="cpf"
         valueKey="name"
         variant="secundary"
+        isRequired
       />
 
       <DropDownTextInput
@@ -102,6 +109,7 @@ export function SellsForm({
         idKey="cnpj"
         valueKey="name"
         variant="secundary"
+        isRequired
       />
     </Box>
   );

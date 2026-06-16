@@ -1,0 +1,21 @@
+name: Preview Update
+
+on:
+  push:
+    branches: ["preview"]
+
+jobs:
+  preview_update:
+    name: Update Preview App
+    steps:
+      - uses: eas/checkout
+      - uses: eas/install_node_modules
+
+      - name: Run TypeScript Compiler
+        run: npx tsc --noEmit
+
+      - name: Run Linter
+        run: npx expo lint
+
+      - name: Deploy to Preview
+        run: npx eas update --channel preview --message "Automated update from preview branch"
