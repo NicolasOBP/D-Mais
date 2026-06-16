@@ -29,6 +29,7 @@ export interface TextInputProps extends RNTextInputProps {
   variant?: TextInputVariant;
   onLayout?: (e: LayoutChangeEvent) => void;
   animatedStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
+  isRequired?: boolean;
 }
 
 const AnimatedBox = createAnimatedComponent(Box);
@@ -42,6 +43,7 @@ export function TextInput({
   variant = "primary",
   onLayout,
   animatedStyle,
+  isRequired = false,
   ...textInputProps
 }: TextInputProps) {
   const [absoluteTopSpacing, setAbsoluteTopSpacing] = useState(0);
@@ -60,9 +62,16 @@ export function TextInput({
         onLayout={(e) => setAbsoluteTopSpacing(e.nativeEvent.layout.height)}
       >
         {label && (
-          <Text variant="title12" mb="s4">
-            {label}
-          </Text>
+          <Box flexDirection="row">
+            <Text variant="title12" mb="s4">
+              {label}
+            </Text>
+            {isRequired && (
+              <Text color="errorText" variant="text16Bold" ml="s4">
+                *
+              </Text>
+            )}
+          </Box>
         )}
 
         <AnimatedBox
