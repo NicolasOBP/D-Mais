@@ -55,8 +55,6 @@ function TwoButtonFooter(
 ) {
   const { closeModal } = useModal();
 
-  console.log({ props });
-
   return (
     <Box alignItems="center" flexDirection="row" justifyContent="space-around">
       <Button

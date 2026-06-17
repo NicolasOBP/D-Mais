@@ -28,7 +28,7 @@ export function SellsScreen() {
 
   return (
     <Screen scrollable noHorizontalPadding>
-      <ScreenHeader title="Venda" canGoBack noMargin />
+      <ScreenHeader title="Venda" goBackTo="/cart" noMargin />
 
       <SellsForm control={control} />
 
@@ -43,6 +43,7 @@ export function SellsScreen() {
           alwaysBounceVertical={false}
         >
           <FlatList
+            key={cartItems.length}
             data={cartItems}
             renderItem={({ item }) => (
               <SellsProductCard key={item.cartId} item={item} />
