@@ -1,7 +1,7 @@
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { FlatList, ScrollView } from "react-native";
 
-import { ProductCart } from "@domain";
+import { ProductCart, useOrdersAdd } from "@domain";
 import { SellSchema, useSellForm } from "@schemas";
 import { useAppTheme } from "@theme";
 import { useFormUtils } from "@utils";
@@ -15,15 +15,31 @@ import { SellsProductCard } from "./components/SellsProductCard";
 
 export function SellsScreen() {
   const { spacing } = useAppTheme();
+  const { mutate: sendOrder } = useOrdersAdd({
+    onSuccess: () => {
+      router.navigate("/orders");
+    },
+  });
   const cartItems = JSON.parse(
     useLocalSearchParams<{ cartItems: string }>().cartItems,
   ) as ProductCart[];
+  const totalPrice = useLocalSearchParams<{ totalPrice: string }>().totalPrice;
 
   const { control, formState, handleSubmit } = useSellForm();
 
   function onSubmit(data: SellSchema) {
-    console.log({ data });
-    // TODO: Send sell data to API
+    sendOrder({
+      products: cartItems,
+      totalPrice: totalPrice,
+      client: data.cliente,
+      paymentTerms: data.condicaoPagamento,
+      company: data.transportadora,
+      driver: data.motorista,
+      pickup: data.carreta,
+      table: data.tabela,
+      truck: data.caminhao,
+      fare: data.valorFrete,
+    });
   }
 
   return (

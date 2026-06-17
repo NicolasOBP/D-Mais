@@ -62,6 +62,7 @@ export function CartScreen() {
       pathname: "/sell",
       params: {
         cartItems: JSON.stringify(cartItems),
+        totalPrice: cartMetadata?.totalPrice || 0,
       },
     });
   }
