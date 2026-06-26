@@ -16,8 +16,6 @@ export function OrdersProductCard({
 }: OrdersProductCardProps) {
   const orderStatus = statusStyleMap[order.status];
 
-  console.log(orderStatus);
-
   return (
     <Box {...cardStyle}>
       {/* Status Badge */}

@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { FlatList, ScrollView } from "react-native";
 
-import { ProductCart, useOrdersAdd } from "@domain";
+import { ProductCart, useOrdersSend } from "@domain";
 import { SellSchema, useSellForm } from "@schemas";
 import { useAppTheme } from "@theme";
 import { useFormUtils } from "@utils";
@@ -17,9 +17,11 @@ import { SendSellModalBody } from "./components/SendSellModalBody";
 export function SellsScreen() {
   const { spacing } = useAppTheme();
   const { showModal, closeModal } = useModal();
-  const { mutate: sendOrder } = useOrdersAdd({
+  const { control, formState, handleSubmit, reset } = useSellForm();
+  const { mutate: sendOrder } = useOrdersSend({
     onSuccess: () => {
       closeModal();
+      reset();
       router.navigate("/orders");
     },
   });
@@ -28,8 +30,6 @@ export function SellsScreen() {
     useLocalSearchParams<{ cartItems: string }>().cartItems,
   ) as ProductCart[];
   const totalPrice = useLocalSearchParams<{ totalPrice: string }>().totalPrice;
-
-  const { control, formState, handleSubmit } = useSellForm();
 
   function handleShowModal(data: SellSchema) {
     showModal({

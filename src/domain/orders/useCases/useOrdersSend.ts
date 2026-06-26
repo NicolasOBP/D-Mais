@@ -1,0 +1,37 @@
+import { useQueryClient } from "@tanstack/react-query";
+
+import {
+  MutationOptions,
+  QueryKeys,
+  useAppMutation,
+  useRepository,
+} from "@infra";
+
+import { useToast } from "@components";
+
+import { Order, OrderVariables } from "../OrdersType";
+
+export function useOrdersSend(options?: MutationOptions<Order>) {
+  const { orders, cart } = useRepository();
+  const { showToast } = useToast();
+  const queryClient = useQueryClient();
+
+  return useAppMutation<Order, OrderVariables>({
+    mutationFn: (order) => orders.send(order),
+    onSuccess: (order) => {
+      showToast({
+        type: "success",
+        message: "Pedido enviado com sucesso!",
+      });
+
+      order.products.forEach((item) => {
+        cart.deleteItem(item.cartId);
+      });
+
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.Orders] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.Cart] });
+
+      options?.onSuccess?.(order);
+    },
+  });
+}

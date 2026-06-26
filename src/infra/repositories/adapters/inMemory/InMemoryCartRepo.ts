@@ -33,7 +33,7 @@ export class InMemoryCartRepo implements ICartRepo {
     await delay();
     return {
       totalItems: InnerCart.totalItems,
-      totalPrice: InnerCart.totalPrice,
+      totalPrice: Math.abs(InnerCart.totalPrice),
     };
   }
 
