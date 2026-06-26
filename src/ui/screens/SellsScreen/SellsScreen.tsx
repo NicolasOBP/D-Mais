@@ -7,25 +7,42 @@ import { useAppTheme } from "@theme";
 import { useFormUtils } from "@utils";
 
 import { ScreenHeader } from "@components";
-import { Screen } from "@containers";
+import { Screen, useModal } from "@containers";
 import { Box, Button, Text } from "@core-components";
 
 import { SellsForm } from "./components/SellsForm";
 import { SellsProductCard } from "./components/SellsProductCard";
+import { SendSellModalBody } from "./components/SendSellModalBody";
 
 export function SellsScreen() {
   const { spacing } = useAppTheme();
+  const { showModal, closeModal } = useModal();
   const { mutate: sendOrder } = useOrdersAdd({
     onSuccess: () => {
+      closeModal();
       router.navigate("/orders");
     },
   });
+
   const cartItems = JSON.parse(
     useLocalSearchParams<{ cartItems: string }>().cartItems,
   ) as ProductCart[];
   const totalPrice = useLocalSearchParams<{ totalPrice: string }>().totalPrice;
 
   const { control, formState, handleSubmit } = useSellForm();
+
+  function handleShowModal(data: SellSchema) {
+    showModal({
+      BodyComponent: <SendSellModalBody />,
+      footerButton: {
+        twoButtonFooter: {
+          labelCancel: "Cancelar",
+          labelConfirm: "Confirmar",
+          onConfirm: () => onSubmit(data),
+        },
+      },
+    });
+  }
 
   function onSubmit(data: SellSchema) {
     sendOrder({
@@ -81,7 +98,7 @@ export function SellsScreen() {
           paddingVertical="s14"
           paddingHorizontal="s20"
           lable="Enviar venda"
-          onPress={handleSubmit(onSubmit)}
+          onPress={handleSubmit(handleShowModal)}
         />
       </Box>
     </Screen>
