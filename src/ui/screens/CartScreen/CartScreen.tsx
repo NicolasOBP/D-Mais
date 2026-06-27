@@ -58,7 +58,7 @@ export function CartScreen() {
       return;
     }
 
-    router.navigate({
+    router.push({
       pathname: "/sell",
       params: {
         cartItems: JSON.stringify(cartItems),

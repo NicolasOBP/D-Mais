@@ -1,4 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
+import { useEffect } from "react";
 import { FlatList, ScrollView } from "react-native";
 
 import { ProductCart, useOrdersSend } from "@domain";
@@ -16,13 +17,13 @@ import { SendSellModalBody } from "./components/SendSellModalBody";
 
 export function SellsScreen() {
   const { spacing } = useAppTheme();
-  const { showModal, closeModal } = useModal();
+  const { showModal, closeModal, updateModalData } = useModal();
   const { control, formState, handleSubmit, reset } = useSellForm();
-  const { mutate: sendOrder } = useOrdersSend({
+  const { mutate: sendOrder, isPending } = useOrdersSend({
     onSuccess: () => {
       closeModal();
       reset();
-      router.navigate("/orders");
+      router.push("/orders");
     },
   });
 
@@ -32,17 +33,25 @@ export function SellsScreen() {
   const totalPrice = useLocalSearchParams<{ totalPrice: string }>().totalPrice;
 
   function handleShowModal(data: SellSchema) {
-    showModal({
-      BodyComponent: <SendSellModalBody />,
-      footerButton: {
-        twoButtonFooter: {
-          labelCancel: "Cancelar",
-          labelConfirm: "Confirmar",
-          onConfirm: () => onSubmit(data),
+    showModal(
+      {
+        BodyComponent: <SendSellModalBody />,
+        footerButton: {
+          twoButtonFooter: {
+            labelCancel: "Cancelar",
+            labelConfirm: "Confirmar",
+            onConfirm: () => onSubmit(data),
+          },
         },
       },
-    });
+      { isLoading: isPending },
+    );
   }
+
+  useEffect(() => {
+    updateModalData({ isLoading: isPending });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPending]);
 
   function onSubmit(data: SellSchema) {
     sendOrder({

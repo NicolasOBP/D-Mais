@@ -4,7 +4,7 @@ export function useOrdersList() {
   const { orders } = useRepository();
 
   return useAppQuery({
-    queryKey: [QueryKeys.Orders],
-    fetchData: () => orders.list(),
+    queryKey: [QueryKeys.Orders, QueryKeys.OrdersList],
+    fetchData: orders.list,
   });
 }
