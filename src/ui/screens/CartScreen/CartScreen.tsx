@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useRef } from "react";
-import { ListRenderItemInfo } from "react-native";
+import { ListRenderItemInfo, RefreshControl } from "react-native";
 
 import { useScrollToTop } from "@react-navigation/native";
 import Animated, { LinearTransition } from "react-native-reanimated";
@@ -20,7 +20,7 @@ type CartItem = ProductCart & { isSelected?: boolean };
 export function CartScreen() {
   const { spacing } = useAppTheme();
   const { showToast } = useToast();
-  const { data: cartItems, isLoading } = useCartGetItems();
+  const { data: cartItems, isLoading, refetch } = useCartGetItems();
   const { data: cartMetadata } = useCartGetMetadata();
 
   // const [cartItems, setCartItems] = useState<CartItem[] | undefined>(
@@ -96,6 +96,9 @@ export function CartScreen() {
               >
                 <Text variant="title16">Seu carrinho está vazio</Text>
               </Box>
+            }
+            refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={refetch} />
             }
           />
         )}

@@ -7,7 +7,7 @@ export class InMemoryOrdersRepo implements IOrdersRepo {
   async list(): Promise<OrderDetails[]> {
     await delay();
 
-    return InnerOrders;
+    return [...InnerOrders];
   }
 
   async send(order: OrderVariables): Promise<Order> {
@@ -18,7 +18,7 @@ export class InMemoryOrdersRepo implements IOrdersRepo {
       status: "pending",
       ...order,
     };
-    InnerOrders.push(newOrder);
+    InnerOrders = [...InnerOrders, newOrder];
 
     return newOrder;
   }

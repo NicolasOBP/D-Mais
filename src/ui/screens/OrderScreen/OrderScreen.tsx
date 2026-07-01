@@ -1,5 +1,9 @@
 import { useRef } from "react";
-import { ActivityIndicator, ListRenderItemInfo } from "react-native";
+import {
+  ActivityIndicator,
+  ListRenderItemInfo,
+  RefreshControl,
+} from "react-native";
 
 import { useScrollToTop } from "@react-navigation/native";
 import Animated, { LinearTransition } from "react-native-reanimated";
@@ -15,7 +19,7 @@ import { OrdersProductCard } from "./components";
 
 export function OrderScreen() {
   const { spacing } = useAppTheme();
-  const { data: orders, isLoading } = useOrdersList();
+  const { data: orders, isLoading, refetch } = useOrdersList();
 
   const flatListRef = useRef(null);
   useScrollToTop(flatListRef);
@@ -45,6 +49,9 @@ export function OrderScreen() {
               paddingBottom: spacing.s12,
               rowGap: spacing.s20,
             }}
+            refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+            }
           />
         )}
       </Box>
