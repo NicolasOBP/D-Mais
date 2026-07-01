@@ -24,9 +24,7 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
         message: "Pedido enviado com sucesso!",
       });
 
-      order.products.forEach((item) => {
-        cart.deleteItem(item.cartId);
-      });
+      cart.deleteItems(order.products.map((prod) => prod.cartId));
 
       queryClient.invalidateQueries({ queryKey: [QueryKeys.Orders] });
       queryClient.invalidateQueries({ queryKey: [QueryKeys.Cart] });

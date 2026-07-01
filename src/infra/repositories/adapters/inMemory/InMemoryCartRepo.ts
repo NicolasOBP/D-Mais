@@ -98,4 +98,33 @@ export class InMemoryCartRepo implements ICartRepo {
     InnerCart.totalItems--;
     InnerCart.totalPrice -= product.price * product.volume;
   }
+
+  async deleteItems(productCartIds: ProductCart["cartId"][]): Promise<void> {
+    if (!productCartIds.length) {
+      return;
+    }
+
+    const productsToRemove = InnerCart.cartProducts.filter((product) =>
+      productCartIds.includes(product.cartId),
+    );
+
+    if (productsToRemove.length !== productCartIds.length) {
+      throw new Error("Algum produto não foi encontrado");
+    }
+
+    InnerCart.cartProducts = InnerCart.cartProducts.filter(
+      (product) => !productCartIds.includes(product.cartId),
+    );
+
+    InnerCart.totalItems -= productsToRemove.length;
+    InnerCart.totalPrice = Number(
+      (
+        InnerCart.totalPrice -
+        productsToRemove.reduce(
+          (sum, product) => sum + product.price * product.volume,
+          0,
+        )
+      ).toFixed(2),
+    );
+  }
 }
