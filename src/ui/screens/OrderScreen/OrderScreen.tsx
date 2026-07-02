@@ -1,9 +1,5 @@
 import { useRef } from "react";
-import {
-  ActivityIndicator,
-  ListRenderItemInfo,
-  RefreshControl,
-} from "react-native";
+import { ListRenderItemInfo, RefreshControl } from "react-native";
 
 import { useScrollToTop } from "@react-navigation/native";
 import Animated, { LinearTransition } from "react-native-reanimated";
@@ -11,7 +7,7 @@ import Animated, { LinearTransition } from "react-native-reanimated";
 import { Order, useOrdersList } from "@domain";
 import { useAppTheme } from "@theme";
 
-import { EmptyList, ScreenHeader } from "@components";
+import { EmptyList, LoadingListState, ScreenHeader } from "@components";
 import { Screen } from "@containers";
 import { Box } from "@core-components";
 
@@ -34,7 +30,7 @@ export function OrderScreen() {
 
       <Box flex={1} pt="s16">
         {isLoading ? (
-          <ActivityIndicator />
+          <LoadingListState screen="Orders" />
         ) : (
           <Animated.FlatList
             ref={flatListRef}

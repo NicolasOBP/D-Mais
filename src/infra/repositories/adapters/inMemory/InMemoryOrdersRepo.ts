@@ -2,7 +2,7 @@ import { IOrdersRepo, Order, OrderDetails, OrderVariables } from "@domain";
 
 let InnerOrders: OrderDetails[] = [];
 
-const delay = () => new Promise((resolve) => setTimeout(resolve, 2000));
+const delay = () => new Promise((resolve) => setTimeout(resolve, 4000));
 export class InMemoryOrdersRepo implements IOrdersRepo {
   async list(): Promise<OrderDetails[]> {
     await delay();

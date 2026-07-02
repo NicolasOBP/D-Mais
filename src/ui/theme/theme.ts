@@ -100,6 +100,7 @@ const theme = createTheme({
     s48: 48,
     s56: 56,
     s62: 62,
+    s75: 75,
     s80: 80,
     default: 16,
   },

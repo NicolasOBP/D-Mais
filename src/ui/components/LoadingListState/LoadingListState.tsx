@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import { View } from "react-native";
+import { StyleProp, View, ViewStyle } from "react-native";
 
 import Animated, {
+  AnimatedStyle,
   Easing,
   LinearTransition,
   useAnimatedStyle,
@@ -12,13 +13,18 @@ import Animated, {
 
 import { useAppTheme } from "@theme";
 
-import { CartScreenLoading } from "./components";
-import { HomeScreenLoading } from "./components/HomeScreenLoading";
+import theme from "../../theme/theme";
+
+import {
+  CartScreenLoading,
+  HomeScreenLoading,
+  OrderScreenLoading,
+} from "./components";
 
 const SKELETON_ITEMS = 5;
 
 type LoadingListStateProps = {
-  screen: "Home" | "Cart";
+  screen: "Home" | "Cart" | "Orders";
 };
 
 export function LoadingListState({ screen }: LoadingListStateProps) {
@@ -52,6 +58,11 @@ export function LoadingListState({ screen }: LoadingListStateProps) {
     if (screen === "Cart") {
       return <CartScreenLoading {...shimmerStyle} />;
     }
+
+    if (screen === "Orders") {
+      return <OrderScreenLoading {...shimmerStyle} />;
+    }
+
     return <View></View>;
   }
 
@@ -62,12 +73,41 @@ export function LoadingListState({ screen }: LoadingListStateProps) {
       renderItem={renderSkeletonItem!}
       scrollEnabled={false}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{
-        gap: screen === "Cart" ? undefined : spacing.s20,
-        paddingTop: screen === "Cart" ? spacing.s16 : spacing.s24,
-        paddingBottom: spacing.s14,
-      }}
+      contentContainerStyle={screenListStyleMap[screen].container}
+      columnWrapperStyle={screenListStyleMap[screen].wrapper}
       itemLayoutAnimation={LinearTransition.duration(500)}
+      numColumns={screen === "Orders" ? 2 : 1}
     />
   );
 }
+
+const screenListStyleMap: Record<
+  LoadingListStateProps["screen"],
+  {
+    container: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
+    wrapper?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
+  }
+> = {
+  Cart: {
+    container: {
+      paddingTop: theme.spacing.s16,
+      paddingBottom: theme.spacing.s14,
+    },
+  },
+  Home: {
+    container: {
+      gap: theme.spacing.s20,
+      paddingTop: theme.spacing.s24,
+      paddingBottom: theme.spacing.s14,
+    },
+  },
+  Orders: {
+    container: {
+      paddingBottom: theme.spacing.s12,
+      rowGap: theme.spacing.s20,
+    },
+    wrapper: {
+      gap: theme.spacing.s24,
+    },
+  },
+};
