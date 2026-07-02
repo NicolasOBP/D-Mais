@@ -8,10 +8,9 @@ import { Product, useProductsList } from "@domain";
 import { useAppTheme } from "@theme";
 import { useDebounce } from "@utils";
 
-import { LoadingListState, SearchBar } from "@components";
+import { EmptyList, LoadingListState, SearchBar } from "@components";
 import { Screen } from "@containers";
 
-import { EmptyComponent } from "./components/EmptyComponent";
 import { ProductCard } from "./components/ProductCard/ProductCard";
 
 export function HomeScreen() {
@@ -58,7 +57,7 @@ export function HomeScreen() {
           }
           itemLayoutAnimation={LinearTransition.duration(500)}
           ref={flatListRef}
-          ListEmptyComponent={<EmptyComponent />}
+          ListEmptyComponent={<EmptyList desc="Nenhum produto encontrado" />}
         />
       )}
     </Screen>

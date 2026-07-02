@@ -11,7 +11,7 @@ import Animated, { LinearTransition } from "react-native-reanimated";
 import { Order, useOrdersList } from "@domain";
 import { useAppTheme } from "@theme";
 
-import { ScreenHeader } from "@components";
+import { EmptyList, ScreenHeader } from "@components";
 import { Screen } from "@containers";
 import { Box } from "@core-components";
 
@@ -52,6 +52,7 @@ export function OrderScreen() {
             refreshControl={
               <RefreshControl refreshing={isLoading} onRefresh={refetch} />
             }
+            ListEmptyComponent={<EmptyList desc="Nenhum pedido encontrado" />}
           />
         )}
       </Box>

@@ -8,9 +8,14 @@ import Animated, { LinearTransition } from "react-native-reanimated";
 import { ProductCart, useCartGetItems, useCartGetMetadata } from "@domain";
 import { useAppTheme } from "@theme";
 
-import { LoadingListState, ScreenHeader, useToast } from "@components";
+import {
+  EmptyList,
+  LoadingListState,
+  ScreenHeader,
+  useToast,
+} from "@components";
 import { Screen } from "@containers";
-import { Box, Text } from "@core-components";
+import { Box } from "@core-components";
 
 import { CartProductCard } from "./components";
 import { CartFooter } from "./components/CartFooter";
@@ -87,16 +92,7 @@ export function CartScreen() {
             itemLayoutAnimation={LinearTransition.duration(500)}
             showsVerticalScrollIndicator={false}
             ref={flatListRef}
-            ListEmptyComponent={
-              <Box
-                flex={1}
-                justifyContent="center"
-                alignItems="center"
-                paddingVertical="s56"
-              >
-                <Text variant="title16">Seu carrinho está vazio</Text>
-              </Box>
-            }
+            ListEmptyComponent={<EmptyList desc="Seu carrinho está vazio" />}
             refreshControl={
               <RefreshControl refreshing={isLoading} onRefresh={refetch} />
             }
