@@ -10,6 +10,19 @@ let InnerCart: Cart = { cartProducts: [], totalPrice: 0, totalItems: 0 };
 
 export class InMemoryCartRepo implements ICartRepo {
   async add(product: ProductCartVariables): Promise<ProductCart> {
+    const existingProduct = InnerCart.cartProducts.find(
+      (cartProduct) => cartProduct.id === product.id,
+    );
+
+    if (existingProduct) {
+      existingProduct.volume += product.volume;
+      InnerCart.totalPrice = Number(
+        (InnerCart.totalPrice + product.price * product.volume).toFixed(2),
+      );
+
+      return existingProduct;
+    }
+
     const productCart = {
       ...product,
       cartId: InnerCart.cartProducts.length + Math.random(),
