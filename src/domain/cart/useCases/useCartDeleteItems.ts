@@ -11,12 +11,17 @@ import { useToast } from "@components";
 
 import { ProductCart } from "..";
 
-export function useCartDeleteItems(options?: MutationOptions<void>) {
+export function useCartDeleteItems(
+  options?: MutationOptions<ProductCart["cartId"][]>,
+) {
   const { cart } = useRepository();
   const { showToast } = useToast();
   const queryClient = useQueryClient();
 
-  return useAppMutation<void, { productCartIds: ProductCart["cartId"][] }>({
+  return useAppMutation<
+    ProductCart["cartId"][],
+    { productCartIds: ProductCart["cartId"][] }
+  >({
     mutationFn: ({ productCartIds }) => cart.deleteItems(productCartIds),
     onSuccess: (productCartIds) => {
       queryClient.invalidateQueries({

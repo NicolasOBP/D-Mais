@@ -11,8 +11,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { useAppTheme } from "@theme";
-
 import theme from "../../theme/theme";
 
 import {
@@ -28,7 +26,6 @@ type LoadingListStateProps = {
 };
 
 export function LoadingListState({ screen }: LoadingListStateProps) {
-  const { spacing } = useAppTheme();
   const shimmerPosition = useSharedValue(-1);
 
   useEffect(() => {

@@ -18,11 +18,16 @@ export function useAppQuery<DataT>({
   queryKey,
   staleTime,
 }: UseAppQueryParams<DataT>): UseFetchDataReturn<DataT> {
-  const { data, isLoading, error, isPending, refetch } = useQuery({
+  const { data, isLoading, error, isPending, refetch, isFetching } = useQuery({
     queryKey,
     queryFn: fetchData,
     staleTime,
   });
 
-  return { data, isLoading: isPending || isLoading, error, refetch };
+  return {
+    data,
+    isLoading: isPending || isLoading || isFetching,
+    error,
+    refetch,
+  };
 }

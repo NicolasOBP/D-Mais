@@ -5,7 +5,8 @@ import { ListRenderItemInfo, RefreshControl } from "react-native";
 import { useScrollToTop } from "@react-navigation/native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
-import { ProductCart, useCartGetItems, useCartGetMetadata } from "@domain";
+import { ProductCartScreen, useCartGetItems } from "@domain";
+import { useCartItems, useCartService } from "@infra";
 import { useAppTheme } from "@theme";
 
 import {
@@ -20,41 +21,31 @@ import { Box } from "@core-components";
 import { CartProductCard } from "./components";
 import { CartFooter } from "./components/CartFooter";
 
-type CartItem = ProductCart & { isSelected?: boolean };
-
 export function CartScreen() {
   const { spacing } = useAppTheme();
   const { showToast } = useToast();
   const { data: cartItems, isLoading, refetch } = useCartGetItems();
-  const { data: cartMetadata } = useCartGetMetadata();
-
-  // const [cartItems, setCartItems] = useState<CartItem[] | undefined>(
-  //   cart?.cartProducts,
-  // );
+  const { selectedItems, totalSelectedPrice } = useCartItems();
+  const { toggleProductSelection, getSelectedProducts } = useCartService();
 
   const flatListRef = useRef(null);
   useScrollToTop(flatListRef);
 
-  const handleSelectChange = (index: number, selected: boolean) => {
-    // if (cartItems) {
-    //   const newItems = [...cartItems];
-    //   newItems[index].isSelected = selected;
-    //   setCartItems(newItems);
-    // }
-  };
+  function handleSelectChange(productCartId: number) {
+    toggleProductSelection(productCartId);
+  }
 
-  function renderItem({ item, index }: ListRenderItemInfo<CartItem>) {
+  function renderItem({ item }: ListRenderItemInfo<ProductCartScreen>) {
     return (
       <CartProductCard
         product={item}
-        isSelected={item.isSelected}
-        onSelectChange={(selected) => handleSelectChange(index, selected)}
+        onSelectChange={() => handleSelectChange(item.cartId)}
       />
     );
   }
 
   function onCheckout() {
-    if (!cartItems || cartItems.length === 0) {
+    if (getSelectedProducts().length === 0) {
       showToast({
         type: "warning",
         message: "Seu carrinho está vazio",
@@ -63,18 +54,8 @@ export function CartScreen() {
       return;
     }
 
-    router.push({
-      pathname: "/sell",
-      params: {
-        cartItems: JSON.stringify(cartItems),
-        totalPrice: cartMetadata?.totalPrice || 0,
-      },
-    });
+    router.push("/sell");
   }
-
-  // useEffect(() => {
-  //   setCartItems(cart?.cartProducts);
-  // }, [cart]);
 
   return (
     <Screen noHorizontalPadding paddingBottom={spacing.s8}>
@@ -102,8 +83,8 @@ export function CartScreen() {
 
       <CartFooter
         onCheckout={onCheckout}
-        totalItems={cartMetadata?.totalItems}
-        totalPrice={cartMetadata?.totalPrice}
+        totalItems={selectedItems}
+        totalPrice={totalSelectedPrice}
       />
     </Screen>
   );

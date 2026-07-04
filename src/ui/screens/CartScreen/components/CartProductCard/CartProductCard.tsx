@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { ProductCart, useCartDeleteItem } from "@domain";
+import { ProductCartScreen, useCartDeleteItem } from "@domain";
 
 import { Icon } from "@components";
 import { useModal } from "@containers";
@@ -10,17 +10,14 @@ import { ProductCartCheckbox } from "./components/ProductCartCheckbox";
 import { ProductCartDetails } from "./components/ProductCartDetails";
 
 type CartProductCardProps = {
-  product: ProductCart;
-  isSelected?: boolean;
-  onSelectChange?: (selected: boolean) => void;
+  product: ProductCartScreen;
+  onSelectChange?: () => void;
 };
 
 export function CartProductCard({
   product,
-  isSelected = false,
   onSelectChange,
 }: CartProductCardProps) {
-  const [selected, setSelected] = useState(isSelected);
   const { showModal, updateModalData, closeModal } = useModal();
 
   const { mutate: deleteItem, isPending } = useCartDeleteItem({
@@ -30,9 +27,7 @@ export function CartProductCard({
   });
 
   const handleSelectChange = () => {
-    const newState = !selected;
-    setSelected(newState);
-    onSelectChange?.(newState);
+    onSelectChange?.();
   };
 
   function handleRemoveProduct() {
@@ -77,7 +72,7 @@ export function CartProductCard({
     >
       <ProductCartCheckbox
         handleSelectChange={handleSelectChange}
-        selected={selected}
+        selected={product.isSelected}
       />
 
       <ProductCartDetails product={product} />

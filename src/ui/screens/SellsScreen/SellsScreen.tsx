@@ -1,8 +1,9 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import { useEffect } from "react";
 import { FlatList, ScrollView } from "react-native";
 
-import { ProductCart, useOrdersSend } from "@domain";
+import { useOrdersSend } from "@domain";
+import { useCartItems, useCartService } from "@infra";
 import { SellSchema, useSellForm } from "@schemas";
 import { useAppTheme } from "@theme";
 import { useFormUtils } from "@utils";
@@ -19,6 +20,8 @@ export function SellsScreen() {
   const { spacing } = useAppTheme();
   const { showModal, closeModal, updateModalData } = useModal();
   const { control, formState, handleSubmit, reset } = useSellForm();
+  const { getSelectedProducts } = useCartService();
+  const { totalSelectedPrice: totalPrice } = useCartItems();
   const { mutate: sendOrder, isPending } = useOrdersSend({
     onSuccess: () => {
       closeModal();
@@ -27,10 +30,7 @@ export function SellsScreen() {
     },
   });
 
-  const cartItems = JSON.parse(
-    useLocalSearchParams<{ cartItems: string }>().cartItems,
-  ) as ProductCart[];
-  const totalPrice = useLocalSearchParams<{ totalPrice: string }>().totalPrice;
+  const cartItems = getSelectedProducts();
 
   function handleShowModal(data: SellSchema) {
     showModal(
@@ -56,7 +56,7 @@ export function SellsScreen() {
   function onSubmit(data: SellSchema) {
     sendOrder({
       products: cartItems,
-      totalPrice: totalPrice,
+      totalPrice: totalPrice.toString(),
       client: data.cliente,
       paymentTerms: data.condicaoPagamento,
       company: data.transportadora,

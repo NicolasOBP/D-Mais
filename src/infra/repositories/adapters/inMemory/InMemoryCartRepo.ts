@@ -3,6 +3,7 @@ import {
   CartMetadata,
   ICartRepo,
   ProductCart,
+  ProductCartScreen,
   ProductCartVariables,
 } from "@domain";
 
@@ -46,8 +47,9 @@ export class InMemoryCartRepo implements ICartRepo {
     };
   }
 
-  async getCartItems(): Promise<ProductCart[]> {
-    return InnerCart.cartProducts;
+  async getCartItems(): Promise<ProductCartScreen[]> {
+    console.log(InnerCart.cartProducts);
+    return InnerCart.cartProducts as ProductCartScreen[];
   }
 
   async editVolume(
@@ -87,7 +89,9 @@ export class InMemoryCartRepo implements ICartRepo {
     return item;
   }
 
-  async deleteItem(productCartId: ProductCart["cartId"]): Promise<void> {
+  async deleteItem(
+    productCartId: ProductCart["cartId"],
+  ): Promise<ProductCart["cartId"]> {
     const product = InnerCart.cartProducts.find(
       (prod) => prod.cartId === productCartId,
     );
@@ -110,11 +114,15 @@ export class InMemoryCartRepo implements ICartRepo {
 
     InnerCart.totalItems--;
     InnerCart.totalPrice -= product.price * product.volume;
+
+    return productCartId;
   }
 
-  async deleteItems(productCartIds: ProductCart["cartId"][]): Promise<void> {
+  async deleteItems(
+    productCartIds: ProductCart["cartId"][],
+  ): Promise<ProductCart["cartId"][]> {
     if (!productCartIds.length) {
-      return;
+      return [];
     }
 
     const productsToRemove = InnerCart.cartProducts.filter((product) =>
@@ -139,5 +147,10 @@ export class InMemoryCartRepo implements ICartRepo {
         )
       ).toFixed(2),
     );
+
+    console.log("1");
+    console.log(InnerCart.cartProducts);
+
+    return productCartIds;
   }
 }
