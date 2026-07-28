@@ -4,7 +4,7 @@ import { ProductCartScreen, useCartDeleteItem } from "@domain";
 
 import { Icon } from "@components";
 import { useModal } from "@containers";
-import { Box, PressableBox, Text } from "@core-components";
+import { Box, PressableBox, PressableBoxProps, Text } from "@core-components";
 
 import { ProductCartCheckbox } from "./components/ProductCartCheckbox";
 import { ProductCartDetails } from "./components/ProductCartDetails";
@@ -62,14 +62,7 @@ export function CartProductCard({
   }, [isPending]);
 
   return (
-    <PressableBox
-      flexDirection="row"
-      justifyContent="space-between"
-      alignItems="center"
-      pb="s12"
-      marginBottom="s12"
-      gap="s16"
-    >
+    <PressableBox {...pressableBoxStyle}>
       <ProductCartCheckbox
         handleSelectChange={handleSelectChange}
         selected={product.isSelected}
@@ -86,3 +79,12 @@ export function CartProductCard({
     </PressableBox>
   );
 }
+
+const pressableBoxStyle: PressableBoxProps = {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  pb: "s12",
+  marginBottom: "s12",
+  gap: "s16",
+};

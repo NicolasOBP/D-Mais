@@ -48,7 +48,6 @@ export class InMemoryCartRepo implements ICartRepo {
   }
 
   async getCartItems(): Promise<ProductCartScreen[]> {
-    console.log(InnerCart.cartProducts);
     return InnerCart.cartProducts as ProductCartScreen[];
   }
 
@@ -147,9 +146,6 @@ export class InMemoryCartRepo implements ICartRepo {
         )
       ).toFixed(2),
     );
-
-    console.log("1");
-    console.log(InnerCart.cartProducts);
 
     return productCartIds;
   }

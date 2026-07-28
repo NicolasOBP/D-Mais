@@ -17,9 +17,6 @@ export function useCartGetItems() {
   });
 
   if (cartList.length === 0 && data && !isLoading) {
-    console.log({ isLoading });
-    console.log({ data });
-
     data.forEach((item) => {
       addProductToCart(item);
     });

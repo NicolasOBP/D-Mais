@@ -36,8 +36,8 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
   }
 
   return (
-    <PressableBox {...cardStyle} {...containerProps}>
-      <Box {...contentStyle}>
+    <PressableBox {...cardBoxStyle} {...containerProps}>
+      <Box {...contentBoxStyle}>
         <Text>{product.title}</Text>
 
         <Text variant="text14" color="gray2" pb="s24">
@@ -56,14 +56,14 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
   );
 }
 
-const cardStyle: BoxProps = {
+const cardBoxStyle: BoxProps = {
   backgroundColor: "background",
   borderRadius: "default",
   borderWidth: 1,
   borderColor: "primary",
 };
 
-const contentStyle: BoxProps = {
+const contentBoxStyle: BoxProps = {
   padding: "s10",
   gap: "s8",
 };

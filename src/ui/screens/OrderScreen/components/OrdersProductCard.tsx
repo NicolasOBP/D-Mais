@@ -17,15 +17,13 @@ export function OrdersProductCard({
   const orderStatus = statusStyleMap[order.status];
 
   return (
-    <Box {...cardStyle}>
-      {/* Status Badge */}
-      <Box {...badgeStyle} {...orderStatus.style}>
+    <Box {...cardBoxStyle}>
+      <Box {...statusBoxStyle} {...orderStatus.style}>
         <Text variant="title12" textAlign="center">
           {orderStatus.label}
         </Text>
       </Box>
 
-      {/* Client Section */}
       <Box flex={1} p="s6" justifyContent="space-between">
         <Text variant="title12" pb="s12">
           {order.client.name}
@@ -68,7 +66,7 @@ export function OrdersProductCard({
   );
 }
 
-const cardStyle: BoxProps = {
+const cardBoxStyle: BoxProps = {
   borderRadius: "default",
   borderWidth: 1,
   borderColor: "primary",
@@ -76,7 +74,7 @@ const cardStyle: BoxProps = {
   overflow: "hidden",
 };
 
-const badgeStyle: BoxProps = {
+const statusBoxStyle: BoxProps = {
   paddingVertical: "s4",
   paddingHorizontal: "s48",
   alignItems: "center",

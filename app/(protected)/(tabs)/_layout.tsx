@@ -6,7 +6,7 @@ import { useCartGetMetadata } from "@domain";
 import { TabBar } from "@components";
 
 export default function TabLayout() {
-  const { data: cartMetadata, error } = useCartGetMetadata();
+  const { data: cartMetadata } = useCartGetMetadata();
 
   function badgeNumber() {
     if (!cartMetadata) {
