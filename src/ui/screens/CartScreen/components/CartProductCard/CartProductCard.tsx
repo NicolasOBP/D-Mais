@@ -1,26 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { ProductCart, useCartDeleteItem } from "@domain";
+import { ProductCartScreen, useCartDeleteItem } from "@domain";
 
 import { Icon } from "@components";
 import { useModal } from "@containers";
-import { Box, PressableBox, Text } from "@core-components";
+import { Box, PressableBox, PressableBoxProps, Text } from "@core-components";
 
 import { ProductCartCheckbox } from "./components/ProductCartCheckbox";
 import { ProductCartDetails } from "./components/ProductCartDetails";
 
 type CartProductCardProps = {
-  product: ProductCart;
-  isSelected?: boolean;
-  onSelectChange?: (selected: boolean) => void;
+  product: ProductCartScreen;
+  onSelectChange?: () => void;
 };
 
 export function CartProductCard({
   product,
-  isSelected = false,
   onSelectChange,
 }: CartProductCardProps) {
-  const [selected, setSelected] = useState(isSelected);
   const { showModal, updateModalData, closeModal } = useModal();
 
   const { mutate: deleteItem, isPending } = useCartDeleteItem({
@@ -30,9 +27,7 @@ export function CartProductCard({
   });
 
   const handleSelectChange = () => {
-    const newState = !selected;
-    setSelected(newState);
-    onSelectChange?.(newState);
+    onSelectChange?.();
   };
 
   function handleRemoveProduct() {
@@ -67,17 +62,10 @@ export function CartProductCard({
   }, [isPending]);
 
   return (
-    <PressableBox
-      flexDirection="row"
-      justifyContent="space-between"
-      alignItems="center"
-      pb="s12"
-      marginBottom="s12"
-      gap="s16"
-    >
+    <PressableBox {...pressableBoxStyle}>
       <ProductCartCheckbox
         handleSelectChange={handleSelectChange}
-        selected={selected}
+        selected={product.isSelected}
       />
 
       <ProductCartDetails product={product} />
@@ -91,3 +79,12 @@ export function CartProductCard({
     </PressableBox>
   );
 }
+
+const pressableBoxStyle: PressableBoxProps = {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  pb: "s12",
+  marginBottom: "s12",
+  gap: "s16",
+};

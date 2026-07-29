@@ -41,7 +41,7 @@ export function ProductCartDetails({ product }: Props) {
   }
 
   return (
-    <Box {...detailsContainer}>
+    <Box {...containerBoxStyle}>
       <Text
         variant="text16Bold"
         color="text"
@@ -69,7 +69,7 @@ export function ProductCartDetails({ product }: Props) {
   );
 }
 
-const detailsContainer: BoxProps = {
+const containerBoxStyle: BoxProps = {
   borderRadius: "default",
   borderWidth: 2,
   borderColor: "primary",

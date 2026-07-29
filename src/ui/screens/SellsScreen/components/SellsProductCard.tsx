@@ -1,7 +1,7 @@
 import { ProductCart } from "@domain";
 import { useNumberFormat } from "@utils";
 
-import { Box, PressableBox, Text } from "@core-components";
+import { Box, BoxProps, PressableBox, Text } from "@core-components";
 
 interface SellsProductCardProps {
   item: ProductCart;
@@ -11,17 +11,7 @@ export function SellsProductCard({ item }: SellsProductCardProps) {
   const finalPrice = item.price * item.volume;
 
   return (
-    <PressableBox
-      padding="s16"
-      paddingVertical="s8"
-      borderRadius="default"
-      backgroundColor="gray5"
-      borderWidth={1}
-      borderColor="gray3"
-      gap="s8"
-      marginRight="s12"
-      width={180}
-    >
+    <PressableBox {...containerBoxStyle}>
       <Text variant="title14" numberOfLines={1}>
         {item.title}
       </Text>
@@ -56,3 +46,15 @@ export function SellsProductCard({ item }: SellsProductCardProps) {
     </PressableBox>
   );
 }
+
+const containerBoxStyle: BoxProps = {
+  padding: "s16",
+  paddingVertical: "s8",
+  borderRadius: "default",
+  backgroundColor: "gray5",
+  borderWidth: 1,
+  borderColor: "gray3",
+  gap: "s8",
+  marginRight: "s12",
+  width: 180,
+};

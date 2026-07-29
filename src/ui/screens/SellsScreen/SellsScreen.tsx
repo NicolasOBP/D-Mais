@@ -1,34 +1,78 @@
-import { useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
+import { useEffect } from "react";
 import { FlatList, ScrollView } from "react-native";
 
-import { ProductCart } from "@domain";
+import { useOrdersSend } from "@domain";
+import { useBackToSellService, useCartItems, useCartService } from "@infra";
 import { SellSchema, useSellForm } from "@schemas";
 import { useAppTheme } from "@theme";
 import { useFormUtils } from "@utils";
 
 import { ScreenHeader } from "@components";
-import { Screen } from "@containers";
+import { Screen, useModal } from "@containers";
 import { Box, Button, Text } from "@core-components";
 
 import { SellsForm } from "./components/SellsForm";
 import { SellsProductCard } from "./components/SellsProductCard";
+import { SendSellModalBody } from "./components/SendSellModalBody";
 
 export function SellsScreen() {
   const { spacing } = useAppTheme();
-  const cartItems = JSON.parse(
-    useLocalSearchParams<{ cartItems: string }>().cartItems,
-  ) as ProductCart[];
+  const { showModal, closeModal, updateModalData } = useModal();
+  const { control, formState, handleSubmit, reset } = useSellForm();
+  const { getSelectedProducts } = useCartService();
+  const { totalSelectedPrice: totalPrice } = useCartItems();
+  const { finishSell } = useBackToSellService();
+  const { mutate: sendOrder, isPending } = useOrdersSend({
+    onSuccess: () => {
+      finishSell();
+      closeModal();
+      reset();
+      router.push("/orders");
+    },
+  });
 
-  const { control, formState, handleSubmit } = useSellForm();
+  const cartItems = getSelectedProducts();
+
+  function handleShowModal(data: SellSchema) {
+    showModal(
+      {
+        BodyComponent: <SendSellModalBody />,
+        footerButton: {
+          twoButtonFooter: {
+            labelCancel: "Cancelar",
+            labelConfirm: "Confirmar",
+            onConfirm: () => onSubmit(data),
+          },
+        },
+      },
+      { isLoading: isPending },
+    );
+  }
+
+  useEffect(() => {
+    updateModalData({ isLoading: isPending });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPending]);
 
   function onSubmit(data: SellSchema) {
-    console.log({ data });
-    // TODO: Send sell data to API
+    sendOrder({
+      products: cartItems,
+      totalPrice: totalPrice.toString(),
+      client: data.cliente,
+      paymentTerms: data.condicaoPagamento,
+      company: data.transportadora,
+      driver: data.motorista,
+      pickup: data.carreta,
+      table: data.tabela,
+      truck: data.caminhao,
+      fare: data.valorFrete,
+    });
   }
 
   return (
     <Screen scrollable noHorizontalPadding>
-      <ScreenHeader title="Venda" canGoBack noMargin />
+      <ScreenHeader title="Venda" goBackTo="/cart" noMargin />
 
       <SellsForm control={control} />
 
@@ -43,6 +87,7 @@ export function SellsScreen() {
           alwaysBounceVertical={false}
         >
           <FlatList
+            key={cartItems.length}
             data={cartItems}
             renderItem={({ item }) => (
               <SellsProductCard key={item.cartId} item={item} />
@@ -64,7 +109,7 @@ export function SellsScreen() {
           paddingVertical="s14"
           paddingHorizontal="s20"
           lable="Enviar venda"
-          onPress={handleSubmit(onSubmit)}
+          onPress={handleSubmit(handleShowModal)}
         />
       </Box>
     </Screen>

@@ -4,6 +4,7 @@ import {
   MutationOptions,
   QueryKeys,
   useAppMutation,
+  useCartService,
   useRepository,
 } from "@infra";
 
@@ -12,6 +13,7 @@ import { ProductCart } from "..";
 export function useCartEditVolume(options?: MutationOptions<ProductCart>) {
   const { cart } = useRepository();
   const queryClient = useQueryClient();
+  const { updateProductVolume } = useCartService();
 
   return useAppMutation<
     ProductCart,
@@ -23,6 +25,8 @@ export function useCartEditVolume(options?: MutationOptions<ProductCart>) {
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.Cart],
       });
+
+      updateProductVolume(prod.cartId, prod.volume);
 
       options?.onSuccess?.(prod);
     },

@@ -29,14 +29,14 @@ export function ModalFooter({ ...modalFooterProps }: ModalFooterProps) {
       return useFormUtils.isFormValid(modalData.formState);
     }
     return modalFooterProps.oneButtonFooter?.disabled ?? false;
-  }, [modalData.formState, modalFooterProps.oneButtonFooter?.disabled]);
+  }, [modalData?.formState, modalFooterProps.oneButtonFooter?.disabled]);
 
   if (modalFooterProps.twoButtonFooter) {
     return (
       <TwoButtonFooter
         {...modalFooterProps.twoButtonFooter}
-        disabled={isDisabled || modalData.isLoading}
-        isLoading={modalData.isLoading}
+        disabled={isDisabled || modalData?.isLoading}
+        isLoading={modalData?.isLoading}
       />
     );
   } else if (modalFooterProps.oneButtonFooter) {
@@ -44,7 +44,7 @@ export function ModalFooter({ ...modalFooterProps }: ModalFooterProps) {
       <OneButtonFooter
         {...modalFooterProps.oneButtonFooter}
         disabled={isDisabled || modalData.isLoading}
-        isLoading={modalData.isLoading}
+        isLoading={!!modalData.isLoading}
       />
     );
   }
@@ -54,8 +54,6 @@ function TwoButtonFooter(
   props: ModalFooterProps["twoButtonFooter"] & { isLoading: boolean },
 ) {
   const { closeModal } = useModal();
-
-  console.log({ props });
 
   return (
     <Box alignItems="center" flexDirection="row" justifyContent="space-around">

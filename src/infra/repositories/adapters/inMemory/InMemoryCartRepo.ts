@@ -3,16 +3,27 @@ import {
   CartMetadata,
   ICartRepo,
   ProductCart,
+  ProductCartScreen,
   ProductCartVariables,
 } from "@domain";
-
-const delay = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
 let InnerCart: Cart = { cartProducts: [], totalPrice: 0, totalItems: 0 };
 
 export class InMemoryCartRepo implements ICartRepo {
   async add(product: ProductCartVariables): Promise<ProductCart> {
-    await delay();
+    const existingProduct = InnerCart.cartProducts.find(
+      (cartProduct) => cartProduct.id === product.id,
+    );
+
+    if (existingProduct) {
+      existingProduct.volume += product.volume;
+      InnerCart.totalPrice = Number(
+        (InnerCart.totalPrice + product.price * product.volume).toFixed(2),
+      );
+
+      return existingProduct;
+    }
+
     const productCart = {
       ...product,
       cartId: InnerCart.cartProducts.length + Math.random(),
@@ -30,23 +41,20 @@ export class InMemoryCartRepo implements ICartRepo {
   }
 
   async getCartMetadata(): Promise<CartMetadata> {
-    await delay();
     return {
       totalItems: InnerCart.totalItems,
-      totalPrice: InnerCart.totalPrice,
+      totalPrice: Math.abs(InnerCart.totalPrice),
     };
   }
 
-  async getCartItems(): Promise<ProductCart[]> {
-    await delay();
-    return InnerCart.cartProducts;
+  async getCartItems(): Promise<ProductCartScreen[]> {
+    return InnerCart.cartProducts as ProductCartScreen[];
   }
 
   async editVolume(
     productCartId: ProductCart["cartId"],
     newVolume: number,
   ): Promise<ProductCart> {
-    await delay();
     let itemCart = InnerCart.cartProducts.filter(
       (prod) => prod.cartId === productCartId,
     );
@@ -80,8 +88,9 @@ export class InMemoryCartRepo implements ICartRepo {
     return item;
   }
 
-  async deleteItem(productCartId: ProductCart["cartId"]): Promise<void> {
-    await delay();
+  async deleteItem(
+    productCartId: ProductCart["cartId"],
+  ): Promise<ProductCart["cartId"]> {
     const product = InnerCart.cartProducts.find(
       (prod) => prod.cartId === productCartId,
     );
@@ -104,5 +113,40 @@ export class InMemoryCartRepo implements ICartRepo {
 
     InnerCart.totalItems--;
     InnerCart.totalPrice -= product.price * product.volume;
+
+    return productCartId;
+  }
+
+  async deleteItems(
+    productCartIds: ProductCart["cartId"][],
+  ): Promise<ProductCart["cartId"][]> {
+    if (!productCartIds.length) {
+      return [];
+    }
+
+    const productsToRemove = InnerCart.cartProducts.filter((product) =>
+      productCartIds.includes(product.cartId),
+    );
+
+    if (productsToRemove.length !== productCartIds.length) {
+      throw new Error("Algum produto não foi encontrado");
+    }
+
+    InnerCart.cartProducts = InnerCart.cartProducts.filter(
+      (product) => !productCartIds.includes(product.cartId),
+    );
+
+    InnerCart.totalItems -= productsToRemove.length;
+    InnerCart.totalPrice = Number(
+      (
+        InnerCart.totalPrice -
+        productsToRemove.reduce(
+          (sum, product) => sum + product.price * product.volume,
+          0,
+        )
+      ).toFixed(2),
+    );
+
+    return productCartIds;
   }
 }

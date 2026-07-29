@@ -20,7 +20,7 @@ const palette = {
   carrotLight: "#FAE6DD",
 
   // Success
-  green: "#008d4b",
+  green: "#4ABC86",
   darkGreen: "#013b1f",
   lightGreen: "#4abc87dd",
 
@@ -33,6 +33,8 @@ const palette = {
   orange: "#929500",
   darkOrange: "#575600",
   lightOrange: "#fefb54df",
+
+  yellow: "#FBDF40",
 
   transparent: "transparent",
 };
@@ -73,6 +75,9 @@ const theme = createTheme({
     //Loading Background
     loadingBackground: palette.gray6,
 
+    //Order Status
+    pending: palette.yellow,
+
     // Raw palette for direct access
     ...palette,
   },
@@ -95,7 +100,9 @@ const theme = createTheme({
     s48: 48,
     s56: 56,
     s62: 62,
+    s75: 75,
     s80: 80,
+    s88: 88,
     default: 16,
   },
 

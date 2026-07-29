@@ -6,7 +6,6 @@ export default function ProtectedLayout() {
       screenOptions={{ headerShown: false, fullScreenGestureEnabled: true }}
     >
       <Stack.Screen options={{ headerShown: false }} name="(tabs)" />
-      <Stack.Screen options={{ headerShown: false }} name="sell" />
     </Stack>
   );
 }

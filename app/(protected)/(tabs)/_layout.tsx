@@ -33,6 +33,7 @@ export default function TabLayout() {
           tabBarBadge: badgeNumber(),
         }}
       />
+      <Tabs.Screen name="sell" options={{ href: null }} />
     </Tabs>
   );
 }

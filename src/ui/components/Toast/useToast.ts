@@ -1,40 +1,11 @@
-import { create } from "zustand";
+import { useToastServiceZustand, useToastStoreZustand } from "./useToastStore";
 
-export type ToastTypes = "success" | "error" | "warning";
+export type { Toast, ToastTypes } from "./useToastStore";
 
-type Toast = {
-  message: string;
-  type: ToastTypes;
-  description?: string;
-  duration?: number;
-};
+export function useToast(): ReturnType<typeof useToastStoreZustand> &
+  ReturnType<typeof useToastServiceZustand> {
+  const toastState = useToastStoreZustand();
+  const toastService = useToastServiceZustand();
 
-const initialState: { toast: Toast } = {
-  toast: {
-    message: "",
-    type: "success",
-    description: "",
-    duration: 2000,
-  },
-};
-
-type ToastStoreType = { toast: Toast } & {
-  /**
-   * Default Toast duration is 2 sec
-   * @returns
-   */
-  showToast: (toast: Toast) => void;
-  closeToast: () => void;
-};
-
-export const useToast = create<ToastStoreType>()((set) => ({
-  ...initialState,
-  showToast: (toast) =>
-    set(() => ({
-      toast: {
-        ...toast,
-        duration: toast.duration ? toast.duration : initialState.toast.duration,
-      },
-    })),
-  closeToast: () => set(() => initialState),
-}));
+  return { ...toastState, ...toastService };
+}

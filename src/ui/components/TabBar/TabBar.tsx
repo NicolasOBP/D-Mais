@@ -48,6 +48,9 @@ export function TabBar({ navigation, state, descriptors }: BottomTabBarProps) {
         backgroundColor="gray5"
       >
         {state.routes.map((route, index) => {
+          if (!tabBarIconMap[route.name]) {
+            return null;
+          }
           const isFocused = state.index === index;
           const { iconFocus, iconUnfocus, label } = tabBarIconMap[route.name];
 

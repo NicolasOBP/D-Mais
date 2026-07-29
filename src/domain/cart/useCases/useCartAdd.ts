@@ -4,6 +4,7 @@ import {
   MutationOptions,
   QueryKeys,
   useAppMutation,
+  useCartService,
   useRepository,
 } from "@infra";
 
@@ -12,6 +13,7 @@ import { useToast } from "@components";
 import { ProductCart, ProductCartVariables } from "..";
 
 export function useCartAdd(options?: MutationOptions<ProductCart>) {
+  const { addProductToCart } = useCartService();
   const { cart } = useRepository();
   const { showToast } = useToast();
   const queryClient = useQueryClient();
@@ -24,6 +26,9 @@ export function useCartAdd(options?: MutationOptions<ProductCart>) {
         message: "Produto adicionado ao carrinho!",
         duration: 1000,
       });
+
+      addProductToCart(prod);
+
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.Cart],
       });
