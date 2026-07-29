@@ -102,6 +102,7 @@ const theme = createTheme({
     s62: 62,
     s75: 75,
     s80: 80,
+    s88: 88,
     default: 16,
   },
 

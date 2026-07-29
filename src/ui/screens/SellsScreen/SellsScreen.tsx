@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { FlatList, ScrollView } from "react-native";
 
 import { useOrdersSend } from "@domain";
-import { useCartItems, useCartService } from "@infra";
+import { useBackToSellService, useCartItems, useCartService } from "@infra";
 import { SellSchema, useSellForm } from "@schemas";
 import { useAppTheme } from "@theme";
 import { useFormUtils } from "@utils";
@@ -22,8 +22,10 @@ export function SellsScreen() {
   const { control, formState, handleSubmit, reset } = useSellForm();
   const { getSelectedProducts } = useCartService();
   const { totalSelectedPrice: totalPrice } = useCartItems();
+  const { finishSell } = useBackToSellService();
   const { mutate: sendOrder, isPending } = useOrdersSend({
     onSuccess: () => {
+      finishSell();
       closeModal();
       reset();
       router.push("/orders");

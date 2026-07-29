@@ -15,7 +15,7 @@ import {
   useAuth,
 } from "@infra";
 
-import { Toast } from "@components";
+import { BackToSell, Toast } from "@components";
 import { Modal, WrapperApp } from "@containers";
 
 import theme from "../src/ui/theme/theme";
@@ -56,6 +56,7 @@ export default function RootLayout() {
               <StatusBar style="dark" />
               <Routes />
 
+              <BackToSell />
               <Modal />
               <Toast />
             </WrapperApp>

@@ -170,6 +170,7 @@ src/
 - [ ] A tela foi criada e integrada
 - [ ] Os exports foram ajustados nos index.ts apropriados
 - [ ] A feature está consistente com o restante da aplicação
+- [ ] A validação final foi feita rodando npx tsc --noEmit
 
 ## 🚫 O que evitar
 
