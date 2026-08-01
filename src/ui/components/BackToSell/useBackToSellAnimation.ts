@@ -12,7 +12,7 @@ export function useBackToSellAnimation(progress: SharedValue<number>) {
   return useAnimatedStyle(() => ({
     transform: [
       {
-        translateX: interpolate(progress.value, [0, 1], [spacing.s62, -37]),
+        translateX: interpolate(progress.value, [0, 1], [spacing.s75, -30]),
       },
     ],
     opacity: 0.9,

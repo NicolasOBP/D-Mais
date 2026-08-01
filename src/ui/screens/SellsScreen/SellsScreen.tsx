@@ -3,7 +3,12 @@ import { useEffect } from "react";
 import { FlatList, ScrollView } from "react-native";
 
 import { useOrdersSend } from "@domain";
-import { useBackToSellService, useCartItems, useCartService } from "@infra";
+import {
+  useAuth,
+  useBackToSellService,
+  useCartItems,
+  useCartService,
+} from "@infra";
 import { SellSchema, useSellForm } from "@schemas";
 import { useAppTheme } from "@theme";
 import { useFormUtils } from "@utils";
@@ -17,6 +22,7 @@ import { SellsProductCard } from "./components/SellsProductCard";
 import { SendSellModalBody } from "./components/SendSellModalBody";
 
 export function SellsScreen() {
+  const { authUser } = useAuth();
   const { spacing } = useAppTheme();
   const { showModal, closeModal, updateModalData } = useModal();
   const { control, formState, handleSubmit, reset } = useSellForm();
@@ -37,7 +43,12 @@ export function SellsScreen() {
   function handleShowModal(data: SellSchema) {
     showModal(
       {
-        BodyComponent: <SendSellModalBody />,
+        BodyComponent: (
+          <SendSellModalBody
+            userLeftQuota={authUser?.leftQuota}
+            userQuota={authUser?.quota}
+          />
+        ),
         footerButton: {
           twoButtonFooter: {
             labelCancel: "Cancelar",

@@ -4,4 +4,6 @@ export type AuthUser = {
   id: string;
   company: string;
   userName: string;
+  quota: number;
+  leftQuota: number;
 };

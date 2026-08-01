@@ -6,6 +6,7 @@ export * from "./Icon";
 export * from "./LoadingListState";
 export * from "./PasswordInput";
 export * from "./ProductModalBody";
+export * from "./ProgressBar";
 export * from "./ScreenHeader";
 export * from "./SearchBar";
 export * from "./TabBar";

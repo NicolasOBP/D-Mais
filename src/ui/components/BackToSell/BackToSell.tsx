@@ -3,6 +3,7 @@ import { useEffect } from "react";
 
 import {
   createAnimatedComponent,
+  Easing,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
@@ -59,6 +60,7 @@ export function BackToSell() {
   useEffect(() => {
     progress.value = withTiming(showBackToSellButton ? 1 : 0, {
       duration: ANIMATION_DURATION,
+      easing: Easing.ease,
     });
   }, [progress, showBackToSellButton]);
 
@@ -72,8 +74,8 @@ export function BackToSell() {
         animatedStyle,
         {
           position: "absolute",
-          top: spacing.s88,
-          right: -30,
+          top: spacing.s96,
+          right: -35,
           zIndex: 1,
           padding: spacing.s10,
           alignItems: "center",
