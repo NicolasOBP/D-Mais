@@ -11,6 +11,7 @@ export const AuthContext = createContext<AuthState>({
   isReady: false,
   saveAuthUser: async () => {},
   removeAuthUser: async () => {},
+  updateLeftQuota: async () => {},
 });
 
 SplashScreen.preventAutoHideAsync();
@@ -42,6 +43,17 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function updateLeftQuota(usedQuota: number) {
+    if (authUser) {
+      const updatedUser = {
+        ...authUser,
+        leftQuota: authUser.leftQuota - usedQuota,
+      };
+      await authContextStorage.set(updatedUser);
+      setAuthUser(updatedUser);
+    }
+  }
+
   useEffect(() => {
     loadAuthUser();
   }, []);
@@ -54,7 +66,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   return (
     <AuthContext.Provider
-      value={{ authUser, isReady, saveAuthUser, removeAuthUser }}
+      value={{
+        authUser,
+        isReady,
+        saveAuthUser,
+        removeAuthUser,
+        updateLeftQuota,
+      }}
     >
       {children}
     </AuthContext.Provider>

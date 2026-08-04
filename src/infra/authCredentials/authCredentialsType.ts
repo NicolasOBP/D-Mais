@@ -5,4 +5,5 @@ export type AuthState = {
   isReady: boolean;
   saveAuthUser: (authUser: AuthUser) => Promise<void>;
   removeAuthUser: () => Promise<void>;
+  updateLeftQuota: (usedQuota: number) => Promise<void>;
 };

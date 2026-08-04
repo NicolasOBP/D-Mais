@@ -18,7 +18,7 @@ import { useModal } from "./useModal";
 import { useModalAnimations } from "./useModalAnimations";
 import { validateModalState } from "./useModalError";
 
-const DURATION = 1000;
+export const MODAL_ANIMATION_DURATION = 1000;
 const WIDTH_SCREEN = Dimensions.get("screen").width;
 
 export function Modal() {
@@ -27,12 +27,14 @@ export function Modal() {
   const modalOpen = useSharedValue(false);
   const modalHeight = useSharedValue(0);
   const progress = useDerivedValue(() =>
-    withTiming(Number(!modalOpen.value), { duration: DURATION }),
+    withTiming(Number(!modalOpen.value), {
+      duration: MODAL_ANIMATION_DURATION,
+    }),
   );
   const widthValue = WIDTH_SCREEN - spacing.s16 * 2;
 
   const { backdropAnimatedStyle, modalAnimatedStyle } = useModalAnimations({
-    DURATION,
+    DURATION: MODAL_ANIMATION_DURATION,
     modalOpen,
     progress,
     height: modalHeight,

@@ -11,7 +11,7 @@ export function SendSellModalBody({
   userQuota,
 }: SendSellModalBodyProps) {
   return (
-    <Box gap="s12" pb="s10">
+    <Box gap="s12">
       <Box>
         <ProgressBar
           total={userQuota ?? 0}

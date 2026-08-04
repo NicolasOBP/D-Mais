@@ -3,11 +3,13 @@ import { useEffect } from "react";
 import Animated, {
   Easing,
   useSharedValue,
+  withDelay,
   withTiming,
 } from "react-native-reanimated";
 
 import { useAppTheme } from "@theme";
 
+import { MODAL_ANIMATION_DURATION } from "@containers";
 import { Box, Text } from "@core-components";
 
 import { useProgressBarAnimation } from "./useProgressBarAnimation";
@@ -18,6 +20,8 @@ export type ProgressBarProps = {
   height?: number;
   label?: string;
 };
+
+const DURATION = 500;
 
 export function ProgressBar({
   total,
@@ -36,10 +40,13 @@ export function ProgressBar({
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    progress.value = withTiming(normalizedPercentage, {
-      duration: 600,
-      easing: Easing.out(Easing.ease),
-    });
+    progress.value = withDelay(
+      MODAL_ANIMATION_DURATION,
+      withTiming(normalizedPercentage, {
+        duration: DURATION,
+        easing: Easing.out(Easing.ease),
+      }),
+    );
   }, [normalizedPercentage, progress]);
 
   const animatedStyle = useProgressBarAnimation(
