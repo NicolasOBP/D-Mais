@@ -2,8 +2,7 @@ import { useEffect } from "react";
 
 import { ProductCartScreen, useCartDeleteItem } from "@domain";
 
-import { Icon } from "@components";
-import { useModal } from "@containers";
+import { Icon, useModal } from "@components";
 import { Box, PressableBox, PressableBoxProps, Text } from "@core-components";
 
 import { ProductCartCheckbox } from "./components/ProductCartCheckbox";

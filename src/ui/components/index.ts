@@ -4,6 +4,7 @@ export * from "./EmptyList";
 export * from "./Form";
 export * from "./Icon";
 export * from "./LoadingListState";
+export * from "./Modal";
 export * from "./PasswordInput";
 export * from "./ProductModalBody";
 export * from "./ProgressBar";

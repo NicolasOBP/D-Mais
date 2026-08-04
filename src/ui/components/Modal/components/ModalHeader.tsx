@@ -1,6 +1,6 @@
-import { Icon } from "@components";
 import { Box, Text } from "@core-components";
 
+import { Icon } from "../../Icon";
 import { useModal } from "../useModal";
 
 type Props = {

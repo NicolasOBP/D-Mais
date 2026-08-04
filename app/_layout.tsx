@@ -15,8 +15,8 @@ import {
   useAuth,
 } from "@infra";
 
-import { BackToSell, Toast } from "@components";
-import { Modal, WrapperApp } from "@containers";
+import { BackToSell, Modal, Toast } from "@components";
+import { WrapperApp } from "@containers";
 
 import theme from "../src/ui/theme/theme";
 

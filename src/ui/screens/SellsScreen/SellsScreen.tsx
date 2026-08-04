@@ -13,8 +13,8 @@ import { SellSchema, useSellForm } from "@schemas";
 import { useAppTheme } from "@theme";
 import { useFormUtils } from "@utils";
 
-import { ScreenHeader } from "@components";
-import { Screen, useModal } from "@containers";
+import { ScreenHeader, useModal } from "@components";
+import { Screen } from "@containers";
 import { Box, Button, Text } from "@core-components";
 
 import { SellsForm } from "./components/SellsForm";

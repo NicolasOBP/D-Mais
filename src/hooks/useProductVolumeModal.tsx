@@ -3,8 +3,7 @@ import { useEffect } from "react";
 import { Product } from "@domain";
 import { useProductForm } from "@schemas";
 
-import { ProductModalBody } from "@components";
-import { useModal } from "@containers";
+import { ProductModalBody, useModal } from "@components";
 
 type ProductVolumeModalProps = {
   defaultVolume: string;

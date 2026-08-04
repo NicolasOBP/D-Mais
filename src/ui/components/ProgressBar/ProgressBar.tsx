@@ -9,8 +9,9 @@ import Animated, {
 
 import { useAppTheme } from "@theme";
 
-import { MODAL_ANIMATION_DURATION } from "@containers";
 import { Box, Text } from "@core-components";
+
+import { MODAL_ANIMATION_DURATION } from "../Modal";
 
 import { useProgressBarAnimation } from "./useProgressBarAnimation";
 
