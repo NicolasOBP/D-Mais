@@ -41,10 +41,13 @@ export function Modal() {
   });
 
   useEffect(() => {
-    if (modal.isModalOpen || modalOpen.value) {
+    if (modal.isModalOpen) {
       validateModalState(modal);
 
+      modalHeight.value = 0;
       modalOpen.value = !modalOpen.value;
+    } else {
+      modalOpen.value = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modal.isModalOpen]);
