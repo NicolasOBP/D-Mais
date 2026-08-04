@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { Dimensions, Pressable, StyleSheet } from "react-native";
 
 import Animated, {
   useDerivedValue,
@@ -7,6 +7,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { useAppTheme } from "@theme";
 import { useHideKeyboard } from "@utils";
 
 import { Box } from "@core-components";
@@ -18,18 +19,23 @@ import { useModalAnimations } from "./useModalAnimations";
 import { validateModalState } from "./useModalError";
 
 const DURATION = 1000;
+const WIDTH_SCREEN = Dimensions.get("screen").width;
 
 export function Modal() {
+  const { spacing } = useAppTheme();
   const { modal } = useModal();
   const modalOpen = useSharedValue(false);
+  const modalHeight = useSharedValue(0);
   const progress = useDerivedValue(() =>
     withTiming(Number(!modalOpen.value), { duration: DURATION }),
   );
+  const widthValue = WIDTH_SCREEN - spacing.s16 * 2;
 
   const { backdropAnimatedStyle, modalAnimatedStyle } = useModalAnimations({
     DURATION,
     modalOpen,
     progress,
+    height: modalHeight,
   });
 
   useEffect(() => {
@@ -52,8 +58,15 @@ export function Modal() {
             p="s16"
             borderRadius="default"
             backgroundColor="background"
-            justifyContent="space-between"
-            style={{ width: "100%", height: "100%" }}
+            width={widthValue}
+            gap="s24"
+            onLayout={(e) => {
+              const heitgh = e.nativeEvent.layout.height;
+
+              if (heitgh >= modalHeight.value) {
+                modalHeight.value = heitgh;
+              }
+            }}
           >
             {modal.HeaderComponent ? (
               modal.HeaderComponent

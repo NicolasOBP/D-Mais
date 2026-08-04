@@ -1,5 +1,3 @@
-import { Dimensions } from "react-native";
-
 import {
   DerivedValue,
   interpolate,
@@ -15,14 +13,16 @@ type Props = {
   modalOpen: SharedValue<boolean>;
   DURATION: number;
   progress: DerivedValue<number>;
+  height?: SharedValue<number>;
 };
 
-const WIDTH_SCREEN = Dimensions.get("screen").width;
-
-export function useModalAnimations({ DURATION, modalOpen, progress }: Props) {
-  const { spacing } = useAppTheme();
-  const widthValue = WIDTH_SCREEN - spacing.s16 * 2;
-
+export function useModalAnimations({
+  DURATION,
+  modalOpen,
+  progress,
+  height,
+}: Props) {
+  const { spacing, colors, borderRadii } = useAppTheme();
   const backdropAnimatedStyle = useAnimatedStyle(() => ({
     zIndex: modalOpen.value
       ? 100
@@ -31,8 +31,14 @@ export function useModalAnimations({ DURATION, modalOpen, progress }: Props) {
   }));
 
   const modalAnimatedStyle = useAnimatedStyle(() => ({
-    height: interpolate(progress.value, [1, 0], [0, 234]),
-    width: interpolate(progress.value, [1, 0], [0, widthValue]),
+    transform: [
+      {
+        scale: interpolate(progress.value, [1, 0], [0.3, 1]),
+      },
+    ],
+    height: height?.value,
+    backgroundColor: colors.background,
+    borderRadius: borderRadii.default,
   }));
 
   return { backdropAnimatedStyle, modalAnimatedStyle };
