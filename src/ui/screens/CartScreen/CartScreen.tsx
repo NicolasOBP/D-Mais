@@ -5,7 +5,11 @@ import { ListRenderItemInfo, RefreshControl } from "react-native";
 import { useScrollToTop } from "@react-navigation/native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
-import { ProductCartScreen, useCartGetItems } from "@domain";
+import {
+  ProductCartScreen,
+  useAuthCheckLeftQuota,
+  useCartGetItems,
+} from "@domain";
 import { useCartItems, useCartService } from "@infra";
 import { useAppTheme } from "@theme";
 
@@ -26,7 +30,13 @@ export function CartScreen() {
   const { showToast } = useToast();
   const { data: cartItems, isLoading, refetch } = useCartGetItems();
   const { selectedItems, totalSelectedPrice } = useCartItems();
-  const { toggleProductSelection, getSelectedProducts } = useCartService();
+  const { toggleProductSelection, getSelectedProducts, getSelectedVolume } =
+    useCartService();
+  const { checkLeftQuota } = useAuthCheckLeftQuota({
+    onSuccess: () => {
+      router.push("/sell");
+    },
+  });
 
   const flatListRef = useRef(null);
   useScrollToTop(flatListRef);
@@ -54,7 +64,7 @@ export function CartScreen() {
       return;
     }
 
-    router.push("/sell");
+    checkLeftQuota(getSelectedVolume());
   }
 
   return (
