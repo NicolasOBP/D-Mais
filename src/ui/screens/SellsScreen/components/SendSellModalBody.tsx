@@ -1,3 +1,5 @@
+import { useAppTheme } from "@theme";
+
 import { ProgressBar } from "@components";
 import { Box, Text } from "@core-components";
 
@@ -10,6 +12,8 @@ export function SendSellModalBody({
   userLeftQuota,
   userQuota,
 }: SendSellModalBodyProps) {
+  const { spacing } = useAppTheme();
+
   return (
     <Box gap="s12">
       <Box>
@@ -17,6 +21,8 @@ export function SendSellModalBody({
           total={userQuota ?? 0}
           remaining={userLeftQuota ?? 0}
           label={`Quota restante: ${userLeftQuota ?? 0} L`}
+          height={18}
+          style={{ marginTop: -spacing.s20 }}
         />
       </Box>
 

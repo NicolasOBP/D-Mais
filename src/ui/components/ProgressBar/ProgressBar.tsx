@@ -9,13 +9,13 @@ import Animated, {
 
 import { useAppTheme } from "@theme";
 
-import { Box, Text } from "@core-components";
+import { Box, BoxProps, Text } from "@core-components";
 
 import { MODAL_ANIMATION_DURATION } from "../Modal";
 
 import { useProgressBarAnimation } from "./useProgressBarAnimation";
 
-export type ProgressBarProps = {
+export type ProgressBarProps = BoxProps & {
   total: number;
   remaining: number;
   height?: number;
@@ -24,14 +24,19 @@ export type ProgressBarProps = {
 
 const DURATION = 500;
 
+/**
+ *
+ * @param height - The height of the progress bar. Default is 12.
+ * @returns
+ */
 export function ProgressBar({
   total,
   remaining,
   height = 12,
   label,
+  ...progressBarProps
 }: ProgressBarProps) {
   const { borderRadii, colors } = useAppTheme();
-
   const safeTotal = Math.max(total, 0);
   const safeRemaining = Math.max(remaining, 0);
   const used = Math.max(safeTotal - safeRemaining, 0);
@@ -57,7 +62,7 @@ export function ProgressBar({
   );
 
   return (
-    <Box width="100%">
+    <Box width="100%" {...progressBarProps}>
       {label && (
         <Box mb="s8">
           <Text variant="title14">{label}</Text>
