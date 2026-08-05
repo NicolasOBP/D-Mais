@@ -14,8 +14,8 @@ import { useToast } from "@components";
 import { Order, OrderVariables } from "../OrdersType";
 
 export function useOrdersSend(options?: MutationOptions<Order>) {
-  const { updateLeftQuota } = useAuth();
-  const { orders, cart } = useRepository();
+  const { orders, cart, auth } = useRepository();
+  const { authUser } = useAuth();
   const { showToast } = useToast();
   const queryClient = useQueryClient();
   const { removeProductsFromCart } = useCartService();
@@ -28,7 +28,8 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
         message: "Pedido enviado com sucesso!",
       });
 
-      updateLeftQuota(
+      auth.updateLeftQuota(
+        authUser!.id,
         order.products.reduce((acc, prod) => acc + prod.volume, 0),
       );
 

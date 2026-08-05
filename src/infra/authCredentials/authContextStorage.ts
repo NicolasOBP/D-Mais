@@ -1,16 +1,14 @@
-import { AuthUser } from "@domain";
-
 import { storage } from "../storage";
 
 const AUTH_KEY = "@Auth";
 
-async function set(user: AuthUser): Promise<void> {
-  await storage.setItem(AUTH_KEY, user);
+async function set(userId: string): Promise<void> {
+  await storage.setItem(AUTH_KEY, userId);
 }
 
-async function get(): Promise<AuthUser | null> {
-  const user = await storage.getItem<AuthUser>(AUTH_KEY);
-  return user;
+async function get(): Promise<string | null> {
+  const userId = await storage.getItem<string>(AUTH_KEY);
+  return userId;
 }
 
 async function remove(): Promise<void> {

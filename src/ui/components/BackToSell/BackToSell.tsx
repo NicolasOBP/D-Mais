@@ -8,7 +8,12 @@ import {
   withTiming,
 } from "react-native-reanimated";
 
-import { useBackToSellService, useBackToSellState } from "@infra";
+import { useAuthCheckLeftQuota } from "@domain";
+import {
+  useBackToSellService,
+  useBackToSellState,
+  useCartService,
+} from "@infra";
 import { useAppTheme } from "@theme";
 
 import { Box, PressableBox, Text } from "@core-components";
@@ -21,6 +26,12 @@ const ANIMATION_DURATION = 600;
 
 export function BackToSell() {
   const { spacing } = useAppTheme();
+  const { checkLeftQuota } = useAuthCheckLeftQuota({
+    onSuccess: () => {
+      router.push("/sell");
+    },
+  });
+  const { getSelectedVolume } = useCartService();
   const pathname = usePathname();
   const { hasVisitedSell, showBackToSellButton, completedSell } =
     useBackToSellState();
@@ -64,11 +75,15 @@ export function BackToSell() {
     });
   }, [progress, showBackToSellButton]);
 
+  function handlePress() {
+    checkLeftQuota(getSelectedVolume());
+  }
+
   const animatedStyle = useBackToSellAnimation(progress);
 
   return (
     <AnimatedPressableBox
-      onPress={() => router.push("/sell")}
+      onPress={handlePress}
       disabled={!showBackToSellButton}
       style={[
         animatedStyle,

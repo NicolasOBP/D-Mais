@@ -3,6 +3,7 @@ import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
 import { AuthUser } from "@domain";
 
+import { useRepository } from "../../repositories";
 import { authContextStorage } from "../authContextStorage";
 import { AuthState } from "../authCredentialsType";
 
@@ -11,7 +12,6 @@ export const AuthContext = createContext<AuthState>({
   isReady: false,
   saveAuthUser: async () => {},
   removeAuthUser: async () => {},
-  updateLeftQuota: async () => {},
 });
 
 SplashScreen.preventAutoHideAsync();
@@ -19,9 +19,10 @@ SplashScreen.preventAutoHideAsync();
 export function AuthProvider({ children }: PropsWithChildren) {
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [isReady, setIsReady] = useState<boolean>(false);
+  const { auth } = useRepository();
 
   async function saveAuthUser(user: AuthUser) {
-    await authContextStorage.set(user);
+    await authContextStorage.set(user.id);
     setAuthUser(user);
   }
 
@@ -32,7 +33,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   async function loadAuthUser() {
     try {
-      const user = await authContextStorage.get();
+      const userId = await authContextStorage.get();
+      const user = await auth.getUserById(userId);
+
       if (user) {
         setAuthUser(user);
       }
@@ -43,19 +46,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function updateLeftQuota(usedQuota: number) {
-    if (authUser) {
-      const updatedUser = {
-        ...authUser,
-        leftQuota: authUser.leftQuota - usedQuota,
-      };
-      await authContextStorage.set(updatedUser);
-      setAuthUser(updatedUser);
-    }
-  }
-
   useEffect(() => {
     loadAuthUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -71,7 +64,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
         isReady,
         saveAuthUser,
         removeAuthUser,
-        updateLeftQuota,
       }}
     >
       {children}
