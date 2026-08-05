@@ -80,7 +80,11 @@ export function Toast() {
           {toast.message}
         </Text>
         {toast.description && (
-          <Text color={toastVariant.textColor} variant="text14">
+          <Text
+            color={toastVariant.textColor}
+            variant="text14"
+            textAlign="center"
+          >
             {toast.description}
           </Text>
         )}
@@ -95,8 +99,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     minWidth: 150,
+    maxWidth: "80%",
     borderRadius: theme.borderRadii.default,
     padding: theme.spacing.s8,
     borderWidth: 2,
+    zIndex: 2,
   },
 });
