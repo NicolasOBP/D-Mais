@@ -20,6 +20,7 @@ export type ProgressBarProps = BoxProps & {
   remaining: number;
   height?: number;
   label?: string;
+  textBelowBar?: string;
 };
 
 const DURATION = 500;
@@ -34,6 +35,7 @@ export function ProgressBar({
   remaining,
   height = 12,
   label,
+  textBelowBar,
   ...progressBarProps
 }: ProgressBarProps) {
   const { borderRadii, colors } = useAppTheme();
@@ -44,6 +46,9 @@ export function ProgressBar({
   const normalizedPercentage = Math.min(Math.max(percentage, 0), 1);
 
   const progress = useSharedValue(0);
+
+  const textBelowBarFinal =
+    textBelowBar || `${Math.round(normalizedPercentage * 100)}%`;
 
   useEffect(() => {
     progress.value = withDelay(
@@ -93,7 +98,7 @@ export function ProgressBar({
 
       <Box mt="s8" alignItems="flex-end">
         <Text variant="text12" color="title">
-          {Math.round(normalizedPercentage * 100)}%
+          {textBelowBarFinal}
         </Text>
       </Box>
     </Box>

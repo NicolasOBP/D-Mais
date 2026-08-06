@@ -1,4 +1,5 @@
 import { useAppTheme } from "@theme";
+import { useNumberFormat } from "@utils";
 
 import { ProgressBar } from "@components";
 import { Box, Text } from "@core-components";
@@ -13,14 +14,17 @@ export function SendSellModalBody({
   userQuota,
 }: SendSellModalBodyProps) {
   const { spacing } = useAppTheme();
+  const quota = userQuota ?? 0;
+  const leftQuota = userLeftQuota ?? 0;
 
   return (
     <Box gap="s12">
       <Box>
         <ProgressBar
-          total={userQuota ?? 0}
-          remaining={userLeftQuota ?? 0}
-          label={`Quota restante: ${userLeftQuota ?? 0} L`}
+          total={quota}
+          remaining={leftQuota}
+          label={`Quota restante: ${useNumberFormat.formatNumberWithThousands(leftQuota)} L`}
+          textBelowBar={`${useNumberFormat.formatNumberWithThousands(quota - leftQuota)} L usados`}
           height={18}
           style={{ marginTop: -spacing.s20 }}
         />

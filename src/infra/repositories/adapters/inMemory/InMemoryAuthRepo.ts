@@ -44,8 +44,6 @@ export class InMemoryAuthRepo implements IAuthRepo {
       throw new Error("Usuário não encontrado");
     }
 
-    console.log(user.leftQuota, quota);
-
     if (user.leftQuota < quota) {
       throw new Error("Quota insuficiente", {
         cause: "Você não possui quota suficiente para realizar esta venda",
@@ -59,8 +57,6 @@ export class InMemoryAuthRepo implements IAuthRepo {
     if (!user) {
       throw new Error("Usuário não encontrado");
     }
-
-    console.log({ user });
 
     user.leftQuota -= usedQuota;
   }

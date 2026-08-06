@@ -38,7 +38,7 @@ export function OrderScreen() {
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
             numColumns={2}
-            columnWrapperStyle={{ gap: spacing.s24 }}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
             itemLayoutAnimation={LinearTransition.duration(500)}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
