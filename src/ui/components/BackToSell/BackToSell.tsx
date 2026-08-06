@@ -8,7 +8,6 @@ import {
   withTiming,
 } from "react-native-reanimated";
 
-import { useAuthCheckLeftQuota } from "@domain";
 import {
   useBackToSellService,
   useBackToSellState,
@@ -17,6 +16,8 @@ import {
 import { useAppTheme } from "@theme";
 
 import { Box, PressableBox, Text } from "@core-components";
+
+import { useAuthCheckLeftQuota } from "../../../domain/auth/useCases/useAuthCheckLeftQuota";
 
 import { useBackToSellAnimation } from "./useBackToSellAnimation";
 

@@ -5,7 +5,7 @@ import {
   useRepository,
 } from "@infra";
 
-import { useToast } from "@components";
+import { useToast } from "../../../ui/components/Toast/";
 
 export function useAuthCheckLeftQuota(options?: MutationOptions<void>) {
   const { auth } = useRepository();
