@@ -1,5 +1,6 @@
 import { IAuthRepo } from "./auth/IAuthRepo";
 import { ICartRepo } from "./cart/ICartRepo";
+import { IInventoryRepo } from "./inventory";
 import { IOrdersRepo } from "./orders/IOrdersRepo";
 import { IProductRepo } from "./product/IProductRepo";
 import { ISellsRepo } from "./sells/ISellsRepo";
@@ -10,4 +11,5 @@ export type Repositories = {
   cart: ICartRepo;
   sells: ISellsRepo;
   orders: IOrdersRepo;
+  inventory: IInventoryRepo;
 };

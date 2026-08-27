@@ -2,6 +2,7 @@ import { Repositories } from "@domain";
 
 import { InMemoryAuthRepo } from "./InMemoryAuthRepo";
 import { InMemoryCartRepo } from "./InMemoryCartRepo";
+import { InMemoryInventoryRepo } from "./InMemoryInventoryRepo";
 import { InMemoryOrdersRepo } from "./InMemoryOrdersRepo";
 import { InMemoryProductRepo } from "./InMemoryProductRepo";
 import { InMemorySellsRepo } from "./InMemorySellsRepo";
@@ -12,4 +13,5 @@ export const InMemoryRepositories: Repositories = {
   cart: new InMemoryCartRepo(),
   sells: new InMemorySellsRepo(),
   orders: new InMemoryOrdersRepo(),
+  inventory: new InMemoryInventoryRepo(),
 };

@@ -15,4 +15,7 @@ export enum QueryKeys {
 
   Orders = "Orders",
   OrdersList = "OrdersList",
+
+  Inventory = "Inventory",
+  InventoryList = "InventoryList",
 }
