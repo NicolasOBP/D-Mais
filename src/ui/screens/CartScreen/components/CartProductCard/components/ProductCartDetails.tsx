@@ -1,6 +1,6 @@
 import { ProductCart, useCartEditVolume } from "@domain";
 import { useProductVolumeModal } from "@hooks";
-import { CartSchema } from "@schemas";
+import { ProductSchema } from "@schemas";
 import { useNumberFormat } from "@utils";
 
 import { Icon } from "@components";
@@ -34,7 +34,7 @@ export function ProductCartDetails({ product }: Props) {
     isLoading: isPending,
   });
 
-  function onSubmitEdit({ volume }: CartSchema) {
+  function onSubmitEdit({ volume }: ProductSchema) {
     const newVolumeNumber = Number.parseInt(volume);
 
     editVolume({ productCartId: product.cartId, newVolume: newVolumeNumber });

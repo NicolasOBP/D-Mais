@@ -2,6 +2,7 @@ import { Product } from "../product";
 
 export interface ProductCart extends Product {
   volume: number;
+  inventory: string;
   cartId: number;
 }
 export interface ProductCartScreen extends ProductCart {

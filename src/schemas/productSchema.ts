@@ -1,10 +1,11 @@
 import { z } from "zod";
 
-export const cartSchema = z.object({
+export const productSchema = z.object({
   volume: z
     .string({ error: "Valor inválido" })
     .regex(/^[0-9.,]+$/, "Valor inválido")
     .min(1, "Informação necessária"),
+  inventory: z.string({ error: "Valor inválido" }),
 });
 
-export type CartSchema = z.infer<typeof cartSchema>;
+export type ProductSchema = z.infer<typeof productSchema>;

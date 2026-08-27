@@ -1,17 +1,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { cartSchema, CartSchema } from "./cartSchema";
+import { productSchema, ProductSchema } from "./productSchema";
 
 type Props = {
   defaultVolume: string;
 };
 
 export function useProductForm({ defaultVolume }: Props) {
-  const { control, handleSubmit, formState, reset } = useForm<CartSchema>({
-    resolver: zodResolver(cartSchema),
+  const { control, handleSubmit, formState, reset } = useForm<ProductSchema>({
+    resolver: zodResolver(productSchema),
     defaultValues: {
       volume: defaultVolume,
+      inventory: "",
     },
     mode: "onChange",
   });

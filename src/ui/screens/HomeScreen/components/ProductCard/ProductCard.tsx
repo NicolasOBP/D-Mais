@@ -1,6 +1,6 @@
 import { Product, useCartAdd } from "@domain";
 import { useProductVolumeModal } from "@hooks";
-import { CartSchema } from "@schemas";
+import { ProductSchema } from "@schemas";
 import { useNumberFormat } from "@utils";
 
 import { Box, BoxProps, Button, PressableBox, Text } from "@core-components";
@@ -29,10 +29,10 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
     isLoading: isPending,
   });
 
-  function onSubmit({ volume }: CartSchema) {
+  function onSubmit({ volume, inventory }: ProductSchema) {
     const volumeNumber = Number.parseInt(volume);
 
-    addCart({ ...product, volume: volumeNumber });
+    addCart({ ...product, volume: volumeNumber, inventory });
   }
 
   return (

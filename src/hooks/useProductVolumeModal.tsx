@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 
 import { Product } from "@domain";
-import { useProductForm } from "@schemas";
+import { ProductSchema, useProductForm } from "@schemas";
 
 import { ProductModalBody, useModal } from "@components";
 
 type ProductVolumeModalProps = {
   defaultVolume: string;
   product: Product;
-  onSubmit: ({ volume }: { volume: string }) => void;
+  onSubmit: (values: ProductSchema) => void;
   isEdit?: boolean;
   isLoading: boolean;
 };
@@ -30,9 +30,9 @@ export function useProductVolumeModal({
     if (isEdit) {
       showModal(
         {
-          headerTitle: `Editar Litros`,
+          headerTitle: `Editar Produto`,
           headerSubtitle: product.title,
-          BodyComponent: <ProductModalBody name="volume" control={control} />,
+          BodyComponent: <ProductModalBody control={control} />,
           footerButton: {
             oneButtonFooter: {
               label: "Confirmar",
@@ -45,8 +45,8 @@ export function useProductVolumeModal({
     } else {
       showModal(
         {
-          headerTitle: `Litros - ${product.title}`,
-          BodyComponent: <ProductModalBody name="volume" control={control} />,
+          headerTitle: `${product.title}`,
+          BodyComponent: <ProductModalBody control={control} />,
           footerButton: {
             oneButtonFooter: {
               label: "Confirmar",
