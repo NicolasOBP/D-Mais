@@ -19,13 +19,14 @@ import { Box, BoxProps } from "../Box/Box";
 import { Text } from "../Text/Text";
 
 import { textInputVariant, TextInputVariant } from "./TextInputVariant";
+import { useTextInputBorderAnimation } from "./useTextInputBorderAnimation";
 
 export interface TextInputProps extends RNTextInputProps {
   label?: string;
   errorMessage?: string;
   RighComponent?: React.ReactElement;
   LeftComponent?: React.ReactElement;
-  boxProps?: BoxProps;
+  textFieldStyle?: BoxProps;
   variant?: TextInputVariant;
   onLayout?: (e: LayoutChangeEvent) => void;
   animatedStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
@@ -35,7 +36,7 @@ export interface TextInputProps extends RNTextInputProps {
 const AnimatedBox = createAnimatedComponent(Box);
 
 export function TextInput({
-  boxProps,
+  textFieldStyle,
   label,
   errorMessage,
   RighComponent,
@@ -48,9 +49,16 @@ export function TextInput({
 }: TextInputProps) {
   const [absoluteTopSpacing, setAbsoluteTopSpacing] = useState(0);
   const { textVariants, colors } = useAppTheme();
+  const [isFocused, setIsFocused] = useState(false);
+
   const inputRef = useRef<RNTextInput>(null);
 
   const inputVariant = textInputVariant[variant];
+  const animatedBorderStyle = useTextInputBorderAnimation(
+    isFocused,
+    inputVariant.borderColor,
+    inputVariant.borderColorOnFocus,
+  );
 
   const focusInput = () => {
     inputRef.current?.focus();
@@ -79,9 +87,11 @@ export function TextInput({
           justifyContent="space-between"
           alignItems="center"
           gap="s8"
-          {...boxProps}
+          {...textFieldStyle}
           {...inputVariant}
-          style={animatedStyle}
+          style={[animatedStyle, animatedBorderStyle]}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
         >
           {LeftComponent && (
             <Box justifyContent="center" alignItems="center">

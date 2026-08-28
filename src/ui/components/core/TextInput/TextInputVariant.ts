@@ -1,13 +1,22 @@
+import { ThemeColor } from "@theme";
+
 import { BoxProps } from "../Box";
 
 export type TextInputVariant = "primary" | "secundary";
 
-export const textInputVariant: Record<TextInputVariant, BoxProps> = {
+type VariantProps = BoxProps & {
+  borderColor: ThemeColor;
+  borderColorOnFocus: ThemeColor;
+};
+
+export const textInputVariant: Record<TextInputVariant, VariantProps> = {
   primary: {
+    backgroundColor: "background",
     borderColor: "gray4",
     borderRadius: "inputField",
     borderWidth: 1,
     padding: "s16",
+    borderColorOnFocus: "gray2",
   },
   secundary: {
     backgroundColor: "gray4",
@@ -15,5 +24,6 @@ export const textInputVariant: Record<TextInputVariant, BoxProps> = {
     borderRadius: "inputField",
     borderColor: "primary",
     padding: "s4",
+    borderColorOnFocus: "primary",
   },
 };
