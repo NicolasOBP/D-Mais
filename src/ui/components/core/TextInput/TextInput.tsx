@@ -19,7 +19,7 @@ import { Box, BoxProps } from "../Box/Box";
 import { Text } from "../Text/Text";
 
 import { textInputVariant, TextInputVariant } from "./TextInputVariant";
-import { useTextInputBorderAnimation } from "./useTextInputBorderAnimation";
+import { useTextInputBorderAnimation } from "./useTextInputAnimation";
 
 export interface TextInputProps extends RNTextInputProps {
   label?: string;
@@ -58,6 +58,8 @@ export function TextInput({
     isFocused,
     inputVariant.borderColor,
     inputVariant.borderColorOnFocus,
+    inputVariant.backgroundColor,
+    inputVariant.backGroundColorOnFocus,
   );
 
   const focusInput = () => {

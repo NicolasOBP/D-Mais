@@ -13,6 +13,8 @@ export function useTextInputBorderAnimation(
   isFocused: boolean,
   borderColor: ThemeColor,
   borderColorOnFocus: ThemeColor,
+  backgroundColor: ThemeColor,
+  backgroundColorOnFocus: ThemeColor,
 ) {
   const { colors } = useAppTheme();
   const progress = useSharedValue(0);
@@ -29,6 +31,11 @@ export function useTextInputBorderAnimation(
       progress.value,
       [0, 1],
       [colors[borderColor], colors[borderColorOnFocus]],
+    ),
+    backgroundColor: interpolateColor(
+      progress.value,
+      [0, 1],
+      [colors[backgroundColor], colors[backgroundColorOnFocus]],
     ),
   }));
 }
