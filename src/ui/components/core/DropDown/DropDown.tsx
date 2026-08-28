@@ -8,6 +8,7 @@ import { StringOrNumberKeyConstraint, useDebounce } from "@utils";
 import { Box, PressableBox } from "../Box";
 import { Text } from "../Text";
 
+import { dropDownVariant, DropDownVariant } from "./DropDownVariant";
 import { useDropDownAnimation } from "./useDropDownAnimation";
 
 export type DropDownProps<TValue> = {
@@ -16,9 +17,10 @@ export type DropDownProps<TValue> = {
   onSelectItem: (value: TValue) => void;
   closeDropdown: () => void;
   dropdownItems: TValue[] | undefined;
-  valueKey: StringOrNumberKeyConstraint<TValue>;
-  idKey: StringOrNumberKeyConstraint<TValue>;
+  valueKey?: StringOrNumberKeyConstraint<TValue>;
+  idKey?: StringOrNumberKeyConstraint<TValue>;
   searchText?: string;
+  variant: DropDownVariant;
 };
 
 export function DropDown<TValue>({
@@ -30,14 +32,19 @@ export function DropDown<TValue>({
   valueKey,
   idKey,
   searchText,
+  variant,
 }: DropDownProps<TValue>) {
   const [items, setItems] = useState(dropdownItems);
   const searchDebounced = useDebounce(
     typeof searchText === "string" ? searchText : "",
   );
   const height = useSharedValue(0);
-
-  const dropDownAnimation = useDropDownAnimation(progress, height);
+  const dropDownVariantStyle = dropDownVariant[variant];
+  const dropDownAnimation = useDropDownAnimation(
+    progress,
+    height,
+    dropDownVariantStyle.textInput.borderColorOnFocus,
+  );
 
   let diffColors = true;
 
@@ -54,7 +61,9 @@ export function DropDown<TValue>({
     if (searchDebounced && dropdownItems) {
       setItems(
         dropdownItems.filter((item) => {
-          const itemValue = String(item[valueKey]).toLowerCase();
+          const itemValue = String(
+            valueKey ? item[valueKey] : item,
+          ).toLowerCase();
           return itemValue.includes(searchDebounced.toLowerCase());
         }),
       );
@@ -79,16 +88,22 @@ export function DropDown<TValue>({
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="always"
           >
-            {items?.map((item) => {
+            {items?.map((item, index) => {
               diffColors = !diffColors;
-              const itemId = String(item[idKey]);
-              const itemValue = String(item[valueKey]);
+              const itemId = idKey ? String(item[idKey]) : String(index);
+              const itemValue = valueKey
+                ? String(item[valueKey])
+                : String(item);
 
               return (
                 <PressableBox
                   key={itemId}
                   flex={1}
-                  backgroundColor={diffColors ? "gray3" : "gray4"}
+                  backgroundColor={
+                    diffColors
+                      ? dropDownVariantStyle.dropDown.activeBackgroundColor
+                      : dropDownVariantStyle.textInput.backgroundColor
+                  }
                   paddingHorizontal="s8"
                   paddingVertical="s4"
                   onPress={() => {

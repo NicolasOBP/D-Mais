@@ -4,11 +4,12 @@ import {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-import { useAppTheme } from "@theme";
+import { ThemeColor, useAppTheme } from "@theme";
 
 export const useDropDownAnimation = (
   progress: SharedValue<number>,
   height: SharedValue<number>,
+  borderColor: ThemeColor,
 ) => {
   const { borderRadii, colors } = useAppTheme();
 
@@ -37,6 +38,6 @@ export const useDropDownAnimation = (
     ),
     borderWidth: interpolate(progress.value, [0, 1], [0, 1]),
     zIndex: 6,
-    borderColor: colors.primary,
+    borderColor: colors[borderColor],
   }));
 };

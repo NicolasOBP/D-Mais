@@ -12,6 +12,7 @@ import {
   TextInputProps,
 } from "@core-components";
 
+import { dropDownVariant } from "../core/DropDown/DropDownVariant";
 import { ControllerProps } from "../Form";
 
 import { ArrowIconAnimation } from "./ArrowIconAnimation";
@@ -29,14 +30,12 @@ export function DropDownTextInput<FormType extends FieldValues, TValue>({
   control,
   name,
   rules,
-  variant,
+  variant = "primary",
   dropdownItems,
   valueKey,
   idKey,
   ...textInputProps
 }: DropDownTextInputProps<FormType, TValue>) {
-  // const [selectedValue, setSelectedValue] = useState<TValue>();
-
   const {
     bodyProgress,
     closeDropdown,
@@ -47,7 +46,9 @@ export function DropDownTextInput<FormType extends FieldValues, TValue>({
     isOpen,
   } = useDropDownTextInput();
 
-  const animatedStyle = useDropDownInputAnimation(progress);
+  const dropDownStyle = dropDownVariant[variant];
+
+  const animatedStyle = useDropDownInputAnimation(progress, dropDownStyle);
 
   return (
     <Box>
@@ -59,7 +60,7 @@ export function DropDownTextInput<FormType extends FieldValues, TValue>({
           <>
             <TextInput
               variant={variant}
-              value={field.value[valueKey]}
+              value={valueKey ? field.value[valueKey] : field.value}
               onChangeText={field.onChange}
               errorMessage={useFormUtils.getFirstErrorMessage(fieldState.error)}
               RighComponent={
@@ -87,6 +88,7 @@ export function DropDownTextInput<FormType extends FieldValues, TValue>({
               idKey={idKey}
               dropdownItems={dropdownItems}
               searchText={field.value}
+              variant={variant}
             />
           </>
         )}

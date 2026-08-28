@@ -1,21 +1,20 @@
 import {
   interpolate,
-  interpolateColor,
   SharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
 
 import { useAppTheme } from "@theme";
 
-export function useDropDownInputAnimation(progress: SharedValue<number>) {
-  const { borderRadii, colors } = useAppTheme();
+import { DropDownStyles } from "../core/DropDown/DropDownVariant";
+
+export function useDropDownInputAnimation(
+  progress: SharedValue<number>,
+  dropDownStyle: DropDownStyles,
+) {
+  const { borderRadii } = useAppTheme();
 
   return useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(
-      progress.value,
-      [0, 1],
-      [colors.gray4, colors.gray3],
-    ),
     borderBottomLeftRadius: interpolate(
       progress.value,
       [0, 1],
