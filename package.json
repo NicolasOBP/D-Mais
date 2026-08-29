@@ -11,7 +11,8 @@
     "lint": "expo lint",
     "eas:dev": "eas build --platform android --profile development",
     "eas:prev": "eas build --platform android --profile preview",
-    "up:prev": "npx eas update --channel preview --message"
+    "up:prev": "npx eas update --channel preview --message",
+    "prepare": "husky"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -58,6 +59,7 @@
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
     "eslint-plugin-import": "^2.32.0",
+    "husky": "^9.1.7",
     "typescript": "~5.9.2"
   },
   "private": true
