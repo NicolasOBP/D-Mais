@@ -1,8 +1,9 @@
+import { Inventory } from "../inventory";
 import { Product } from "../product";
 
 export interface ProductCart extends Product {
   volume: number;
-  inventory: string;
+  inventory: Inventory;
   cartId: number;
 }
 export interface ProductCartScreen extends ProductCart {

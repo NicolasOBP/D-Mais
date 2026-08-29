@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 
-import { Product } from "@domain";
-import { ProductSchema, useProductForm } from "@schemas";
+import { Product, useInventoryList } from "@domain";
+import { ProductSchema, useProductForm, UseProductFormProps } from "@schemas";
 
 import { ProductModalBody, useModal } from "@components";
 
-type ProductVolumeModalProps = {
-  defaultVolume: string;
+type ProductVolumeModalProps = UseProductFormProps & {
   product: Product;
   onSubmit: (values: ProductSchema) => void;
   isEdit?: boolean;
@@ -19,10 +18,13 @@ export function useProductVolumeModal({
   onSubmit,
   isEdit,
   isLoading,
+  defaultInventory,
 }: ProductVolumeModalProps) {
   const { control, handleSubmit, formState, reset } = useProductForm({
     defaultVolume,
+    defaultInventory,
   });
+  const { inventoryList } = useInventoryList();
 
   const { showModal, updateModalData, closeModal } = useModal();
 
@@ -32,7 +34,9 @@ export function useProductVolumeModal({
         {
           headerTitle: `Editar Produto`,
           headerSubtitle: product.title,
-          BodyComponent: <ProductModalBody control={control} />,
+          BodyComponent: (
+            <ProductModalBody inventoryList={inventoryList} control={control} />
+          ),
           footerButton: {
             oneButtonFooter: {
               label: "Confirmar",
@@ -46,7 +50,9 @@ export function useProductVolumeModal({
       showModal(
         {
           headerTitle: `${product.title}`,
-          BodyComponent: <ProductModalBody control={control} />,
+          BodyComponent: (
+            <ProductModalBody inventoryList={inventoryList} control={control} />
+          ),
           footerButton: {
             oneButtonFooter: {
               label: "Confirmar",

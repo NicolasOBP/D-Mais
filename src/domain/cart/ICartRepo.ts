@@ -1,3 +1,5 @@
+import { Inventory } from "../inventory";
+
 import {
   CartMetadata,
   ProductCart,
@@ -9,9 +11,10 @@ export interface ICartRepo {
   add: (product: ProductCartVariables) => Promise<ProductCart>;
   getCartItems: () => Promise<ProductCartScreen[]>;
   getCartMetadata: () => Promise<CartMetadata>;
-  editVolume: (
+  editCartProduct: (
     productCartId: ProductCart["cartId"],
     newVolume: number,
+    newInventory: Inventory,
   ) => Promise<ProductCart>;
   deleteItem: (
     productCartId: ProductCart["cartId"],

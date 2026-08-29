@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { ProductCart, ProductCartScreen } from "@domain";
+import { Inventory, ProductCart, ProductCartScreen } from "@domain";
 
 const initialState: {
   productCartStore: ProductCartScreen[];
@@ -16,7 +16,11 @@ export type CartStoreType = typeof initialState & {
   addProductToCart: (product: ProductCart) => void;
   removeProductFromCart: (productCartId: number) => void;
   removeProductsFromCart: (productCartIds: number[]) => void;
-  updateProductVolume: (productCartId: number, newVolume: number) => void;
+  updateCartProduct: (
+    productCartId: number,
+    newVolume: number,
+    newInventory: Inventory,
+  ) => void;
   toggleProductSelection: (productCartId: number) => void;
   getSelectedProducts: () => ProductCartScreen[];
   getSelectedVolume: () => number;
@@ -32,7 +36,12 @@ const useCartStore = create<CartStoreType>()((set, get) => ({
         (item) => item.id === product.id,
       );
 
-      if (existingProduct) {
+      if (
+        existingProduct &&
+        existingProduct.inventory.description ===
+          product.inventory.description &&
+        existingProduct.inventory.id === product.inventory.id
+      ) {
         state.totalSelectedPrice +=
           (product.volume - existingProduct.volume) * product.price;
 
@@ -96,7 +105,7 @@ const useCartStore = create<CartStoreType>()((set, get) => ({
     });
   },
 
-  updateProductVolume: (productCartId, newVolume) => {
+  updateCartProduct: (productCartId, newVolume, newInventory) => {
     set((state) => {
       const productToUpdate = state.productCartStore.find(
         (item) => item.cartId === productCartId,
@@ -112,7 +121,9 @@ const useCartStore = create<CartStoreType>()((set, get) => ({
 
       return {
         productCartStore: state.productCartStore.map((item) =>
-          item.cartId === productCartId ? { ...item, volume: newVolume } : item,
+          item.cartId === productCartId
+            ? { ...item, volume: newVolume, inventory: newInventory }
+            : item,
         ),
       };
     });
@@ -182,9 +193,7 @@ export function useCartServiceZustand(): Omit<
   const removeProductsFromCart = useCartStore(
     (state) => state.removeProductsFromCart,
   );
-  const updateProductVolume = useCartStore(
-    (state) => state.updateProductVolume,
-  );
+  const updateCartProduct = useCartStore((state) => state.updateCartProduct);
   const toggleProductSelection = useCartStore(
     (state) => state.toggleProductSelection,
   );
@@ -198,7 +207,7 @@ export function useCartServiceZustand(): Omit<
     addProductToCart,
     removeProductFromCart,
     removeProductsFromCart,
-    updateProductVolume,
+    updateCartProduct,
     toggleProductSelection,
     clearCart,
     getSelectedProducts,

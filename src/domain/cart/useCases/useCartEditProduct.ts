@@ -9,24 +9,25 @@ import {
 } from "@infra";
 
 import { ProductCart } from "..";
+import { Inventory } from "../../inventory";
 
-export function useCartEditVolume(options?: MutationOptions<ProductCart>) {
+export function useCartEditProduct(options?: MutationOptions<ProductCart>) {
   const { cart } = useRepository();
   const queryClient = useQueryClient();
-  const { updateProductVolume } = useCartService();
+  const { updateCartProduct } = useCartService();
 
   return useAppMutation<
     ProductCart,
-    { productCartId: number; newVolume: number }
+    { productCartId: number; newVolume: number; newInventory: Inventory }
   >({
-    mutationFn: ({ productCartId, newVolume }) =>
-      cart.editVolume(productCartId, newVolume),
+    mutationFn: ({ productCartId, newVolume, newInventory }) =>
+      cart.editCartProduct(productCartId, newVolume, newInventory),
     onSuccess: (prod) => {
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.Cart],
       });
 
-      updateProductVolume(prod.cartId, prod.volume);
+      updateCartProduct(prod.cartId, prod.volume, prod.inventory);
 
       options?.onSuccess?.(prod);
     },

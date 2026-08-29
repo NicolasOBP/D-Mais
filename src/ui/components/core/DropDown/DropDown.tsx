@@ -21,6 +21,7 @@ export type DropDownProps<TValue> = {
   idKey?: StringOrNumberKeyConstraint<TValue>;
   searchText?: string;
   variant: DropDownVariant;
+  showTextWithId?: boolean;
 };
 
 export function DropDown<TValue>({
@@ -33,6 +34,7 @@ export function DropDown<TValue>({
   idKey,
   searchText,
   variant,
+  showTextWithId = false,
 }: DropDownProps<TValue>) {
   const [items, setItems] = useState(dropdownItems);
   const searchDebounced = useDebounce(
@@ -95,6 +97,10 @@ export function DropDown<TValue>({
                 ? String(item[valueKey])
                 : String(item);
 
+              const itemText = showTextWithId
+                ? `${itemId} - ${itemValue}`
+                : itemValue;
+
               return (
                 <PressableBox
                   key={itemId}
@@ -112,7 +118,7 @@ export function DropDown<TValue>({
                     Keyboard.dismiss();
                   }}
                 >
-                  <Text variant="text14">{itemValue}</Text>
+                  <Text variant="text14">{itemText}</Text>
                 </PressableBox>
               );
             })}

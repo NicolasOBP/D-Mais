@@ -23,7 +23,6 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
     reset: resetForm,
     handleShowModal,
   } = useProductVolumeModal({
-    defaultVolume: "",
     product,
     onSubmit,
     isLoading: isPending,

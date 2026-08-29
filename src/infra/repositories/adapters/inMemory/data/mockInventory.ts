@@ -13,4 +13,12 @@ export const mockInventory: Inventory[] = [
     id: "A3",
     description: "Usina RJ",
   },
+  {
+    id: "A4",
+    description: "Usina MG",
+  },
+  {
+    id: "A5",
+    description: "Usina ES",
+  },
 ];

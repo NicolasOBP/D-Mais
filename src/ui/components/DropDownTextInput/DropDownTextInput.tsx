@@ -24,7 +24,10 @@ type DropDownTextInputProps<FormType extends FieldValues, TValue> = Omit<
   "RighComponent"
 > &
   ControllerProps<FormType> &
-  Pick<DropDownProps<TValue>, "dropdownItems" | "valueKey" | "idKey">;
+  Pick<
+    DropDownProps<TValue>,
+    "dropdownItems" | "valueKey" | "idKey" | "showTextWithId"
+  >;
 
 export function DropDownTextInput<FormType extends FieldValues, TValue>({
   control,
@@ -34,6 +37,7 @@ export function DropDownTextInput<FormType extends FieldValues, TValue>({
   dropdownItems,
   valueKey,
   idKey,
+  showTextWithId,
   ...textInputProps
 }: DropDownTextInputProps<FormType, TValue>) {
   const {
@@ -56,42 +60,52 @@ export function DropDownTextInput<FormType extends FieldValues, TValue>({
         control={control}
         name={name}
         rules={rules}
-        render={({ fieldState, field }) => (
-          <>
-            <TextInput
-              variant={variant}
-              value={valueKey ? field.value[valueKey] : field.value}
-              onChangeText={field.onChange}
-              errorMessage={useFormUtils.getFirstErrorMessage(fieldState.error)}
-              RighComponent={
-                <ArrowIconAnimation
-                  closeDropdown={closeDropdown}
-                  isOpen={isOpen}
-                  openDropdown={openDropdown}
-                  progress={progress}
-                />
-              }
-              onLayout={(e) => {
-                setTopOffset(e.nativeEvent.layout.height);
-              }}
-              animatedStyle={animatedStyle}
-              onFocus={openDropdown}
-              onBlur={closeDropdown}
-              {...textInputProps}
-            />
-            <DropDown
-              progress={bodyProgress}
-              topOffset={topOffset}
-              onSelectItem={field.onChange}
-              closeDropdown={closeDropdown}
-              valueKey={valueKey}
-              idKey={idKey}
-              dropdownItems={dropdownItems}
-              searchText={field.value}
-              variant={variant}
-            />
-          </>
-        )}
+        render={({ fieldState, field }) => {
+          const textValue =
+            valueKey && idKey
+              ? `${field.value[idKey]} - ${field.value[valueKey]}`
+              : field.value;
+
+          return (
+            <>
+              <TextInput
+                variant={variant}
+                value={textValue}
+                onChangeText={field.onChange}
+                errorMessage={useFormUtils.getFirstErrorMessage(
+                  fieldState.error,
+                )}
+                RighComponent={
+                  <ArrowIconAnimation
+                    closeDropdown={closeDropdown}
+                    isOpen={isOpen}
+                    openDropdown={openDropdown}
+                    progress={progress}
+                  />
+                }
+                onLayout={(e) => {
+                  setTopOffset(e.nativeEvent.layout.height);
+                }}
+                animatedStyle={animatedStyle}
+                onFocus={openDropdown}
+                onBlur={closeDropdown}
+                {...textInputProps}
+              />
+              <DropDown
+                progress={bodyProgress}
+                topOffset={topOffset}
+                onSelectItem={field.onChange}
+                closeDropdown={closeDropdown}
+                valueKey={valueKey}
+                idKey={idKey}
+                dropdownItems={dropdownItems}
+                searchText={field.value}
+                variant={variant}
+                showTextWithId={showTextWithId}
+              />
+            </>
+          );
+        }}
       />
     </Box>
   );

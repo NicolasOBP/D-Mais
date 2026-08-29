@@ -1,4 +1,4 @@
-import { ProductCart, useCartEditVolume } from "@domain";
+import { ProductCart, useCartEditProduct } from "@domain";
 import { useProductVolumeModal } from "@hooks";
 import { ProductSchema } from "@schemas";
 import { useNumberFormat } from "@utils";
@@ -15,10 +15,13 @@ export function ProductCartDetails({ product }: Props) {
     product.price * product.volume,
   );
 
-  const { mutate: editVolume, isPending } = useCartEditVolume({
+  const { mutate: editProduct, isPending } = useCartEditProduct({
     onSuccess: (product) => {
       closeModal();
-      resetForm({ volume: product.volume.toString() });
+      resetForm({
+        volume: product.volume.toString(),
+        inventory: product.inventory,
+      });
     },
   });
 
@@ -27,17 +30,22 @@ export function ProductCartDetails({ product }: Props) {
     reset: resetForm,
     handleShowModal: handleEditProduct,
   } = useProductVolumeModal({
-    defaultVolume: product.volume.toString(),
     product,
     onSubmit: onSubmitEdit,
     isEdit: true,
     isLoading: isPending,
+    defaultVolume: product.volume.toString(),
+    defaultInventory: product.inventory,
   });
 
-  function onSubmitEdit({ volume }: ProductSchema) {
+  function onSubmitEdit({ volume, inventory }: ProductSchema) {
     const newVolumeNumber = Number.parseInt(volume);
 
-    editVolume({ productCartId: product.cartId, newVolume: newVolumeNumber });
+    editProduct({
+      productCartId: product.cartId,
+      newVolume: newVolumeNumber,
+      newInventory: inventory,
+    });
   }
 
   return (

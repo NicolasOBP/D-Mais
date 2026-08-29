@@ -2,6 +2,7 @@ import {
   Cart,
   CartMetadata,
   ICartRepo,
+  Inventory,
   ProductCart,
   ProductCartScreen,
   ProductCartVariables,
@@ -15,7 +16,11 @@ export class InMemoryCartRepo implements ICartRepo {
       (cartProduct) => cartProduct.id === product.id,
     );
 
-    if (existingProduct) {
+    if (
+      existingProduct &&
+      existingProduct.inventory.description === product.inventory.description &&
+      existingProduct.inventory.id === product.inventory.id
+    ) {
       existingProduct.volume += product.volume;
       InnerCart.totalPrice = Number(
         (InnerCart.totalPrice + product.price * product.volume).toFixed(2),
@@ -24,20 +29,21 @@ export class InMemoryCartRepo implements ICartRepo {
       return existingProduct;
     }
 
-    const productCart = {
+    const newProductCart = {
       ...product,
       cartId: InnerCart.cartProducts.length + Math.random(),
     };
 
-    InnerCart.cartProducts.push(productCart);
+    InnerCart.cartProducts.push(newProductCart);
     InnerCart.totalItems++;
     InnerCart.totalPrice = Number(
-      (InnerCart.totalPrice + productCart.price * productCart.volume).toFixed(
-        2,
-      ),
+      (
+        InnerCart.totalPrice +
+        newProductCart.price * newProductCart.volume
+      ).toFixed(2),
     );
 
-    return productCart;
+    return newProductCart;
   }
 
   async getCartMetadata(): Promise<CartMetadata> {
@@ -51,9 +57,10 @@ export class InMemoryCartRepo implements ICartRepo {
     return InnerCart.cartProducts as ProductCartScreen[];
   }
 
-  async editVolume(
+  async editCartProduct(
     productCartId: ProductCart["cartId"],
     newVolume: number,
+    newInventory: Inventory,
   ): Promise<ProductCart> {
     let itemCart = InnerCart.cartProducts.filter(
       (prod) => prod.cartId === productCartId,
@@ -65,7 +72,7 @@ export class InMemoryCartRepo implements ICartRepo {
 
     const item = itemCart[0];
 
-    if (item.volume === newVolume) {
+    if (item.volume === newVolume && item.inventory === newInventory) {
       return item;
     }
 
@@ -84,6 +91,7 @@ export class InMemoryCartRepo implements ICartRepo {
     }
 
     item.volume = newVolume;
+    item.inventory = newInventory;
 
     return item;
   }
