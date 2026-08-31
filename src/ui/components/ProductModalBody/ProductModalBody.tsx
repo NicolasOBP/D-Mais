@@ -1,37 +1,38 @@
-import { Inventory } from "@domain";
-import { ProductSchema } from "@schemas";
+import type { Inventory } from "@domain"
 
-import { Box } from "@core-components";
+import type { ProductSchema } from "@schemas"
 
-import { DropDownTextInput } from "../DropDownTextInput";
-import { ControllerProps, FormTextInput } from "../Form/FormTextInput";
+import { Box } from "@core-components"
+
+import { DropDownTextInput } from "../DropDownTextInput"
+import { type ControllerProps, FormTextInput } from "../Form/FormTextInput"
 
 export function ProductModalBody({
-  control,
-  inventoryList,
+	control,
+	inventoryList,
 }: Pick<ControllerProps<ProductSchema>, "control"> & {
-  inventoryList: Inventory[] | undefined;
+	inventoryList: Inventory[] | undefined
 }) {
-  return (
-    <Box gap="s14" style={{ marginTop: -20 }}>
-      <DropDownTextInput
-        dropdownItems={inventoryList}
-        name="inventory"
-        control={control}
-        textFieldStyle={{ paddingVertical: "s8" }}
-        label="Estoque"
-        idKey="id"
-        valueKey="description"
-        showTextWithId
-      />
+	return (
+		<Box gap="s14" style={{ marginTop: -20 }}>
+			<DropDownTextInput
+				dropdownItems={inventoryList}
+				name="inventory"
+				control={control}
+				textFieldStyle={{ paddingVertical: "s8" }}
+				label="Estoque"
+				idKey="id"
+				valueKey="description"
+				showTextWithId
+			/>
 
-      <FormTextInput
-        control={control}
-        name="volume"
-        keyboardType="number-pad"
-        label="Litros"
-        textFieldStyle={{ paddingVertical: "s8" }}
-      />
-    </Box>
-  );
+			<FormTextInput
+				control={control}
+				name="volume"
+				keyboardType="number-pad"
+				label="Litros"
+				textFieldStyle={{ paddingVertical: "s8" }}
+			/>
+		</Box>
+	)
 }

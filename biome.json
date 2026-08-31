@@ -1,0 +1,89 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.5.11/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"files": {
+		"includes": [
+			"**/*.{ts,tsx,js,jsx,json}",
+			"!dist",
+			"!**/.expo",
+			"!android/**/build",
+			"!ios/**/build"
+		]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineWidth": 100
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"preset": "recommended",
+			"style": {
+				"noNonNullAssertion": "off",
+				"useConst": "off"
+			},
+			"suspicious": {
+				"noConfusingVoidType": "off"
+			},
+			"complexity": {
+				"useLiteralKeys": "off"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double",
+			"semicolons": "asNeeded",
+			"trailingCommas": "all"
+		}
+	},
+	"assist": {
+		"enabled": true,
+		"actions": {
+			"source": {
+				"organizeImports": {
+					"level": "on",
+					"options": {
+						"identifierOrder": "lexicographic",
+						"groups": [
+							["react", "react-native", "expo*", "expo*/**"],
+							":BLANK_LINE:",
+							[
+								"@react-navigation/**",
+								"react-native-reanimated",
+								"react-hook-form",
+								"@hookform/resolvers/zod",
+								"@tanstack/react-query",
+								"@shopify/restyle",
+								"react-native-worklets",
+								"zustand",
+								"react-native-safe-area-context",
+								"react-native-svg"
+							],
+							":BLANK_LINE:",
+							["@domain", "@infra"],
+							":BLANK_LINE:",
+							["@schemas", "@utils", "@theme", "@hooks"],
+							":BLANK_LINE:",
+							[":PACKAGE:", ":PACKAGE_WITH_PROTOCOL:", ":URL:"],
+							":BLANK_LINE:",
+							"@/src/components/**",
+							":BLANK_LINE:",
+							"../**",
+							":BLANK_LINE:",
+							"./**",
+							":BLANK_LINE:",
+							":PATH:"
+						]
+					}
+				}
+			}
+		}
+	}
+}

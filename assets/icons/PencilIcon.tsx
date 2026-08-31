@@ -1,22 +1,17 @@
-import { G, Path, Svg } from "react-native-svg";
+import { G, Path, Svg } from "react-native-svg"
 
-import { IconBase } from "@components";
+import type { IconBase } from "@components"
 
 export function PencilIcon({ size = 20, color = "black" }: IconBase) {
-  return (
-    <Svg
-      width={size}
-      height={size}
-      viewBox="0 0 512 512"
-      preserveAspectRatio="xMidYMid meet"
-    >
-      <G
-        transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-        fill={color}
-        stroke="none"
-      >
-        <Path
-          d="M4210 5094 c-141 -28 -265 -84 -363 -163 -109 -87 -3600 -3590 -3651
+	return (
+		<Svg width={size} height={size} viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet">
+			<G
+				transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+				fill={color}
+				stroke="none"
+			>
+				<Path
+					d="M4210 5094 c-141 -28 -265 -84 -363 -163 -109 -87 -3600 -3590 -3651
           -3662 -64 -93 -132 -240 -163 -356 -25 -94 -27 -112 -31 -409 -4 -356 -2 -375
           61 -438 66 -65 86 -68 443 -64 295 4 313 6 407 31 116 31 263 99 356 163 73
           52 3578 3546 3660 3649 125 158 178 325 168 525 -17 327 -231 599 -552 700
@@ -26,8 +21,8 @@ export function PencilIcon({ size = 20, color = "black" }: IconBase) {
           l243 -243 -1344 -1341 c-1442 -1438 -1390 -1390 -1547 -1444 -56 -20 -91 -23
           -242 -27 l-178 -4 0 159 c0 129 4 172 21 233 45 164 -39 73 1438 1553 746 746
           1358 1357 1361 1357 3 0 114 -109 248 -243z"
-        />
-      </G>
-    </Svg>
-  );
+				/>
+			</G>
+		</Svg>
+	)
 }

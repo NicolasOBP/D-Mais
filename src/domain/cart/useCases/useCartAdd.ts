@@ -1,45 +1,45 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query"
 
 import {
-  MutationOptions,
-  QueryKeys,
-  useAppMutation,
-  useCartService,
-  useRepository,
-} from "@infra";
+	type MutationOptions,
+	QueryKeys,
+	useAppMutation,
+	useCartService,
+	useRepository,
+} from "@infra"
 
-import { useToast } from "@components";
+import { useToast } from "@components"
 
-import { ProductCart, ProductCartVariables } from "..";
+import type { ProductCart, ProductCartVariables } from ".."
 
 export function useCartAdd(options?: MutationOptions<ProductCart>) {
-  const { addProductToCart } = useCartService();
-  const { cart } = useRepository();
-  const { showToast } = useToast();
-  const queryClient = useQueryClient();
+	const { addProductToCart } = useCartService()
+	const { cart } = useRepository()
+	const { showToast } = useToast()
+	const queryClient = useQueryClient()
 
-  return useAppMutation<ProductCart, ProductCartVariables>({
-    mutationFn: (prod) => cart.add(prod),
-    onSuccess: (prod) => {
-      showToast({
-        type: "success",
-        message: "Produto adicionado ao carrinho!",
-        duration: 1000,
-      });
+	return useAppMutation<ProductCart, ProductCartVariables>({
+		mutationFn: (prod) => cart.add(prod),
+		onSuccess: (prod) => {
+			showToast({
+				type: "success",
+				message: "Produto adicionado ao carrinho!",
+				duration: 1000,
+			})
 
-      addProductToCart(prod);
+			addProductToCart(prod)
 
-      queryClient.invalidateQueries({
-        queryKey: [QueryKeys.Cart],
-      });
+			queryClient.invalidateQueries({
+				queryKey: [QueryKeys.Cart],
+			})
 
-      options?.onSuccess?.(prod);
-    },
-    onError: (error) => {
-      showToast({
-        type: "error",
-        message: error.message,
-      });
-    },
-  });
+			options?.onSuccess?.(prod)
+		},
+		onError: (error) => {
+			showToast({
+				type: "error",
+				message: error.message,
+			})
+		},
+	})
 }

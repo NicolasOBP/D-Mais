@@ -1,72 +1,72 @@
-import { SplashScreen } from "expo-router";
-import { createContext, PropsWithChildren, useEffect, useState } from "react";
+import { SplashScreen } from "expo-router"
+import { type PropsWithChildren, createContext, useEffect, useState } from "react"
 
-import { AuthUser } from "@domain";
+import type { AuthUser } from "@domain"
 
-import { useRepository } from "../../repositories";
-import { authContextStorage } from "../authContextStorage";
-import { AuthState } from "../authCredentialsType";
+import { useRepository } from "../../repositories"
+import { authContextStorage } from "../authContextStorage"
+import type { AuthState } from "../authCredentialsType"
 
 export const AuthContext = createContext<AuthState>({
-  authUser: null,
-  isReady: false,
-  saveAuthUser: async () => {},
-  removeAuthUser: async () => {},
-});
+	authUser: null,
+	isReady: false,
+	saveAuthUser: async () => {},
+	removeAuthUser: async () => {},
+})
 
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync()
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
-  const [isReady, setIsReady] = useState<boolean>(false);
-  const { auth } = useRepository();
+	const [authUser, setAuthUser] = useState<AuthUser | null>(null)
+	const [isReady, setIsReady] = useState<boolean>(false)
+	const { auth } = useRepository()
 
-  async function saveAuthUser(user: AuthUser) {
-    await authContextStorage.set(user.id);
-    setAuthUser(user);
-  }
+	async function saveAuthUser(user: AuthUser) {
+		await authContextStorage.set(user.id)
+		setAuthUser(user)
+	}
 
-  async function removeAuthUser() {
-    await authContextStorage.remove();
-    setAuthUser(null);
-  }
+	async function removeAuthUser() {
+		await authContextStorage.remove()
+		setAuthUser(null)
+	}
 
-  async function loadAuthUser() {
-    try {
-      const userId = await authContextStorage.get();
-      const user = await auth.getUserById(userId);
+	async function loadAuthUser() {
+		try {
+			const userId = await authContextStorage.get()
+			const user = await auth.getUserById(userId)
 
-      if (user) {
-        setAuthUser(user);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsReady(true);
-    }
-  }
+			if (user) {
+				setAuthUser(user)
+			}
+		} catch (error) {
+			console.log(error)
+		} finally {
+			setIsReady(true)
+		}
+	}
 
-  useEffect(() => {
-    loadAuthUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <just one load>
+	useEffect(() => {
+		loadAuthUser()
+	}, [])
 
-  useEffect(() => {
-    if (isReady) {
-      SplashScreen.hide();
-    }
-  }, [isReady]);
+	useEffect(() => {
+		if (isReady) {
+			SplashScreen.hide()
+		}
+	}, [isReady])
 
-  return (
-    <AuthContext.Provider
-      value={{
-        authUser,
-        isReady,
-        saveAuthUser,
-        removeAuthUser,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+	return (
+		<AuthContext.Provider
+			value={{
+				authUser,
+				isReady,
+				saveAuthUser,
+				removeAuthUser,
+			}}
+		>
+			{children}
+		</AuthContext.Provider>
+	)
 }

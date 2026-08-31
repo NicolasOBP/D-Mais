@@ -1,17 +1,17 @@
-import { Repositories } from "@domain";
+import type { Repositories } from "@domain"
 
-import { InMemoryAuthRepo } from "./InMemoryAuthRepo";
-import { InMemoryCartRepo } from "./InMemoryCartRepo";
-import { InMemoryInventoryRepo } from "./InMemoryInventoryRepo";
-import { InMemoryOrdersRepo } from "./InMemoryOrdersRepo";
-import { InMemoryProductRepo } from "./InMemoryProductRepo";
-import { InMemorySellsRepo } from "./InMemorySellsRepo";
+import { InMemoryAuthRepo } from "./InMemoryAuthRepo"
+import { InMemoryCartRepo } from "./InMemoryCartRepo"
+import { InMemoryInventoryRepo } from "./InMemoryInventoryRepo"
+import { InMemoryOrdersRepo } from "./InMemoryOrdersRepo"
+import { InMemoryProductRepo } from "./InMemoryProductRepo"
+import { InMemorySellsRepo } from "./InMemorySellsRepo"
 
 export const InMemoryRepositories: Repositories = {
-  auth: new InMemoryAuthRepo(),
-  product: new InMemoryProductRepo(),
-  cart: new InMemoryCartRepo(),
-  sells: new InMemorySellsRepo(),
-  orders: new InMemoryOrdersRepo(),
-  inventory: new InMemoryInventoryRepo(),
-};
+	auth: new InMemoryAuthRepo(),
+	product: new InMemoryProductRepo(),
+	cart: new InMemoryCartRepo(),
+	sells: new InMemorySellsRepo(),
+	orders: new InMemoryOrdersRepo(),
+	inventory: new InMemoryInventoryRepo(),
+}

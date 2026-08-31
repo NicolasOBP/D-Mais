@@ -1,34 +1,34 @@
-import { Product } from "@domain";
+import type { Product } from "@domain"
 
 export const mockProducts: Product[] = [
-  {
-    id: "1",
-    title: "Gasolina Premium",
-    price: 5.99,
-  },
-  {
-    id: "2",
-    title: "Gasolina Comum",
-    price: 4.99,
-  },
-  {
-    id: "3",
-    title: "Diesel",
-    price: 5.49,
-  },
-  {
-    id: "4",
-    title: "Etanol",
-    price: 3.99,
-  },
-  {
-    id: "5",
-    title: "Etanol Premium",
-    price: 4.99,
-  },
-  {
-    id: "6",
-    title: "Diesel S10",
-    price: 7.99,
-  },
-];
+	{
+		id: "1",
+		title: "Gasolina Premium",
+		price: 5.99,
+	},
+	{
+		id: "2",
+		title: "Gasolina Comum",
+		price: 4.99,
+	},
+	{
+		id: "3",
+		title: "Diesel",
+		price: 5.49,
+	},
+	{
+		id: "4",
+		title: "Etanol",
+		price: 3.99,
+	},
+	{
+		id: "5",
+		title: "Etanol Premium",
+		price: 4.99,
+	},
+	{
+		id: "6",
+		title: "Diesel S10",
+		price: 7.99,
+	},
+]

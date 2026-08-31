@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
 export function useDebounce<T>(value: T, delay = 500) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+	const [debouncedValue, setDebouncedValue] = useState(value)
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <unintended behavior>
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setDebouncedValue(value)
+		}, delay)
 
-    return () => {
-      clearTimeout(timer);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+		return () => {
+			clearTimeout(timer)
+		}
+	}, [value])
 
-  return debouncedValue;
+	return debouncedValue
 }

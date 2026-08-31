@@ -1,8 +1,8 @@
-import { AuthUser } from "@domain";
+import type { AuthUser } from "@domain"
 
 export type AuthState = {
-  authUser: AuthUser | null;
-  isReady: boolean;
-  saveAuthUser: (authUser: AuthUser) => Promise<void>;
-  removeAuthUser: () => Promise<void>;
-};
+	authUser: AuthUser | null
+	isReady: boolean
+	saveAuthUser: (authUser: AuthUser) => Promise<void>
+	removeAuthUser: () => Promise<void>
+}

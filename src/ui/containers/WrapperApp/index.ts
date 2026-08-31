@@ -1,1 +1,1 @@
-export { WrapperApp } from "./WrapperApp";
+export { WrapperApp } from "./WrapperApp"

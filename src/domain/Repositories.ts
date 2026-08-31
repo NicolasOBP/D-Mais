@@ -1,15 +1,15 @@
-import { IAuthRepo } from "./auth/IAuthRepo";
-import { ICartRepo } from "./cart/ICartRepo";
-import { IInventoryRepo } from "./inventory";
-import { IOrdersRepo } from "./orders/IOrdersRepo";
-import { IProductRepo } from "./product/IProductRepo";
-import { ISellsRepo } from "./sells/ISellsRepo";
+import type { IAuthRepo } from "./auth/IAuthRepo"
+import type { ICartRepo } from "./cart/ICartRepo"
+import type { IInventoryRepo } from "./inventory"
+import type { IOrdersRepo } from "./orders/IOrdersRepo"
+import type { IProductRepo } from "./product/IProductRepo"
+import type { ISellsRepo } from "./sells/ISellsRepo"
 
 export type Repositories = {
-  auth: IAuthRepo;
-  product: IProductRepo;
-  cart: ICartRepo;
-  sells: ISellsRepo;
-  orders: IOrdersRepo;
-  inventory: IInventoryRepo;
-};
+	auth: IAuthRepo
+	product: IProductRepo
+	cart: ICartRepo
+	sells: ISellsRepo
+	orders: IOrdersRepo
+	inventory: IInventoryRepo
+}

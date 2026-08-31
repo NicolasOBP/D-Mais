@@ -1,2 +1,2 @@
-export * from "./Screen";
-export * from "./WrapperApp";
+export * from "./Screen"
+export * from "./WrapperApp"

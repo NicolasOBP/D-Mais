@@ -1,2 +1,2 @@
-export * from "./adapters";
-export { RepositoryProvider, useRepository } from "./RepositoryProvider";
+export * from "./adapters"
+export { RepositoryProvider, useRepository } from "./RepositoryProvider"

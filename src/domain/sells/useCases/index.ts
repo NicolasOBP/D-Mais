@@ -1,5 +1,5 @@
-export { useSellClientList } from "./useSellClientList";
-export { useSellCompanyList } from "./useSellCompanyList";
-export { useSellDriverList } from "./useSellDriverList";
-export { useSellPickupList } from "./useSellPickupList";
-export { useSellTruckList } from "./useSellTruckList";
+export { useSellClientList } from "./useSellClientList"
+export { useSellCompanyList } from "./useSellCompanyList"
+export { useSellDriverList } from "./useSellDriverList"
+export { useSellPickupList } from "./useSellPickupList"
+export { useSellTruckList } from "./useSellTruckList"

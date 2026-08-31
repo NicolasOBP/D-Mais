@@ -1,32 +1,32 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 
-import { Inventory } from "@domain";
+import type { Inventory } from "@domain"
 
-import { productSchema, ProductSchema } from "./productSchema";
+import { type ProductSchema, productSchema } from "./productSchema"
 
 export type UseProductFormProps = {
-  defaultVolume?: string;
-  defaultInventory?: Inventory;
-};
+	defaultVolume?: string
+	defaultInventory?: Inventory
+}
 
 export function useProductForm({
-  defaultVolume = "",
-  defaultInventory = { description: "", id: "" },
+	defaultVolume = "",
+	defaultInventory = { description: "", id: "" },
 }: UseProductFormProps) {
-  const { control, handleSubmit, formState, reset } = useForm<ProductSchema>({
-    resolver: zodResolver(productSchema),
-    defaultValues: {
-      volume: defaultVolume,
-      inventory: defaultInventory,
-    },
-    mode: "onChange",
-  });
+	const { control, handleSubmit, formState, reset } = useForm<ProductSchema>({
+		resolver: zodResolver(productSchema),
+		defaultValues: {
+			volume: defaultVolume,
+			inventory: defaultInventory,
+		},
+		mode: "onChange",
+	})
 
-  return {
-    control,
-    handleSubmit,
-    formState,
-    reset,
-  };
+	return {
+		control,
+		handleSubmit,
+		formState,
+		reset,
+	}
 }

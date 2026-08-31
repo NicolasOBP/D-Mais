@@ -1,2 +1,2 @@
-export { useOrdersList } from "./useOrdersList";
-export { useOrdersSend } from "./useOrdersSend";
+export { useOrdersList } from "./useOrdersList"
+export { useOrdersSend } from "./useOrdersSend"

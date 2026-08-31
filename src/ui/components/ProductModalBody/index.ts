@@ -1,1 +1,1 @@
-export { ProductModalBody } from "./ProductModalBody";
+export { ProductModalBody } from "./ProductModalBody"

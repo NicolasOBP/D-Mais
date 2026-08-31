@@ -1,22 +1,17 @@
-import { G, Path, Svg } from "react-native-svg";
+import { G, Path, Svg } from "react-native-svg"
 
-import { IconBase } from "@components";
+import type { IconBase } from "@components"
 
 export function CartFillIcon({ size = 20, color = "black" }: IconBase) {
-  return (
-    <Svg
-      width={size}
-      height={size}
-      viewBox="0 0 512 508"
-      preserveAspectRatio="xMidYMid meet"
-    >
-      <G
-        fill={color}
-        stroke="none"
-        transform="translate(0.000000,508.000000) scale(0.100000,-0.100000)"
-      >
-        <Path
-          d="M92 4913 c-106 -52 -122 -208 -30 -276 16 -12 185 -83 376 -158 l346
+	return (
+		<Svg width={size} height={size} viewBox="0 0 512 508" preserveAspectRatio="xMidYMid meet">
+			<G
+				fill={color}
+				stroke="none"
+				transform="translate(0.000000,508.000000) scale(0.100000,-0.100000)"
+			>
+				<Path
+					d="M92 4913 c-106 -52 -122 -208 -30 -276 16 -12 185 -83 376 -158 l346
           -136 238 -1294 c130 -712 240 -1304 243 -1316 7 -31 59 -88 92 -102 16 -6 53
           -15 84 -19 l56 -7 -90 -245 c-95 -260 -106 -315 -74 -364 30 -45 65 -60 153
           -66 l83 -5 -39 -58 c-126 -187 -97 -446 67 -610 274 -274 730 -143 828 238 19
@@ -28,8 +23,8 @@ export function CartFillIcon({ size = 20, color = "black" }: IconBase) {
           2192 717 2236 0 67 -43 129 -105 153 -31 12 -3579 173 -3822 173 -29 0 -53 1
           -53 2 0 1 -11 61 -24 132 -26 138 -39 174 -78 210 -35 33 -829 343 -876 343
           -20 0 -52 -8 -70 -17z"
-        />
-      </G>
-    </Svg>
-  );
+				/>
+			</G>
+		</Svg>
+	)
 }

@@ -1,5 +1,5 @@
-import { createText } from "@shopify/restyle";
+import { createText } from "@shopify/restyle"
 
-import { Theme } from "@theme";
+import type { Theme } from "@theme"
 
-export const Text = createText<Theme>();
+export const Text = createText<Theme>()
