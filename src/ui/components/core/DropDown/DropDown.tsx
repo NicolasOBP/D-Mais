@@ -59,12 +59,12 @@ export function DropDown<TValue>({
 
 	function filterItems() {
 		if (searchDebounced && dropdownItems) {
-			setItems(
-				dropdownItems.filter((item) => {
-					const itemValue = String(valueKey ? item[valueKey] : item).toLowerCase()
-					return itemValue.includes(searchDebounced.toLowerCase())
-				}),
-			)
+			const filteredItems = dropdownItems.filter((item) => {
+				const itemValue = String(valueKey ? item[valueKey] : item).toLowerCase()
+				return itemValue.includes(searchDebounced.toLowerCase())
+			})
+
+			setItems(filteredItems.length > 0 ? filteredItems : undefined)
 		} else {
 			setItems(dropdownItems)
 		}
@@ -86,34 +86,45 @@ export function DropDown<TValue>({
 						showsVerticalScrollIndicator={false}
 						keyboardShouldPersistTaps="always"
 					>
-						{items?.map((item, index) => {
-							diffColors = !diffColors
-							const itemId = idKey ? String(item[idKey]) : String(index)
-							const itemValue = valueKey ? String(item[valueKey]) : String(item)
+						{items ? (
+							items.map((item, index) => {
+								diffColors = !diffColors
+								const itemId = idKey ? String(item[idKey]) : String(index)
+								const itemValue = valueKey ? String(item[valueKey]) : String(item)
 
-							const itemText = showTextWithId ? `${itemId} - ${itemValue}` : itemValue
+								const itemText = showTextWithId ? `${itemId} - ${itemValue}` : itemValue
 
-							return (
-								<PressableBox
-									key={itemId}
-									flex={1}
-									backgroundColor={
-										diffColors
-											? dropDownVariantStyle.dropDown.activeBackgroundColor
-											: dropDownVariantStyle.textInput.backgroundColor
-									}
-									paddingHorizontal="s8"
-									paddingVertical="s4"
-									onPress={() => {
-										onSelectItem(item)
-										closeDropdown()
-										Keyboard.dismiss()
-									}}
-								>
-									<Text variant="text14">{itemText}</Text>
-								</PressableBox>
-							)
-						})}
+								return (
+									<PressableBox
+										key={itemId}
+										flex={1}
+										backgroundColor={
+											diffColors
+												? dropDownVariantStyle.dropDown.activeBackgroundColor
+												: dropDownVariantStyle.textInput.backgroundColor
+										}
+										paddingHorizontal="s8"
+										paddingVertical="s4"
+										onPress={() => {
+											onSelectItem(item)
+											closeDropdown()
+											Keyboard.dismiss()
+										}}
+									>
+										<Text variant="text14">{itemText}</Text>
+									</PressableBox>
+								)
+							})
+						) : (
+							<Box
+								flex={1}
+								backgroundColor={dropDownVariantStyle.textInput.backgroundColor}
+								paddingHorizontal="s8"
+								paddingVertical="s4"
+							>
+								<Text variant="text14">Nenhum item encontrado</Text>
+							</Box>
+						)}
 					</ScrollView>
 				</Box>
 			</Animated.View>

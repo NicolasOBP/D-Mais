@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 import { Controller, type FieldValues } from "react-hook-form"
 
 import { useFormUtils } from "@utils"
@@ -28,8 +30,17 @@ export function DropDownTextInput<FormType extends FieldValues, TValue>({
 	showTextWithId = false,
 	...textInputProps
 }: DropDownTextInputProps<FormType, TValue>) {
-	const { bodyProgress, closeDropdown, openDropdown, progress, setTopOffset, topOffset, isOpen } =
-		useDropDownTextInput()
+	const [wasSelected, setWasSelected] = useState(false)
+	const {
+		bodyProgress,
+		closeDropdown,
+		openDropdown,
+		progress,
+		setTopOffset,
+		topOffset,
+		isOpen,
+		textValueFormatting,
+	} = useDropDownTextInput()
 
 	const animatedStyle = useDropDownInputAnimation(progress)
 
@@ -40,19 +51,29 @@ export function DropDownTextInput<FormType extends FieldValues, TValue>({
 				name={name}
 				rules={rules}
 				render={({ fieldState, field }) => {
-					const textValue =
-						valueKey && idKey
-							? showTextWithId
-								? `${field.value[idKey]} - ${field.value[valueKey]}`
-								: field.value[valueKey]
-							: field.value
+					const textValue = textValueFormatting({
+						valueKey,
+						field,
+						idKey,
+						showTextWithId,
+					})
+
+					function handleChangeText(text: string) {
+						if (wasSelected) {
+							field.onChange("")
+							setWasSelected(false)
+							return
+						}
+
+						field.onChange(text)
+					}
 
 					return (
 						<>
 							<TextInput
 								variant={variant}
 								value={textValue}
-								onChangeText={field.onChange}
+								onChangeText={handleChangeText}
 								errorMessage={useFormUtils.getFirstErrorMessage(fieldState.error)}
 								RighComponent={
 									<ArrowIconAnimation
@@ -73,7 +94,10 @@ export function DropDownTextInput<FormType extends FieldValues, TValue>({
 							<DropDown
 								progress={bodyProgress}
 								topOffset={topOffset}
-								onSelectItem={field.onChange}
+								onSelectItem={(item) => {
+									field.onChange(item)
+									setWasSelected(true)
+								}}
 								closeDropdown={closeDropdown}
 								valueKey={valueKey}
 								idKey={idKey}
