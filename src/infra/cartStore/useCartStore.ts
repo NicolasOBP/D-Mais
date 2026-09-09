@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-import type { Inventory, ProductCart, ProductCartScreen } from "@domain"
+import type { InventoryWithoutProducts, ProductCart, ProductCartScreen } from "@domain"
 
 const initialState: {
 	productCartStore: ProductCartScreen[]
@@ -16,7 +16,11 @@ export type CartStoreType = typeof initialState & {
 	addProductToCart: (product: ProductCart) => void
 	removeProductFromCart: (productCartId: number) => void
 	removeProductsFromCart: (productCartIds: number[]) => void
-	updateCartProduct: (productCartId: number, newVolume: number, newInventory: Inventory) => void
+	updateCartProduct: (
+		productCartId: number,
+		newVolume: number,
+		newInventory: InventoryWithoutProducts,
+	) => void
 	toggleProductSelection: (productCartId: number) => void
 	getSelectedProducts: () => ProductCartScreen[]
 	getSelectedVolume: () => number

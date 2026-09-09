@@ -1,13 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
-import type { Inventory } from "@domain"
+import type { InventoryWithoutProducts } from "@domain"
 
 import { type ProductSchema, productSchema } from "./productSchema"
 
 export type UseProductFormProps = {
 	defaultVolume?: string
-	defaultInventory?: Inventory
+	defaultInventory?: InventoryWithoutProducts
 }
 
 export function useProductForm({

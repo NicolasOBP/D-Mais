@@ -1,4 +1,4 @@
-import type { Inventory } from "@domain"
+import type { InventoryWithoutProducts } from "@domain"
 
 import type { ProductSchema } from "@schemas"
 
@@ -11,7 +11,7 @@ export function ProductModalBody({
 	control,
 	inventoryList,
 }: Pick<ControllerProps<ProductSchema>, "control"> & {
-	inventoryList: Inventory[] | undefined
+	inventoryList: InventoryWithoutProducts[] | undefined
 }) {
 	return (
 		<Box gap="s14" style={{ marginTop: -20 }}>

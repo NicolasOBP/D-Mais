@@ -2,7 +2,7 @@ import type {
 	Cart,
 	CartMetadata,
 	ICartRepo,
-	Inventory,
+	InventoryWithoutProducts,
 	ProductCart,
 	ProductCartScreen,
 	ProductCartVariables,
@@ -57,7 +57,7 @@ export class InMemoryCartRepo implements ICartRepo {
 	async editCartProduct(
 		productCartId: ProductCart["cartId"],
 		newVolume: number,
-		newInventory: Inventory,
+		newInventory: InventoryWithoutProducts,
 	): Promise<ProductCart> {
 		let itemCart = InnerCart.cartProducts.filter((prod) => prod.cartId === productCartId)
 

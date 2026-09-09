@@ -1,4 +1,4 @@
-import type { Inventory } from "../inventory"
+import type { InventoryWithoutProducts } from "../inventory"
 
 import type {
 	CartMetadata,
@@ -14,7 +14,7 @@ export interface ICartRepo {
 	editCartProduct: (
 		productCartId: ProductCart["cartId"],
 		newVolume: number,
-		newInventory: Inventory,
+		newInventory: InventoryWithoutProducts,
 	) => Promise<ProductCart>
 	deleteItem: (productCartId: ProductCart["cartId"]) => Promise<ProductCart["cartId"]>
 	deleteItems: (productCartIds: ProductCart["cartId"][]) => Promise<ProductCart["cartId"][]>

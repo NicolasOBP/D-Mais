@@ -1,9 +1,9 @@
-import type { Inventory } from "../inventory"
+import type { InventoryWithoutProducts } from "../inventory"
 import type { Product } from "../product"
 
 export interface ProductCart extends Product {
 	volume: number
-	inventory: Inventory
+	inventory: InventoryWithoutProducts
 	cartId: number
 }
 export interface ProductCartScreen extends ProductCart {

@@ -8,7 +8,7 @@ import {
 	useRepository,
 } from "@infra"
 
-import type { Inventory } from "../../inventory"
+import type { InventoryWithoutProducts } from "../../inventory"
 
 import type { ProductCart } from ".."
 
@@ -19,7 +19,7 @@ export function useCartEditProduct(options?: MutationOptions<ProductCart>) {
 
 	return useAppMutation<
 		ProductCart,
-		{ productCartId: number; newVolume: number; newInventory: Inventory }
+		{ productCartId: number; newVolume: number; newInventory: InventoryWithoutProducts }
 	>({
 		mutationFn: ({ productCartId, newVolume, newInventory }) =>
 			cart.editCartProduct(productCartId, newVolume, newInventory),

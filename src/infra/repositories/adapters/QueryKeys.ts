@@ -18,4 +18,5 @@ export enum QueryKeys {
 
 	Inventory = "Inventory",
 	InventoryList = "InventoryList",
+	InventoryFullList = "InventoryFullList",
 }

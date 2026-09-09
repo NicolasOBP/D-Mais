@@ -1,5 +1,6 @@
-import type { Inventory } from "./InventoryTypes"
+import type { Inventory, InventoryWithoutProducts } from "./InventoryTypes"
 
 export interface IInventoryRepo {
-	list: () => Promise<Inventory[]>
+	listFullInventories: () => Promise<Inventory[]>
+	listInventories: () => Promise<InventoryWithoutProducts[]>
 }
