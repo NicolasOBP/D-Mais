@@ -44,6 +44,7 @@ export function DropDownTextInput<FormType extends FieldValues, TValue>({
 
 	const animatedStyle = useDropDownInputAnimation(progress)
 
+	//TODO: add focus function to textInput when pressing arrow icon
 	return (
 		<Box>
 			<Controller

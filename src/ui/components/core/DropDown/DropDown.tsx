@@ -59,8 +59,15 @@ export function DropDown<TValue>({
 
 	function filterItems() {
 		if (searchDebounced && dropdownItems) {
-			const filteredItems = dropdownItems.filter((item) => {
-				const itemValue = String(valueKey ? item[valueKey] : item).toLowerCase()
+			const filteredItems = dropdownItems.filter((item, index) => {
+				const itemId = idKey ? String(item[idKey]) : String(index)
+				const itemValue = String(
+					showTextWithId
+						? `${itemId} - ${valueKey ? item[valueKey] : item}`
+						: valueKey
+							? item[valueKey]
+							: item,
+				).toLowerCase()
 				return itemValue.includes(searchDebounced.toLowerCase())
 			})
 
