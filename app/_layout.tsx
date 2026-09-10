@@ -39,6 +39,8 @@ const Routes = () => {
 export default function RootLayout() {
 	const [loaded] = useFonts({
 		InterRegular: require("../assets/fonts/Inter_18pt-Regular.ttf"),
+		InterMedium: require("../assets/fonts/Inter_18pt-Medium.ttf"),
+		InterBlack: require("../assets/fonts/Inter_18pt-Black.ttf"),
 		InterBold: require("../assets/fonts/Inter_18pt-Bold.ttf"),
 		InterSemiBold: require("../assets/fonts/Inter_18pt-SemiBold.ttf"),
 	})

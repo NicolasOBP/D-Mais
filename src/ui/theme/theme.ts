@@ -152,6 +152,13 @@ const theme = createTheme({
 			color: "title",
 		},
 
+		// Medium text - 10px
+		mediumText10: {
+			fontSize: 10,
+			lineHeight: 16,
+			fontFamily: "InterMedium",
+		},
+
 		// Text - 16px
 		text16Bold: {
 			fontFamily: "InterSemiBold",
