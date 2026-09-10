@@ -16,6 +16,11 @@ type TabBarIconMap = {
 }
 
 const tabBarIconMap: TabBarIconMap = {
+	inventory: {
+		iconFocus: "inventoryFill",
+		iconUnfocus: "inventory",
+		label: "Estoque",
+	},
 	home: {
 		iconFocus: "homeFill",
 		iconUnfocus: "home",

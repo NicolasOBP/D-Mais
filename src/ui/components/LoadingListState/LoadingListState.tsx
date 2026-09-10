@@ -18,7 +18,7 @@ import { CartScreenLoading, HomeScreenLoading, OrderScreenLoading } from "./comp
 const SKELETON_ITEMS = 5
 
 type LoadingListStateProps = {
-	screen: "Home" | "Cart" | "Orders"
+	screen: "Home" | "Cart" | "Orders" | "Inventory"
 }
 
 export function LoadingListState({ screen }: LoadingListStateProps) {
@@ -56,7 +56,7 @@ export function LoadingListState({ screen }: LoadingListStateProps) {
 			return <OrderScreenLoading {...shimmerStyle} />
 		}
 
-		return <View></View>
+		return <View />
 	}
 
 	return (
@@ -101,6 +101,12 @@ const screenListStyleMap: Record<
 		},
 		wrapper: {
 			gap: theme.spacing.s24,
+		},
+	},
+	Inventory: {
+		container: {
+			paddingTop: theme.spacing.s16,
+			paddingBottom: theme.spacing.s14,
 		},
 	},
 }

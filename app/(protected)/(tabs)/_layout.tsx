@@ -24,6 +24,7 @@ export default function TabLayout() {
 				animation: "shift",
 			}}
 		>
+			<Tabs.Screen name="inventory" />
 			<Tabs.Screen name="orders" />
 			<Tabs.Screen name="home" />
 			<Tabs.Screen
