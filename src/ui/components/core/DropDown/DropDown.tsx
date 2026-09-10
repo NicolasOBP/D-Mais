@@ -22,6 +22,8 @@ export type DropDownProps<TValue> = {
 	searchText?: string
 	variant: DropDownVariant
 	showTextWithId?: boolean
+	/** Maximum dropdown height in pixels. Defaults to 100. */
+	maxHeight?: number
 }
 
 export function DropDown<TValue>({
@@ -34,6 +36,7 @@ export function DropDown<TValue>({
 	idKey,
 	searchText,
 	variant,
+	maxHeight = 100,
 	showTextWithId = false,
 }: DropDownProps<TValue>) {
 	const [items, setItems] = useState(dropdownItems)
@@ -88,7 +91,7 @@ export function DropDown<TValue>({
 					style={{ width: "100%" }}
 				>
 					<ScrollView
-						style={{ flex: 1, maxHeight: 100 }}
+						style={{ flex: 1, maxHeight: maxHeight }}
 						nestedScrollEnabled={true}
 						showsVerticalScrollIndicator={false}
 						keyboardShouldPersistTaps="always"

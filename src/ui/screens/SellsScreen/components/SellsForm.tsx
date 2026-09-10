@@ -8,7 +8,7 @@ import {
 
 import type { SellSchema } from "@schemas"
 
-import { type ControllerProps, DropDownTextInput, FormTextInput } from "@components"
+import { type ControllerProps, DropDownControllerInput, FormTextInput } from "@components"
 import { Box } from "@core-components"
 
 export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "control">) {
@@ -20,7 +20,7 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 
 	return (
 		<Box pt="s14" pb="s20" gap="s20" paddingHorizontal="default">
-			<DropDownTextInput
+			<DropDownControllerInput
 				name="cliente"
 				control={control}
 				label="Cliente"
@@ -64,7 +64,7 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 
 			<Box flexDirection="row" gap="s12">
 				<Box flex={1}>
-					<DropDownTextInput
+					<DropDownControllerInput
 						name="caminhao"
 						control={control}
 						label="Caminhão"
@@ -76,7 +76,7 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 					/>
 				</Box>
 				<Box flex={1}>
-					<DropDownTextInput
+					<DropDownControllerInput
 						name="carreta"
 						control={control}
 						label="Carreta"
@@ -89,7 +89,7 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 				</Box>
 			</Box>
 
-			<DropDownTextInput
+			<DropDownControllerInput
 				name="motorista"
 				control={control}
 				label="Motorista"
@@ -100,7 +100,7 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 				isRequired
 			/>
 
-			<DropDownTextInput
+			<DropDownControllerInput
 				name="transportadora"
 				control={control}
 				label="Transportadora"

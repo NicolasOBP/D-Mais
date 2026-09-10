@@ -14,12 +14,15 @@ import { useDropDownTextInput } from "./useDropDownTextInput"
 
 type DropDownTextInputProps<FormType extends FieldValues, TValue> = Omit<
 	TextInputProps,
-	"RighComponent"
+	"RighComponent" | "errorMessage"
 > &
 	ControllerProps<FormType> &
-	Pick<DropDownProps<TValue>, "dropdownItems" | "valueKey" | "idKey" | "showTextWithId">
+	Pick<
+		DropDownProps<TValue>,
+		"dropdownItems" | "valueKey" | "idKey" | "showTextWithId" | "maxHeight"
+	>
 
-export function DropDownTextInput<FormType extends FieldValues, TValue>({
+export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 	control,
 	name,
 	rules,
@@ -28,6 +31,7 @@ export function DropDownTextInput<FormType extends FieldValues, TValue>({
 	valueKey,
 	idKey,
 	showTextWithId = false,
+	maxHeight,
 	...textInputProps
 }: DropDownTextInputProps<FormType, TValue>) {
 	const [wasSelected, setWasSelected] = useState(false)
@@ -106,6 +110,7 @@ export function DropDownTextInput<FormType extends FieldValues, TValue>({
 								searchText={field.value}
 								variant={variant}
 								showTextWithId={showTextWithId}
+								maxHeight={maxHeight}
 							/>
 						</>
 					)

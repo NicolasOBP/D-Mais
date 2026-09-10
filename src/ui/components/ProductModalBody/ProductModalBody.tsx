@@ -4,7 +4,7 @@ import type { ProductSchema } from "@schemas"
 
 import { Box } from "@core-components"
 
-import { DropDownTextInput } from "../DropDownTextInput"
+import { DropDownControllerInput } from "../DropDownInputs"
 import { type ControllerProps, FormTextInput } from "../Form/FormTextInput"
 
 export function ProductModalBody({
@@ -15,7 +15,7 @@ export function ProductModalBody({
 }) {
 	return (
 		<Box gap="s14" style={{ marginTop: -20 }}>
-			<DropDownTextInput
+			<DropDownControllerInput
 				dropdownItems={inventoryList}
 				name="inventory"
 				control={control}
@@ -24,6 +24,7 @@ export function ProductModalBody({
 				idKey="id"
 				valueKey="description"
 				showTextWithId
+				maxHeight={150}
 			/>
 
 			<FormTextInput

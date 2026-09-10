@@ -1,5 +1,5 @@
 export * from "./BackToSell"
-export * from "./DropDownTextInput"
+export * from "./DropDownInputs"
 export * from "./EmptyList"
 export * from "./Form"
 export * from "./Icon"
