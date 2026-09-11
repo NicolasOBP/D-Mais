@@ -49,7 +49,7 @@ export function BackToSell() {
 			return
 		}
 
-		if (["home", "orders"].includes(activeRoute) && !completedSell) {
+		if (["home", "orders", "inventory"].includes(activeRoute) && !completedSell) {
 			setShowBackToSell(hasVisitedSell)
 			return
 		}

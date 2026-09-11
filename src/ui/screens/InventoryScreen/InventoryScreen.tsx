@@ -37,7 +37,7 @@ export function InventoryScreen() {
 
 	return (
 		<Screen>
-			<ScreenHeader title="Consulta Estoque" />
+			<ScreenHeader noMargin title="Consulta Estoque" />
 
 			<Box flexDirection="row" mt="s20" g="s10">
 				<Text variant="title20">Estoque</Text>

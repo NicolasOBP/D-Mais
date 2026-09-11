@@ -27,7 +27,7 @@ export function OrderScreen() {
 
 	return (
 		<Screen>
-			<ScreenHeader title="Pedidos" />
+			<ScreenHeader noMargin title="Pedidos" />
 
 			<Box flex={1} pt="s16">
 				{isLoading ? (
