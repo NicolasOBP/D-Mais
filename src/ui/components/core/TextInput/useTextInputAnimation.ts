@@ -9,13 +9,23 @@ import {
 
 import { type ThemeColor, useAppTheme } from "@theme"
 
-export function useTextInputBorderAnimation(
-	isFocused: boolean,
-	borderColor: ThemeColor,
-	borderColorOnFocus: ThemeColor,
-	backgroundColor: ThemeColor,
-	backgroundColorOnFocus: ThemeColor,
-) {
+type UseTextInputAnimationProps = {
+	isFocused: boolean
+	isError: boolean
+	borderColor: ThemeColor
+	borderColorOnFocus: ThemeColor
+	backgroundColor: ThemeColor
+	backgroundColorOnFocus: ThemeColor
+}
+
+export function useTextInputAnimation({
+	isFocused,
+	isError,
+	borderColor,
+	borderColorOnFocus,
+	backgroundColor,
+	backgroundColorOnFocus,
+}: UseTextInputAnimationProps) {
 	const { colors } = useAppTheme()
 	const progress = useSharedValue(0)
 
@@ -27,11 +37,9 @@ export function useTextInputBorderAnimation(
 	}, [isFocused])
 
 	return useAnimatedStyle(() => ({
-		borderColor: interpolateColor(
-			progress.value,
-			[0, 1],
-			[colors[borderColor], colors[borderColorOnFocus]],
-		),
+		borderColor: isError
+			? colors.error
+			: interpolateColor(progress.value, [0, 1], [colors[borderColor], colors[borderColorOnFocus]]),
 		backgroundColor: interpolateColor(
 			progress.value,
 			[0, 1],

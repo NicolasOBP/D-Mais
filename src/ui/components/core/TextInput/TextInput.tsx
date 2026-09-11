@@ -16,7 +16,7 @@ import { Box, type BoxProps } from "../Box/Box"
 import { Text } from "../Text/Text"
 
 import { type TextInputVariant, textInputVariant } from "./TextInputVariant"
-import { useTextInputBorderAnimation } from "./useTextInputAnimation"
+import { useTextInputAnimation } from "./useTextInputAnimation"
 
 export interface TextInputProps extends RNTextInputProps {
 	label?: string
@@ -51,13 +51,14 @@ export function TextInput({
 	const inputRef = useRef<RNTextInput>(null)
 
 	const inputVariant = textInputVariant[variant]
-	const animatedBorderStyle = useTextInputBorderAnimation(
+	const animatedFieldStyle = useTextInputAnimation({
 		isFocused,
-		inputVariant.borderColor,
-		inputVariant.borderColorOnFocus,
-		inputVariant.backgroundColor,
-		inputVariant.backGroundColorOnFocus,
-	)
+		isError: !!errorMessage,
+		borderColor: inputVariant.borderColor,
+		borderColorOnFocus: inputVariant.borderColorOnFocus,
+		backgroundColor: inputVariant.backgroundColor,
+		backgroundColorOnFocus: inputVariant.backGroundColorOnFocus,
+	})
 
 	const focusInput = () => {
 		inputRef.current?.focus()
@@ -88,9 +89,9 @@ export function TextInput({
 					gap="s8"
 					{...textFieldStyle}
 					{...inputVariant}
-					style={[animatedStyle, animatedBorderStyle]}
 					onFocus={() => setIsFocused(true)}
 					onBlur={() => setIsFocused(false)}
+					style={[animatedStyle, animatedFieldStyle, errorMessage && { borderColor: colors.error }]}
 				>
 					{LeftComponent && (
 						<Box justifyContent="center" alignItems="center">
