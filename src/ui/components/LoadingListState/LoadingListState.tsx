@@ -18,7 +18,7 @@ import { CartScreenLoading, HomeScreenLoading, OrderScreenLoading } from "./comp
 const SKELETON_ITEMS = 5
 
 type LoadingListStateProps = {
-	screen: "Home" | "Cart" | "Orders" | "Inventory"
+	screen: "Home" | "Cart" | "Orders"
 }
 
 export function LoadingListState({ screen }: LoadingListStateProps) {
@@ -101,12 +101,6 @@ const screenListStyleMap: Record<
 		},
 		wrapper: {
 			gap: theme.spacing.s24,
-		},
-	},
-	Inventory: {
-		container: {
-			paddingTop: theme.spacing.s16,
-			paddingBottom: theme.spacing.s14,
 		},
 	},
 }

@@ -1,1 +1,0 @@
-export { InventoryScreenCard } from "./InventoryScreenCard"
