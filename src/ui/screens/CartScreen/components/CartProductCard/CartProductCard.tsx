@@ -2,10 +2,9 @@ import { useEffect } from "react"
 
 import { type ProductCartScreen, useCartDeleteItem } from "@domain"
 
-import { Icon, useModal } from "@components"
+import { CheckBox, Icon, useModal } from "@components"
 import { Box, PressableBox, type PressableBoxProps, Text } from "@core-components"
 
-import { ProductCartCheckbox } from "./components/ProductCartCheckbox"
 import { ProductCartDetails } from "./components/ProductCartDetails"
 
 type CartProductCardProps = {
@@ -59,7 +58,7 @@ export function CartProductCard({ product, onSelectChange }: CartProductCardProp
 
 	return (
 		<PressableBox {...pressableBoxStyle}>
-			<ProductCartCheckbox handleSelectChange={handleSelectChange} selected={product.isSelected} />
+			<CheckBox handleSelectChange={handleSelectChange} selected={product.isSelected} />
 
 			<ProductCartDetails product={product} />
 
