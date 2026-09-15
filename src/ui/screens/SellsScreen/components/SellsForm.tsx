@@ -8,8 +8,13 @@ import {
 
 import type { SellSchema } from "@schemas"
 
-import { type ControllerProps, DropDownControllerInput, FormTextInput } from "@components"
-import { Box } from "@core-components"
+import {
+	ControllerCheckBox,
+	type ControllerProps,
+	DropDownControllerInput,
+	FormTextInput,
+} from "@components"
+import { Box, PressableBox, Text } from "@core-components"
 
 export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "control">) {
 	const { data: clientList } = useSellClientList()
@@ -32,13 +37,14 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 			/>
 
 			<Box flexDirection="row" gap="s12">
-				<Box flex={1}>
-					<FormTextInput
+				<Box flex={2}>
+					<DropDownControllerInput
 						name="condicaoPagamento"
 						control={control}
 						label="Cond. de Pagto."
 						variant="secundary"
 						isRequired
+						dropdownItems={["1 mês", "2 meses", "3 meses"]}
 					/>
 				</Box>
 				<Box flex={1}>
@@ -50,14 +56,14 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 						isRequired
 					/>
 				</Box>
-				<Box flex={1}>
-					<FormTextInput
-						name="valorFrete"
+				<Box flex={2}>
+					<DropDownControllerInput
+						name="formaPagamento"
 						control={control}
-						label="Valor do frete"
-						keyboardType="decimal-pad"
+						label="Forma de Pagto."
 						variant="secundary"
 						isRequired
+						dropdownItems={["Crédito", "Débito", "Pix"]}
 					/>
 				</Box>
 			</Box>
@@ -110,6 +116,11 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 				variant="secundary"
 				isRequired
 			/>
+
+			<PressableBox flexDirection="row" alignItems="center" g="s4" alignSelf="flex-start">
+				<ControllerCheckBox control={control} name="frete" variant="rounded" size={20} />
+				<Text variant="title12">Adicionar Frete</Text>
+			</PressableBox>
 		</Box>
 	)
 }

@@ -9,8 +9,9 @@ export function useSellForm() {
 		defaultValues: {
 			cliente: { cnpjCpf: "", name: "", corporateReason: "" },
 			condicaoPagamento: "",
+			formaPagamento: "",
 			tabela: "",
-			valorFrete: "",
+			frete: true,
 			caminhao: { licensePlate: "" },
 			carreta: { licensePlate: "" },
 			motorista: { cpf: "", name: "" },

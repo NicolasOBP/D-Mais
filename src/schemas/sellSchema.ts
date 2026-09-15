@@ -10,8 +10,9 @@ export const sellSchema = z.object({
 		{ error: "Cliente inválido" },
 	),
 	condicaoPagamento: z.string().min(1, "Campo obrigatório"),
+	formaPagamento: z.string().min(1, "Campo obrigatório"),
 	tabela: z.string().min(1, "Campo obrigatório"),
-	valorFrete: z.string().min(1, "Campo obrigatório"),
+	frete: z.boolean(),
 	caminhao: z.object(
 		{
 			licensePlate: z.string().min(1, "Caminhão inválido"),
