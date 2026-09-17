@@ -11,7 +11,7 @@ export function useSellForm() {
 			condicaoPagamento: "",
 			formaPagamento: "",
 			tabela: "",
-			frete: true,
+			frete: false,
 			caminhao: { licensePlate: "" },
 			carreta: { licensePlate: "" },
 			motorista: { cpf: "", name: "" },

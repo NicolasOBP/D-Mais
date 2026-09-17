@@ -43,7 +43,7 @@ export function useProductVolumeModal({
 						},
 					},
 				},
-				{ formState, reset, isLoading },
+				{ formState, reset, isLoading, updatedInventoryList: inventoryList },
 			)
 		} else {
 			showModal(
@@ -57,15 +57,15 @@ export function useProductVolumeModal({
 						},
 					},
 				},
-				{ formState, reset, isLoading },
+				{ formState, reset, isLoading, updatedInventoryList: inventoryList },
 			)
 		}
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: unnecessary re-render
 	useEffect(() => {
-		updateModalData({ formState, isLoading })
-	}, [formState, isLoading])
+		updateModalData({ formState, isLoading, updatedInventoryList: inventoryList })
+	}, [formState, isLoading, inventoryList])
 
 	return { handleShowModal, closeModal, reset }
 }

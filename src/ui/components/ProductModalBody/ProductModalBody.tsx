@@ -6,6 +6,7 @@ import { Box } from "@core-components"
 
 import { DropDownControllerInput } from "../DropDownInputs"
 import { type ControllerProps, FormTextInput } from "../Form/FormTextInput"
+import { useModal } from "../Modal"
 
 export function ProductModalBody({
 	control,
@@ -13,10 +14,13 @@ export function ProductModalBody({
 }: Pick<ControllerProps<ProductSchema>, "control"> & {
 	inventoryList: InventoryWithoutProducts[] | undefined
 }) {
+	const { modalData } = useModal()
+	const updatedInventoryList: InventoryWithoutProducts[] = modalData.updatedInventoryList
+
 	return (
 		<Box gap="s14" style={{ marginTop: -20 }}>
 			<DropDownControllerInput
-				dropdownItems={inventoryList}
+				dropdownItems={inventoryList || updatedInventoryList}
 				name="inventory"
 				control={control}
 				textFieldStyle={{ paddingVertical: "s8" }}
