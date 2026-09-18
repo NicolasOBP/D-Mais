@@ -1,19 +1,25 @@
 import { Pressable } from "react-native"
 
-import { Box, type BoxProps } from "@core-components"
-
-import { Icon } from "../Icon"
+import { Icon } from "../../Icon"
+import { Box, type BoxProps } from "../Box"
 
 import { type CheckBoxVariants, checkBoxVariant } from "./CheckBoxVariants"
 
-type Props = {
+export type CheckBoxProps = {
 	handleSelectChange: () => void
 	selected: boolean
 	variant?: CheckBoxVariants
 	size?: number
+	disabled?: boolean
 }
 
-export function CheckBox({ handleSelectChange, selected, variant = "squarcle", size = 24 }: Props) {
+export function CheckBox({
+	handleSelectChange,
+	selected,
+	variant = "squarcle",
+	size = 24,
+	disabled = false,
+}: CheckBoxProps) {
 	const checkBoxStyle = checkBoxVariant[variant]
 
 	function checkStyle() {
@@ -33,7 +39,7 @@ export function CheckBox({ handleSelectChange, selected, variant = "squarcle", s
 	}
 
 	return (
-		<Pressable onPress={handleSelectChange}>
+		<Pressable onPress={handleSelectChange} disabled={disabled}>
 			<Box
 				{...containerBoxStyle}
 				width={size}

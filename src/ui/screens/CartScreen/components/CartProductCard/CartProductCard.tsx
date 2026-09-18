@@ -2,8 +2,8 @@ import { useEffect } from "react"
 
 import { type ProductCartScreen, useCartDeleteItem } from "@domain"
 
-import { CheckBox, Icon, useModal } from "@components"
-import { Box, PressableBox, type PressableBoxProps, Text } from "@core-components"
+import { Icon, useModal } from "@components"
+import { Box, CheckBox, PressableBox, type PressableBoxProps, Text } from "@core-components"
 
 import { ProductCartDetails } from "./components/ProductCartDetails"
 

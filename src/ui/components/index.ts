@@ -1,5 +1,5 @@
 export * from "./BackToSell"
-export * from "./CheckBox"
+export * from "./ControllerCheckBox"
 export * from "./DropDownInputs"
 export * from "./EmptyList"
 export * from "./Form"

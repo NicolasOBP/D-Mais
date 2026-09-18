@@ -14,7 +14,7 @@ import {
 	DropDownControllerInput,
 	FormTextInput,
 } from "@components"
-import { Box, PressableBox, Text } from "@core-components"
+import { Box, Text } from "@core-components"
 
 export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "control">) {
 	const { data: clientList } = useSellClientList()
@@ -117,10 +117,20 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 				isRequired
 			/>
 
-			<PressableBox flexDirection="row" alignItems="center" g="s4" alignSelf="flex-start">
-				<ControllerCheckBox control={control} name="frete" variant="rounded" size={20} />
+			<ControllerCheckBox
+				control={control}
+				name="frete"
+				variant="rounded"
+				size={20}
+				pressableProps={{
+					flexDirection: "row",
+					alignItems: "center",
+					g: "s4",
+					alignSelf: "flex-start",
+				}}
+			>
 				<Text variant="title12">Adicionar Frete</Text>
-			</PressableBox>
+			</ControllerCheckBox>
 		</Box>
 	)
 }
