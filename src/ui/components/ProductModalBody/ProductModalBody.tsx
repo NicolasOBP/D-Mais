@@ -16,6 +16,7 @@ export function ProductModalBody({
 }) {
 	const { modalData } = useModal()
 	const updatedInventoryList: InventoryWithoutProducts[] = modalData.updatedInventoryList
+	const isLoadingInventory: boolean = modalData.isLoadingInventory
 
 	return (
 		<Box gap="s14" style={{ marginTop: -20 }}>
@@ -29,6 +30,7 @@ export function ProductModalBody({
 				valueKey="description"
 				showTextWithId
 				maxHeight={150}
+				isLoading={isLoadingInventory}
 			/>
 
 			<FormTextInput

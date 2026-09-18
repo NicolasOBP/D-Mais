@@ -19,7 +19,7 @@ type DropDownTextInputProps<FormType extends FieldValues, TValue> = Omit<
 	ControllerProps<FormType> &
 	Pick<
 		DropDownProps<TValue>,
-		"dropdownItems" | "valueKey" | "idKey" | "showTextWithId" | "maxHeight"
+		"dropdownItems" | "valueKey" | "idKey" | "showTextWithId" | "maxHeight" | "isLoading"
 	>
 
 export function DropDownControllerInput<FormType extends FieldValues, TValue>({
@@ -32,6 +32,7 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 	idKey,
 	showTextWithId = false,
 	maxHeight,
+	isLoading,
 	...textInputProps
 }: DropDownTextInputProps<FormType, TValue>) {
 	const [wasSelected, setWasSelected] = useState(false)
@@ -111,6 +112,7 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 								variant={variant}
 								showTextWithId={showTextWithId}
 								maxHeight={maxHeight}
+								isLoading={isLoading}
 							/>
 						</>
 					)

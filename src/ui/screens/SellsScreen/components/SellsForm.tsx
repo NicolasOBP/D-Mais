@@ -17,11 +17,11 @@ import {
 import { Box, Text } from "@core-components"
 
 export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "control">) {
-	const { data: clientList } = useSellClientList()
-	const { data: truckList } = useSellTruckList()
-	const { data: driverList } = useSellDriverList()
-	const { data: pickupList } = useSellPickupList()
-	const { data: companyList } = useSellCompanyList()
+	const { data: clientList, isLoading: isLoadingClient } = useSellClientList()
+	const { data: truckList, isLoading: isLoadingTruck } = useSellTruckList()
+	const { data: driverList, isLoading: isLoadingDriver } = useSellDriverList()
+	const { data: pickupList, isLoading: isLoadingPickup } = useSellPickupList()
+	const { data: companyList, isLoading: isLoadingCompany } = useSellCompanyList()
 
 	return (
 		<Box pt="s14" pb="s20" gap="s20" paddingHorizontal="default">
@@ -34,6 +34,7 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 				valueKey="corporateReason"
 				variant="secundary"
 				isRequired
+				isLoading={isLoadingClient}
 			/>
 
 			<Box flexDirection="row" gap="s12">
@@ -79,6 +80,7 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 						valueKey="licensePlate"
 						variant="secundary"
 						isRequired
+						isLoading={isLoadingTruck}
 					/>
 				</Box>
 				<Box flex={1}>
@@ -91,6 +93,7 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 						valueKey="licensePlate"
 						variant="secundary"
 						isRequired
+						isLoading={isLoadingPickup}
 					/>
 				</Box>
 			</Box>
@@ -104,6 +107,7 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 				valueKey="name"
 				variant="secundary"
 				isRequired
+				isLoading={isLoadingDriver}
 			/>
 
 			<DropDownControllerInput
@@ -115,6 +119,7 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 				valueKey="name"
 				variant="secundary"
 				isRequired
+				isLoading={isLoadingCompany}
 			/>
 
 			<ControllerCheckBox

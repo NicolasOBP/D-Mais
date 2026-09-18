@@ -22,6 +22,7 @@ export type DropDownProps<TValue> = {
 	searchText?: string
 	variant: DropDownVariant
 	showTextWithId?: boolean
+	isLoading?: boolean
 	/** Maximum dropdown height in pixels. Defaults to 100. */
 	maxHeight?: number
 }
@@ -38,6 +39,7 @@ export function DropDown<TValue>({
 	variant,
 	maxHeight = 100,
 	showTextWithId = false,
+	isLoading,
 }: DropDownProps<TValue>) {
 	const [items, setItems] = useState(dropdownItems)
 	const searchDebounced = useDebounce(typeof searchText === "string" ? searchText : "")
@@ -96,7 +98,16 @@ export function DropDown<TValue>({
 						showsVerticalScrollIndicator={false}
 						keyboardShouldPersistTaps="always"
 					>
-						{items ? (
+						{isLoading ? (
+							<Box
+								flex={1}
+								backgroundColor={dropDownVariantStyle.textInput.backgroundColor}
+								paddingHorizontal="s8"
+								paddingVertical="s4"
+							>
+								<Text variant="text14">Carregando...</Text>
+							</Box>
+						) : items ? (
 							items.map((item, index) => {
 								diffColors = !diffColors
 								const itemId = idKey ? String(item[idKey]) : String(index)

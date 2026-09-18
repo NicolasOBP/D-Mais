@@ -25,7 +25,7 @@ export function useProductVolumeModal({
 		defaultVolume,
 		defaultInventory,
 	})
-	const { inventoryList } = useInventoryList()
+	const { inventoryList, isLoading: isLoadingInventory } = useInventoryList()
 
 	const { showModal, updateModalData, closeModal } = useModal()
 
@@ -43,7 +43,7 @@ export function useProductVolumeModal({
 						},
 					},
 				},
-				{ formState, reset, isLoading, updatedInventoryList: inventoryList },
+				{ formState, reset, isLoading, updatedInventoryList: inventoryList, isLoadingInventory },
 			)
 		} else {
 			showModal(
@@ -57,15 +57,20 @@ export function useProductVolumeModal({
 						},
 					},
 				},
-				{ formState, reset, isLoading, updatedInventoryList: inventoryList },
+				{ formState, reset, isLoading, updatedInventoryList: inventoryList, isLoadingInventory },
 			)
 		}
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: unnecessary re-render
 	useEffect(() => {
-		updateModalData({ formState, isLoading, updatedInventoryList: inventoryList })
-	}, [formState, isLoading, inventoryList])
+		updateModalData({
+			formState,
+			isLoading,
+			updatedInventoryList: inventoryList,
+			isLoadingInventory,
+		})
+	}, [formState, isLoading, inventoryList, isLoadingInventory])
 
 	return { handleShowModal, closeModal, reset }
 }
