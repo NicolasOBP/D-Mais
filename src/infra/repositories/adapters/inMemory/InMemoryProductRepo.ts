@@ -1,9 +1,12 @@
 import type { IProductRepo, Product } from "@domain"
 
 import { mockProducts } from "./data/mockProducts"
+import { delay } from "./delay"
 
 export class InMemoryProductRepo implements IProductRepo {
 	async list(searchProduct: string | null): Promise<Product[]> {
+		await delay()
+
 		const products = mockProducts
 
 		if (searchProduct) {

@@ -1,11 +1,14 @@
 import type { AuthUser, IAuthRepo } from "@domain"
 
 import { mockAuthUsers } from "./data/mockAuthUsers"
+import { delay } from "./delay"
 
 let Users: AuthUser[] = [...mockAuthUsers]
 
 export class InMemoryAuthRepo implements IAuthRepo {
 	async signIn(company: string, _password: string, userName: string): Promise<AuthUser> {
+		await delay()
+
 		const user = Users.find((user) => user.company === company && user.userName === userName)
 
 		if (user) {
@@ -18,6 +21,8 @@ export class InMemoryAuthRepo implements IAuthRepo {
 	}
 
 	async getUserById(userId: string | null): Promise<AuthUser | null> {
+		await delay()
+
 		if (!userId) {
 			return null
 		}
@@ -32,6 +37,8 @@ export class InMemoryAuthRepo implements IAuthRepo {
 	}
 
 	async checkLeftQuota(userId: string, quota: number): Promise<void> {
+		await delay()
+
 		const user = Users.find((user) => user.id === userId)
 
 		if (!user) {
@@ -46,6 +53,8 @@ export class InMemoryAuthRepo implements IAuthRepo {
 	}
 
 	async updateLeftQuota(userId: string, usedQuota: number): Promise<void> {
+		await delay()
+
 		const user = Users.find((user) => user.id === userId)
 
 		if (!user) {
@@ -55,5 +64,7 @@ export class InMemoryAuthRepo implements IAuthRepo {
 		user.leftQuota -= usedQuota
 	}
 
-	async signOut(): Promise<void> {}
+	async signOut(): Promise<void> {
+		await delay()
+	}
 }

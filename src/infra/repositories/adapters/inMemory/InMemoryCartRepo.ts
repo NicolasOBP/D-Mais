@@ -8,10 +8,14 @@ import type {
 	ProductCartVariables,
 } from "@domain"
 
+import { delay } from "./delay"
+
 let InnerCart: Cart = { cartProducts: [], totalPrice: 0, totalItems: 0 }
 
 export class InMemoryCartRepo implements ICartRepo {
 	async add(product: ProductCartVariables): Promise<ProductCart> {
+		await delay()
+
 		const existingProduct = InnerCart.cartProducts.find(
 			(cartProduct) => cartProduct.id === product.id,
 		)
@@ -44,6 +48,8 @@ export class InMemoryCartRepo implements ICartRepo {
 	}
 
 	async getCartMetadata(): Promise<CartMetadata> {
+		await delay()
+
 		return {
 			totalItems: InnerCart.totalItems,
 			totalPrice: Math.abs(InnerCart.totalPrice),
@@ -51,6 +57,8 @@ export class InMemoryCartRepo implements ICartRepo {
 	}
 
 	async getCartItems(): Promise<ProductCartScreen[]> {
+		await delay()
+
 		return InnerCart.cartProducts as ProductCartScreen[]
 	}
 
@@ -59,6 +67,8 @@ export class InMemoryCartRepo implements ICartRepo {
 		newVolume: number,
 		newInventory: InventoryWithoutProducts,
 	): Promise<ProductCart> {
+		await delay()
+
 		let itemCart = InnerCart.cartProducts.filter((prod) => prod.cartId === productCartId)
 
 		if (itemCart.length === 0) {
@@ -90,6 +100,8 @@ export class InMemoryCartRepo implements ICartRepo {
 	}
 
 	async deleteItem(productCartId: ProductCart["cartId"]): Promise<ProductCart["cartId"]> {
+		await delay()
+
 		const product = InnerCart.cartProducts.find((prod) => prod.cartId === productCartId)
 
 		if (!product) {
@@ -113,6 +125,8 @@ export class InMemoryCartRepo implements ICartRepo {
 	}
 
 	async deleteItems(productCartIds: ProductCart["cartId"][]): Promise<ProductCart["cartId"][]> {
+		await delay()
+
 		if (!productCartIds.length) {
 			return []
 		}
