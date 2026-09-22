@@ -9,6 +9,7 @@ import { EyeOffIcon } from "../../../../assets/icons/EyeOffIcon"
 import { EyeOnIcon } from "../../../../assets/icons/EyeOnIcon"
 import { HomeFillIcon } from "../../../../assets/icons/HomeFillIcon"
 import { HomeIcon } from "../../../../assets/icons/HomeIcon"
+import { LoadingIcon } from "../../../../assets/icons/LoadingIcon"
 import { OrderFillIcon } from "../../../../assets/icons/OrderFillIcon"
 import { OrderIcon } from "../../../../assets/icons/OrderIcon"
 import { PencilIcon } from "../../../../assets/icons/PencilIcon"
@@ -32,6 +33,7 @@ export const iconRegistry = {
 	trash: TrashIcon,
 	chevronRight: ChevronRightIcon,
 	chevronDown: ChevronDownIcon,
+	loading: LoadingIcon,
 }
 
 export type IconType = typeof iconRegistry

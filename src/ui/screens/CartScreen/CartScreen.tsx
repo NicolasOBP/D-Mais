@@ -23,7 +23,7 @@ export function CartScreen() {
 	const { data: cartItems, isLoading, refetch } = useCartGetItems()
 	const { selectedItems, totalSelectedPrice } = useCartItems()
 	const { toggleProductSelection, getSelectedProducts, getSelectedVolume } = useCartService()
-	const { checkLeftQuota } = useAuthCheckLeftQuota({
+	const { checkLeftQuota, isPending } = useAuthCheckLeftQuota({
 		onSuccess: () => {
 			router.push("/sell")
 		},
@@ -76,6 +76,7 @@ export function CartScreen() {
 			</Box>
 
 			<CartFooter
+				isPending={isPending}
 				onCheckout={onCheckout}
 				totalItems={selectedItems}
 				totalPrice={totalSelectedPrice}

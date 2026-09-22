@@ -1,15 +1,17 @@
 import { useNumberFormat } from "@utils"
 
-import { Icon } from "@components"
 import { Box, type BoxProps, Text } from "@core-components"
+
+import { MorphingSubmitButton } from "./MorphingSubmitButton"
 
 type Props = {
 	totalPrice: number | undefined
 	totalItems: number | undefined
+	isPending: boolean
 	onCheckout: () => void
 }
 
-export function CartFooter({ onCheckout, totalItems, totalPrice }: Props) {
+export function CartFooter({ isPending, onCheckout, totalItems, totalPrice }: Props) {
 	const totalItemsText = totalItems === 1 ? "item" : "itens"
 
 	return (
@@ -24,7 +26,7 @@ export function CartFooter({ onCheckout, totalItems, totalPrice }: Props) {
 			</Box>
 
 			<Box {...checkoutBoxStyle}>
-				<Icon name="chevronRight" color="white" size={50} onPress={onCheckout} />
+				<MorphingSubmitButton isPending={isPending} onCheckout={onCheckout} />
 			</Box>
 		</Box>
 	)
