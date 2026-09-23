@@ -1,7 +1,7 @@
 import { router } from "expo-router"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
-import { useOrdersSend } from "@domain"
+import { useOrdersSend, useSellFareControl } from "@domain"
 import { useAuth, useBackToSellService, useCartItems, useCartService } from "@infra"
 
 import { type SellSchema, useSellForm } from "@schemas"
@@ -29,6 +29,10 @@ export function SellsScreen() {
 			reset()
 			router.push("/orders")
 		},
+	})
+	const [isFareSelected, setIsFareSelected] = useState(false)
+	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
+		onError: () => setIsFareSelected((prev) => !prev),
 	})
 
 	const cartItems = getSelectedProducts()
@@ -76,9 +80,18 @@ export function SellsScreen() {
 		<Screen scrollable noHorizontalPadding>
 			<ScreenHeader title="Venda" goBackTo="/cart" noMargin />
 
-			<SellsForm control={control} />
+			<SellsForm
+				control={control}
+				fareControl={fareControl}
+				isFareSelected={isFareSelected}
+				setIsFareSelected={setIsFareSelected}
+			/>
 
-			<SellsProductsList cartItems={cartItems} totalPrice={totalPrice} />
+			<SellsProductsList
+				cartItems={cartItems}
+				totalPrice={totalPrice}
+				isPendingTotalPrice={isPendingTotalPrice}
+			/>
 
 			<Box padding="default" paddingHorizontal="s32">
 				<Button

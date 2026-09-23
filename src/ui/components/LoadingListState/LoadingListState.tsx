@@ -30,6 +30,7 @@ export function LoadingListState({ screen }: LoadingListStateProps) {
 				duration: 1300,
 				easing: Easing.inOut(Easing.ease),
 			}),
+			-1,
 		)
 	}, [shimmerPosition])
 

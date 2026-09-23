@@ -16,7 +16,13 @@ import {
 } from "@components"
 import { Box, Text } from "@core-components"
 
-export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "control">) {
+type Props = Pick<ControllerProps<SellSchema>, "control"> & {
+	fareControl: (variable: { isFareSelected: boolean }) => number | void
+	isFareSelected: boolean
+	setIsFareSelected: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export function SellsForm({ control, fareControl, isFareSelected, setIsFareSelected }: Props) {
 	const { data: clientList, isLoading: isLoadingClient } = useSellClientList()
 	const { data: truckList, isLoading: isLoadingTruck } = useSellTruckList()
 	const { data: driverList, isLoading: isLoadingDriver } = useSellDriverList()
@@ -127,11 +133,16 @@ export function SellsForm({ control }: Pick<ControllerProps<SellSchema>, "contro
 				name="frete"
 				variant="rounded"
 				size={20}
+				extraFunction={() => fareControl({ isFareSelected })}
 				pressableProps={{
 					flexDirection: "row",
 					alignItems: "center",
 					g: "s4",
 					alignSelf: "flex-start",
+				}}
+				ownToggleFunction={{
+					handleChange: () => setIsFareSelected((prev) => !prev),
+					value: isFareSelected,
 				}}
 			>
 				<Text variant="title12">Adicionar Frete</Text>

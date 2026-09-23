@@ -8,27 +8,33 @@ import { useNumberFormat } from "@utils"
 import { Box, Text } from "@core-components"
 
 import { SellsProductCard } from "./SellsProductCard"
+import { TotalPriceLoadingAnimation } from "./TotalPriceLoadingAnimation"
 
 type Props = {
 	cartItems: ProductCartScreen[]
 	totalPrice: number
+	isPendingTotalPrice: boolean
 }
 
-export function SellsProductsList({ cartItems, totalPrice }: Props) {
+export function SellsProductsList({ cartItems, totalPrice, isPendingTotalPrice }: Props) {
 	const { spacing } = useAppTheme()
 
 	return (
 		<Box pb="s8">
-			<Box flexDirection="row" justifyContent="space-between" pr="s16">
+			<Box flexDirection="row" justifyContent="space-between" alignItems="center" pr="s16">
 				<Text variant="title12" mb="s12" paddingHorizontal="default">
 					Produtos
 				</Text>
-				<Text variant="title12">
-					Total:{" "}
-					<Text variant="title14" color="green">
-						{useNumberFormat.toBRLCurrency(totalPrice)}
-					</Text>
-				</Text>
+				<Box flexDirection="row" alignItems="center" gap="s4">
+					<Text variant="title12">Total:</Text>
+					{isPendingTotalPrice ? (
+						<TotalPriceLoadingAnimation />
+					) : (
+						<Text variant="title14" color="green">
+							{useNumberFormat.toBRLCurrency(totalPrice)}
+						</Text>
+					)}
+				</Box>
 			</Box>
 			<ScrollView
 				horizontal
