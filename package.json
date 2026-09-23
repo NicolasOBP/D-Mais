@@ -4,6 +4,7 @@
 	"version": "1.0.0",
 	"scripts": {
 		"dev": "cross-env APP_VARIANT=development npx expo start",
+		"devLocal": "cross-env APP_VARIANT=devLocal npx expo start",
 		"android": "expo run:android",
 		"android:dev": "cross-env APP_VARIANT=development npx expo run:android",
 		"android:devLocal": "cross-env APP_VARIANT=devLocal npx expo run:android",

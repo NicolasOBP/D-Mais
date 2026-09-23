@@ -24,6 +24,7 @@ export type CartStoreType = typeof initialState & {
 	toggleProductSelection: (productCartId: number) => void
 	getSelectedProducts: () => ProductCartScreen[]
 	getSelectedVolume: () => number
+	updateTotalSelectedPrice: (farePrice: number) => void
 	clearCart: () => void
 }
 
@@ -150,6 +151,14 @@ const useCartStore = create<CartStoreType>()((set, get) => ({
 	clearCart: () => {
 		set(initialState)
 	},
+
+	updateTotalSelectedPrice: (farePrice) => {
+		set((state) => {
+			return {
+				totalSelectedPrice: state.totalSelectedPrice + farePrice,
+			}
+		})
+	},
 }))
 
 export function useCartStoreZustand(): Pick<
@@ -175,6 +184,7 @@ export function useCartServiceZustand(): Omit<
 	const clearCart = useCartStore((state) => state.clearCart)
 	const getSelectedProducts = useCartStore((state) => state.getSelectedProducts)
 	const getSelectedVolume = useCartStore((state) => state.getSelectedVolume)
+	const updateTotalSelectedPrice = useCartStore((state) => state.updateTotalSelectedPrice)
 
 	return {
 		addProductToCart,
@@ -185,5 +195,6 @@ export function useCartServiceZustand(): Omit<
 		clearCart,
 		getSelectedProducts,
 		getSelectedVolume,
+		updateTotalSelectedPrice,
 	}
 }

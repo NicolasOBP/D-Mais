@@ -6,4 +6,5 @@ export interface ISellsRepo {
 	pickupList: () => Promise<Pickup[]>
 	driverList: () => Promise<Driver[]>
 	companyList: () => Promise<Company[]>
+	fareControl: (isFareSelected: boolean) => Promise<number>
 }

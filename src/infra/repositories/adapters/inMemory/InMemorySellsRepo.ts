@@ -37,4 +37,10 @@ export class InMemorySellsRepo implements ISellsRepo {
 
 		return mockCompanies
 	}
+
+	async fareControl(isFareSelected: boolean): Promise<number> {
+		await delay()
+
+		return isFareSelected ? -10 : 10
+	}
 }

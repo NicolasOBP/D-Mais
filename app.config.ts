@@ -1,8 +1,10 @@
-const IS_DEV = process.env.APP_VARIANT === "development"
+const APP_VARIANT = process.env.APP_VARIANT
+const IS_DEV = APP_VARIANT === "development"
+const IS_DEV_LOCAL = APP_VARIANT === "devLocal"
 
 export default {
 	expo: {
-		name: IS_DEV ? "D'Mais (DEV)" : "D'Mais",
+		name: IS_DEV_LOCAL ? "LOCAL D'Mais" : IS_DEV ? "DEV D'Mais" : "D'Mais",
 		slug: "D-Mais",
 		version: "1.0.0",
 		orientation: "portrait",
@@ -20,7 +22,11 @@ export default {
 			},
 			edgeToEdgeEnabled: true,
 			predictiveBackGestureEnabled: false,
-			package: IS_DEV ? "com.nicolasobp.DMais.dev" : "com.nicolasobp.DMais",
+			package: IS_DEV_LOCAL
+				? "com.nicolasobp.DMaisLocal"
+				: IS_DEV
+					? "com.nicolasobp.DMaisDev"
+					: "com.nicolasobp.DMais",
 		},
 		web: {
 			output: "static",

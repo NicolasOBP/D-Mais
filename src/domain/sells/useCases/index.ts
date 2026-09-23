@@ -1,5 +1,6 @@
 export { useSellClientList } from "./useSellClientList"
 export { useSellCompanyList } from "./useSellCompanyList"
 export { useSellDriverList } from "./useSellDriverList"
+export { useSellFareControl } from "./useSellFareControl"
 export { useSellPickupList } from "./useSellPickupList"
 export { useSellTruckList } from "./useSellTruckList"
