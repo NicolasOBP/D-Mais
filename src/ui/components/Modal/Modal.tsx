@@ -58,7 +58,6 @@ export function Modal() {
 					<Box
 						p="s16"
 						borderRadius="default"
-						backgroundColor="background"
 						width={widthValue}
 						gap="s40"
 						onLayout={(e) => {
@@ -69,9 +68,7 @@ export function Modal() {
 							}
 						}}
 					>
-						{modal.HeaderComponent ? (
-							modal.HeaderComponent
-						) : (
+						{modal.HeaderComponent ?? (
 							<ModalHeader title={modal.headerTitle} subtitle={modal.headerSubtitle} />
 						)}
 
