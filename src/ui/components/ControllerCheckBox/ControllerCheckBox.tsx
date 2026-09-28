@@ -12,7 +12,7 @@ type Props<FormType extends FieldValues> = ControllerProps<FormType> & {
 	size?: number
 	children?: ReactNode
 	pressableProps?: Omit<PressableBoxProps, "children" | "onPress">
-	extraFunction?: () => void
+	extraFunction?: (value: boolean) => void
 	ownToggleFunction?: {
 		handleChange: () => void
 		value: boolean
@@ -36,8 +36,12 @@ export function ControllerCheckBox<FormType extends FieldValues>({
 			name={name}
 			rules={rules}
 			render={({ field }) => {
-				const toggle = () =>
-					ownToggleFunction ? ownToggleFunction?.handleChange() : field.onChange(!field.value)
+				const toggle = () => {
+					if (ownToggleFunction) {
+						ownToggleFunction.handleChange()
+					}
+					field.onChange(!field.value)
+				}
 
 				const checkBox = (
 					<CheckBox
@@ -54,7 +58,7 @@ export function ControllerCheckBox<FormType extends FieldValues>({
 						{...pressableProps}
 						onPress={() => {
 							toggle()
-							extraFunction?.()
+							extraFunction?.(field.value)
 						}}
 					>
 						{checkBox}

@@ -1,5 +1,5 @@
 import { router } from "expo-router"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import { useOrdersSend, useSellFareControl } from "@domain"
 import { useAuth, useBackToSellService, useCartItems, useCartService } from "@infra"
@@ -30,9 +30,12 @@ export function SellsScreen() {
 			router.push("/orders")
 		},
 	})
-	const [isFareSelected, setIsFareSelected] = useState(false)
 	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
-		onError: () => setIsFareSelected((prev) => !prev),
+		onError: () => {
+			reset((data) => {
+				return { ...data, freteSelecionado: !data.freteSelecionado }
+			})
+		},
 	})
 
 	const cartItems = getSelectedProducts()
@@ -61,7 +64,6 @@ export function SellsScreen() {
 	}, [isPending])
 
 	function onSubmit(data: SellSchema) {
-		// TODO: fix fare field
 		sendOrder({
 			products: cartItems,
 			totalPrice: totalPrice.toString(),
@@ -72,7 +74,7 @@ export function SellsScreen() {
 			pickup: data.carreta,
 			table: data.tabela,
 			truck: data.caminhao,
-			fare: "10",
+			fareSelected: data.freteSelecionado,
 		})
 	}
 
@@ -80,12 +82,7 @@ export function SellsScreen() {
 		<Screen scrollable noHorizontalPadding>
 			<ScreenHeader title="Venda" goBackTo="/cart" noMargin />
 
-			<SellsForm
-				control={control}
-				fareControl={fareControl}
-				isFareSelected={isFareSelected}
-				setIsFareSelected={setIsFareSelected}
-			/>
+			<SellsForm control={control} fareControl={fareControl} />
 
 			<SellsProductsList
 				cartItems={cartItems}

@@ -16,7 +16,7 @@ export class InMemoryOrdersRepo implements IOrdersRepo {
 
 		const newOrder: OrderDetails = {
 			id: InnerOrders.length + Math.floor(Math.random() * 1000),
-			status: "pending",
+			status: "completed",
 			...order,
 		}
 		InnerOrders = [...InnerOrders, newOrder]

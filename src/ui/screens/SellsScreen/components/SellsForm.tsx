@@ -14,15 +14,13 @@ import {
 	DropDownControllerInput,
 	FormTextInput,
 } from "@components"
-import { Box, Text } from "@core-components"
+import { Box, type BoxProps, Text } from "@core-components"
 
 type Props = Pick<ControllerProps<SellSchema>, "control"> & {
 	fareControl: (variable: { isFareSelected: boolean }) => number | void
-	isFareSelected: boolean
-	setIsFareSelected: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export function SellsForm({ control, fareControl, isFareSelected, setIsFareSelected }: Props) {
+export function SellsForm({ control, fareControl }: Props) {
 	const { data: clientList, isLoading: isLoadingClient } = useSellClientList()
 	const { data: truckList, isLoading: isLoadingTruck } = useSellTruckList()
 	const { data: driverList, isLoading: isLoadingDriver } = useSellDriverList()
@@ -130,23 +128,21 @@ export function SellsForm({ control, fareControl, isFareSelected, setIsFareSelec
 
 			<ControllerCheckBox
 				control={control}
-				name="frete"
+				name="freteSelecionado"
 				variant="rounded"
 				size={20}
-				extraFunction={() => fareControl({ isFareSelected })}
-				pressableProps={{
-					flexDirection: "row",
-					alignItems: "center",
-					g: "s4",
-					alignSelf: "flex-start",
-				}}
-				ownToggleFunction={{
-					handleChange: () => setIsFareSelected((prev) => !prev),
-					value: isFareSelected,
-				}}
+				extraFunction={(isFareSelected) => fareControl({ isFareSelected })}
+				pressableProps={checkBoxPressableProps}
 			>
-				<Text variant="title12">Adicionar Frete</Text>
+				<Text variant="title12">Adicionar o custo do frete (com entrega)</Text>
 			</ControllerCheckBox>
 		</Box>
 	)
+}
+
+const checkBoxPressableProps: BoxProps = {
+	flexDirection: "row",
+	alignItems: "center",
+	g: "s4",
+	alignSelf: "flex-start",
 }

@@ -14,7 +14,7 @@ export interface Order {
 export interface OrderDetails extends Order {
 	paymentTerms: string
 	table: string
-	fare: string
+	fareSelected: boolean
 	truck: Truck
 	pickup: Pickup
 	driver: Driver
