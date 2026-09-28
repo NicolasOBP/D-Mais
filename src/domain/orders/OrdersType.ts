@@ -16,7 +16,7 @@ export interface OrderDetails extends Order {
 	table: string
 	fareSelected: boolean
 	truck: Truck
-	pickup: Pickup
+	pickup?: Pickup
 	driver: Driver
 	company: Company
 }

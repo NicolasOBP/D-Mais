@@ -19,12 +19,14 @@ export const sellSchema = z.object({
 		},
 		{ error: "Caminhão inválido" },
 	),
-	carreta: z.object(
-		{
-			licensePlate: z.string().min(1, "Carreta inválido"),
-		},
-		{ error: "Carreta inválido" },
-	),
+	carreta: z
+		.object(
+			{
+				licensePlate: z.string().min(1, "Carreta inválido"),
+			},
+			{ error: "Carreta inválido" },
+		)
+		.optional(),
 	motorista: z.object(
 		{
 			name: z.string().min(1, "Motorista inválido"),

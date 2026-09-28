@@ -13,7 +13,6 @@ export function useSellForm() {
 			tabela: "",
 			freteSelecionado: false,
 			caminhao: { licensePlate: "" },
-			carreta: { licensePlate: "" },
 			motorista: { cpf: "", name: "" },
 			transportadora: { cnpj: "", name: "" },
 		},
