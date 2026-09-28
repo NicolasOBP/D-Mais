@@ -62,6 +62,16 @@ export function DropDown<TValue>({
 		filterItems()
 	}, [searchDebounced])
 
+	if (
+		dropdownItems?.some((item) => typeof item !== "string" && typeof item !== "number") &&
+		!valueKey &&
+		!idKey
+	) {
+		throw new Error(
+			"DropDown requires valueKey and idKey when dropdown items are not strings or numbers.",
+		)
+	}
+
 	function filterItems() {
 		if (searchDebounced && dropdownItems) {
 			const filteredItems = dropdownItems.filter((item, index) => {
