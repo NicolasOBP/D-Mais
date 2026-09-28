@@ -1,6 +1,6 @@
 import { useSharedValue, withTiming } from "react-native-reanimated"
 
-import { Box, type BoxProps, TextInput } from "@core-components"
+import { Box, type BoxProps, Text, TextInput } from "@core-components"
 
 import { SearchIconAnimation } from "./components/SearchIconAnimation"
 
@@ -43,6 +43,10 @@ export function SearchBar({
 					<SearchIconAnimation hasSearchText={hasSearchTextValue} onClearPress={clearSearchText} />
 				}
 			/>
+
+			<Text textAlign="center" variant="mediumText10" pt="s10" pb="s4">
+				*O estoque será selecionado após a escolha do combustível
+			</Text>
 		</Box>
 	)
 }
