@@ -2,6 +2,8 @@ import {
 	useSellClientList,
 	useSellCompanyList,
 	useSellDriverList,
+	useSellPaymentDelayList,
+	useSellPaymentMethodsList,
 	useSellPickupList,
 	useSellTruckList,
 } from "@domain"
@@ -26,6 +28,9 @@ export function SellsForm({ control, fareControl }: Props) {
 	const { data: driverList, isLoading: isLoadingDriver } = useSellDriverList()
 	const { data: pickupList, isLoading: isLoadingPickup } = useSellPickupList()
 	const { data: companyList, isLoading: isLoadingCompany } = useSellCompanyList()
+	const { data: paymentMethodsList, isLoading: isLoadingPaymentMethods } =
+		useSellPaymentMethodsList()
+	const { data: paymentDelaysList, isLoading: isLoadingPaymentDelays } = useSellPaymentDelayList()
 
 	return (
 		<Box pt="s14" pb="s20" gap="s20" paddingHorizontal="default">
@@ -49,7 +54,10 @@ export function SellsForm({ control, fareControl }: Props) {
 						label="Cond. de Pagto."
 						variant="secundary"
 						isRequired
-						dropdownItems={["1 mês", "2 meses", "3 meses"]}
+						dropdownItems={paymentDelaysList}
+						isLoading={isLoadingPaymentDelays}
+						valueKey="description"
+						idKey="id"
 					/>
 				</Box>
 				<Box flex={1}>
@@ -68,7 +76,10 @@ export function SellsForm({ control, fareControl }: Props) {
 						label="Forma de Pagto."
 						variant="secundary"
 						isRequired
-						dropdownItems={["Crédito", "Débito", "Pix"]}
+						dropdownItems={paymentMethodsList}
+						isLoading={isLoadingPaymentMethods}
+						valueKey="description"
+						idKey="id"
 					/>
 				</Box>
 			</Box>
@@ -96,7 +107,6 @@ export function SellsForm({ control, fareControl }: Props) {
 						idKey="licensePlate"
 						valueKey="licensePlate"
 						variant="secundary"
-						isRequired
 						isLoading={isLoadingPickup}
 					/>
 				</Box>

@@ -21,3 +21,13 @@ export type Company = {
 	name: string
 	cnpj: string
 }
+
+export type PaymentDelay = {
+	id: string
+	description: string
+}
+
+export type PaymentMethod = {
+	id: string
+	description: string
+}
