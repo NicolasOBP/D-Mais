@@ -52,6 +52,9 @@ export function ProductCartDetails({ product }: Props) {
 			<Text variant="text16Bold" color="text" numberOfLines={1} textAlign="center">
 				{product.title}
 			</Text>
+			<Text textAlign="center" variant="text10" color="gray2">
+				{product.inventory.id} - {product.inventory.description}
+			</Text>
 
 			<Box flexDirection="row" justifyContent="space-between" mt="s14">
 				<Box>
