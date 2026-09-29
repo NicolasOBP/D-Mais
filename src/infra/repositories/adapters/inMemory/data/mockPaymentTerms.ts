@@ -1,6 +1,6 @@
-import type { PaymentDelay } from "@domain"
+import type { PaymentTerms } from "@domain"
 
-export const mockPaymentDelay: PaymentDelay[] = [
+export const mockPaymentTerms: PaymentTerms[] = [
 	{
 		description: "Antecipado",
 		id: "001",

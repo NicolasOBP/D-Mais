@@ -5,7 +5,7 @@ export function useSellPaymentDelayList() {
 
 	return useAppQuery({
 		queryKey: [QueryKeys.Sells, QueryKeys.SellsPaymentDelayList],
-		fetchData: sells.paymentDelayList,
+		fetchData: sells.paymentTermsList,
 		staleTime: 1000 * 30,
 	})
 }
