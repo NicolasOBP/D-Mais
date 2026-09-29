@@ -5,7 +5,7 @@ import { useNumberFormat } from "@utils"
 import { Box, type BoxProps, PressableBox, Text } from "@core-components"
 
 interface SellsProductCardProps {
-	item: ProductCart
+	item: Pick<ProductCart, "cartId" | "title" | "volume" | "price">
 }
 
 export function SellsProductCard({ item }: SellsProductCardProps) {

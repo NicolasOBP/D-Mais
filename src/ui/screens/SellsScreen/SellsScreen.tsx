@@ -7,12 +7,10 @@ import { useAuth, useBackToSellService, useCartItems, useCartService } from "@in
 import { type SellSchema, useSellForm } from "@schemas"
 import { useFormUtils } from "@utils"
 
-import { ScreenHeader, useModal } from "@components"
+import { ScreenHeader, SellsForm, SellsProductsList, useModal } from "@components"
 import { Screen } from "@containers"
 import { Box, Button } from "@core-components"
 
-import { SellsForm } from "./components/SellsForm"
-import { SellsProductsList } from "./components/SellsProductsList"
 import { SendSellModalBody } from "./components/SendSellModalBody"
 
 export function SellsScreen() {
@@ -69,6 +67,7 @@ export function SellsScreen() {
 			totalPrice: totalPrice.toString(),
 			client: data.cliente,
 			paymentTerms: data.condicaoPagamento,
+			paymentMethod: data.formaPagamento,
 			company: data.transportadora,
 			driver: data.motorista,
 			pickup: data.carreta,

@@ -10,19 +10,18 @@ import {
 
 import type { SellSchema } from "@schemas"
 
-import {
-	ControllerCheckBox,
-	type ControllerProps,
-	DropDownControllerInput,
-	FormTextInput,
-} from "@components"
 import { Box, type BoxProps, Text } from "@core-components"
+
+import { ControllerCheckBox } from "../ControllerCheckBox"
+import { DropDownControllerInput } from "../DropDownInputs"
+import { type ControllerProps, FormTextInput } from "../Form"
 
 type Props = Pick<ControllerProps<SellSchema>, "control"> & {
 	fareControl: (variable: { isFareSelected: boolean }) => number | void
+	readOnly?: boolean
 }
 
-export function SellsForm({ control, fareControl }: Props) {
+export function SellsForm({ control, fareControl, readOnly }: Props) {
 	const { data: clientList, isLoading: isLoadingClient } = useSellClientList()
 	const { data: truckList, isLoading: isLoadingTruck } = useSellTruckList()
 	const { data: driverList, isLoading: isLoadingDriver } = useSellDriverList()
@@ -44,6 +43,7 @@ export function SellsForm({ control, fareControl }: Props) {
 				variant="secundary"
 				isRequired
 				isLoading={isLoadingClient}
+				readOnly={readOnly}
 			/>
 
 			<Box flexDirection="row" gap="s12">
@@ -58,6 +58,7 @@ export function SellsForm({ control, fareControl }: Props) {
 						isLoading={isLoadingPaymentDelays}
 						valueKey="description"
 						idKey="id"
+						readOnly={readOnly}
 					/>
 				</Box>
 				<Box flex={1}>
@@ -67,6 +68,7 @@ export function SellsForm({ control, fareControl }: Props) {
 						label="Tabela"
 						variant="secundary"
 						isRequired
+						readOnly={readOnly}
 					/>
 				</Box>
 				<Box flex={2}>
@@ -80,6 +82,7 @@ export function SellsForm({ control, fareControl }: Props) {
 						isLoading={isLoadingPaymentMethods}
 						valueKey="description"
 						idKey="id"
+						readOnly={readOnly}
 					/>
 				</Box>
 			</Box>
@@ -96,6 +99,7 @@ export function SellsForm({ control, fareControl }: Props) {
 						variant="secundary"
 						isRequired
 						isLoading={isLoadingTruck}
+						readOnly={readOnly}
 					/>
 				</Box>
 				<Box flex={1}>
@@ -108,6 +112,7 @@ export function SellsForm({ control, fareControl }: Props) {
 						valueKey="licensePlate"
 						variant="secundary"
 						isLoading={isLoadingPickup}
+						readOnly={readOnly}
 					/>
 				</Box>
 			</Box>
@@ -122,6 +127,7 @@ export function SellsForm({ control, fareControl }: Props) {
 				variant="secundary"
 				isRequired
 				isLoading={isLoadingDriver}
+				readOnly={readOnly}
 			/>
 
 			<DropDownControllerInput
@@ -134,6 +140,7 @@ export function SellsForm({ control, fareControl }: Props) {
 				variant="secundary"
 				isRequired
 				isLoading={isLoadingCompany}
+				readOnly={readOnly}
 			/>
 
 			<ControllerCheckBox
@@ -143,6 +150,7 @@ export function SellsForm({ control, fareControl }: Props) {
 				size={20}
 				extraFunction={(isFareSelected) => fareControl({ isFareSelected })}
 				pressableProps={checkBoxPressableProps}
+				readOnly={readOnly}
 			>
 				<Text variant="title12">Adicionar o custo do frete (com entrega)</Text>
 			</ControllerCheckBox>

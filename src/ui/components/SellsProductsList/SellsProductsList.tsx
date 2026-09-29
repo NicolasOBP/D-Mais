@@ -1,6 +1,6 @@
 import { FlatList, ScrollView } from "react-native"
 
-import type { ProductCartScreen } from "@domain"
+import type { ProductCart } from "@domain"
 
 import { useAppTheme } from "@theme"
 import { useNumberFormat } from "@utils"
@@ -11,7 +11,7 @@ import { SellsProductCard } from "./SellsProductCard"
 import { TotalPriceLoadingAnimation } from "./TotalPriceLoadingAnimation"
 
 type Props = {
-	cartItems: ProductCartScreen[]
+	cartItems: Pick<ProductCart, "cartId" | "title" | "volume" | "price">[]
 	totalPrice: number
 	isPendingTotalPrice: boolean
 }
