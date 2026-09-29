@@ -1,3 +1,4 @@
+import { router } from "expo-router"
 import { useRef } from "react"
 import { type ListRenderItemInfo, RefreshControl } from "react-native"
 
@@ -22,7 +23,14 @@ export function OrderScreen() {
 	useScrollToTop(flatListRef)
 
 	function renderItem({ item }: ListRenderItemInfo<Order>) {
-		return <OrdersProductCard order={item} />
+		return (
+			<OrdersProductCard
+				order={item}
+				onPress={() =>
+					router.push({ pathname: "/orders/[id]", params: { id: item.id.toString() } })
+				}
+			/>
+		)
 	}
 
 	return (

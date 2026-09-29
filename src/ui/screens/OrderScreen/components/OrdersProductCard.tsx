@@ -2,19 +2,20 @@ import type { Order } from "@domain"
 
 import { useNumberFormat } from "@utils"
 
-import { Box, type BoxProps, Text } from "@core-components"
+import { Box, type BoxProps, PressableBox, Text } from "@core-components"
 
 import { statusStyleMap } from "./statusStyleMap"
 
 export interface OrdersProductCardProps {
 	order: Order
+	onPress: () => void
 }
 
-export function OrdersProductCard({ order }: OrdersProductCardProps) {
+export function OrdersProductCard({ order, onPress }: OrdersProductCardProps) {
 	const orderStatus = statusStyleMap[order.status]
 
 	return (
-		<Box {...cardBoxStyle}>
+		<PressableBox {...cardBoxStyle} onPress={onPress}>
 			<Box {...statusBoxStyle} {...orderStatus.style}>
 				<Text variant="title12" textAlign="center">
 					{orderStatus.label}
@@ -54,7 +55,7 @@ export function OrdersProductCard({ order }: OrdersProductCardProps) {
 					{useNumberFormat.toBRLCurrency(order.totalPrice)}
 				</Text>
 			</Box>
-		</Box>
+		</PressableBox>
 	)
 }
 
