@@ -189,6 +189,11 @@ const theme = createTheme({
 			lineHeight: 16,
 		},
 
+		disabledText: {
+			fontFamily: "InterSemiBold",
+			color: "gray1",
+		},
+
 		// Tab bar text - 12px SemiBold
 		tabBar: {
 			fontSize: 12,

@@ -9,23 +9,28 @@ import Animated, {
 import { Box } from "@core-components"
 
 import { Icon } from "../Icon"
+import type { IconProps } from "../Icon/Icon"
 
 configureReanimatedLogger({
 	level: ReanimatedLogLevel.warn,
 	strict: false,
 })
 
+type Props = {
+	progress: SharedValue<number>
+	closeDropdown: () => void
+	openDropdown: () => void
+	isOpen: SharedValue<boolean>
+	color?: IconProps["color"]
+}
+
 export function ArrowIconAnimation({
 	progress,
 	closeDropdown,
 	isOpen,
 	openDropdown,
-}: {
-	progress: SharedValue<number>
-	closeDropdown: () => void
-	openDropdown: () => void
-	isOpen: SharedValue<boolean>
-}) {
+	color,
+}: Props) {
 	const arrowAnimattion = useAnimatedStyle(() => ({
 		transform: [{ rotate: `${interpolate(progress.value, [0, 1], [0, -180])}deg` }],
 	}))
@@ -41,7 +46,7 @@ export function ArrowIconAnimation({
 	return (
 		<Box pr="s4">
 			<Animated.View style={arrowAnimattion}>
-				<Icon name="chevronDown" onPress={handleIconAction} />
+				<Icon name="chevronDown" onPress={handleIconAction} color={color} />
 			</Animated.View>
 		</Box>
 	)

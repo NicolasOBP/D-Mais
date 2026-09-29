@@ -11,6 +11,7 @@ export type CheckBoxProps = {
 	variant?: CheckBoxVariants
 	size?: number
 	disabled?: boolean
+	readOnly?: boolean
 }
 
 export function CheckBox({
@@ -19,8 +20,14 @@ export function CheckBox({
 	variant = "squarcle",
 	size = 24,
 	disabled = false,
+	readOnly,
 }: CheckBoxProps) {
 	const checkBoxStyle = checkBoxVariant[variant]
+
+	const borderColors =
+		variant === "squarcle" ? (selected ? "primary" : "gray2") : readOnly ? "gray2" : "primary"
+	const backgroundColors =
+		variant === "squarcle" ? (selected ? "primary" : "background") : "transparent"
 
 	function checkStyle() {
 		if (variant === "squarcle" && selected) {
@@ -29,7 +36,7 @@ export function CheckBox({
 		if (variant === "rounded" && selected) {
 			return (
 				<Box
-					backgroundColor="primary"
+					backgroundColor={readOnly ? "gray2" : "primary"}
 					borderRadius="rounded"
 					width={size - 10}
 					height={size - 10}
@@ -44,8 +51,8 @@ export function CheckBox({
 				{...containerBoxStyle}
 				width={size}
 				height={size}
-				borderColor={selected ? "primary" : "gray2"}
-				backgroundColor={selected ? "primary" : "background"}
+				borderColor={borderColors}
+				backgroundColor={backgroundColors}
 				{...checkBoxStyle}
 			>
 				{checkStyle()}

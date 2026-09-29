@@ -17,6 +17,7 @@ type Props<FormType extends FieldValues> = ControllerProps<FormType> & {
 		handleChange: () => void
 		value: boolean
 	}
+	readOnly?: boolean
 }
 
 export function ControllerCheckBox<FormType extends FieldValues>({
@@ -29,6 +30,7 @@ export function ControllerCheckBox<FormType extends FieldValues>({
 	pressableProps,
 	extraFunction,
 	ownToggleFunction,
+	readOnly,
 }: Props<FormType>) {
 	return (
 		<Controller
@@ -49,7 +51,8 @@ export function ControllerCheckBox<FormType extends FieldValues>({
 						handleSelectChange={toggle}
 						variant={variant}
 						size={size}
-						disabled={Boolean(children)}
+						disabled={Boolean(children) || readOnly}
+						readOnly={readOnly}
 					/>
 				)
 
@@ -60,6 +63,7 @@ export function ControllerCheckBox<FormType extends FieldValues>({
 							toggle()
 							extraFunction?.(field.value)
 						}}
+						disabled={readOnly}
 					>
 						{checkBox}
 						{children}

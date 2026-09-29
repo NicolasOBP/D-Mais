@@ -11,7 +11,7 @@ const boxStyleDefault: BoxProps = {
 
 type VariantStyle = {
 	boxStyle: BoxProps
-	textVariant?: "text16Bold" | "text12Bold" | "text16Bold"
+	textVariant?: "text16Bold" | "text12Bold" | "text16Bold" | "disabledText"
 }
 
 export const buttonVariants: Record<ButtonVariant, VariantStyle> = {
@@ -39,7 +39,9 @@ export const buttonVariants: Record<ButtonVariant, VariantStyle> = {
 	},
 	disabled: {
 		boxStyle: {
-			backgroundColor: "gray1",
+			...boxStyleDefault,
+			backgroundColor: "gray3",
 		},
+		textVariant: "disabledText",
 	},
 }

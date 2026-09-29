@@ -42,6 +42,7 @@ export function TextInput({
 	onLayout,
 	animatedStyle,
 	isRequired = false,
+	readOnly,
 	...textInputProps
 }: TextInputProps) {
 	const [absoluteTopSpacing, setAbsoluteTopSpacing] = useState(0)
@@ -103,6 +104,7 @@ export function TextInput({
 						ref={inputRef}
 						autoCapitalize="none"
 						placeholderTextColor={colors.gray2}
+						readOnly={readOnly}
 						{...textInputProps}
 						style={[
 							textInputProps.style,
@@ -112,7 +114,7 @@ export function TextInput({
 								flexGrow: 1,
 								flexShrink: 1,
 								...textVariants.defaults,
-								color: colors["text"],
+								color: readOnly ? colors["gray2"] : colors["text"],
 							},
 						]}
 					/>

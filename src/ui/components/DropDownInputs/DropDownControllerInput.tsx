@@ -33,6 +33,7 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 	showTextWithId = false,
 	maxHeight,
 	isLoading,
+	readOnly,
 	...textInputProps
 }: DropDownTextInputProps<FormType, TValue>) {
 	const [wasSelected, setWasSelected] = useState(false)
@@ -83,10 +84,11 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 								errorMessage={useFormUtils.getFirstErrorMessage(fieldState.error)}
 								RighComponent={
 									<ArrowIconAnimation
-										closeDropdown={closeDropdown}
+										closeDropdown={readOnly ? () => {} : closeDropdown}
 										isOpen={isOpen}
-										openDropdown={openDropdown}
+										openDropdown={readOnly ? () => {} : openDropdown}
 										progress={progress}
+										color={readOnly ? "gray2" : undefined}
 									/>
 								}
 								onLayout={(e) => {
@@ -95,6 +97,7 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 								animatedStyle={animatedStyle}
 								onFocus={openDropdown}
 								onBlur={closeDropdown}
+								readOnly={readOnly}
 								{...textInputProps}
 							/>
 							<DropDown

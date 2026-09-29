@@ -6,8 +6,6 @@ export const checkBoxVariant: Record<CheckBoxVariants, BoxProps> = {
 	rounded: {
 		borderRadius: "rounded",
 		borderWidth: 3,
-		borderColor: "primary",
-		backgroundColor: "transparent",
 	},
 	squarcle: {
 		borderRadius: "checkbox",
