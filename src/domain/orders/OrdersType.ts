@@ -1,5 +1,5 @@
 import type { ProductCart } from "../cart"
-import type { Client, Company, Driver, Pickup, Truck } from "../sells"
+import type { Client, Company, Driver, PaymentDelay, PaymentMethod, Pickup, Truck } from "../sells"
 
 export type OrdersStatus = "pending" | "completed" | "cancelled"
 
@@ -12,13 +12,15 @@ export interface Order {
 }
 
 export interface OrderDetails extends Order {
-	paymentTerms: string
+	paymentTerms: PaymentDelay
+	paymentMethod: PaymentMethod
 	table: string
 	fareSelected: boolean
 	truck: Truck
 	pickup?: Pickup
 	driver: Driver
 	company: Company
+	products: Pick<ProductCart, "cartId" | "title" | "volume" | "price">[]
 }
 
 export type OrderVariables = Omit<OrderDetails, "id" | "status">

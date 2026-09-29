@@ -23,4 +23,18 @@ export class InMemoryOrdersRepo implements IOrdersRepo {
 
 		return newOrder
 	}
+
+	async complete(id: number): Promise<void> {
+		await delay()
+
+		InnerOrders = InnerOrders.map((order) =>
+			order.id === id ? { ...order, status: "completed" } : order,
+		)
+	}
+
+	async remove(id: number): Promise<void> {
+		await delay()
+
+		InnerOrders = InnerOrders.filter((order) => order.id !== id)
+	}
 }
