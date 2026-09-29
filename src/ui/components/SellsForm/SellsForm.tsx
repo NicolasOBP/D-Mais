@@ -37,13 +37,15 @@ export function SellsForm({ control, fareControl, readOnly }: Props) {
 				name="cliente"
 				control={control}
 				label="Cliente"
-				dropdownItems={clientList}
-				idKey="cnpjCpf"
-				valueKey="corporateReason"
 				variant="secundary"
 				isRequired
-				isLoading={isLoadingClient}
 				readOnly={readOnly}
+				dropDownProps={{
+					dropdownItems: clientList,
+					idKey: "cnpjCpf",
+					valueKey: "corporateReason",
+					isLoading: isLoadingClient,
+				}}
 			/>
 
 			<Box flexDirection="row" gap="s12">
@@ -54,11 +56,13 @@ export function SellsForm({ control, fareControl, readOnly }: Props) {
 						label="Cond. de Pagto."
 						variant="secundary"
 						isRequired
-						dropdownItems={paymentDelaysList}
-						isLoading={isLoadingPaymentDelays}
-						valueKey="description"
-						idKey="id"
 						readOnly={readOnly}
+						dropDownProps={{
+							dropdownItems: paymentDelaysList,
+							isLoading: isLoadingPaymentDelays,
+							valueKey: "description",
+							idKey: "id",
+						}}
 					/>
 				</Box>
 				<Box flex={1}>
@@ -78,11 +82,13 @@ export function SellsForm({ control, fareControl, readOnly }: Props) {
 						label="Forma de Pagto."
 						variant="secundary"
 						isRequired
-						dropdownItems={paymentMethodsList}
-						isLoading={isLoadingPaymentMethods}
-						valueKey="description"
-						idKey="id"
 						readOnly={readOnly}
+						dropDownProps={{
+							dropdownItems: paymentMethodsList,
+							isLoading: isLoadingPaymentMethods,
+							valueKey: "description",
+							idKey: "id",
+						}}
 					/>
 				</Box>
 			</Box>
@@ -93,13 +99,15 @@ export function SellsForm({ control, fareControl, readOnly }: Props) {
 						name="caminhao"
 						control={control}
 						label="Caminhão"
-						dropdownItems={truckList}
-						idKey="licensePlate"
-						valueKey="licensePlate"
 						variant="secundary"
 						isRequired
-						isLoading={isLoadingTruck}
 						readOnly={readOnly}
+						dropDownProps={{
+							dropdownItems: truckList,
+							idKey: "licensePlate",
+							valueKey: "licensePlate",
+							isLoading: isLoadingTruck,
+						}}
 					/>
 				</Box>
 				<Box flex={1}>
@@ -107,12 +115,14 @@ export function SellsForm({ control, fareControl, readOnly }: Props) {
 						name="carreta"
 						control={control}
 						label="Carreta"
-						dropdownItems={pickupList}
-						idKey="licensePlate"
-						valueKey="licensePlate"
 						variant="secundary"
-						isLoading={isLoadingPickup}
 						readOnly={readOnly}
+						dropDownProps={{
+							dropdownItems: pickupList,
+							idKey: "licensePlate",
+							valueKey: "licensePlate",
+							isLoading: isLoadingPickup,
+						}}
 					/>
 				</Box>
 			</Box>
@@ -121,26 +131,30 @@ export function SellsForm({ control, fareControl, readOnly }: Props) {
 				name="motorista"
 				control={control}
 				label="Motorista"
-				dropdownItems={driverList}
-				idKey="cpf"
-				valueKey="name"
 				variant="secundary"
 				isRequired
-				isLoading={isLoadingDriver}
 				readOnly={readOnly}
+				dropDownProps={{
+					dropdownItems: driverList,
+					idKey: "cpf",
+					valueKey: "name",
+					isLoading: isLoadingDriver,
+				}}
 			/>
 
 			<DropDownControllerInput
 				name="transportadora"
 				control={control}
 				label="Transportadora"
-				dropdownItems={companyList}
-				idKey="cnpj"
-				valueKey="name"
 				variant="secundary"
 				isRequired
-				isLoading={isLoadingCompany}
 				readOnly={readOnly}
+				dropDownProps={{
+					dropdownItems: companyList,
+					idKey: "cnpj",
+					valueKey: "name",
+					isLoading: isLoadingCompany,
+				}}
 			/>
 
 			<ControllerCheckBox

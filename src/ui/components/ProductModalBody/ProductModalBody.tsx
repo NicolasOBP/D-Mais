@@ -21,16 +21,18 @@ export function ProductModalBody({
 	return (
 		<Box gap="s14" style={{ marginTop: -20 }}>
 			<DropDownControllerInput
-				dropdownItems={inventoryList || updatedInventoryList}
 				name="inventory"
 				control={control}
 				textFieldStyle={{ paddingVertical: "s8" }}
 				label="Estoque"
-				idKey="id"
-				valueKey="description"
-				showTextWithId
-				maxHeight={150}
-				isLoading={isLoadingInventory}
+				dropDownProps={{
+					dropdownItems: inventoryList || updatedInventoryList,
+					idKey: "id",
+					valueKey: "description",
+					showTextWithId: true,
+					maxHeight: 150,
+					isLoading: isLoadingInventory,
+				}}
 			/>
 
 			<FormTextInput

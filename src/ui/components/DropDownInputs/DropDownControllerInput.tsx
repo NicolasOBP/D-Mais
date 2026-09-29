@@ -16,24 +16,20 @@ type DropDownTextInputProps<FormType extends FieldValues, TValue> = Omit<
 	TextInputProps,
 	"RighComponent" | "errorMessage"
 > &
-	ControllerProps<FormType> &
-	Pick<
-		DropDownProps<TValue>,
-		"dropdownItems" | "valueKey" | "idKey" | "showTextWithId" | "maxHeight" | "isLoading"
-	>
+	ControllerProps<FormType> & {
+		dropDownProps: Pick<
+			DropDownProps<TValue>,
+			"dropdownItems" | "valueKey" | "idKey" | "showTextWithId" | "maxHeight" | "isLoading"
+		>
+	}
 
 export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 	control,
 	name,
 	rules,
 	variant = "primary",
-	dropdownItems,
-	valueKey,
-	idKey,
-	showTextWithId = false,
-	maxHeight,
-	isLoading,
 	readOnly,
+	dropDownProps,
 	...textInputProps
 }: DropDownTextInputProps<FormType, TValue>) {
 	const [wasSelected, setWasSelected] = useState(false)
@@ -59,10 +55,10 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 				rules={rules}
 				render={({ fieldState, field }) => {
 					const textValue = textValueFormatting({
-						valueKey,
 						field,
-						idKey,
-						showTextWithId,
+						idKey: dropDownProps.idKey,
+						showTextWithId: !!dropDownProps.showTextWithId,
+						valueKey: dropDownProps.valueKey,
 					})
 
 					function handleChangeText(text: string) {
@@ -108,14 +104,9 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 									setWasSelected(true)
 								}}
 								closeDropdown={closeDropdown}
-								valueKey={valueKey}
-								idKey={idKey}
-								dropdownItems={dropdownItems}
 								searchText={field.value}
 								variant={variant}
-								showTextWithId={showTextWithId}
-								maxHeight={maxHeight}
-								isLoading={isLoading}
+								{...dropDownProps}
 							/>
 						</>
 					)

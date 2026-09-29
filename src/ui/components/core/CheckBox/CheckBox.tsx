@@ -1,5 +1,7 @@
 import { Pressable } from "react-native"
 
+import type { ThemeColor } from "@theme"
+
 import { Icon } from "../../Icon"
 import { Box, type BoxProps } from "../Box"
 
@@ -24,9 +26,9 @@ export function CheckBox({
 }: CheckBoxProps) {
 	const checkBoxStyle = checkBoxVariant[variant]
 
-	const borderColors =
+	const borderColors: ThemeColor =
 		variant === "squarcle" ? (selected ? "primary" : "gray2") : readOnly ? "gray2" : "primary"
-	const backgroundColors =
+	const backgroundColors: ThemeColor =
 		variant === "squarcle" ? (selected ? "primary" : "background") : "transparent"
 
 	function checkStyle() {

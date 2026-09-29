@@ -2,6 +2,8 @@ import { type Href, router } from "expo-router"
 
 import type { OrdersStatus } from "@domain"
 
+import type { ThemeColor } from "@theme"
+
 import { Box, Text } from "@core-components"
 
 import { Icon } from "../Icon"
@@ -20,7 +22,7 @@ export function ScreenHeader({
 	status?: OrdersStatus
 }) {
 	const backEnabled = canGoBack || !!goBackTo
-	const statusColor =
+	const statusColor: ThemeColor =
 		status === "pending" ? "pending" : status === "completed" ? "success" : "error"
 
 	function handleGoBack() {
