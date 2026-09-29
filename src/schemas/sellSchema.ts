@@ -9,8 +9,20 @@ export const sellSchema = z.object({
 		},
 		{ error: "Cliente inválido" },
 	),
-	condicaoPagamento: z.string().min(1, "Campo obrigatório"),
-	formaPagamento: z.string().min(1, "Campo obrigatório"),
+	condicaoPagamento: z.object(
+		{
+			id: z.string().min(1, "Campo obrigatório"),
+			description: z.string().min(1, "Campo obrigatório"),
+		},
+		{ error: "Campo obrigatório" },
+	),
+	formaPagamento: z.object(
+		{
+			id: z.string().min(1, "Campo obrigatório"),
+			description: z.string().min(1, "Campo obrigatório"),
+		},
+		{ error: "Campo obrigatório" },
+	),
 	tabela: z.string().min(1, "Inválido"),
 	freteSelecionado: z.boolean(),
 	caminhao: z.object(
