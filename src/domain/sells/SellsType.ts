@@ -31,3 +31,9 @@ export type PaymentMethod = {
 	id: string
 	description: string
 }
+
+export type TablePrices = {
+	paymentTermsId: PaymentTerms["id"]
+	tableName: string
+	price: number
+}

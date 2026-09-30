@@ -1,4 +1,6 @@
 import {
+	type PaymentTerms,
+	type TablePrices,
 	useSellClientList,
 	useSellCompanyList,
 	useSellDriverList,
@@ -19,9 +21,10 @@ import { type ControllerProps, FormTextInput } from "../Form"
 type Props = Pick<ControllerProps<SellSchema>, "control"> & {
 	fareControl: (variable: { isFareSelected: boolean }) => number | void
 	readOnly?: boolean
+	paymentTermsControl: (variable: PaymentTerms) => void | TablePrices
 }
 
-export function SellsForm({ control, fareControl, readOnly }: Props) {
+export function SellsForm({ control, fareControl, readOnly, paymentTermsControl }: Props) {
 	const { data: clientList, isLoading: isLoadingClient } = useSellClientList()
 	const { data: truckList, isLoading: isLoadingTruck } = useSellTruckList()
 	const { data: driverList, isLoading: isLoadingDriver } = useSellDriverList()
@@ -63,6 +66,7 @@ export function SellsForm({ control, fareControl, readOnly }: Props) {
 							valueKey: "description",
 							idKey: "id",
 						}}
+						extraFunction={paymentTermsControl}
 					/>
 				</Box>
 				<Box flex={1}>
@@ -71,8 +75,7 @@ export function SellsForm({ control, fareControl, readOnly }: Props) {
 						control={control}
 						label="Tabela"
 						variant="secundary"
-						isRequired
-						readOnly={readOnly}
+						readOnly
 					/>
 				</Box>
 				<Box flex={2}>

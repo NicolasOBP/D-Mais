@@ -6,7 +6,7 @@ import type { OrderVariables } from "@domain"
 import { type SellSchema, sellSchema } from "./sellSchema"
 
 export function useSellForm(order?: OrderVariables) {
-	const { control, handleSubmit, formState, reset } = useForm<SellSchema>({
+	const { control, handleSubmit, formState, reset, setValue, getValues } = useForm<SellSchema>({
 		resolver: zodResolver(sellSchema),
 		defaultValues: order
 			? {
@@ -29,6 +29,8 @@ export function useSellForm(order?: OrderVariables) {
 		handleSubmit,
 		formState,
 		reset,
+		setValue,
+		getValues,
 	}
 }
 

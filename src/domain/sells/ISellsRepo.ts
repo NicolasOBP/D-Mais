@@ -2,9 +2,10 @@ import type {
 	Client,
 	Company,
 	Driver,
-	PaymentDelay,
 	PaymentMethod,
+	PaymentTerms,
 	Pickup,
+	TablePrices,
 	Truck,
 } from "./SellsType"
 
@@ -14,7 +15,8 @@ export interface ISellsRepo {
 	pickupList: () => Promise<Pickup[]>
 	driverList: () => Promise<Driver[]>
 	companyList: () => Promise<Company[]>
-	paymentDelayList: () => Promise<PaymentDelay[]>
+	paymentTermsList: () => Promise<PaymentTerms[]>
 	paymentMethodsList: () => Promise<PaymentMethod[]>
 	fareControl: (isFareSelected: boolean) => Promise<number>
+	paymentTermsControl: (paymentTerms: PaymentTerms) => Promise<TablePrices>
 }

@@ -1,7 +1,7 @@
 import { router } from "expo-router"
 import { useEffect } from "react"
 
-import { useOrdersSend, useSellFareControl } from "@domain"
+import { useOrdersSend, useSellFareControl, useSellPaymentTermsControl } from "@domain"
 import { useAuth, useBackToSellService, useCartItems, useCartService } from "@infra"
 
 import { type SellSchema, useSellForm } from "@schemas"
@@ -16,11 +16,11 @@ import { SendSellModalBody } from "./components/SendSellModalBody"
 export function SellsScreen() {
 	const { authUser } = useAuth()
 	const { showModal, closeModal, updateModalData } = useModal()
-	const { control, formState, handleSubmit, reset } = useSellForm()
+	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm()
 	const { getSelectedProducts } = useCartService()
 	const { totalSelectedPrice: totalPrice } = useCartItems()
 	const { finishSell } = useBackToSellService()
-	const { mutate: sendOrder, isPending } = useOrdersSend({
+	const { mutate: sendOrder, isPending: isPendingOrderSend } = useOrdersSend({
 		onSuccess: () => {
 			finishSell()
 			closeModal()
@@ -30,11 +30,17 @@ export function SellsScreen() {
 	})
 	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
 		onError: () => {
-			reset((data) => {
-				return { ...data, freteSelecionado: !data.freteSelecionado }
-			})
+			setValue("freteSelecionado", !getValues("freteSelecionado"))
 		},
 	})
+	const { mutate: paymentTermsControl, isPending: isPendingPaymentTerms } =
+		useSellPaymentTermsControl({
+			onSuccess: (data) => {
+				setValue("tabela", data.tableName)
+			},
+		})
+
+	let isTotalPricePending = isPendingTotalPrice || isPendingPaymentTerms
 
 	const cartItems = getSelectedProducts()
 
@@ -52,14 +58,14 @@ export function SellsScreen() {
 					},
 				},
 			},
-			{ isLoading: isPending },
+			{ isLoading: isPendingOrderSend },
 		)
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <unintended behavior>
 	useEffect(() => {
-		updateModalData({ isLoading: isPending })
-	}, [isPending])
+		updateModalData({ isLoading: isPendingOrderSend })
+	}, [isPendingOrderSend])
 
 	function onSubmit(data: SellSchema) {
 		sendOrder({
@@ -81,12 +87,16 @@ export function SellsScreen() {
 		<Screen scrollable noHorizontalPadding>
 			<ScreenHeader title="Venda" goBackTo="/cart" noMargin />
 
-			<SellsForm control={control} fareControl={fareControl} />
+			<SellsForm
+				control={control}
+				fareControl={fareControl}
+				paymentTermsControl={paymentTermsControl}
+			/>
 
 			<SellsProductsList
 				cartItems={cartItems}
 				totalPrice={totalPrice}
-				isPendingTotalPrice={isPendingTotalPrice}
+				isPendingTotalPrice={isTotalPricePending}
 			/>
 
 			<Box padding="default" paddingHorizontal="s32">

@@ -21,6 +21,7 @@ type DropDownTextInputProps<FormType extends FieldValues, TValue> = Omit<
 			DropDownProps<TValue>,
 			"dropdownItems" | "valueKey" | "idKey" | "showTextWithId" | "maxHeight" | "isLoading"
 		>
+		extraFunction?: (value: TValue) => void
 	}
 
 export function DropDownControllerInput<FormType extends FieldValues, TValue>({
@@ -29,6 +30,7 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 	rules,
 	variant = "primary",
 	readOnly,
+	extraFunction,
 	dropDownProps,
 	...textInputProps
 }: DropDownTextInputProps<FormType, TValue>) {
@@ -101,6 +103,7 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 								topOffset={topOffset}
 								onSelectItem={(item) => {
 									field.onChange(item)
+									extraFunction?.(item)
 									setWasSelected(true)
 								}}
 								closeDropdown={closeDropdown}

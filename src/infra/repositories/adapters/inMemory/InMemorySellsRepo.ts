@@ -3,18 +3,20 @@ import type {
 	Company,
 	Driver,
 	ISellsRepo,
-	PaymentDelay,
 	PaymentMethod,
+	PaymentTerms,
 	Pickup,
+	TablePrices,
 	Truck,
 } from "@domain"
 
 import { mockClients } from "./data/mockClients"
 import { mockCompanies } from "./data/mockCompanies"
 import { mockDrivers } from "./data/mockDrivers"
-import { mockPaymentDelay } from "./data/mockPaymentDelay"
 import { mockPaymentMethods } from "./data/mockPaymentMethods"
+import { mockPaymentTerms } from "./data/mockPaymentTerms"
 import { mockPickups } from "./data/mockPickups"
+import { mockTablePrices } from "./data/mockTablesPrices"
 import { mockTrucks } from "./data/mockTrucks"
 import { delay } from "./delay"
 
@@ -49,10 +51,10 @@ export class InMemorySellsRepo implements ISellsRepo {
 		return mockCompanies
 	}
 
-	async paymentDelayList(): Promise<PaymentDelay[]> {
+	async paymentTermsList(): Promise<PaymentTerms[]> {
 		await delay()
 
-		return mockPaymentDelay
+		return mockPaymentTerms
 	}
 
 	async paymentMethodsList(): Promise<PaymentMethod[]> {
@@ -65,5 +67,14 @@ export class InMemorySellsRepo implements ISellsRepo {
 		await delay()
 
 		return isFareSelected ? -10 : 10
+	}
+
+	async paymentTermsControl(paymentTerms: PaymentTerms): Promise<TablePrices> {
+		await delay()
+		const tablePrices = mockTablePrices.find((item) => item.paymentTermsId === paymentTerms.id)
+
+		if (!tablePrices) throw new Error("Erro ao procurar tabela")
+
+		return tablePrices
 	}
 }

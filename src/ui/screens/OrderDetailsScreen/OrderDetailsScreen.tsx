@@ -1,6 +1,12 @@
 import { router, useLocalSearchParams } from "expo-router"
 
-import { type OrderDetails, useOrdersList, useOrdersManage, useSellFareControl } from "@domain"
+import {
+	type OrderDetails,
+	useOrdersList,
+	useOrdersManage,
+	useSellFareControl,
+	useSellPaymentTermsControl,
+} from "@domain"
 
 import { useSellForm } from "@schemas"
 
@@ -40,9 +46,10 @@ export function OrderDetailsScreen() {
 }
 
 function OrderDetailsContent({ order }: { order: OrderDetails }) {
-	const { control, formState, handleSubmit, reset } = useSellForm(order)
+	const { control } = useSellForm(order)
 	const { mutate: fareControl } = useSellFareControl()
 	const { mutate: manageOrder, isPending } = useOrdersManage({ onSuccess: () => router.back() })
+	const { mutate: paymentTermsControl } = useSellPaymentTermsControl({})
 	const title =
 		order.status === "completed"
 			? "Pedido Enviado"
@@ -58,6 +65,7 @@ function OrderDetailsContent({ order }: { order: OrderDetails }) {
 				fareControl={fareControl}
 				readOnly={order.status !== "pending"}
 				control={control}
+				paymentTermsControl={paymentTermsControl}
 			/>
 
 			<SellsProductsList
