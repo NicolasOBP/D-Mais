@@ -1,11 +1,11 @@
-import { QueryKeys, useAppQuery, useRepository } from "@infra";
+import { QueryKeys, useAppQuery, useRepository } from "@infra"
 
 export function useSellDriverList() {
-  const { sells } = useRepository();
+	const { sells } = useRepository()
 
-  return useAppQuery({
-    queryKey: [QueryKeys.Sells, QueryKeys.SellsDriverList],
-    fetchData: sells.driverList,
-    staleTime: 1000 * 30,
-  });
+	return useAppQuery({
+		queryKey: [QueryKeys.Sells, QueryKeys.SellsDriverList],
+		fetchData: sells.driverList,
+		staleTime: 1000 * 30,
+	})
 }

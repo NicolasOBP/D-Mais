@@ -1,19 +1,19 @@
-import { Pressable, PressableProps } from "react-native";
+import { Pressable, type PressableProps } from "react-native"
 
 import {
-  backgroundColor,
-  border,
-  createRestyleComponent,
-  layout,
-  spacing,
-  spacingShorthand,
-} from "@shopify/restyle";
+	backgroundColor,
+	border,
+	createRestyleComponent,
+	layout,
+	spacing,
+	spacingShorthand,
+} from "@shopify/restyle"
 
-import { RestyleTypes, Theme } from "@theme";
+import type { RestyleTypes, Theme } from "@theme"
 
-export type PressableBoxProps = PressableProps & RestyleTypes;
+export type PressableBoxProps = PressableProps & RestyleTypes
 
 export const PressableBox = createRestyleComponent<PressableBoxProps, Theme>(
-  [backgroundColor, spacing, spacingShorthand, layout, border],
-  Pressable,
-);
+	[backgroundColor, spacing, spacingShorthand, layout, border],
+	Pressable,
+)

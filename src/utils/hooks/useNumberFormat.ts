@@ -1,27 +1,27 @@
 function toBRLCurrency(value: number | string): string {
-  const numValue = typeof value === "string" ? parseFloat(value) : value;
+	const numValue = typeof value === "string" ? parseFloat(value) : value
 
-  if (isNaN(numValue)) {
-    return "R$ 0,00";
-  }
+	if (Number.isNaN(numValue)) {
+		return "R$ 0,00"
+	}
 
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(numValue);
+	return new Intl.NumberFormat("pt-BR", {
+		style: "currency",
+		currency: "BRL",
+	}).format(numValue)
 }
 
 function formatNumberWithThousands(value: number | string): string {
-  const numValue = typeof value === "string" ? parseFloat(value) : value;
+	const numValue = typeof value === "string" ? parseFloat(value) : value
 
-  if (isNaN(numValue)) {
-    return "0";
-  }
+	if (Number.isNaN(numValue)) {
+		return "0"
+	}
 
-  return new Intl.NumberFormat("pt-BR", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(numValue);
+	return new Intl.NumberFormat("pt-BR", {
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 0,
+	}).format(numValue)
 }
 
-export const useNumberFormat = { toBRLCurrency, formatNumberWithThousands };
+export const useNumberFormat = { toBRLCurrency, formatNumberWithThousands }

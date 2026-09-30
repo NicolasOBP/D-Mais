@@ -1,5 +1,5 @@
-import { SellsScreen } from "@screens";
+import { SellsScreen } from "@screens"
 
 export default function Sell() {
-  return <SellsScreen />;
+	return <SellsScreen />
 }

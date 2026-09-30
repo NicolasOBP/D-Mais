@@ -1,3 +1,3 @@
-export { Button } from "./Button";
-export { buttonVariants } from "./ButtonVariants";
-export type { ButtonVariant } from "./ButtonVariants";
+export { Button } from "./Button"
+export type { ButtonVariant } from "./ButtonVariants"
+export { buttonVariants } from "./ButtonVariants"

@@ -1,17 +1,20 @@
-import { IProductRepo, Product } from "@domain";
+import type { IProductRepo, Product } from "@domain"
 
-import { mockProducts } from "./data/mockProducts";
+import { mockProducts } from "./data/mockProducts"
+import { delay } from "./delay"
 
 export class InMemoryProductRepo implements IProductRepo {
-  async list(searchProduct: string | null): Promise<Product[]> {
-    const products = mockProducts;
+	async list(searchProduct: string | null): Promise<Product[]> {
+		await delay()
 
-    if (searchProduct) {
-      return products.filter((prod) =>
-        prod.title.toLowerCase().includes(searchProduct.toLowerCase()),
-      );
-    }
+		const products = mockProducts
 
-    return products;
-  }
+		if (searchProduct) {
+			return products.filter((prod) =>
+				prod.title.toLowerCase().includes(searchProduct.toLowerCase()),
+			)
+		}
+
+		return products
+	}
 }

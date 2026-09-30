@@ -1,27 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 import {
-  Keyboard,
-  KeyboardAvoidingView,
-  KeyboardAvoidingViewProps,
-  Platform,
-} from "react-native";
+	Keyboard,
+	KeyboardAvoidingView,
+	type KeyboardAvoidingViewProps,
+	Platform,
+} from "react-native"
 
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context"
 
-import { useAppTheme } from "@theme";
+import { useAppTheme } from "@theme"
 
 export function WrapperApp({ children }: React.PropsWithChildren) {
-  const behaviour = useBehavior();
-  const { colors } = useAppTheme();
+	const behaviour = useBehavior()
+	const { colors } = useAppTheme()
 
-  return (
-    <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: colors.background }}
-      behavior={behaviour}
-    >
-      <SafeAreaView style={{ flex: 1 }}>{children}</SafeAreaView>
-    </KeyboardAvoidingView>
-  );
+	return (
+		<KeyboardAvoidingView
+			style={{ flex: 1, backgroundColor: colors.background }}
+			behavior={behaviour}
+		>
+			<SafeAreaView style={{ flex: 1 }}>{children}</SafeAreaView>
+		</KeyboardAvoidingView>
+	)
 }
 
 /**
@@ -30,26 +30,25 @@ export function WrapperApp({ children }: React.PropsWithChildren) {
  * @returns
  */
 function useBehavior() {
-  const defaultValue: KeyboardAvoidingViewProps["behavior"] =
-    Platform.OS === "ios" ? "padding" : "height";
+	const defaultValue: KeyboardAvoidingViewProps["behavior"] =
+		Platform.OS === "ios" ? "padding" : "height"
 
-  const [behaviour, setBehaviour] =
-    useState<KeyboardAvoidingViewProps["behavior"]>(defaultValue);
+	const [behaviour, setBehaviour] = useState<KeyboardAvoidingViewProps["behavior"]>(defaultValue)
 
-  useEffect(() => {
-    const showListener = Keyboard.addListener("keyboardDidShow", () => {
-      setBehaviour(defaultValue);
-    });
-    const hideListener = Keyboard.addListener("keyboardDidHide", () => {
-      setBehaviour(undefined);
-    });
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <unintended behavior>
+	useEffect(() => {
+		const showListener = Keyboard.addListener("keyboardDidShow", () => {
+			setBehaviour(defaultValue)
+		})
+		const hideListener = Keyboard.addListener("keyboardDidHide", () => {
+			setBehaviour(undefined)
+		})
 
-    return () => {
-      showListener.remove();
-      hideListener.remove();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+		return () => {
+			showListener.remove()
+			hideListener.remove()
+		}
+	}, [])
 
-  return behaviour;
+	return behaviour
 }

@@ -1,10 +1,10 @@
-import { QueryKeys, useAppQuery, useRepository } from "@infra";
+import { QueryKeys, useAppQuery, useRepository } from "@infra"
 
 export function useOrdersList() {
-  const { orders } = useRepository();
+	const { orders } = useRepository()
 
-  return useAppQuery({
-    queryKey: [QueryKeys.Orders, QueryKeys.OrdersList],
-    fetchData: orders.list,
-  });
+	return useAppQuery({
+		queryKey: [QueryKeys.Orders, QueryKeys.OrdersList],
+		fetchData: orders.list,
+	})
 }

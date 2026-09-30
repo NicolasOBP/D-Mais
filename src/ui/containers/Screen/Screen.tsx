@@ -1,36 +1,36 @@
-import { PropsWithChildren } from "react";
-import { Pressable, ScrollView, View, ViewStyle } from "react-native";
+import type { PropsWithChildren } from "react"
+import { Pressable, ScrollView, View, type ViewStyle } from "react-native"
 
-import { useAppTheme } from "@theme";
-import { useHideKeyboard } from "@utils";
+import { useAppTheme } from "@theme"
+import { useHideKeyboard } from "@utils"
 
 export function Screen({
-  children,
-  scrollable = false,
-  noHorizontalPadding = false,
-  ...viewProps
+	children,
+	scrollable = false,
+	noHorizontalPadding = false,
+	...viewProps
 }: PropsWithChildren<ViewStyle> & {
-  scrollable?: boolean;
-  noHorizontalPadding?: boolean;
+	scrollable?: boolean
+	noHorizontalPadding?: boolean
 }) {
-  const { colors, spacing } = useAppTheme();
+	const { colors, spacing } = useAppTheme()
 
-  const Container = scrollable ? ScrollView : View;
+	const Container = scrollable ? ScrollView : View
 
-  return (
-    <Container
-      {...viewProps}
-      style={{
-        flex: 1,
-        backgroundColor: colors.background,
-        paddingHorizontal: noHorizontalPadding ? 0 : spacing.default,
-      }}
-      showsVerticalScrollIndicator={false}
-      keyboardShouldPersistTaps="handled"
-    >
-      <Pressable style={{ flex: 1 }} onPress={useHideKeyboard}>
-        {children}
-      </Pressable>
-    </Container>
-  );
+	return (
+		<Container
+			{...viewProps}
+			style={{
+				flex: 1,
+				backgroundColor: colors.background,
+				paddingHorizontal: noHorizontalPadding ? 0 : spacing.default,
+			}}
+			showsVerticalScrollIndicator={false}
+			keyboardShouldPersistTaps="handled"
+		>
+			<Pressable style={{ flex: 1 }} onPress={useHideKeyboard}>
+				{children}
+			</Pressable>
+		</Container>
+	)
 }

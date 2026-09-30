@@ -1,5 +1,5 @@
-import { OrderScreen } from "@screens";
+import { OrderScreen } from "@screens"
 
 export default function Orders() {
-  return <OrderScreen />;
+	return <OrderScreen />
 }

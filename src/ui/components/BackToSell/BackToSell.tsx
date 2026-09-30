@@ -1,91 +1,97 @@
-import { router, usePathname } from "expo-router";
-import { useEffect } from "react";
+import { router, usePathname } from "expo-router"
+import { useEffect } from "react"
 
 import {
-  createAnimatedComponent,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+	Easing,
+	createAnimatedComponent,
+	useSharedValue,
+	withTiming,
+} from "react-native-reanimated"
 
-import { useBackToSellService, useBackToSellState } from "@infra";
-import { useAppTheme } from "@theme";
+import { useBackToSellService, useBackToSellState, useCartService } from "@infra"
 
-import { Box, PressableBox, Text } from "@core-components";
+import { useAppTheme } from "@theme"
 
-import { useBackToSellAnimation } from "./useBackToSellAnimation";
+import { Box, PressableBox, Text } from "@core-components"
 
-const AnimatedPressableBox = createAnimatedComponent(PressableBox);
+import { useAuthCheckLeftQuota } from "../../../domain/auth/useCases/useAuthCheckLeftQuota"
 
-const ANIMATION_DURATION = 600;
+import { useBackToSellAnimation } from "./useBackToSellAnimation"
+
+const AnimatedPressableBox = createAnimatedComponent(PressableBox)
+
+const ANIMATION_DURATION = 600
 
 export function BackToSell() {
-  const { spacing } = useAppTheme();
-  const pathname = usePathname();
-  const { hasVisitedSell, showBackToSellButton, completedSell } =
-    useBackToSellState();
-  const { markVisitedSell, setShowBackToSell, resetBackToSell } =
-    useBackToSellService();
-  const progress = useSharedValue(showBackToSellButton ? 1 : 0);
+	const { spacing } = useAppTheme()
+	const { checkLeftQuota } = useAuthCheckLeftQuota({
+		onSuccess: () => {
+			router.push("/sell")
+		},
+	})
+	const { getSelectedVolume } = useCartService()
+	const pathname = usePathname()
+	const { hasVisitedSell, showBackToSellButton, completedSell } = useBackToSellState()
+	const { markVisitedSell, setShowBackToSell, resetBackToSell } = useBackToSellService()
+	const progress = useSharedValue(showBackToSellButton ? 1 : 0)
 
-  useEffect(() => {
-    const activeRoute = pathname?.split("/").filter(Boolean).pop() ?? "";
+	useEffect(() => {
+		const activeRoute = pathname?.split("/").filter(Boolean).pop() ?? ""
 
-    if (activeRoute === "sell") {
-      markVisitedSell();
-      setShowBackToSell(false);
-      return;
-    }
+		if (activeRoute === "sell") {
+			markVisitedSell()
+			setShowBackToSell(false)
+			return
+		}
 
-    if (activeRoute === "cart") {
-      resetBackToSell();
-      return;
-    }
+		if (activeRoute === "cart") {
+			resetBackToSell()
+			return
+		}
 
-    if (["home", "orders"].includes(activeRoute) && !completedSell) {
-      setShowBackToSell(hasVisitedSell);
-      return;
-    }
+		if (["home", "orders"].includes(activeRoute) && !completedSell) {
+			setShowBackToSell(hasVisitedSell)
+			return
+		}
 
-    setShowBackToSell(false);
-  }, [
-    pathname,
-    hasVisitedSell,
-    markVisitedSell,
-    resetBackToSell,
-    setShowBackToSell,
-    completedSell,
-  ]);
+		setShowBackToSell(false)
+	}, [pathname, hasVisitedSell, markVisitedSell, resetBackToSell, setShowBackToSell, completedSell])
 
-  useEffect(() => {
-    progress.value = withTiming(showBackToSellButton ? 1 : 0, {
-      duration: ANIMATION_DURATION,
-    });
-  }, [progress, showBackToSellButton]);
+	useEffect(() => {
+		progress.value = withTiming(showBackToSellButton ? 1 : 0, {
+			duration: ANIMATION_DURATION,
+			easing: Easing.ease,
+		})
+	}, [progress, showBackToSellButton])
 
-  const animatedStyle = useBackToSellAnimation(progress);
+	function handlePress() {
+		checkLeftQuota(getSelectedVolume())
+	}
 
-  return (
-    <AnimatedPressableBox
-      onPress={() => router.push("/sell")}
-      disabled={!showBackToSellButton}
-      style={[
-        animatedStyle,
-        {
-          position: "absolute",
-          top: spacing.s88,
-          right: -30,
-          zIndex: 1,
-          padding: spacing.s10,
-          alignItems: "center",
-          justifyContent: "center",
-        },
-      ]}
-    >
-      <Box alignItems="center" justifyContent="center">
-        <Text variant="text12Bold" textAlign="center">
-          Voltar para{`\n`}Venda
-        </Text>
-      </Box>
-    </AnimatedPressableBox>
-  );
+	const animatedStyle = useBackToSellAnimation(progress)
+
+	return (
+		<AnimatedPressableBox
+			onPress={handlePress}
+			disabled={!showBackToSellButton}
+			style={[
+				animatedStyle,
+				{
+					position: "absolute",
+					top: spacing.s96,
+					right: -35,
+					zIndex: 1,
+					padding: spacing.s10,
+					alignItems: "center",
+					justifyContent: "center",
+				},
+			]}
+		>
+			<Box alignItems="center" justifyContent="center">
+				<Text variant="text12Bold" textAlign="center">
+					Voltar para{`\n`}Venda
+				</Text>
+			</Box>
+		</AnimatedPressableBox>
+	)
 }

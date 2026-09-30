@@ -1,1 +1,1 @@
-export * from "./useProductVolumeModal";
+export * from "./useProductVolumeModal"

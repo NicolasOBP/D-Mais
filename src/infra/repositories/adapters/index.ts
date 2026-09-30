@@ -1,2 +1,2 @@
-export { InMemoryRepositories } from "./inMemory";
-export { QueryKeys } from "./QueryKeys";
+export { InMemoryRepositories } from "./inMemory"
+export { QueryKeys } from "./QueryKeys"

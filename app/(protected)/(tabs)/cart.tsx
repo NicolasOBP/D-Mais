@@ -1,5 +1,5 @@
-import { CartScreen } from "@screens";
+import { CartScreen } from "@screens"
 
 export default function Cart() {
-  return <CartScreen />;
+	return <CartScreen />
 }

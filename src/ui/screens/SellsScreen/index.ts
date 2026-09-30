@@ -1,1 +1,1 @@
-export { SellsScreen } from "./SellsScreen";
+export { SellsScreen } from "./SellsScreen"

@@ -1,1 +1,1 @@
-export { MMKVStorage } from "./MMKVStorage";
+export { MMKVStorage } from "./MMKVStorage"

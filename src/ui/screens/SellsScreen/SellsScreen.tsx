@@ -1,117 +1,114 @@
-import { router } from "expo-router";
-import { useEffect } from "react";
-import { FlatList, ScrollView } from "react-native";
+import { router } from "expo-router"
+import { useEffect } from "react"
 
-import { useOrdersSend } from "@domain";
-import { useBackToSellService, useCartItems, useCartService } from "@infra";
-import { SellSchema, useSellForm } from "@schemas";
-import { useAppTheme } from "@theme";
-import { useFormUtils } from "@utils";
+import { useOrdersSend, useSellFareControl, useSellPaymentTermsControl } from "@domain"
+import { useAuth, useBackToSellService, useCartItems, useCartService } from "@infra"
 
-import { ScreenHeader } from "@components";
-import { Screen, useModal } from "@containers";
-import { Box, Button, Text } from "@core-components";
+import { type SellSchema, useSellForm } from "@schemas"
+import { useFormUtils } from "@utils"
 
-import { SellsForm } from "./components/SellsForm";
-import { SellsProductCard } from "./components/SellsProductCard";
-import { SendSellModalBody } from "./components/SendSellModalBody";
+import { ScreenHeader, SellsForm, SellsProductsList, useModal } from "@components"
+import { Screen } from "@containers"
+import { Box, Button } from "@core-components"
+
+import { SendSellModalBody } from "./components/SendSellModalBody"
 
 export function SellsScreen() {
-  const { spacing } = useAppTheme();
-  const { showModal, closeModal, updateModalData } = useModal();
-  const { control, formState, handleSubmit, reset } = useSellForm();
-  const { getSelectedProducts } = useCartService();
-  const { totalSelectedPrice: totalPrice } = useCartItems();
-  const { finishSell } = useBackToSellService();
-  const { mutate: sendOrder, isPending } = useOrdersSend({
-    onSuccess: () => {
-      finishSell();
-      closeModal();
-      reset();
-      router.push("/orders");
-    },
-  });
+	const { authUser } = useAuth()
+	const { showModal, closeModal, updateModalData } = useModal()
+	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm()
+	const { getSelectedProducts } = useCartService()
+	const { totalSelectedPrice: totalPrice } = useCartItems()
+	const { finishSell } = useBackToSellService()
+	const { mutate: sendOrder, isPending: isPendingOrderSend } = useOrdersSend({
+		onSuccess: () => {
+			finishSell()
+			closeModal()
+			reset()
+			router.push("/orders")
+		},
+	})
+	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
+		onError: () => {
+			setValue("freteSelecionado", !getValues("freteSelecionado"))
+		},
+	})
+	const { mutate: paymentTermsControl, isPending: isPendingPaymentTerms } =
+		useSellPaymentTermsControl({
+			onSuccess: (data) => {
+				setValue("tabela", data.tableName)
+			},
+		})
 
-  const cartItems = getSelectedProducts();
+	let isTotalPricePending = isPendingTotalPrice || isPendingPaymentTerms
 
-  function handleShowModal(data: SellSchema) {
-    showModal(
-      {
-        BodyComponent: <SendSellModalBody />,
-        footerButton: {
-          twoButtonFooter: {
-            labelCancel: "Cancelar",
-            labelConfirm: "Confirmar",
-            onConfirm: () => onSubmit(data),
-          },
-        },
-      },
-      { isLoading: isPending },
-    );
-  }
+	const cartItems = getSelectedProducts()
 
-  useEffect(() => {
-    updateModalData({ isLoading: isPending });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPending]);
+	function handleShowModal(data: SellSchema) {
+		showModal(
+			{
+				BodyComponent: (
+					<SendSellModalBody userLeftQuota={authUser?.leftQuota} userQuota={authUser?.quota} />
+				),
+				footerButton: {
+					twoButtonFooter: {
+						labelCancel: "Cancelar",
+						labelConfirm: "Confirmar",
+						onConfirm: () => onSubmit(data),
+					},
+				},
+			},
+			{ isLoading: isPendingOrderSend },
+		)
+	}
 
-  function onSubmit(data: SellSchema) {
-    sendOrder({
-      products: cartItems,
-      totalPrice: totalPrice.toString(),
-      client: data.cliente,
-      paymentTerms: data.condicaoPagamento,
-      company: data.transportadora,
-      driver: data.motorista,
-      pickup: data.carreta,
-      table: data.tabela,
-      truck: data.caminhao,
-      fare: data.valorFrete,
-    });
-  }
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <unintended behavior>
+	useEffect(() => {
+		updateModalData({ isLoading: isPendingOrderSend })
+	}, [isPendingOrderSend])
 
-  return (
-    <Screen scrollable noHorizontalPadding>
-      <ScreenHeader title="Venda" goBackTo="/cart" noMargin />
+	function onSubmit(data: SellSchema) {
+		sendOrder({
+			products: cartItems,
+			totalPrice: totalPrice.toString(),
+			client: data.cliente,
+			paymentTerms: data.condicaoPagamento,
+			paymentMethod: data.formaPagamento,
+			company: data.transportadora,
+			driver: data.motorista,
+			pickup: data.carreta,
+			table: data.tabela,
+			truck: data.caminhao,
+			fareSelected: data.freteSelecionado,
+		})
+	}
 
-      <SellsForm control={control} />
+	return (
+		<Screen scrollable noHorizontalPadding>
+			<ScreenHeader title="Venda" goBackTo="/cart" noMargin />
 
-      <Box pb="s8">
-        <Text variant="title12" mb="s12" paddingHorizontal="default">
-          Produtos
-        </Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          directionalLockEnabled={true}
-          alwaysBounceVertical={false}
-        >
-          <FlatList
-            key={cartItems.length}
-            data={cartItems}
-            renderItem={({ item }) => (
-              <SellsProductCard key={item.cartId} item={item} />
-            )}
-            keyExtractor={(item) => item.cartId.toString()}
-            numColumns={Math.ceil(cartItems.length / 2)}
-            contentContainerStyle={{
-              gap: spacing.s12,
-            }}
-            style={{ paddingLeft: spacing.default, paddingRight: spacing.s8 }}
-          />
-        </ScrollView>
-      </Box>
+			<SellsForm
+				control={control}
+				fareControl={fareControl}
+				paymentTermsControl={paymentTermsControl}
+			/>
 
-      <Box padding="default" paddingHorizontal="s32">
-        <Button
-          disabled={useFormUtils.isFormValid(formState)}
-          variant="primary"
-          paddingVertical="s14"
-          paddingHorizontal="s20"
-          lable="Enviar venda"
-          onPress={handleSubmit(handleShowModal)}
-        />
-      </Box>
-    </Screen>
-  );
+			<SellsProductsList
+				cartItems={cartItems}
+				totalPrice={totalPrice}
+				isPendingTotalPrice={isTotalPricePending}
+			/>
+
+			<Box padding="default" paddingHorizontal="s32">
+				<Button
+					disabled={useFormUtils.isFormValid(formState)}
+					variant="primary"
+					paddingVertical="s14"
+					paddingHorizontal="s20"
+					lable="Enviar venda"
+					onPress={handleSubmit(handleShowModal)}
+				/>
+			</Box>
+		</Screen>
+	)
 }

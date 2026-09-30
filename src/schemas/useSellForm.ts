@@ -1,28 +1,46 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 
-import { sellSchema, SellSchema } from "./sellSchema";
+import type { OrderVariables } from "@domain"
 
-export function useSellForm() {
-  const { control, handleSubmit, formState, reset } = useForm<SellSchema>({
-    resolver: zodResolver(sellSchema),
-    defaultValues: {
-      cliente: { cnpjCpf: "", corporateReason: "", name: "" },
-      condicaoPagamento: "",
-      tabela: "",
-      valorFrete: "",
-      caminhao: { licensePlate: "" },
-      carreta: { licensePlate: "" },
-      motorista: { cpf: "", name: "" },
-      transportadora: { cnpj: "", name: "" },
-    },
-    mode: "onChange",
-  });
+import { type SellSchema, sellSchema } from "./sellSchema"
 
-  return {
-    control,
-    handleSubmit,
-    formState,
-    reset,
-  };
+export function useSellForm(order?: OrderVariables) {
+	const { control, handleSubmit, formState, reset, setValue, getValues } = useForm<SellSchema>({
+		resolver: zodResolver(sellSchema),
+		defaultValues: order
+			? {
+					caminhao: order.truck,
+					carreta: order.pickup,
+					cliente: order.client,
+					condicaoPagamento: order.paymentTerms,
+					formaPagamento: order.paymentMethod,
+					freteSelecionado: order.fareSelected,
+					motorista: order.driver,
+					tabela: order.table,
+					transportadora: order.company,
+				}
+			: defaultValues,
+		mode: "onChange",
+	})
+
+	return {
+		control,
+		handleSubmit,
+		formState,
+		reset,
+		setValue,
+		getValues,
+	}
+}
+
+const defaultValues: SellSchema = {
+	cliente: { cnpjCpf: "", name: "", corporateReason: "" },
+	condicaoPagamento: { description: "", id: "" },
+	formaPagamento: { description: "", id: "" },
+	tabela: "",
+	freteSelecionado: false,
+	caminhao: { licensePlate: "" },
+	motorista: { cpf: "", name: "" },
+	transportadora: { cnpj: "", name: "" },
 }

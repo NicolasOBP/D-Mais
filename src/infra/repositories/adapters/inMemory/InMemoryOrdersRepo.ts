@@ -1,20 +1,40 @@
-import { IOrdersRepo, Order, OrderDetails, OrderVariables } from "@domain";
+import type { IOrdersRepo, Order, OrderDetails, OrderVariables } from "@domain"
 
-let InnerOrders: OrderDetails[] = [];
+import { delay } from "./delay"
+
+let InnerOrders: OrderDetails[] = []
 
 export class InMemoryOrdersRepo implements IOrdersRepo {
-  async list(): Promise<OrderDetails[]> {
-    return [...InnerOrders];
-  }
+	async list(): Promise<OrderDetails[]> {
+		await delay()
 
-  async send(order: OrderVariables): Promise<Order> {
-    const newOrder: OrderDetails = {
-      id: InnerOrders.length + Math.floor(Math.random() * 1000),
-      status: "pending",
-      ...order,
-    };
-    InnerOrders = [...InnerOrders, newOrder];
+		return [...InnerOrders]
+	}
 
-    return newOrder;
-  }
+	async send(order: OrderVariables): Promise<Order> {
+		await delay()
+
+		const newOrder: OrderDetails = {
+			id: InnerOrders.length + Math.floor(Math.random() * 1000),
+			status: "completed",
+			...order,
+		}
+		InnerOrders = [...InnerOrders, newOrder]
+
+		return newOrder
+	}
+
+	async complete(id: number): Promise<void> {
+		await delay()
+
+		InnerOrders = InnerOrders.map((order) =>
+			order.id === id ? { ...order, status: "completed" } : order,
+		)
+	}
+
+	async remove(id: number): Promise<void> {
+		await delay()
+
+		InnerOrders = InnerOrders.filter((order) => order.id !== id)
+	}
 }

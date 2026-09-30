@@ -1,20 +1,20 @@
 {
-  "extends": "expo/tsconfig.base",
-  "compilerOptions": {
-    "strict": true,
-    "paths": {
-      "@core-components": ["./src/ui/components/core"],
-      "@components": ["./src/ui/components"],
-      "@containers": ["./src/ui/containers"],
-      "@screens": ["./src/ui/screens"],
-      "@mock-data": ["./src/data"],
-      "@domain": ["./src/domain"],
-      "@infra": ["./src/infra"],
-      "@utils": ["./src/utils"],
-      "@schemas": ["./src/schemas"],
-      "@hooks": ["./src/hooks"],
-      "@theme": ["./src/ui/theme"]
-    }
-  },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+	"extends": "expo/tsconfig.base",
+	"compilerOptions": {
+		"strict": true,
+		"paths": {
+			"@core-components": ["./src/ui/components/core"],
+			"@components": ["./src/ui/components"],
+			"@containers": ["./src/ui/containers"],
+			"@screens": ["./src/ui/screens"],
+			"@mock-data": ["./src/data"],
+			"@domain": ["./src/domain"],
+			"@infra": ["./src/infra"],
+			"@utils": ["./src/utils"],
+			"@schemas": ["./src/schemas"],
+			"@hooks": ["./src/hooks"],
+			"@theme": ["./src/ui/theme"]
+		}
+	},
+	"include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }

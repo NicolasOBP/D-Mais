@@ -1,29 +1,80 @@
-import { Client, Company, Driver, ISellsRepo, Pickup, Truck } from "@domain";
+import type {
+	Client,
+	Company,
+	Driver,
+	ISellsRepo,
+	PaymentMethod,
+	PaymentTerms,
+	Pickup,
+	TablePrices,
+	Truck,
+} from "@domain"
 
-import { mockClients } from "./data/mockClients";
-import { mockCompanies } from "./data/mockCompanies";
-import { mockDrivers } from "./data/mockDrivers";
-import { mockPickups } from "./data/mockPickups";
-import { mockTrucks } from "./data/mockTrucks";
+import { mockClients } from "./data/mockClients"
+import { mockCompanies } from "./data/mockCompanies"
+import { mockDrivers } from "./data/mockDrivers"
+import { mockPaymentMethods } from "./data/mockPaymentMethods"
+import { mockPaymentTerms } from "./data/mockPaymentTerms"
+import { mockPickups } from "./data/mockPickups"
+import { mockTablePrices } from "./data/mockTablesPrices"
+import { mockTrucks } from "./data/mockTrucks"
+import { delay } from "./delay"
 
 export class InMemorySellsRepo implements ISellsRepo {
-  async clientList(): Promise<Client[]> {
-    return mockClients;
-  }
+	async clientList(): Promise<Client[]> {
+		await delay()
 
-  async truckList(): Promise<Truck[]> {
-    return mockTrucks;
-  }
+		return mockClients
+	}
 
-  async pickupList(): Promise<Pickup[]> {
-    return mockPickups;
-  }
+	async truckList(): Promise<Truck[]> {
+		await delay()
 
-  async driverList(): Promise<Driver[]> {
-    return mockDrivers;
-  }
+		return mockTrucks
+	}
 
-  async companyList(): Promise<Company[]> {
-    return mockCompanies;
-  }
+	async pickupList(): Promise<Pickup[]> {
+		await delay()
+
+		return mockPickups
+	}
+
+	async driverList(): Promise<Driver[]> {
+		await delay()
+
+		return mockDrivers
+	}
+
+	async companyList(): Promise<Company[]> {
+		await delay()
+
+		return mockCompanies
+	}
+
+	async paymentTermsList(): Promise<PaymentTerms[]> {
+		await delay()
+
+		return mockPaymentTerms
+	}
+
+	async paymentMethodsList(): Promise<PaymentMethod[]> {
+		await delay()
+
+		return mockPaymentMethods
+	}
+
+	async fareControl(isFareSelected: boolean): Promise<number> {
+		await delay()
+
+		return isFareSelected ? -10 : 10
+	}
+
+	async paymentTermsControl(paymentTerms: PaymentTerms): Promise<TablePrices> {
+		await delay()
+		const tablePrices = mockTablePrices.find((item) => item.paymentTermsId === paymentTerms.id)
+
+		if (!tablePrices) throw new Error("Erro ao procurar tabela")
+
+		return tablePrices
+	}
 }

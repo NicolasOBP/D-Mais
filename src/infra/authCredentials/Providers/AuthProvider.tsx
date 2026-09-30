@@ -1,62 +1,72 @@
-import { SplashScreen } from "expo-router";
-import { createContext, PropsWithChildren, useEffect, useState } from "react";
+import { SplashScreen } from "expo-router"
+import { type PropsWithChildren, createContext, useEffect, useState } from "react"
 
-import { AuthUser } from "@domain";
+import type { AuthUser } from "@domain"
 
-import { authContextStorage } from "../authContextStorage";
-import { AuthState } from "../authCredentialsType";
+import { useRepository } from "../../repositories"
+import { authContextStorage } from "../authContextStorage"
+import type { AuthState } from "../authCredentialsType"
 
 export const AuthContext = createContext<AuthState>({
-  authUser: null,
-  isReady: false,
-  saveAuthUser: async () => {},
-  removeAuthUser: async () => {},
-});
+	authUser: null,
+	isReady: false,
+	saveAuthUser: async () => {},
+	removeAuthUser: async () => {},
+})
 
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync()
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
-  const [isReady, setIsReady] = useState<boolean>(false);
+	const [authUser, setAuthUser] = useState<AuthUser | null>(null)
+	const [isReady, setIsReady] = useState<boolean>(false)
+	const { auth } = useRepository()
 
-  async function saveAuthUser(user: AuthUser) {
-    await authContextStorage.set(user);
-    setAuthUser(user);
-  }
+	async function saveAuthUser(user: AuthUser) {
+		await authContextStorage.set(user.id)
+		setAuthUser(user)
+	}
 
-  async function removeAuthUser() {
-    await authContextStorage.remove();
-    setAuthUser(null);
-  }
+	async function removeAuthUser() {
+		await authContextStorage.remove()
+		setAuthUser(null)
+	}
 
-  async function loadAuthUser() {
-    try {
-      const user = await authContextStorage.get();
-      if (user) {
-        setAuthUser(user);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsReady(true);
-    }
-  }
+	async function loadAuthUser() {
+		try {
+			const userId = await authContextStorage.get()
+			const user = await auth.getUserById(userId)
 
-  useEffect(() => {
-    loadAuthUser();
-  }, []);
+			if (user) {
+				setAuthUser(user)
+			}
+		} catch (error) {
+			console.log(error)
+		} finally {
+			setIsReady(true)
+		}
+	}
 
-  useEffect(() => {
-    if (isReady) {
-      SplashScreen.hide();
-    }
-  }, [isReady]);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <just one load>
+	useEffect(() => {
+		loadAuthUser()
+	}, [])
 
-  return (
-    <AuthContext.Provider
-      value={{ authUser, isReady, saveAuthUser, removeAuthUser }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+	useEffect(() => {
+		if (isReady) {
+			SplashScreen.hide()
+		}
+	}, [isReady])
+
+	return (
+		<AuthContext.Provider
+			value={{
+				authUser,
+				isReady,
+				saveAuthUser,
+				removeAuthUser,
+			}}
+		>
+			{children}
+		</AuthContext.Provider>
+	)
 }

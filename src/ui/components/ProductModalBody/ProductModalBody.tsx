@@ -1,24 +1,47 @@
-// eslint-disable-next-line import/named
-import { FieldValues } from "react-hook-form";
+import type { InventoryWithoutProducts } from "@domain"
 
-import { Box } from "@core-components";
+import type { ProductSchema } from "@schemas"
 
-import { ControllerProps, FormTextInput } from "../Form/FormTextInput";
+import { Box } from "@core-components"
 
-export function ProductModalBody<FormType extends FieldValues>({
-  control,
-  name,
-}: ControllerProps<FormType>) {
-  return (
-    <Box alignItems="center">
-      <FormTextInput
-        control={control}
-        name={name}
-        boxProps={{ width: 150 }}
-        style={{ textAlign: "center" }}
-        placeholder="Quantidade"
-        keyboardType="number-pad"
-      />
-    </Box>
-  );
+import { DropDownControllerInput } from "../DropDownInputs"
+import { type ControllerProps, FormTextInput } from "../Form/FormTextInput"
+import { useModal } from "../Modal"
+
+export function ProductModalBody({
+	control,
+	inventoryList,
+}: Pick<ControllerProps<ProductSchema>, "control"> & {
+	inventoryList: InventoryWithoutProducts[] | undefined
+}) {
+	const { modalData } = useModal()
+	const updatedInventoryList: InventoryWithoutProducts[] = modalData.updatedInventoryList
+	const isLoadingInventory: boolean = modalData.isLoadingInventory
+
+	return (
+		<Box gap="s14" style={{ marginTop: -20 }}>
+			<DropDownControllerInput
+				name="inventory"
+				control={control}
+				textFieldStyle={{ paddingVertical: "s8" }}
+				label="Estoque"
+				dropDownProps={{
+					dropdownItems: inventoryList || updatedInventoryList,
+					idKey: "id",
+					valueKey: "description",
+					showTextWithId: true,
+					maxHeight: 150,
+					isLoading: isLoadingInventory,
+				}}
+			/>
+
+			<FormTextInput
+				control={control}
+				name="volume"
+				keyboardType="number-pad"
+				label="Litros"
+				textFieldStyle={{ paddingVertical: "s8" }}
+			/>
+		</Box>
+	)
 }

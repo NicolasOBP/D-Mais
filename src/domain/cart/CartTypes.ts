@@ -1,18 +1,20 @@
-import { Product } from "../product";
+import type { InventoryWithoutProducts } from "../inventory"
+import type { Product } from "../product"
 
 export interface ProductCart extends Product {
-  volume: number;
-  cartId: number;
+	volume: number
+	inventory: InventoryWithoutProducts
+	cartId: number
 }
 export interface ProductCartScreen extends ProductCart {
-  isSelected: boolean;
+	isSelected: boolean
 }
 
-export type ProductCartVariables = Omit<ProductCart, "cartId">;
-export type CartMetadata = Omit<Cart, "cartProducts">;
+export type ProductCartVariables = Omit<ProductCart, "cartId">
+export type CartMetadata = Omit<Cart, "cartProducts">
 
 export type Cart = {
-  cartProducts: ProductCart[];
-  totalPrice: number;
-  totalItems: number;
-};
+	cartProducts: ProductCart[]
+	totalPrice: number
+	totalItems: number
+}

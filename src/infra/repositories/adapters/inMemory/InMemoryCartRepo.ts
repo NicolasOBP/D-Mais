@@ -1,152 +1,156 @@
-import {
-  Cart,
-  CartMetadata,
-  ICartRepo,
-  ProductCart,
-  ProductCartScreen,
-  ProductCartVariables,
-} from "@domain";
+import type {
+	Cart,
+	CartMetadata,
+	ICartRepo,
+	InventoryWithoutProducts,
+	ProductCart,
+	ProductCartScreen,
+	ProductCartVariables,
+} from "@domain"
 
-let InnerCart: Cart = { cartProducts: [], totalPrice: 0, totalItems: 0 };
+import { delay } from "./delay"
+
+let InnerCart: Cart = { cartProducts: [], totalPrice: 0, totalItems: 0 }
 
 export class InMemoryCartRepo implements ICartRepo {
-  async add(product: ProductCartVariables): Promise<ProductCart> {
-    const existingProduct = InnerCart.cartProducts.find(
-      (cartProduct) => cartProduct.id === product.id,
-    );
+	async add(product: ProductCartVariables): Promise<ProductCart> {
+		await delay()
 
-    if (existingProduct) {
-      existingProduct.volume += product.volume;
-      InnerCart.totalPrice = Number(
-        (InnerCart.totalPrice + product.price * product.volume).toFixed(2),
-      );
+		const existingProduct = InnerCart.cartProducts.find(
+			(cartProduct) => cartProduct.id === product.id,
+		)
 
-      return existingProduct;
-    }
+		if (
+			existingProduct &&
+			existingProduct.inventory.description === product.inventory.description &&
+			existingProduct.inventory.id === product.inventory.id
+		) {
+			existingProduct.volume += product.volume
+			InnerCart.totalPrice = Number(
+				(InnerCart.totalPrice + product.price * product.volume).toFixed(2),
+			)
 
-    const productCart = {
-      ...product,
-      cartId: InnerCart.cartProducts.length + Math.random(),
-    };
+			return existingProduct
+		}
 
-    InnerCart.cartProducts.push(productCart);
-    InnerCart.totalItems++;
-    InnerCart.totalPrice = Number(
-      (InnerCart.totalPrice + productCart.price * productCart.volume).toFixed(
-        2,
-      ),
-    );
+		const newProductCart = {
+			...product,
+			cartId: InnerCart.cartProducts.length + Math.random(),
+		}
 
-    return productCart;
-  }
+		InnerCart.cartProducts.push(newProductCart)
+		InnerCart.totalItems++
+		InnerCart.totalPrice = Number(
+			(InnerCart.totalPrice + newProductCart.price * newProductCart.volume).toFixed(2),
+		)
 
-  async getCartMetadata(): Promise<CartMetadata> {
-    return {
-      totalItems: InnerCart.totalItems,
-      totalPrice: Math.abs(InnerCart.totalPrice),
-    };
-  }
+		return newProductCart
+	}
 
-  async getCartItems(): Promise<ProductCartScreen[]> {
-    return InnerCart.cartProducts as ProductCartScreen[];
-  }
+	async getCartMetadata(): Promise<CartMetadata> {
+		await delay()
 
-  async editVolume(
-    productCartId: ProductCart["cartId"],
-    newVolume: number,
-  ): Promise<ProductCart> {
-    let itemCart = InnerCart.cartProducts.filter(
-      (prod) => prod.cartId === productCartId,
-    );
+		return {
+			totalItems: InnerCart.totalItems,
+			totalPrice: Math.abs(InnerCart.totalPrice),
+		}
+	}
 
-    if (itemCart.length === 0) {
-      throw new Error("Product not found in cart");
-    }
+	async getCartItems(): Promise<ProductCartScreen[]> {
+		await delay()
 
-    const item = itemCart[0];
+		return InnerCart.cartProducts as ProductCartScreen[]
+	}
 
-    if (item.volume === newVolume) {
-      return item;
-    }
+	async editCartProduct(
+		productCartId: ProductCart["cartId"],
+		newVolume: number,
+		newInventory: InventoryWithoutProducts,
+	): Promise<ProductCart> {
+		await delay()
 
-    const oldPrice = item.price * item.volume;
-    const newPrice = item.price * newVolume;
+		let itemCart = InnerCart.cartProducts.filter((prod) => prod.cartId === productCartId)
 
-    InnerCart.totalPrice = Number(
-      (InnerCart.totalPrice - oldPrice + newPrice).toFixed(2),
-    );
+		if (itemCart.length === 0) {
+			throw new Error("Product not found in cart")
+		}
 
-    if (newVolume === 0) {
-      InnerCart.cartProducts = InnerCart.cartProducts.filter(
-        (prod) => prod.cartId !== productCartId,
-      );
-      InnerCart.totalItems--;
-    }
+		const item = itemCart[0]
 
-    item.volume = newVolume;
+		if (item.volume === newVolume && item.inventory === newInventory) {
+			return item
+		}
 
-    return item;
-  }
+		const oldPrice = item.price * item.volume
+		const newPrice = item.price * newVolume
 
-  async deleteItem(
-    productCartId: ProductCart["cartId"],
-  ): Promise<ProductCart["cartId"]> {
-    const product = InnerCart.cartProducts.find(
-      (prod) => prod.cartId === productCartId,
-    );
+		InnerCart.totalPrice = Number((InnerCart.totalPrice - oldPrice + newPrice).toFixed(2))
 
-    if (!product) {
-      throw new Error("Produto não encontrado");
-    }
+		if (newVolume === 0) {
+			InnerCart.cartProducts = InnerCart.cartProducts.filter(
+				(prod) => prod.cartId !== productCartId,
+			)
+			InnerCart.totalItems--
+		}
 
-    const cartInitialLenght = InnerCart.cartProducts.length;
+		item.volume = newVolume
+		item.inventory = newInventory
 
-    InnerCart.cartProducts = InnerCart.cartProducts.filter(
-      (prod) => prod.cartId !== productCartId,
-    );
+		return item
+	}
 
-    const cartCurrentlLenght = InnerCart.cartProducts.length;
+	async deleteItem(productCartId: ProductCart["cartId"]): Promise<ProductCart["cartId"]> {
+		await delay()
 
-    if (cartInitialLenght === cartCurrentlLenght) {
-      throw new Error("Erro ao excluir produto");
-    }
+		const product = InnerCart.cartProducts.find((prod) => prod.cartId === productCartId)
 
-    InnerCart.totalItems--;
-    InnerCart.totalPrice -= product.price * product.volume;
+		if (!product) {
+			throw new Error("Produto não encontrado")
+		}
 
-    return productCartId;
-  }
+		const cartInitialLenght = InnerCart.cartProducts.length
 
-  async deleteItems(
-    productCartIds: ProductCart["cartId"][],
-  ): Promise<ProductCart["cartId"][]> {
-    if (!productCartIds.length) {
-      return [];
-    }
+		InnerCart.cartProducts = InnerCart.cartProducts.filter((prod) => prod.cartId !== productCartId)
 
-    const productsToRemove = InnerCart.cartProducts.filter((product) =>
-      productCartIds.includes(product.cartId),
-    );
+		const cartCurrentlLenght = InnerCart.cartProducts.length
 
-    if (productsToRemove.length !== productCartIds.length) {
-      throw new Error("Algum produto não foi encontrado");
-    }
+		if (cartInitialLenght === cartCurrentlLenght) {
+			throw new Error("Erro ao excluir produto")
+		}
 
-    InnerCart.cartProducts = InnerCart.cartProducts.filter(
-      (product) => !productCartIds.includes(product.cartId),
-    );
+		InnerCart.totalItems--
+		InnerCart.totalPrice -= product.price * product.volume
 
-    InnerCart.totalItems -= productsToRemove.length;
-    InnerCart.totalPrice = Number(
-      (
-        InnerCart.totalPrice -
-        productsToRemove.reduce(
-          (sum, product) => sum + product.price * product.volume,
-          0,
-        )
-      ).toFixed(2),
-    );
+		return productCartId
+	}
 
-    return productCartIds;
-  }
+	async deleteItems(productCartIds: ProductCart["cartId"][]): Promise<ProductCart["cartId"][]> {
+		await delay()
+
+		if (!productCartIds.length) {
+			return []
+		}
+
+		const productsToRemove = InnerCart.cartProducts.filter((product) =>
+			productCartIds.includes(product.cartId),
+		)
+
+		if (productsToRemove.length !== productCartIds.length) {
+			throw new Error("Algum produto não foi encontrado")
+		}
+
+		InnerCart.cartProducts = InnerCart.cartProducts.filter(
+			(product) => !productCartIds.includes(product.cartId),
+		)
+
+		InnerCart.totalItems -= productsToRemove.length
+		InnerCart.totalPrice = Number(
+			(
+				InnerCart.totalPrice -
+				productsToRemove.reduce((sum, product) => sum + product.price * product.volume, 0)
+			).toFixed(2),
+		)
+
+		return productCartIds
+	}
 }
