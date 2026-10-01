@@ -43,5 +43,8 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
 
 			options?.onSuccess?.(order)
 		},
+		onError: (error) => {
+			options?.onError?.(error.message)
+		},
 	})
 }

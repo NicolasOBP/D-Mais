@@ -1,3 +1,5 @@
+import { useCartService } from "@infra"
+
 import { useFormUtils } from "@utils"
 
 import { ScreenHeader, SellsForm, SellsProductsList } from "@components"
@@ -7,17 +9,18 @@ import { Box, Button } from "@core-components"
 import { useSellScreen } from "./useSellScreen"
 
 export function SellsScreen() {
+	const { getSelectedProducts } = useCartService()
+	const cartItems = getSelectedProducts()
 	const {
 		handleShowModal,
 		handleSubmit,
 		fareControl,
 		paymentTermsControl,
-		cartItems,
 		control,
 		totalPrice,
 		isTotalPricePending,
 		formState,
-	} = useSellScreen()
+	} = useSellScreen(cartItems)
 
 	return (
 		<Screen scrollable noHorizontalPadding>
@@ -37,7 +40,7 @@ export function SellsScreen() {
 
 			<Box padding="default" paddingHorizontal="s32">
 				<Button
-					disabled={useFormUtils.isFormValid(formState)}
+					disabled={useFormUtils.isFormValid(formState) || isTotalPricePending}
 					variant="primary"
 					paddingVertical="s14"
 					paddingHorizontal="s20"

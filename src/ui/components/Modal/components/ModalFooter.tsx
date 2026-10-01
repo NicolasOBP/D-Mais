@@ -43,8 +43,8 @@ export function ModalFooter({ ...modalFooterProps }: ModalFooterProps) {
 		return (
 			<OneButtonFooter
 				{...modalFooterProps.oneButtonFooter}
-				disabled={isDisabled || modalData.isLoading}
-				isLoading={!!modalData.isLoading}
+				disabled={isDisabled || modalData?.isLoading}
+				isLoading={modalData?.isLoading}
 			/>
 		)
 	}
@@ -57,7 +57,7 @@ function TwoButtonFooter(props: ModalFooterProps["twoButtonFooter"] & { isLoadin
 		<Box alignItems="center" flexDirection="row" justifyContent="space-around">
 			<Button
 				variant="error"
-				lable={props!.labelCancel}
+				lable={props.labelCancel}
 				paddingVertical="s10"
 				paddingHorizontal="s24"
 				onPress={closeModal}
@@ -65,11 +65,11 @@ function TwoButtonFooter(props: ModalFooterProps["twoButtonFooter"] & { isLoadin
 			/>
 			<Button
 				variant="success"
-				lable={props!.labelConfirm}
+				lable={props.labelConfirm}
 				paddingVertical="s10"
 				paddingHorizontal="s24"
-				onPress={props!.onConfirm}
-				isLoading={props!.isLoading}
+				onPress={props.onConfirm}
+				isLoading={props.isLoading}
 				style={{ minWidth: 120 }}
 			/>
 		</Box>
@@ -79,13 +79,13 @@ function OneButtonFooter(props: ModalFooterProps["oneButtonFooter"] & { isLoadin
 	return (
 		<Box alignItems="center">
 			<Button
-				isLoading={props!.isLoading}
+				isLoading={props.isLoading}
 				variant="primary"
-				lable={props!.label}
+				lable={props.label}
 				paddingVertical="s10"
 				paddingHorizontal="s24"
-				onPress={props!.onPress}
-				disabled={props!.disabled}
+				onPress={props.onPress}
+				disabled={props.disabled}
 				style={{ minWidth: 125 }}
 			/>
 		</Box>

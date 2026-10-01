@@ -5,6 +5,7 @@ import { CheckIcon } from "../../../../assets/icons/CheckIcon"
 import { ChevronDownIcon } from "../../../../assets/icons/ChevronDownIcon"
 import { ChevronRightIcon } from "../../../../assets/icons/ChevronRightIcon"
 import { CloseIcon } from "../../../../assets/icons/CloseIcon"
+import { ErrorRoundIcon } from "../../../../assets/icons/ErrorRoundIcon"
 import { EyeOffIcon } from "../../../../assets/icons/EyeOffIcon"
 import { EyeOnIcon } from "../../../../assets/icons/EyeOnIcon"
 import { HomeFillIcon } from "../../../../assets/icons/HomeFillIcon"
@@ -34,6 +35,7 @@ export const iconRegistry = {
 	chevronRight: ChevronRightIcon,
 	chevronDown: ChevronDownIcon,
 	loading: LoadingIcon,
+	errorRound: ErrorRoundIcon,
 }
 
 export type IconType = typeof iconRegistry

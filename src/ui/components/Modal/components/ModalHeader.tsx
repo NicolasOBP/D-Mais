@@ -18,8 +18,7 @@ export function ModalHeader({ title, subtitle }: Props) {
 
 	return (
 		<Box alignItems="center" justifyContent="space-between" flexDirection="row">
-			<Box />
-			<Box>
+			<Box flexGrow={1} flexShrink={1}>
 				<Text variant="title20" textAlign="center">
 					{title}
 				</Text>
@@ -29,7 +28,7 @@ export function ModalHeader({ title, subtitle }: Props) {
 					</Text>
 				)}
 			</Box>
-			<Box>
+			<Box alignSelf="flex-start">
 				<Icon name="close" color="primary" onPress={handleClose} />
 			</Box>
 		</Box>
