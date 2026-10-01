@@ -66,6 +66,8 @@ export class InMemorySellsRepo implements ISellsRepo {
 	async fareControl(isFareSelected: boolean): Promise<number> {
 		await delay()
 
+		if (Math.random() < 0.5) throw new Error("Erro de servidor")
+
 		return isFareSelected ? -10 : 10
 	}
 
@@ -74,6 +76,8 @@ export class InMemorySellsRepo implements ISellsRepo {
 		const tablePrices = mockTablePrices.find((item) => item.paymentTermsId === paymentTerms.id)
 
 		if (!tablePrices) throw new Error("Erro ao procurar tabela")
+
+		if (Math.random() < 0.5) throw new Error("Erro de servidor")
 
 		return tablePrices
 	}

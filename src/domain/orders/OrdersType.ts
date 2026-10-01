@@ -8,7 +8,7 @@ export interface Order {
 	products: Pick<ProductCart, "cartId" | "title" | "volume">[]
 	client: Client
 	status: OrdersStatus
-	totalPrice: string
+	totalPrice: number
 }
 
 export interface OrderDetails extends Order {

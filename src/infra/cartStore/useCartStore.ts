@@ -15,7 +15,7 @@ const initialState: {
 export type CartStoreType = typeof initialState & {
 	addProductToCart: (product: ProductCart) => void
 	removeProductFromCart: (productCartId: number) => void
-	removeProductsFromCart: (productCartIds: number[]) => void
+	removeProductsFromCart: (productCartIds: number[], orderTotalPrice: number) => void
 	updateCartProduct: (
 		productCartId: number,
 		newVolume: number,
@@ -73,7 +73,7 @@ const useCartStore = create<CartStoreType>()((set, get) => ({
 		})
 	},
 
-	removeProductsFromCart: (productCartIds) => {
+	removeProductsFromCart: (productCartIds, orderTotalPrice) => {
 		set((state) => {
 			const productsToRemove = state.productCartStore.filter((item) =>
 				productCartIds.includes(item.cartId),
@@ -82,9 +82,9 @@ const useCartStore = create<CartStoreType>()((set, get) => ({
 			productsToRemove.forEach((prod) => {
 				if (prod.isSelected) {
 					state.selectedItems -= 1
-					state.totalSelectedPrice -= prod.volume * prod.price
 				}
 			})
+			state.totalSelectedPrice -= orderTotalPrice
 
 			return {
 				productCartStore: state.productCartStore.filter(
