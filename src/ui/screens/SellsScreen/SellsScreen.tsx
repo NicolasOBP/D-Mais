@@ -36,7 +36,7 @@ export function SellsScreen() {
 	const { mutate: paymentTermsControl, isPending: isPendingPaymentTerms } =
 		useSellPaymentTermsControl({
 			onSuccess: (data) => {
-				setValue("tabela", data.tableName)
+				setValue("tabela", data.tableName, { shouldValidate: true })
 			},
 		})
 
@@ -70,7 +70,7 @@ export function SellsScreen() {
 	function onSubmit(data: SellSchema) {
 		sendOrder({
 			products: cartItems,
-			totalPrice: totalPrice.toString(),
+			totalPrice: totalPrice,
 			client: data.cliente,
 			paymentTerms: data.condicaoPagamento,
 			paymentMethod: data.formaPagamento,
