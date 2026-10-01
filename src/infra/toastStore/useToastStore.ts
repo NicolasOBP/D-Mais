@@ -9,7 +9,7 @@ export type Toast = {
 	duration?: number
 }
 
-export const initialToastState: { toast: Toast } = {
+const initialToastState: { toast: Toast } = {
 	toast: {
 		message: "",
 		type: "success",
@@ -18,7 +18,7 @@ export const initialToastState: { toast: Toast } = {
 	},
 }
 
-export type ToastStoreType = { toast: Toast } & {
+type ToastStoreType = { toast: Toast } & {
 	/**
 	 * Default Toast duration is 2 sec
 	 * @returns

@@ -7,9 +7,8 @@ import {
 	useAuth,
 	useCartService,
 	useRepository,
+	useToast,
 } from "@infra"
-
-import { useToast } from "@components"
 
 import type { Order, OrderVariables } from "../OrdersType"
 

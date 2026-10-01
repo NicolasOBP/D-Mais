@@ -1,8 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query"
 
-import { type MutationOptions, QueryKeys, useAppMutation, useRepository } from "@infra"
-
-import { useToast } from "@components"
+import { type MutationOptions, QueryKeys, useAppMutation, useRepository, useToast } from "@infra"
 
 import type { ProductCart } from ".."
 

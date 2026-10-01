@@ -6,11 +6,11 @@ import { useScrollToTop } from "@react-navigation/native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 
 import { type ProductCartScreen, useAuthCheckLeftQuota, useCartGetItems } from "@domain"
-import { useCartItems, useCartService } from "@infra"
+import { useCartItems, useCartService, useToast } from "@infra"
 
 import { useAppTheme } from "@theme"
 
-import { EmptyList, LoadingListState, ScreenHeader, useToast } from "@components"
+import { EmptyList, LoadingListState, ScreenHeader } from "@components"
 import { Screen } from "@containers"
 import { Box } from "@core-components"
 

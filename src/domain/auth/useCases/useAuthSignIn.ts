@@ -1,6 +1,4 @@
-import { type MutationOptions, useAppMutation, useAuth, useRepository } from "@infra"
-
-import { useToast } from "@components"
+import { type MutationOptions, useAppMutation, useAuth, useRepository, useToast } from "@infra"
 
 import type { AuthUser } from "../AuthUser"
 

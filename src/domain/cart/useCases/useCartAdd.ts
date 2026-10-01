@@ -6,9 +6,8 @@ import {
 	useAppMutation,
 	useCartService,
 	useRepository,
+	useToast,
 } from "@infra"
-
-import { useToast } from "@components"
 
 import type { ProductCart, ProductCartVariables } from ".."
 

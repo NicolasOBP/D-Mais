@@ -1,6 +1,4 @@
-import { type MutationOptions, useAppMutation, useAuth, useRepository } from "@infra"
-
-import { useToast } from "../../../ui/components/Toast/"
+import { type MutationOptions, useAppMutation, useAuth, useRepository, useToast } from "@infra"
 
 export function useAuthCheckLeftQuota(options?: MutationOptions<void>) {
 	const { auth } = useRepository()
