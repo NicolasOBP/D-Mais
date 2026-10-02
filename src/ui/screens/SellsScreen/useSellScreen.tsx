@@ -7,7 +7,7 @@ import {
 	useSellFareControl,
 	useSellPaymentTermsControl,
 } from "@domain"
-import { useAuth, useBackToSellService, useCartItems } from "@infra"
+import { useAuth, useBackToSellService, useCartItems, useOrderItems, useOrderService } from "@infra"
 
 import { type SellSchema, useSellForm } from "@schemas"
 
@@ -19,10 +19,16 @@ import { SendSellModalBody } from "./components/SendSellModalBody"
 export function useSellScreen(cartItems: ProductCartScreen[]) {
 	const { authUser } = useAuth()
 	const { finishSell } = useBackToSellService()
+	const { setProductsTotal, setOrderDetails, clearOrder } = useOrderService()
 	const { showModal, closeModal, updateModalData } = useModal()
 
-	const { totalSelectedPrice: totalPrice } = useCartItems()
+	const { totalSelectedPrice: productsTotal } = useCartItems()
+	const { totalPrice } = useOrderItems()
 	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm()
+
+	useEffect(() => {
+		setProductsTotal(productsTotal)
+	}, [productsTotal, setProductsTotal])
 
 	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
 		onError: () => {
@@ -38,6 +44,7 @@ export function useSellScreen(cartItems: ProductCartScreen[]) {
 	const { mutate: sendOrder, isPending: isPendingOrderSend } = useOrdersSend({
 		onSuccess: () => {
 			finishSell()
+			clearOrder()
 			closeModal()
 			reset()
 			router.push("/orders")
@@ -72,7 +79,7 @@ export function useSellScreen(cartItems: ProductCartScreen[]) {
 	}
 
 	function onSubmit(data: SellSchema) {
-		sendOrder({
+		const order = {
 			products: cartItems,
 			totalPrice: totalPrice,
 			client: data.cliente,
@@ -84,7 +91,10 @@ export function useSellScreen(cartItems: ProductCartScreen[]) {
 			table: data.tabela,
 			truck: data.caminhao,
 			fareSelected: data.freteSelecionado,
-		})
+		}
+
+		setOrderDetails(order)
+		sendOrder(order)
 	}
 
 	function handleErrorShowModal() {

@@ -1,7 +1,7 @@
 import {
 	type MutationOptions,
 	useAppMutation,
-	useCartService,
+	useOrderService,
 	useRepository,
 	useToast,
 } from "@infra"
@@ -11,12 +11,12 @@ import type { PaymentTerms, TablePrices } from "../SellsType"
 export function useSellPaymentTermsControl(options?: MutationOptions<TablePrices>) {
 	const { sells } = useRepository()
 	const { showToast } = useToast()
-	const { updateTotalSelectedPrice } = useCartService()
+	const { updateOrderTotalPrice } = useOrderService()
 
 	return useAppMutation<TablePrices, PaymentTerms>({
 		mutationFn: (paymentTerms) => sells.paymentTermsControl(paymentTerms),
 		onSuccess: (data) => {
-			updateTotalSelectedPrice(data.price)
+			updateOrderTotalPrice(data.price)
 			options?.onSuccess?.(data)
 		},
 		onError: (error) => {

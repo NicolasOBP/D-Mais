@@ -33,10 +33,7 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
 			)
 
 			cart.deleteItems(order.products.map((prod) => prod.cartId))
-			removeProductsFromCart(
-				order.products.map((prod) => prod.cartId),
-				order.totalPrice,
-			)
+			removeProductsFromCart(order.products.map((prod) => prod.cartId))
 
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.Orders] })
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.Cart] })
