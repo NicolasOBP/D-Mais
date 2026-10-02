@@ -5,7 +5,7 @@ import { type ListRenderItemInfo, RefreshControl } from "react-native"
 import { useScrollToTop } from "@react-navigation/native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 
-import { type Order, useOrdersList } from "@domain"
+import { type Order, useOrdersList, useOrdersListStorage } from "@domain"
 
 import { useAppTheme } from "@theme"
 
@@ -18,6 +18,7 @@ import { OrdersProductCard } from "./components"
 export function OrderScreen() {
 	const { spacing } = useAppTheme()
 	const { data: orders, isLoading, refetch } = useOrdersList()
+	const { data: storageOrders } = useOrdersListStorage()
 
 	const flatListRef = useRef(null)
 	useScrollToTop(flatListRef)
@@ -33,6 +34,10 @@ export function OrderScreen() {
 		)
 	}
 
+	function organizeData(): Order[] {
+		return [...(storageOrders ?? []), ...(orders ?? [])]
+	}
+
 	return (
 		<Screen>
 			<ScreenHeader noMargin title="Pedidos" />
@@ -43,7 +48,7 @@ export function OrderScreen() {
 				) : (
 					<Animated.FlatList
 						ref={flatListRef}
-						data={orders}
+						data={organizeData()}
 						keyExtractor={(item) => item.id.toString()}
 						renderItem={renderItem}
 						numColumns={2}

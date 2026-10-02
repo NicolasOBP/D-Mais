@@ -26,10 +26,6 @@ export function useSellScreen(cartItems: ProductCartScreen[]) {
 	const { totalPrice } = useOrderItems()
 	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm()
 
-	useEffect(() => {
-		setProductsTotal(productsTotal)
-	}, [productsTotal, setProductsTotal])
-
 	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
 		onError: () => {
 			setValue("freteSelecionado", !getValues("freteSelecionado"))
@@ -50,6 +46,8 @@ export function useSellScreen(cartItems: ProductCartScreen[]) {
 			router.push("/orders")
 		},
 		onError: () => {
+			finishSell()
+
 			closeModal()
 			handleErrorShowModal()
 		},
@@ -59,6 +57,10 @@ export function useSellScreen(cartItems: ProductCartScreen[]) {
 	useEffect(() => {
 		updateModalData({ isLoading: isPendingOrderSend })
 	}, [isPendingOrderSend])
+
+	useEffect(() => {
+		setProductsTotal(productsTotal)
+	}, [productsTotal, setProductsTotal])
 
 	function handleShowModal(data: SellSchema) {
 		showModal(
@@ -100,6 +102,7 @@ export function useSellScreen(cartItems: ProductCartScreen[]) {
 	function handleErrorShowModal() {
 		showModal({
 			headerTitle: `Erro ao enviar venda, tente novamente entrando em "Pedidos"`,
+			showCloseButton: false,
 			BodyComponent: (
 				<Box alignSelf="center">
 					<Icon name="errorRound" size={70} color="red" />
@@ -109,7 +112,11 @@ export function useSellScreen(cartItems: ProductCartScreen[]) {
 				oneButtonFooter: {
 					label: "Confirmar",
 					onPress: () => {
-						console.log("AAA")
+						reset()
+						clearOrder()
+
+						closeModal()
+						router.push("/orders")
 					},
 				},
 			},

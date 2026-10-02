@@ -1,3 +1,4 @@
 export { useOrdersList } from "./useOrdersList"
+export { useOrdersListStorage } from "./useOrdersListStorage"
 export { useOrdersManage } from "./useOrdersManage"
 export { useOrdersSend } from "./useOrdersSend"

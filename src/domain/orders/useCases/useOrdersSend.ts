@@ -6,11 +6,14 @@ import {
 	useAppMutation,
 	useAuth,
 	useCartService,
+	useOrderItems,
 	useRepository,
 	useToast,
 } from "@infra"
 
 import type { Order, OrderVariables } from "../OrdersType"
+
+import { useOrderSaveStorage } from "./useOrderSaveStorage"
 
 export function useOrdersSend(options?: MutationOptions<Order>) {
 	const { orders, cart, auth } = useRepository()
@@ -18,6 +21,8 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
 	const { showToast } = useToast()
 	const queryClient = useQueryClient()
 	const { removeProductsFromCart } = useCartService()
+	const { products: orderProducts } = useOrderItems()
+	const { mutate: saveOrderInStorage } = useOrderSaveStorage()
 
 	return useAppMutation<Order, OrderVariables>({
 		mutationFn: (order) => orders.send(order),
@@ -41,6 +46,14 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
 			options?.onSuccess?.(order)
 		},
 		onError: (error) => {
+			saveOrderInStorage("save order")
+
+			cart.deleteItems(orderProducts.map((prod) => prod.cartId))
+			removeProductsFromCart(orderProducts.map((prod) => prod.cartId))
+
+			queryClient.invalidateQueries({ queryKey: [QueryKeys.Orders] })
+			queryClient.invalidateQueries({ queryKey: [QueryKeys.Cart] })
+
 			options?.onError?.(error.message)
 		},
 	})

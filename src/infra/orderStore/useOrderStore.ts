@@ -2,6 +2,8 @@ import { create } from "zustand"
 
 import type { OrderDetails, OrderVariables } from "@domain"
 
+import { orderStorage } from "./orderStorage"
+
 const initialOrder: OrderDetails = {
 	id: 0,
 	products: [],
@@ -17,12 +19,14 @@ const initialOrder: OrderDetails = {
 	company: { name: "", cnpj: "" },
 }
 
-export type OrderStoreType = OrderDetails & {
+type OrderStoreType = OrderDetails & {
 	productsTotal: number
 	priceAdjustments: number
 	setProductsTotal: (productsTotal: number) => void
 	updateOrderTotalPrice: (priceAdjustment: number) => void
 	setOrderDetails: (order: OrderVariables) => void
+	saveOrderInStorage: () => Promise<void>
+	getOrderFromStorage: () => Promise<OrderDetails[]>
 	clearOrder: () => void
 }
 
@@ -41,6 +45,17 @@ export const useOrderStore = create<OrderStoreType>()((set) => ({
 			totalPrice: state.totalPrice + priceAdjustment,
 		})),
 	setOrderDetails: (order) => set(order),
+	saveOrderInStorage: async () => {
+		const { saveOrder } = orderStorage
+		const order: OrderDetails = useOrderStore.getState()
+		await saveOrder(order)
+	},
+	getOrderFromStorage: async () => {
+		const { getOrders } = orderStorage
+		const orders = await getOrders()
+
+		return orders
+	},
 	clearOrder: () => set({ ...initialOrder, productsTotal: 0, priceAdjustments: 0 }),
 }))
 
@@ -50,12 +65,26 @@ export function useOrderTotalPrice(): number {
 
 export function useOrderServiceZustand(): Pick<
 	OrderStoreType,
-	"setProductsTotal" | "updateOrderTotalPrice" | "setOrderDetails" | "clearOrder"
+	| "setProductsTotal"
+	| "updateOrderTotalPrice"
+	| "setOrderDetails"
+	| "clearOrder"
+	| "saveOrderInStorage"
+	| "getOrderFromStorage"
 > {
 	const setProductsTotal = useOrderStore((state) => state.setProductsTotal)
 	const updateOrderTotalPrice = useOrderStore((state) => state.updateOrderTotalPrice)
 	const setOrderDetails = useOrderStore((state) => state.setOrderDetails)
 	const clearOrder = useOrderStore((state) => state.clearOrder)
+	const saveOrderInStorage = useOrderStore((state) => state.saveOrderInStorage)
+	const getOrderFromStorage = useOrderStore((state) => state.getOrderFromStorage)
 
-	return { setProductsTotal, updateOrderTotalPrice, setOrderDetails, clearOrder }
+	return {
+		setProductsTotal,
+		saveOrderInStorage,
+		updateOrderTotalPrice,
+		setOrderDetails,
+		clearOrder,
+		getOrderFromStorage,
+	}
 }
