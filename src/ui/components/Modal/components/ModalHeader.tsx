@@ -6,9 +6,10 @@ import { useModal } from "../useModal"
 type Props = {
 	title?: string
 	subtitle?: string
+	showCloseButton?: boolean
 }
 
-export function ModalHeader({ title, subtitle }: Props) {
+export function ModalHeader({ title, subtitle, showCloseButton = true }: Props) {
 	const { closeModal, modalData } = useModal()
 
 	function handleClose() {
@@ -28,9 +29,11 @@ export function ModalHeader({ title, subtitle }: Props) {
 					</Text>
 				)}
 			</Box>
-			<Box alignSelf="flex-start">
-				<Icon name="close" color="primary" onPress={handleClose} />
-			</Box>
+			{showCloseButton && (
+				<Box alignSelf="flex-start">
+					<Icon name="close" color="primary" onPress={handleClose} />
+				</Box>
+			)}
 		</Box>
 	)
 }

@@ -8,6 +8,7 @@ export type Modal = {
 		isModalOpen: boolean
 		headerTitle?: string
 		headerSubtitle?: string
+		showCloseButton?: boolean
 		HeaderComponent?: React.ReactElement
 		FooterComponent?: React.ReactElement
 		BodyComponent: React.ReactElement | undefined
