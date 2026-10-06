@@ -13,6 +13,9 @@ export function useOrderSaveStorage() {
 			queryClient.invalidateQueries({
 				queryKey: [QueryKeys.Orders, QueryKeys.OrdersListStorage],
 			})
+			queryClient.invalidateQueries({
+				queryKey: [QueryKeys.Orders, QueryKeys.OrdersTotalStorageOrders],
+			})
 		},
 		onError: (error) => {
 			showToast({

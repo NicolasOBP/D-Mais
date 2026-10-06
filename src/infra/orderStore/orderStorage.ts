@@ -7,7 +7,11 @@ const ORDER_KEY = "@Order"
 async function saveOrder(order: OrderDetails): Promise<void> {
 	try {
 		const previousOrders = await getOrders()
-		const newOrders = [...previousOrders, order]
+		const orderToSave = {
+			...order,
+			id: Date.now() * 1000 + Math.random() * 1000,
+		}
+		const newOrders = [...previousOrders, orderToSave]
 		await storage.setItem(ORDER_KEY, newOrders)
 	} catch (error) {
 		console.log(error)

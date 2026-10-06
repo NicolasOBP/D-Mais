@@ -69,7 +69,7 @@ export function TabBar({ navigation, state, descriptors }: BottomTabBarProps) {
 
 					return (
 						<PressableBox key={route.key} alignItems="center" onPress={onPress}>
-							<TabBadge number={tabBadgeNumber} />
+							<TabBadge number={tabBadgeNumber} screenName={route.name} />
 							<Icon name={isFocused ? iconFocus : iconUnfocus} color="primary" />
 							<Text variant="tabBar">{label}</Text>
 						</PressableBox>

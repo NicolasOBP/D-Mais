@@ -65,6 +65,7 @@ const cardBoxStyle: BoxProps = {
 	borderColor: "primary",
 	backgroundColor: "background",
 	overflow: "hidden",
+	width: 152,
 }
 
 const statusBoxStyle: BoxProps = {

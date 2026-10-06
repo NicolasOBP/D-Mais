@@ -77,6 +77,7 @@ const theme = createTheme({
 
 		//Order Status
 		pending: palette.yellow,
+		pendingBadgeText: palette.carrot,
 
 		// Raw palette for direct access
 		...palette,

@@ -52,6 +52,9 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
 			removeProductsFromCart(orderProducts.map((prod) => prod.cartId))
 
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.Orders] })
+			queryClient.invalidateQueries({
+				queryKey: [QueryKeys.Orders, QueryKeys.OrdersTotalStorageOrders],
+			})
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.Cart] })
 
 			options?.onError?.(error.message)
