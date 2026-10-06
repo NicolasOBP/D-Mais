@@ -3,6 +3,7 @@ import { router, useLocalSearchParams } from "expo-router"
 import {
 	type OrderDetails,
 	useOrdersList,
+	useOrdersListStorage,
 	useOrdersManage,
 	useSellFareControl,
 	useSellPaymentTermsControl,
@@ -23,9 +24,12 @@ import { Box, Button } from "@core-components"
 export function OrderDetailsScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>()
 	const { data: orders, isLoading } = useOrdersList()
-	const order = orders?.find((item) => item.id === Number(id))
+	const { data: storageOrders, isLoading: isLoadingStorage } = useOrdersListStorage()
+	const order =
+		orders?.find((item) => item.id === Number(id)) ??
+		storageOrders?.find((item) => item.id === Number(id))
 
-	if (isLoading) {
+	if (isLoading || isLoadingStorage) {
 		return (
 			<Screen>
 				<LoadingListState screen="Orders" />
