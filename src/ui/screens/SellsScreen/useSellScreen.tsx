@@ -2,6 +2,8 @@ import { router } from "expo-router"
 import { useEffect } from "react"
 
 import {
+	type OrderDetails,
+	type OrderVariables,
 	type ProductCartScreen,
 	useOrdersSend,
 	useSellFareControl,
@@ -16,7 +18,12 @@ import { Box } from "@core-components"
 
 import { SendSellModalBody } from "./components/SendSellModalBody"
 
-export function useSellScreen(cartItems: ProductCartScreen[]) {
+type Props = {
+	cartItems: ProductCartScreen[] | OrderDetails["products"]
+	order?: OrderVariables
+}
+
+export function useSellScreen({ cartItems, order }: Props) {
 	const { authUser } = useAuth()
 	const { finishSell } = useBackToSellService()
 	const { setProductsTotal, setOrderDetails, clearOrder } = useOrderService()
@@ -24,7 +31,7 @@ export function useSellScreen(cartItems: ProductCartScreen[]) {
 
 	const { totalSelectedPrice: productsTotal } = useCartItems()
 	const { totalPrice } = useOrderItems()
-	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm()
+	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm(order)
 
 	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
 		onError: () => {
@@ -130,7 +137,6 @@ export function useSellScreen(cartItems: ProductCartScreen[]) {
 		paymentTermsControl,
 		handleSubmit,
 		fareControl,
-		cartItems,
 		control,
 		formState,
 		isTotalPricePending,

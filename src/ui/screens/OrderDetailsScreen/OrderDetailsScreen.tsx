@@ -2,14 +2,10 @@ import { router, useLocalSearchParams } from "expo-router"
 
 import {
 	type OrderDetails,
+	useOrderRemoveFromStorage,
 	useOrdersList,
 	useOrdersListStorage,
-	useOrdersManage,
-	useSellFareControl,
-	useSellPaymentTermsControl,
 } from "@domain"
-
-import { useSellForm } from "@schemas"
 
 import {
 	EmptyList,
@@ -17,9 +13,12 @@ import {
 	ScreenHeader,
 	SellsForm,
 	SellsProductsList,
+	useModal,
 } from "@components"
 import { Screen } from "@containers"
-import { Box, Button } from "@core-components"
+import { Box, Button, Text } from "@core-components"
+
+import { useSellScreen } from "../SellsScreen/useSellScreen"
 
 export function OrderDetailsScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>()
@@ -50,16 +49,44 @@ export function OrderDetailsScreen() {
 }
 
 function OrderDetailsContent({ order }: { order: OrderDetails }) {
-	const { control } = useSellForm(order)
-	const { mutate: fareControl } = useSellFareControl()
-	const { mutate: manageOrder, isPending } = useOrdersManage({ onSuccess: () => router.back() })
-	const { mutate: paymentTermsControl } = useSellPaymentTermsControl({})
+	const { showModal, closeModal } = useModal()
+	const { mutate: removeOrderFromStorage } = useOrderRemoveFromStorage({
+		onSuccess: () => {
+			closeModal()
+			router.back()
+		},
+	})
 	const title =
 		order.status === "completed"
 			? "Pedido Enviado"
 			: order.status === "pending"
 				? "Pedido Pendente"
 				: "Pedido Cancelado"
+	const { fareControl, paymentTermsControl, isTotalPricePending, totalPrice, control } =
+		useSellScreen({ cartItems: order.products, order })
+
+	function handleShowDeleteModal() {
+		showModal({
+			headerTitle: "EXCLUIR PEDIDO",
+			BodyComponent: (
+				<Box paddingHorizontal="s48">
+					<Text variant="title16" color="errorText" textAlign="center">
+						Deseja realmente excluir esse pedido?
+					</Text>
+					<Text variant="title16" color="errorText" textAlign="center">
+						Essa ação não poderá ser desfeita.
+					</Text>
+				</Box>
+			),
+			footerButton: {
+				twoButtonFooter: {
+					labelCancel: "Cancelar",
+					labelConfirm: "Deletar",
+					onConfirm: () => removeOrderFromStorage({ orderId: order.id }),
+				},
+			},
+		})
+	}
 
 	return (
 		<Screen scrollable noHorizontalPadding>
@@ -74,8 +101,8 @@ function OrderDetailsContent({ order }: { order: OrderDetails }) {
 
 			<SellsProductsList
 				cartItems={order.products}
-				totalPrice={Number(order.totalPrice)}
-				isPendingTotalPrice={false}
+				totalPrice={totalPrice}
+				isPendingTotalPrice={isTotalPricePending}
 			/>
 
 			{order.status === "completed" && (
@@ -96,8 +123,7 @@ function OrderDetailsContent({ order }: { order: OrderDetails }) {
 						flex={1}
 						lable="Excluir venda"
 						variant="error"
-						disabled={isPending}
-						onPress={() => manageOrder({ id: order.id, action: "remove" })}
+						onPress={handleShowDeleteModal}
 						paddingVertical="s14"
 						paddingHorizontal="s8"
 					/>
@@ -105,8 +131,6 @@ function OrderDetailsContent({ order }: { order: OrderDetails }) {
 						flex={1}
 						lable="Enviar venda"
 						variant="primary"
-						disabled={isPending}
-						onPress={() => manageOrder({ id: order.id, action: "complete" })}
 						paddingVertical="s14"
 						paddingHorizontal="s8"
 					/>

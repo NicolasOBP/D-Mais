@@ -20,7 +20,7 @@ export function SellsScreen() {
 		totalPrice,
 		isTotalPricePending,
 		formState,
-	} = useSellScreen(cartItems)
+	} = useSellScreen({ cartItems })
 
 	return (
 		<Screen scrollable noHorizontalPadding>

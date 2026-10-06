@@ -1,4 +1,5 @@
 export { useOrderGetTotalOrdersInStorage } from "./useOrderGetTotalOrdersInStorage"
+export { useOrderRemoveFromStorage } from "./useOrderRemoveFromStorage"
 export { useOrdersList } from "./useOrdersList"
 export { useOrdersListStorage } from "./useOrdersListStorage"
 export { useOrdersManage } from "./useOrdersManage"

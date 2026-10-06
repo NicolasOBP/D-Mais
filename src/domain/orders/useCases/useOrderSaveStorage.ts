@@ -11,10 +11,7 @@ export function useOrderSaveStorage() {
 		mutationFn: saveOrderInStorage,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: [QueryKeys.Orders, QueryKeys.OrdersListStorage],
-			})
-			queryClient.invalidateQueries({
-				queryKey: [QueryKeys.Orders, QueryKeys.OrdersTotalStorageOrders],
+				queryKey: [QueryKeys.Orders],
 			})
 		},
 		onError: (error) => {
