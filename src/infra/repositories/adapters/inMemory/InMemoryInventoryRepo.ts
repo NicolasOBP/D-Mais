@@ -12,12 +12,11 @@ export class InMemoryInventoryRepo implements IInventoryRepo {
 		return inventory
 	}
 
-	async listInventories(): Promise<InventoryWithoutProducts[]> {
+	async listInventories(productCode: string): Promise<InventoryWithoutProducts[]> {
 		await delay()
 
-		return inventory.map(({ id, description }) => ({
-			id,
-			description,
-		}))
+		return inventory
+			.filter(({ products }) => products.some(({ id }) => id === productCode))
+			.map(({ id, description }) => ({ id, description }))
 	}
 }

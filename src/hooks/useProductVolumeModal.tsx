@@ -25,7 +25,7 @@ export function useProductVolumeModal({
 		defaultVolume,
 		defaultInventory,
 	})
-	const { inventoryList, isLoading: isLoadingInventory } = useInventoryList()
+	const { inventoryList, isLoading: isLoadingInventory } = useInventoryList(product.id)
 
 	const { showModal, updateModalData, closeModal } = useModal()
 

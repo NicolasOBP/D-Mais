@@ -1,11 +1,11 @@
 import { QueryKeys, useAppQuery, useRepository } from "@infra"
 
-export function useInventoryList() {
+export function useInventoryList(productCode: string) {
 	const { inventory } = useRepository()
 
 	const { error, isLoading, refetch, data } = useAppQuery({
-		fetchData: inventory.listInventories,
-		queryKey: [QueryKeys.Inventory, QueryKeys.InventoryList],
+		fetchData: () => inventory.listInventories(productCode),
+		queryKey: [QueryKeys.Inventory, QueryKeys.InventoryList, productCode],
 	})
 
 	return {
