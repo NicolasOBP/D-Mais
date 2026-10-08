@@ -17,7 +17,7 @@ export function useAuthSignIn(options?: MutationOptions<AuthUser>) {
 		mutationFn: ({ company, password, userName }) => auth.signIn(company, password, userName),
 		onSuccess: (authUser) => {
 			showToast({
-				message: `Bem vindo ${authUser.name}`,
+				message: authUser.message ?? `Bem vindo ${authUser.name ?? authUser.userName}`,
 				type: "success",
 			})
 			saveAuthUser(authUser)

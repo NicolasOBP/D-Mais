@@ -22,7 +22,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 	const { auth } = useRepository()
 
 	async function saveAuthUser(user: AuthUser) {
-		await authContextStorage.set(user.id)
+		await authContextStorage.set(user)
 		setAuthUser(user)
 	}
 
@@ -33,11 +33,15 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
 	async function loadAuthUser() {
 		try {
-			const userId = await authContextStorage.get()
-			const user = await auth.getUserById(userId)
+			const storedAuthUser = await authContextStorage.get()
 
-			if (user) {
-				setAuthUser(user)
+			if (typeof storedAuthUser === "string") {
+				const legacyAuthUser = await auth.getUserById(storedAuthUser)
+				if (legacyAuthUser) {
+					setAuthUser(legacyAuthUser)
+				}
+			} else if (storedAuthUser) {
+				setAuthUser(storedAuthUser)
 			}
 		} catch (error) {
 			console.log(error)
