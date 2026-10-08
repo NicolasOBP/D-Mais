@@ -12,7 +12,10 @@ type Props = {
 }
 
 export function ProductCartDetails({ product }: Props) {
-	const totalProductPrice = useNumberFormat.toBRLCurrency(product.price * product.volume)
+	const totalProductPrice =
+		product.price === undefined
+			? "Não informado"
+			: useNumberFormat.toBRLCurrency(product.price * product.volume)
 
 	const { mutate: editProduct, isPending } = useCartEditProduct({
 		onSuccess: (product) => {

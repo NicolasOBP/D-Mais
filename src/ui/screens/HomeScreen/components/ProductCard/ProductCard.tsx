@@ -2,7 +2,6 @@ import { type Product, useCartAdd } from "@domain"
 
 import { useProductVolumeModal } from "@hooks"
 import type { ProductSchema } from "@schemas"
-import { useNumberFormat } from "@utils"
 
 import { Box, type BoxProps, Button, PressableBox, Text } from "@core-components"
 
@@ -40,10 +39,6 @@ export function ProductCard({ product, containerProps }: ProductCardProps) {
 			<Box {...contentBoxStyle}>
 				<Text>{product.title}</Text>
 
-				<Text variant="text14" color="gray2" pb="s24">
-					Preço por litro {useNumberFormat.toBRLCurrency(product.price)}
-				</Text>
-
 				<Button
 					variant="secondary"
 					lable="Adicionar ao carrinho"
@@ -65,5 +60,5 @@ const cardBoxStyle: BoxProps = {
 
 const contentBoxStyle: BoxProps = {
 	padding: "s10",
-	gap: "s8",
+	gap: "s40",
 }

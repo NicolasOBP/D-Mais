@@ -9,7 +9,7 @@ interface SellsProductCardProps {
 }
 
 export function SellsProductCard({ item }: SellsProductCardProps) {
-	const finalPrice = item.price * item.volume
+	const finalPrice = item.price === undefined ? undefined : item.price * item.volume
 
 	return (
 		<PressableBox {...containerBoxStyle}>
@@ -32,7 +32,7 @@ export function SellsProductCard({ item }: SellsProductCardProps) {
 						Preço
 					</Text>
 					<Text variant="title12" numberOfLines={1}>
-						{useNumberFormat.toBRLCurrency(item.price)}
+						{item.price === undefined ? "Não informado" : useNumberFormat.toBRLCurrency(item.price)}
 					</Text>
 				</Box>
 			</Box>
@@ -41,7 +41,7 @@ export function SellsProductCard({ item }: SellsProductCardProps) {
 					Total
 				</Text>
 				<Text variant="title12" color="green" numberOfLines={1}>
-					{useNumberFormat.toBRLCurrency(finalPrice)}
+					{finalPrice === undefined ? "Não informado" : useNumberFormat.toBRLCurrency(finalPrice)}
 				</Text>
 			</Box>
 		</PressableBox>

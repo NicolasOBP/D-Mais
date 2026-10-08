@@ -39,7 +39,7 @@ const useCartStore = create<CartStoreType>()((set, get) => ({
 				existingProduct.inventory.description === product.inventory.description &&
 				existingProduct.inventory.id === product.inventory.id
 			) {
-				state.totalSelectedPrice += (product.volume - existingProduct.volume) * product.price
+				state.totalSelectedPrice += (product.volume - existingProduct.volume) * (product.price ?? 0)
 
 				existingProduct.volume = product.volume
 
@@ -49,7 +49,7 @@ const useCartStore = create<CartStoreType>()((set, get) => ({
 			}
 
 			state.selectedItems += 1
-			state.totalSelectedPrice += product.volume * product.price
+			state.totalSelectedPrice += product.volume * (product.price ?? 0)
 
 			return {
 				productCartStore: [...state.productCartStore, { ...product, isSelected: true }],
@@ -63,7 +63,7 @@ const useCartStore = create<CartStoreType>()((set, get) => ({
 
 			if (productToRemove?.isSelected) {
 				state.selectedItems -= 1
-				state.totalSelectedPrice -= productToRemove.volume * productToRemove.price
+				state.totalSelectedPrice -= productToRemove.volume * (productToRemove.price ?? 0)
 			}
 
 			return {
@@ -81,7 +81,7 @@ const useCartStore = create<CartStoreType>()((set, get) => ({
 			productsToRemove.forEach((prod) => {
 				if (prod.isSelected) {
 					state.selectedItems -= 1
-					state.totalSelectedPrice -= prod.volume * prod.price
+					state.totalSelectedPrice -= prod.volume * (prod.price ?? 0)
 				}
 			})
 
@@ -98,8 +98,9 @@ const useCartStore = create<CartStoreType>()((set, get) => ({
 			const productToUpdate = state.productCartStore.find((item) => item.cartId === productCartId)
 
 			if (productToUpdate?.isSelected) {
-				const oldPrice = productToUpdate.price * productToUpdate.volume
-				const newPrice = productToUpdate.price * newVolume
+				const price = productToUpdate.price ?? 0
+				const oldPrice = price * productToUpdate.volume
+				const newPrice = price * newVolume
 
 				state.totalSelectedPrice = state.totalSelectedPrice - oldPrice + newPrice
 			}
@@ -121,10 +122,11 @@ const useCartStore = create<CartStoreType>()((set, get) => ({
 			)
 
 			if (productToToggleSelection) {
+				const price = productToToggleSelection.price ?? 0
 				state.selectedItems += productToToggleSelection.isSelected ? -1 : 1
 				state.totalSelectedPrice += productToToggleSelection.isSelected
-					? -productToToggleSelection.volume * productToToggleSelection.price
-					: productToToggleSelection.volume * productToToggleSelection.price
+					? -productToToggleSelection.volume * price
+					: productToToggleSelection.volume * price
 			}
 
 			return {

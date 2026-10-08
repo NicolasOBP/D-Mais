@@ -27,7 +27,7 @@ export class InMemoryCartRepo implements ICartRepo {
 		) {
 			existingProduct.volume += product.volume
 			InnerCart.totalPrice = Number(
-				(InnerCart.totalPrice + product.price * product.volume).toFixed(2),
+				(InnerCart.totalPrice + (product.price ?? 0) * product.volume).toFixed(2),
 			)
 
 			return existingProduct
@@ -41,7 +41,7 @@ export class InMemoryCartRepo implements ICartRepo {
 		InnerCart.cartProducts.push(newProductCart)
 		InnerCart.totalItems++
 		InnerCart.totalPrice = Number(
-			(InnerCart.totalPrice + newProductCart.price * newProductCart.volume).toFixed(2),
+			(InnerCart.totalPrice + (newProductCart.price ?? 0) * newProductCart.volume).toFixed(2),
 		)
 
 		return newProductCart
@@ -81,8 +81,9 @@ export class InMemoryCartRepo implements ICartRepo {
 			return item
 		}
 
-		const oldPrice = item.price * item.volume
-		const newPrice = item.price * newVolume
+		const price = item.price ?? 0
+		const oldPrice = price * item.volume
+		const newPrice = price * newVolume
 
 		InnerCart.totalPrice = Number((InnerCart.totalPrice - oldPrice + newPrice).toFixed(2))
 
@@ -119,7 +120,7 @@ export class InMemoryCartRepo implements ICartRepo {
 		}
 
 		InnerCart.totalItems--
-		InnerCart.totalPrice -= product.price * product.volume
+		InnerCart.totalPrice -= (product.price ?? 0) * product.volume
 
 		return productCartId
 	}
@@ -147,7 +148,7 @@ export class InMemoryCartRepo implements ICartRepo {
 		InnerCart.totalPrice = Number(
 			(
 				InnerCart.totalPrice -
-				productsToRemove.reduce((sum, product) => sum + product.price * product.volume, 0)
+				productsToRemove.reduce((sum, product) => sum + (product.price ?? 0) * product.volume, 0)
 			).toFixed(2),
 		)
 
