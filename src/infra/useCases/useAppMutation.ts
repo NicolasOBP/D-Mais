@@ -10,7 +10,6 @@ export type UseAppMutationOptions<TData> = {
 	onSuccess?: (data: TData) => void
 	onError?: (data: { message: string; cause: string | undefined }) => void
 	errorMessage?: string
-	retry?: boolean
 }
 
 type UseAppMutationParams<TData, TVariables> = {
@@ -21,13 +20,12 @@ export function useAppMutation<TData, TVariables>({
 	mutationFn,
 	onError,
 	onSuccess,
-	retry,
 }: UseAppMutationParams<TData, TVariables>): UseAppMutationReturn<TData, TVariables> {
 	const { mutate, error, isPending } = useMutation({
 		mutationFn: mutationFn,
 		onSuccess,
 		onError,
-		retry,
+		retry: false,
 	})
 
 	return { mutate, isPending, error }

@@ -22,6 +22,7 @@ export function useAppQuery<DataT>({
 		queryKey,
 		queryFn: fetchData,
 		staleTime,
+		retry: false,
 	})
 
 	return {

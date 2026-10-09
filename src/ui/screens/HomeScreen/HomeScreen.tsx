@@ -7,7 +7,7 @@ import Animated, { LinearTransition } from "react-native-reanimated"
 import { type Product, useProductsList } from "@domain"
 
 import { useAppTheme } from "@theme"
-import { useDebounce } from "@utils"
+import { errorUtils, useDebounce } from "@utils"
 
 import { EmptyList, LoadingListState, SearchBar } from "@components"
 import { Screen } from "@containers"
@@ -18,7 +18,7 @@ export function HomeScreen() {
 	const { spacing } = useAppTheme()
 	const [searchText, setSearchText] = useState("")
 	const searchDebounced = useDebounce(searchText)
-	const { data: products, isLoading, refetch } = useProductsList(searchDebounced)
+	const { data: products, isLoading, refetch, error } = useProductsList(searchDebounced)
 
 	const flatListRef = useRef(null)
 
@@ -26,6 +26,18 @@ export function HomeScreen() {
 
 	function renderItem({ item }: ListRenderItemInfo<Product>) {
 		return <ProductCard product={item} />
+	}
+
+	function renderEmptyComponent() {
+		let desc: string
+
+		if (error) {
+			desc = `Erro ao carregar produtos. ${errorUtils.getErrorMessage(error)}`
+		} else {
+			desc = "Nenhum produto encontrado"
+		}
+
+		return <EmptyList desc={desc} />
 	}
 
 	return (
@@ -52,7 +64,7 @@ export function HomeScreen() {
 					refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
 					itemLayoutAnimation={LinearTransition.duration(500)}
 					ref={flatListRef}
-					ListEmptyComponent={<EmptyList desc="Nenhum produto encontrado" />}
+					ListEmptyComponent={renderEmptyComponent()}
 				/>
 			)}
 		</Screen>

@@ -1,3 +1,4 @@
+export * from "./errorUtils"
 export * from "./hooks/StringOrNumberKeyConstraint"
 export * from "./hooks/useDebounce"
 export * from "./hooks/useFormUtils"
