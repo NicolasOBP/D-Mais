@@ -1,21 +1,13 @@
 import { useQueryClient } from "@tanstack/react-query"
 
-import {
-	type MutationOptions,
-	QueryKeys,
-	useAppMutation,
-	useCartService,
-	useRepository,
-} from "@infra"
+import { type MutationOptions, QueryKeys, useAppMutation, useCartService } from "@infra"
 
 import type { InventoryWithoutProducts } from "../../inventory"
-
-import type { ProductCart } from ".."
+import type { ProductCart } from "../CartTypes"
 
 export function useCartEditProduct(options?: MutationOptions<ProductCart>) {
-	const { cart } = useRepository()
+	const { cart } = useCartService()
 	const queryClient = useQueryClient()
-	const { updateCartProduct } = useCartService()
 
 	return useAppMutation<
 		ProductCart,
@@ -27,8 +19,6 @@ export function useCartEditProduct(options?: MutationOptions<ProductCart>) {
 			queryClient.invalidateQueries({
 				queryKey: [QueryKeys.Cart],
 			})
-
-			updateCartProduct(prod.cartId, prod.volume, prod.inventory)
 
 			options?.onSuccess?.(prod)
 		},

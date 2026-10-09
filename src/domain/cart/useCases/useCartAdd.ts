@@ -1,23 +1,15 @@
 import { useQueryClient } from "@tanstack/react-query"
 
-import {
-	type MutationOptions,
-	QueryKeys,
-	useAppMutation,
-	useCartService,
-	useRepository,
-	useToast,
-} from "@infra"
+import { type MutationOptions, QueryKeys, useAppMutation, useCartService, useToast } from "@infra"
 
-import type { ProductCart, ProductCartVariables } from ".."
+import type { ProductCartVariables } from ".."
 
-export function useCartAdd(options?: MutationOptions<ProductCart>) {
-	const { addProductToCart } = useCartService()
-	const { cart } = useRepository()
+export function useCartAdd(options?: MutationOptions<void>) {
+	const { cart } = useCartService()
 	const { showToast } = useToast()
 	const queryClient = useQueryClient()
 
-	return useAppMutation<ProductCart, ProductCartVariables>({
+	return useAppMutation<void, ProductCartVariables>({
 		mutationFn: (prod) => cart.add(prod),
 		onSuccess: (prod) => {
 			showToast({
@@ -25,8 +17,6 @@ export function useCartAdd(options?: MutationOptions<ProductCart>) {
 				message: "Produto adicionado ao carrinho!",
 				duration: 1000,
 			})
-
-			addProductToCart(prod)
 
 			queryClient.invalidateQueries({
 				queryKey: [QueryKeys.Cart],

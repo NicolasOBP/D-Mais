@@ -16,11 +16,11 @@ import type { Order, OrderVariables } from "../OrdersType"
 import { useOrderSaveStorage } from "./useOrderSaveStorage"
 
 export function useOrdersSend(options?: MutationOptions<Order>) {
-	const { orders, cart, auth } = useRepository()
+	const { orders, auth } = useRepository()
 	const { authUser } = useAuth()
 	const { showToast } = useToast()
 	const queryClient = useQueryClient()
-	const { removeProductsFromCart } = useCartService()
+	const { cart } = useCartService()
 	const { products: orderProducts } = useOrderItems()
 	const { mutate: saveOrderInStorage } = useOrderSaveStorage()
 
@@ -38,7 +38,6 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
 			)
 
 			cart.deleteItems(order.products.map((prod) => prod.cartId))
-			removeProductsFromCart(order.products.map((prod) => prod.cartId))
 
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.Orders] })
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.Cart] })
@@ -49,7 +48,8 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
 			saveOrderInStorage("save order")
 
 			cart.deleteItems(orderProducts.map((prod) => prod.cartId))
-			removeProductsFromCart(orderProducts.map((prod) => prod.cartId))
+
+			//TODO: FIX MULTIPLES ORDERS INVALIDATES
 
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.Orders] })
 			queryClient.invalidateQueries({

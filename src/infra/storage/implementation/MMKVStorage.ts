@@ -1,4 +1,5 @@
 import { createMMKV } from "react-native-mmkv"
+import type { StateStorage } from "zustand/middleware"
 
 import type { Storage } from "../storage"
 
@@ -16,5 +17,20 @@ export const MMKVStorage: Storage = {
 	setItem: async (key, value) => {
 		MMKVInstance.set(key, JSON.stringify(value))
 	},
-	removeItem: async (key) => MMKVInstance.remove(key),
+	removeItem: async (key) => {
+		MMKVInstance.remove(key)
+	},
+}
+
+export const zustandStorage: StateStorage = {
+	setItem: (name, value) => {
+		return MMKVInstance.set(name, value)
+	},
+	getItem: (name) => {
+		const value = MMKVInstance.getString(name)
+		return value ?? null
+	},
+	removeItem: (name) => {
+		return MMKVInstance.remove(name)
+	},
 }

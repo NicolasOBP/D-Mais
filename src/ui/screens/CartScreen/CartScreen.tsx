@@ -1,16 +1,16 @@
 import { router } from "expo-router"
 import { useRef } from "react"
-import { type ListRenderItemInfo, RefreshControl } from "react-native"
+import type { ListRenderItemInfo } from "react-native"
 
 import { useScrollToTop } from "@react-navigation/native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 
-import { type ProductCartScreen, useAuthCheckLeftQuota, useCartGetItems } from "@domain"
-import { useCartItems, useCartService, useToast } from "@infra"
+import { type ProductCartScreen, useAuthCheckLeftQuota } from "@domain"
+import { useCartService, useCartStore, useToast } from "@infra"
 
 import { useAppTheme } from "@theme"
 
-import { EmptyList, LoadingListState, ScreenHeader } from "@components"
+import { EmptyList, ScreenHeader } from "@components"
 import { Screen } from "@containers"
 import { Box } from "@core-components"
 
@@ -20,9 +20,8 @@ import { CartFooter } from "./components/CartFooter"
 export function CartScreen() {
 	const { spacing } = useAppTheme()
 	const { showToast } = useToast()
-	const { data: cartItems, isLoading, refetch } = useCartGetItems()
-	const { selectedItems, totalSelectedPrice } = useCartItems()
-	const { toggleProductSelection, getSelectedProducts, getSelectedVolume } = useCartService()
+	const { selectedItems, totalSelectedPrice, cartProducts } = useCartStore()
+	const { cart } = useCartService()
 	const { checkLeftQuota, isPending } = useAuthCheckLeftQuota({
 		onSuccess: () => {
 			router.push("/sell")
@@ -32,16 +31,17 @@ export function CartScreen() {
 	const flatListRef = useRef(null)
 	useScrollToTop(flatListRef)
 
-	function handleSelectChange(productCartId: number) {
-		toggleProductSelection(productCartId)
-	}
-
 	function renderItem({ item }: ListRenderItemInfo<ProductCartScreen>) {
-		return <CartProductCard product={item} onSelectChange={() => handleSelectChange(item.cartId)} />
+		return (
+			<CartProductCard
+				product={item}
+				onSelectChange={() => cart.toggleProductSelection(item.cartId)}
+			/>
+		)
 	}
 
 	function onCheckout() {
-		if (getSelectedProducts().length === 0) {
+		if (cart.getSelectedProducts().length === 0) {
 			showToast({
 				type: "warning",
 				message: "Seu carrinho está vazio",
@@ -50,7 +50,7 @@ export function CartScreen() {
 			return
 		}
 
-		checkLeftQuota(getSelectedVolume())
+		checkLeftQuota(cart.getSelectedVolume())
 	}
 
 	return (
@@ -58,21 +58,16 @@ export function CartScreen() {
 			<ScreenHeader title="Carrinho" />
 
 			<Box flex={1} paddingHorizontal="default">
-				{isLoading ? (
-					<LoadingListState screen="Cart" />
-				) : (
-					<Animated.FlatList
-						data={cartItems}
-						keyExtractor={(item) => item.cartId.toString()}
-						contentContainerStyle={{ paddingTop: spacing.s16 }}
-						renderItem={renderItem}
-						itemLayoutAnimation={LinearTransition.duration(500)}
-						showsVerticalScrollIndicator={false}
-						ref={flatListRef}
-						ListEmptyComponent={<EmptyList desc="Seu carrinho está vazio" />}
-						refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
-					/>
-				)}
+				<Animated.FlatList
+					data={cartProducts}
+					keyExtractor={(item) => item.cartId.toString()}
+					contentContainerStyle={{ paddingTop: spacing.s16 }}
+					renderItem={renderItem}
+					itemLayoutAnimation={LinearTransition.duration(500)}
+					showsVerticalScrollIndicator={false}
+					ref={flatListRef}
+					ListEmptyComponent={<EmptyList desc="Seu carrinho está vazio" />}
+				/>
 			</Box>
 
 			<CartFooter

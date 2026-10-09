@@ -9,7 +9,7 @@ import {
 	useSellFareControl,
 	useSellPaymentTermsControl,
 } from "@domain"
-import { useAuth, useBackToSellService, useCartItems, useOrderItems, useOrderService } from "@infra"
+import { useAuth, useBackToSellService, useCartStore, useOrderItems, useOrderService } from "@infra"
 
 import { type SellSchema, useSellForm } from "@schemas"
 
@@ -29,7 +29,7 @@ export function useSellScreen({ cartItems, order }: Props) {
 	const { setProductsTotal, setOrderDetails, clearOrder } = useOrderService()
 	const { showModal, closeModal, updateModalData } = useModal()
 
-	const { totalSelectedPrice: productsTotal } = useCartItems()
+	const { totalSelectedPrice: productsTotal } = useCartStore()
 	const { totalPrice } = useOrderItems()
 	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm(order)
 

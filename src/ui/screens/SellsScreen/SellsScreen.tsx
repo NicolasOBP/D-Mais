@@ -9,8 +9,8 @@ import { Box, Button } from "@core-components"
 import { useSellScreen } from "./useSellScreen"
 
 export function SellsScreen() {
-	const { getSelectedProducts } = useCartService()
-	const cartItems = getSelectedProducts()
+	const { cart } = useCartService()
+	const cartItems = cart.getSelectedProducts()
 	const {
 		handleShowModal,
 		handleSubmit,

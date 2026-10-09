@@ -29,7 +29,7 @@ export function BackToSell() {
 			router.push("/sell")
 		},
 	})
-	const { getSelectedVolume } = useCartService()
+	const { cart } = useCartService()
 	const pathname = usePathname()
 	const { hasVisitedSell, showBackToSellButton, completedSell } = useBackToSellState()
 	const { markVisitedSell, setShowBackToSell, resetBackToSell } = useBackToSellService()
@@ -65,7 +65,7 @@ export function BackToSell() {
 	}, [progress, showBackToSellButton])
 
 	function handlePress() {
-		checkLeftQuota(getSelectedVolume())
+		checkLeftQuota(cart.getSelectedVolume())
 	}
 
 	const animatedStyle = useBackToSellAnimation(progress)
