@@ -11,18 +11,21 @@ type UseAppQueryParams<DataT> = {
 	queryKey: (string | null | undefined | number)[]
 	fetchData: () => Promise<DataT>
 	staleTime?: number
+	enabled?: boolean | (() => boolean)
 }
 
 export function useAppQuery<DataT>({
 	fetchData,
 	queryKey,
 	staleTime,
+	enabled,
 }: UseAppQueryParams<DataT>): UseFetchDataReturn<DataT> {
 	const { data, isLoading, error, isPending, refetch, isFetching } = useQuery({
 		queryKey,
 		queryFn: fetchData,
 		staleTime,
 		retry: false,
+		enabled,
 	})
 
 	return {

@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 import { type Product, useInventoryList } from "@domain"
 
@@ -21,15 +21,21 @@ export function useProductVolumeModal({
 	isLoading,
 	defaultInventory,
 }: ProductVolumeModalProps) {
+	const [isModalOpen, setIsModalOpen] = useState(false)
 	const { control, handleSubmit, formState, reset } = useProductForm({
 		defaultVolume,
 		defaultInventory,
 	})
-	const { inventoryList, isLoading: isLoadingInventory } = useInventoryList(product.id)
-
 	const { showModal, updateModalData, closeModal } = useModal()
 
+	const { inventoryList, isLoading: isLoadingInventory } = useInventoryList({
+		productCode: product.id,
+		isEnable: isModalOpen,
+	})
+
 	function handleShowModal() {
+		setIsModalOpen(true)
+
 		if (isEdit) {
 			showModal(
 				{

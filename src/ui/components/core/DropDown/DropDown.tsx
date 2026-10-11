@@ -91,7 +91,6 @@ export function DropDown<TValue>({
 			setItems(dropdownItems)
 		}
 	}
-
 	return (
 		<Box position="absolute" top={topOffset} style={{ width: "100%" }}>
 			<Animated.View style={[dropDownAnimation, { overflow: "hidden" }]}>
@@ -117,7 +116,7 @@ export function DropDown<TValue>({
 							>
 								<Text variant="text14">Carregando...</Text>
 							</Box>
-						) : items ? (
+						) : items && items.length >= 1 ? (
 							items.map((item, index) => {
 								diffColors = !diffColors
 								const itemId = idKey ? String(item[idKey]) : String(index)
