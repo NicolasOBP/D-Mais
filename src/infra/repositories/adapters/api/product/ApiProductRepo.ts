@@ -1,6 +1,8 @@
+import axios from "axios"
+
 import type { IProductRepo, Product } from "@domain"
 
-import axios from "axios"
+import { errorUtils } from "@utils"
 
 import { API } from "../apiConfig"
 
@@ -17,6 +19,13 @@ export class ApiProductRepo implements IProductRepo {
 			responseData = response.data
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
+				const errorMessage = errorUtils.getErrorMessage(error.message)
+				if (errorMessage !== error.message) {
+					throw new Error(errorMessage, {
+						cause: `O servidor de combustíveis retornou um erro (HTTP ${error.response?.status}).`,
+					})
+				}
+
 				if (error.response) {
 					throw new Error(
 						`O servidor de combustíveis retornou um erro (HTTP ${error.response.status}).`,
