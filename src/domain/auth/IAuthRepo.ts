@@ -1,4 +1,4 @@
-import type { AuthUser } from "./AuthUser"
+import type { AuthUser } from "./AuthTypes"
 
 export interface IAuthRepo {
 	signIn: (company: string, password: string, userName: string) => Promise<AuthUser>

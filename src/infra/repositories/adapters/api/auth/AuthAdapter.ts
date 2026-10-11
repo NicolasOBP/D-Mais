@@ -1,9 +1,7 @@
-import type { AuthUser } from "@domain"
-
-import type { LoginResponseResult } from "./authSchema"
+import type { AuthAPIContent, AuthUser } from "@domain"
 
 export function adaptLoginResultToAuthUser(
-	loginResult: LoginResponseResult,
+	loginResult: AuthAPIContent,
 	userName: string,
 ): AuthUser {
 	if (!loginResult.C_CDEMPR || !loginResult.C_POSTO) {

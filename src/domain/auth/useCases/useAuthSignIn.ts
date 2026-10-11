@@ -1,6 +1,6 @@
 import { type MutationOptions, useAppMutation, useAuth, useRepository, useToast } from "@infra"
 
-import type { AuthUser } from "../AuthUser"
+import type { AuthUser } from "../AuthTypes"
 
 interface Variables {
 	company: string
