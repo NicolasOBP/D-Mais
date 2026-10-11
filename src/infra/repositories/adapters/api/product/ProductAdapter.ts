@@ -1,8 +1,6 @@
-import type { Product } from "@domain"
+import type { Product, ProductAPIContent } from "@domain"
 
-import type { FuelResult } from "./productSchema"
-
-export function adaptFuelResultToProduct(fuel: FuelResult): Product {
+export function adaptFuelResultToProduct(fuel: ProductAPIContent): Product {
 	return {
 		id: fuel.C_CDPRO,
 		title: fuel.C_DESC,

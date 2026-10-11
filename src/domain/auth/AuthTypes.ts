@@ -1,11 +1,5 @@
 export type AuthAPI = {
-	result: {
-		STATUS: string
-		MENSAGEM: string
-		C_POSTO: string
-		C_CDEMPR: string
-		C_RAZO: string
-	}[]
+	result: AuthAPIContent[]
 }
 export type AuthAPIContent = {
 	STATUS: string

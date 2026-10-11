@@ -4,6 +4,7 @@ import type { AuthAPI, AuthUser, IAuthRepo } from "@domain"
 
 import { errorUtils } from "@utils"
 
+import type { ErrorType } from "../APITypes"
 import { API } from "../apiConfig"
 
 import { adaptLoginResultToAuthUser } from "./AuthAdapter"
@@ -40,7 +41,7 @@ export class ApiAuthRepo implements IAuthRepo {
 				throw error
 			}
 
-			if (axios.isAxiosError(error)) {
+			if (axios.isAxiosError<ErrorType>(error)) {
 				const errorMessage = errorUtils.getErrorMessage(error.message)
 				if (errorMessage !== error.message) {
 					throw new Error(errorMessage, {
@@ -48,8 +49,7 @@ export class ApiAuthRepo implements IAuthRepo {
 					})
 				}
 
-				const errorResponse = error.response?.data as AuthAPI | undefined
-				const serverResult = errorResponse ? errorResponse.result[0] : undefined
+				const serverResult = error.response?.data.result[0]
 
 				if (serverResult && serverResult.STATUS !== "OK") {
 					throw new Error(serverResult.MENSAGEM || "Não foi possível autenticar o usuário.")
