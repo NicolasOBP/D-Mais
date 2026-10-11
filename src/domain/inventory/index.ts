@@ -1,3 +1,9 @@
 export { IInventoryRepo } from "./IInventoryRepo"
-export { Inventory, InventoryProduct, InventoryWithoutProducts } from "./InventoryTypes"
+export {
+	Inventory,
+	InventoryAPI,
+	InventoryAPIContent,
+	InventoryProduct,
+	InventoryWithoutProducts,
+} from "./InventoryTypes"
 export * from "./useCases"

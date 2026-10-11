@@ -1,31 +1,43 @@
 import axios from "axios"
 
-import type { IInventoryRepo } from "@domain"
+import type { IInventoryRepo, InventoryAPI } from "@domain"
 
 import { errorUtils } from "@utils"
 
+import type { ErrorType } from "../APITypes"
 import { API } from "../apiConfig"
 
 import { adaptInventoryResult } from "./InventoryAdapter"
-import { inventoryResponseSchema } from "./inventorySchema"
 
 export class ApiInventoryRepo implements Pick<IInventoryRepo, "listInventories"> {
 	async listInventories(productCode: string) {
-		let responseData: unknown
-
 		try {
-			const response = await API.put<unknown>("TMetodosGerais/F_ListarEstoques", {
+			const response = await API.put<InventoryAPI>("TMetodosGerais/F_ListarEstoques", {
 				C_CDPRO: productCode,
 			})
 
-			responseData = response.data
+			if (response.data.result.length === 0) {
+				throw new Error("O servidor retornou uma lista de estoques inválida.")
+			}
+
+			return response.data.result[0].map(adaptInventoryResult)
 		} catch (error) {
-			if (axios.isAxiosError(error)) {
+			if (error instanceof Error && !axios.isAxiosError(error)) {
+				throw error
+			}
+
+			if (axios.isAxiosError<ErrorType>(error)) {
 				const errorMessage = errorUtils.getErrorMessage(error.message)
 				if (errorMessage !== error.message) {
 					throw new Error(errorMessage, {
 						cause: `O servidor de combustíveis retornou um erro (HTTP ${error.response?.status}).`,
 					})
+				}
+
+				const serverResult = error.response?.data.result[0]
+
+				if (serverResult && serverResult.STATUS !== "OK") {
+					throw new Error(serverResult.MENSAGEM || "Não foi possível listar estoques.")
 				}
 
 				if (error.response) {
@@ -42,13 +54,5 @@ export class ApiInventoryRepo implements Pick<IInventoryRepo, "listInventories">
 
 			throw error
 		}
-
-		const parsedResponse = inventoryResponseSchema.safeParse(responseData)
-
-		if (!parsedResponse.success || parsedResponse.data.result.length === 0) {
-			throw new Error("O servidor retornou uma lista de estoques inválida.")
-		}
-
-		return parsedResponse.data.result[0].map(adaptInventoryResult)
 	}
 }
