@@ -13,7 +13,7 @@ import { TotalPriceLoadingAnimation } from "./TotalPriceLoadingAnimation"
 type Props = {
 	cartItems: Pick<ProductCart, "cartId" | "title" | "volume" | "price">[]
 	totalPrice: number
-	isPendingTotalPrice: boolean
+	isPendingTotalPrice?: boolean
 }
 
 export function SellsProductsList({ cartItems, totalPrice, isPendingTotalPrice }: Props) {

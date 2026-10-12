@@ -19,9 +19,9 @@ import { DropDownControllerInput } from "../DropDownInputs"
 import { type ControllerProps, FormTextInput } from "../Form"
 
 type Props = Pick<ControllerProps<SellSchema>, "control"> & {
-	fareControl: (variable: { isFareSelected: boolean }) => number | void
+	fareControl?: (variable: { isFareSelected: boolean }) => number | void
 	readOnly?: boolean
-	paymentTermsControl: (variable: PaymentTerms) => void | TablePrices
+	paymentTermsControl?: (variable: PaymentTerms) => void | TablePrices
 }
 
 export function SellsForm({ control, fareControl, readOnly, paymentTermsControl }: Props) {
@@ -165,7 +165,7 @@ export function SellsForm({ control, fareControl, readOnly, paymentTermsControl 
 				name="freteSelecionado"
 				variant="rounded"
 				size={20}
-				extraFunction={(isFareSelected) => fareControl({ isFareSelected })}
+				extraFunction={(isFareSelected) => fareControl?.({ isFareSelected })}
 				pressableProps={checkBoxPressableProps}
 				readOnly={readOnly}
 			>
