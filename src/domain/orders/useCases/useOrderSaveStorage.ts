@@ -7,7 +7,7 @@ export function useOrderSaveStorage() {
 	const { showToast } = useToast()
 	const queryClient = useQueryClient()
 
-	return useAppMutation<void, string>({
+	return useAppMutation<void, void>({
 		mutationFn: saveOrderInStorage,
 		onSuccess: () => {
 			queryClient.invalidateQueries({

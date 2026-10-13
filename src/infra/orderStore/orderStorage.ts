@@ -1,5 +1,7 @@
 import type { OrderDetails } from "@domain"
 
+import { idUtils } from "@utils"
+
 import { storage } from "../storage"
 
 const ORDER_KEY = "@Order"
@@ -9,14 +11,14 @@ async function saveOrder(order: OrderDetails): Promise<void> {
 		const previousOrders = await getOrders()
 		const orderToSave = {
 			...order,
-			id: Date.now() * 1000 + Math.random() * 1000,
+			id: idUtils.generateId(),
 		}
 		const newOrders = [...previousOrders, orderToSave]
 		await storage.setItem(ORDER_KEY, newOrders)
 	} catch (error) {
-		console.log(error)
-
-		throw new Error("Erro ao salvar o pedido no armazenamento local.")
+		throw new Error("Erro ao salvar o pedido no armazenamento local.", {
+			cause: { cause: String(error) },
+		})
 	}
 }
 
@@ -31,9 +33,27 @@ async function removeOrder(orderId: OrderDetails["id"]): Promise<void> {
 		const newOrders = previousOrders.filter((order) => order.id !== orderId)
 		await storage.setItem(ORDER_KEY, newOrders)
 	} catch (error) {
-		console.log(error)
+		throw new Error("Erro ao remover pedido.", { cause: String(error) })
+	}
+}
 
-		throw new Error("Erro ao remover pedido.")
+async function updateOrder(order: OrderDetails): Promise<void> {
+	try {
+		const previousOrders = await getOrders()
+		const orderExists = previousOrders.some((previousOrder) => previousOrder.id === order.id)
+
+		if (!orderExists) {
+			return
+		}
+
+		const updatedOrders = previousOrders.map((previousOrder) =>
+			previousOrder.id === order.id ? order : previousOrder,
+		)
+		await storage.setItem(ORDER_KEY, updatedOrders)
+	} catch (error) {
+		throw new Error("Erro ao atualizar pedido no armazenamento local.", {
+			cause: String(error),
+		})
 	}
 }
 
@@ -41,4 +61,5 @@ export const orderStorage = {
 	saveOrder,
 	getOrders,
 	removeOrder,
+	updateOrder,
 }

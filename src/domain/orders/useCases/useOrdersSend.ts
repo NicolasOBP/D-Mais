@@ -45,16 +45,8 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
 			options?.onSuccess?.(order)
 		},
 		onError: (error) => {
-			saveOrderInStorage("save order")
-
 			cart.deleteItems(orderProducts.map((prod) => prod.cartId))
 
-			//TODO: FIX MULTIPLES ORDERS INVALIDATES
-
-			queryClient.invalidateQueries({ queryKey: [QueryKeys.Orders] })
-			queryClient.invalidateQueries({
-				queryKey: [QueryKeys.Orders, QueryKeys.OrdersTotalStorageOrders],
-			})
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.Cart] })
 
 			options?.onError?.(error.message)

@@ -25,14 +25,16 @@ type Props = Pick<ControllerProps<SellSchema>, "control"> & {
 }
 
 export function SellsForm({ control, fareControl, readOnly, paymentTermsControl }: Props) {
-	const { data: clientList, isLoading: isLoadingClient } = useSellClientList()
-	const { data: truckList, isLoading: isLoadingTruck } = useSellTruckList()
-	const { data: driverList, isLoading: isLoadingDriver } = useSellDriverList()
-	const { data: pickupList, isLoading: isLoadingPickup } = useSellPickupList()
-	const { data: companyList, isLoading: isLoadingCompany } = useSellCompanyList()
+	const { data: clientList, isLoading: isLoadingClient } = useSellClientList(!readOnly)
+	const { data: truckList, isLoading: isLoadingTruck } = useSellTruckList(!readOnly)
+	const { data: driverList, isLoading: isLoadingDriver } = useSellDriverList(!readOnly)
+	const { data: pickupList, isLoading: isLoadingPickup } = useSellPickupList(!readOnly)
+	const { data: companyList, isLoading: isLoadingCompany } = useSellCompanyList(!readOnly)
 	const { data: paymentMethodsList, isLoading: isLoadingPaymentMethods } =
-		useSellPaymentMethodsList()
-	const { data: paymentDelaysList, isLoading: isLoadingPaymentDelays } = useSellPaymentDelayList()
+		useSellPaymentMethodsList(!readOnly)
+	const { data: paymentDelaysList, isLoading: isLoadingPaymentDelays } = useSellPaymentDelayList(
+		!readOnly,
+	)
 
 	return (
 		<Box pt="s14" pb="s20" gap="s20" paddingHorizontal="default">

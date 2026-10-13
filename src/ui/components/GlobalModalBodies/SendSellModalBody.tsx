@@ -1,8 +1,9 @@
 import { useAppTheme } from "@theme"
 import { useNumberFormat } from "@utils"
 
-import { ProgressBar } from "@components"
 import { Box, Text } from "@core-components"
+
+import { ProgressBar } from "../ProgressBar"
 
 type SendSellModalBodyProps = {
 	userLeftQuota?: number

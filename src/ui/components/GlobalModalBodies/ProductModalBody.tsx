@@ -5,8 +5,8 @@ import type { ProductSchema } from "@schemas"
 import { Box } from "@core-components"
 
 import { DropDownControllerInput } from "../DropDownInputs"
-import { type ControllerProps, FormTextInput } from "../Form/FormTextInput"
-import { useModal } from "../Modal"
+import { type ControllerProps, FormTextInput } from "../Form"
+import { useModal } from "../Modal/useModal"
 
 export function ProductModalBody({
 	control,

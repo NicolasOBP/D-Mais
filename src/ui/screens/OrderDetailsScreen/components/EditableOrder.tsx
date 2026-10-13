@@ -6,7 +6,7 @@ import { ScreenHeader, SellsForm, SellsProductsList, useModal } from "@component
 import { Screen } from "@containers"
 import { Box, Button, Text } from "@core-components"
 
-import { useSellScreen } from "../../SellsScreen/useSellScreen"
+import { useEditableOrder } from "./useEditableOrder"
 
 export function EditAbleOrder({ order }: { order: OrderDetails }) {
 	const { showModal, closeModal } = useModal()
@@ -17,8 +17,19 @@ export function EditAbleOrder({ order }: { order: OrderDetails }) {
 		},
 	})
 
-	const { fareControl, paymentTermsControl, isTotalPricePending, totalPrice, control } =
-		useSellScreen({ cartItems: order.products, order })
+	const {
+		handleSubmit,
+		handleShowModal,
+		fareControl,
+		paymentTermsControl,
+		isTotalPricePending,
+		control,
+		totalPrice,
+	} = useEditableOrder({
+		cartItems: order.products,
+		order,
+		defaultTotalPrice: order.totalPrice,
+	})
 
 	function handleShowDeleteModal() {
 		showModal({
@@ -74,6 +85,7 @@ export function EditAbleOrder({ order }: { order: OrderDetails }) {
 					variant="primary"
 					paddingVertical="s14"
 					paddingHorizontal="s8"
+					onPress={handleSubmit(handleShowModal)}
 				/>
 			</Box>
 		</Screen>

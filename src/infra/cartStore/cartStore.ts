@@ -2,6 +2,8 @@ import { create } from "zustand"
 
 import type { ICartRepo, ProductCart, ProductCartScreen } from "@domain"
 
+import { idUtils } from "@utils"
+
 import { createJSONStorage, persist } from "zustand/middleware"
 
 import { zustandStorage } from "../storage"
@@ -52,7 +54,7 @@ const useCartStore = create<CartStoreType>()(
 					const newProductCart: ProductCartScreen = {
 						...product,
 						isSelected: true,
-						cartId: get().cartProducts.length + Math.random(),
+						cartId: idUtils.generateId(),
 					}
 
 					state.selectedItems += 1

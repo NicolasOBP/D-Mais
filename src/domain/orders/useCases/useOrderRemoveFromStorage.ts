@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query"
 
 import { type MutationOptions, QueryKeys, useAppMutation, useOrderService, useToast } from "@infra"
 
-export function useOrderRemoveFromStorage(options: MutationOptions<void>) {
+export function useOrderRemoveFromStorage(options?: MutationOptions<void>) {
 	const { removeOrderFromStorage } = useOrderService()
 	const queryClient = useQueryClient()
 	const { showToast } = useToast()
@@ -15,7 +15,7 @@ export function useOrderRemoveFromStorage(options: MutationOptions<void>) {
 				type: "success",
 			})
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.Orders] })
-			options.onSuccess?.()
+			options?.onSuccess?.()
 		},
 	})
 }

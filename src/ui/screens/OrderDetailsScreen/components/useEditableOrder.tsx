@@ -1,0 +1,144 @@
+import { router } from "expo-router"
+import { useEffect, useState } from "react"
+
+import {
+	type OrderDetails,
+	type OrderVariables,
+	useOrderRemoveFromStorage,
+	useOrderUpdateStorage,
+	useOrdersSend,
+	useSellFareControl,
+	useSellPaymentTermsControl,
+} from "@domain"
+import { useAuth } from "@infra"
+
+import { type SellSchema, useSellForm } from "@schemas"
+
+import { Icon, SendSellModalBody, useModal } from "@components"
+import { Box } from "@core-components"
+
+type Props = {
+	cartItems: OrderDetails["products"]
+	order: OrderDetails
+	defaultTotalPrice: number
+}
+
+export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props) {
+	const [totalPrice, setTotalPrice] = useState(defaultTotalPrice)
+	const { authUser } = useAuth()
+	const { showModal, closeModal, updateModalData } = useModal()
+
+	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm(order)
+
+	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
+		onSuccess: (price) => {
+			setTotalPrice((prevPrice) => prevPrice + price)
+		},
+		onError: () => {
+			setValue("freteSelecionado", !getValues("freteSelecionado"))
+		},
+	})
+	const { mutate: paymentTermsControl, isPending: isPendingPaymentTerms } =
+		useSellPaymentTermsControl({
+			onSuccess: (data) => {
+				setTotalPrice((prevPrice) => prevPrice + data.price)
+				setValue("tabela", data.tableName, { shouldValidate: true })
+			},
+		})
+
+	const { mutate: removeOrderFromStorage } = useOrderRemoveFromStorage()
+	const { mutate: sendOrder, isPending: isPendingOrderSend } = useOrdersSend({
+		onSuccess: () => {
+			removeOrderFromStorage({ orderId: order.id })
+			closeModal()
+			reset()
+			router.push("/orders")
+		},
+		onError: () => {
+			closeModal()
+			handleErrorShowModal()
+		},
+	})
+	const { mutate: updateOrderInStorage, isPending: isPendingOrderUpdate } = useOrderUpdateStorage({
+		onSuccess: (orderToSend) => {
+			sendOrder(orderToSend)
+		},
+	})
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <unintended behavior>
+	useEffect(() => {
+		updateModalData({ isLoading: isPendingOrderUpdate || isPendingOrderSend })
+	}, [isPendingOrderUpdate, isPendingOrderSend])
+
+	function handleShowModal(data: SellSchema) {
+		showModal(
+			{
+				BodyComponent: (
+					<SendSellModalBody userLeftQuota={authUser?.leftQuota} userQuota={authUser?.quota} />
+				),
+				footerButton: {
+					twoButtonFooter: {
+						labelCancel: "Cancelar",
+						labelConfirm: "Confirmar",
+						onConfirm: () => onSubmit(data),
+					},
+				},
+			},
+			{ isLoading: isPendingOrderUpdate || isPendingOrderSend },
+		)
+	}
+
+	function onSubmit(data: SellSchema) {
+		const orderToSend: OrderVariables = {
+			products: cartItems,
+			totalPrice: totalPrice,
+			client: data.cliente,
+			paymentTerms: data.condicaoPagamento,
+			paymentMethod: data.formaPagamento,
+			company: data.transportadora,
+			driver: data.motorista,
+			pickup: data.carreta,
+			table: data.tabela,
+			truck: data.caminhao,
+			fareSelected: data.freteSelecionado,
+		}
+
+		updateOrderInStorage({ ...order, ...orderToSend })
+	}
+
+	function handleErrorShowModal() {
+		showModal({
+			headerTitle: `Erro ao enviar venda, tente novamente entrando em "Pedidos"`,
+			showCloseButton: false,
+			BodyComponent: (
+				<Box alignSelf="center">
+					<Icon name="errorRound" size={70} color="red" />
+				</Box>
+			),
+			footerButton: {
+				oneButtonFooter: {
+					label: "Confirmar",
+					onPress: () => {
+						reset()
+
+						closeModal()
+						router.push("/orders")
+					},
+				},
+			},
+		})
+	}
+
+	let isTotalPricePending = isPendingTotalPrice || isPendingPaymentTerms
+
+	return {
+		handleShowModal,
+		paymentTermsControl,
+		handleSubmit,
+		fareControl,
+		control,
+		formState,
+		isTotalPricePending,
+		totalPrice: totalPrice,
+	}
+}

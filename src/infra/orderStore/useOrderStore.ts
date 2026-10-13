@@ -26,6 +26,7 @@ type OrderStoreType = OrderDetails & {
 	updateOrderTotalPrice: (priceAdjustment: number) => void
 	setOrderDetails: (order: OrderVariables) => void
 	saveOrderInStorage: () => Promise<void>
+	updateOrderInStorage: (order: OrderDetails) => Promise<void>
 	removeOrderFromStorage: (orderId: number) => Promise<void>
 	getOrderFromStorage: () => Promise<OrderDetails[]>
 	getTotalOrdersInStorage: () => Promise<number>
@@ -51,6 +52,10 @@ export const useOrderStore = create<OrderStoreType>()((set) => ({
 		const { saveOrder } = orderStorage
 		const order: OrderDetails = useOrderStore.getState()
 		await saveOrder(order)
+	},
+	updateOrderInStorage: async (order) => {
+		const { updateOrder } = orderStorage
+		await updateOrder(order)
 	},
 	removeOrderFromStorage: async (orderId) => {
 		const { removeOrder } = orderStorage
@@ -82,6 +87,7 @@ export function useOrderServiceZustand(): Pick<
 	| "setOrderDetails"
 	| "clearOrder"
 	| "saveOrderInStorage"
+	| "updateOrderInStorage"
 	| "getOrderFromStorage"
 	| "getTotalOrdersInStorage"
 	| "removeOrderFromStorage"
@@ -91,6 +97,7 @@ export function useOrderServiceZustand(): Pick<
 	const setOrderDetails = useOrderStore((state) => state.setOrderDetails)
 	const clearOrder = useOrderStore((state) => state.clearOrder)
 	const saveOrderInStorage = useOrderStore((state) => state.saveOrderInStorage)
+	const updateOrderInStorage = useOrderStore((state) => state.updateOrderInStorage)
 	const getOrderFromStorage = useOrderStore((state) => state.getOrderFromStorage)
 	const getTotalOrdersInStorage = useOrderStore((state) => state.getTotalOrdersInStorage)
 	const removeOrderFromStorage = useOrderStore((state) => state.removeOrderFromStorage)
@@ -101,6 +108,7 @@ export function useOrderServiceZustand(): Pick<
 		updateOrderTotalPrice,
 		setOrderDetails,
 		clearOrder,
+		updateOrderInStorage,
 		getOrderFromStorage,
 		getTotalOrdersInStorage,
 		removeOrderFromStorage,

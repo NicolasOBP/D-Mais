@@ -2,9 +2,8 @@ import { router } from "expo-router"
 import { useEffect } from "react"
 
 import {
-	type OrderDetails,
-	type OrderVariables,
 	type ProductCartScreen,
+	useOrderSaveStorage,
 	useOrdersSend,
 	useSellFareControl,
 	useSellPaymentTermsControl,
@@ -13,27 +12,28 @@ import { useAuth, useBackToSellService, useCartStore, useOrderItems, useOrderSer
 
 import { type SellSchema, useSellForm } from "@schemas"
 
-import { Icon, useModal } from "@components"
+import { Icon, SendSellModalBody, useModal } from "@components"
 import { Box } from "@core-components"
 
-import { SendSellModalBody } from "./components/SendSellModalBody"
-
 type Props = {
-	cartItems: ProductCartScreen[] | OrderDetails["products"]
-	order?: OrderVariables
+	cartItems: ProductCartScreen[]
 }
 
-export function useSellScreen({ cartItems, order }: Props) {
+export function useSellScreen({ cartItems }: Props) {
 	const { authUser } = useAuth()
 	const { finishSell } = useBackToSellService()
-	const { setProductsTotal, setOrderDetails, clearOrder } = useOrderService()
+	const { setProductsTotal, setOrderDetails, clearOrder, updateOrderTotalPrice } = useOrderService()
 	const { showModal, closeModal, updateModalData } = useModal()
 
 	const { totalSelectedPrice: productsTotal } = useCartStore()
 	const { totalPrice } = useOrderItems()
-	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm(order)
+	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm()
 
+	const { mutate: saveOrderInStorage } = useOrderSaveStorage()
 	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
+		onSuccess: (price) => {
+			updateOrderTotalPrice(price)
+		},
 		onError: () => {
 			setValue("freteSelecionado", !getValues("freteSelecionado"))
 		},
@@ -41,6 +41,7 @@ export function useSellScreen({ cartItems, order }: Props) {
 	const { mutate: paymentTermsControl, isPending: isPendingPaymentTerms } =
 		useSellPaymentTermsControl({
 			onSuccess: (data) => {
+				updateOrderTotalPrice(data.price)
 				setValue("tabela", data.tableName, { shouldValidate: true })
 			},
 		})
@@ -53,6 +54,7 @@ export function useSellScreen({ cartItems, order }: Props) {
 			router.push("/orders")
 		},
 		onError: () => {
+			saveOrderInStorage()
 			finishSell()
 
 			closeModal()
@@ -140,6 +142,6 @@ export function useSellScreen({ cartItems, order }: Props) {
 		control,
 		formState,
 		isTotalPricePending,
-		totalPrice,
+		totalPrice: totalPrice,
 	}
 }
