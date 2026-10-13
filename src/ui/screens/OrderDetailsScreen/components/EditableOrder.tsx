@@ -1,25 +1,16 @@
-import { router } from "expo-router"
+import type { OrderDetails } from "@domain"
 
-import { type OrderDetails, useOrderRemoveFromStorage } from "@domain"
-
-import { ScreenHeader, SellsForm, SellsProductsList, useModal } from "@components"
+import { ScreenHeader, SellsForm, SellsProductsList } from "@components"
 import { Screen } from "@containers"
-import { Box, Button, Text } from "@core-components"
+import { Box, Button } from "@core-components"
 
 import { useEditableOrder } from "./useEditableOrder"
 
 export function EditAbleOrder({ order }: { order: OrderDetails }) {
-	const { showModal, closeModal } = useModal()
-	const { mutate: removeOrderFromStorage } = useOrderRemoveFromStorage({
-		onSuccess: () => {
-			closeModal()
-			router.back()
-		},
-	})
-
 	const {
 		handleSubmit,
 		handleShowModal,
+		handleShowDeleteModal,
 		fareControl,
 		paymentTermsControl,
 		isTotalPricePending,
@@ -30,29 +21,6 @@ export function EditAbleOrder({ order }: { order: OrderDetails }) {
 		order,
 		defaultTotalPrice: order.totalPrice,
 	})
-
-	function handleShowDeleteModal() {
-		showModal({
-			headerTitle: "EXCLUIR PEDIDO",
-			BodyComponent: (
-				<Box paddingHorizontal="s48">
-					<Text variant="title16" color="errorText" textAlign="center">
-						Deseja realmente excluir esse pedido?
-					</Text>
-					<Text variant="title16" color="errorText" textAlign="center">
-						Essa ação não poderá ser desfeita.
-					</Text>
-				</Box>
-			),
-			footerButton: {
-				twoButtonFooter: {
-					labelCancel: "Cancelar",
-					labelConfirm: "Deletar",
-					onConfirm: () => removeOrderFromStorage({ orderId: order.id }),
-				},
-			},
-		})
-	}
 
 	return (
 		<Screen scrollable noHorizontalPadding>

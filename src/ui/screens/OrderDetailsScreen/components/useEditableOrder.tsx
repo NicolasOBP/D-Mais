@@ -15,7 +15,7 @@ import { useAuth } from "@infra"
 import { type SellSchema, useSellForm } from "@schemas"
 
 import { Icon, SendSellModalBody, useModal } from "@components"
-import { Box } from "@core-components"
+import { Box, Text } from "@core-components"
 
 type Props = {
 	cartItems: OrderDetails["products"]
@@ -129,13 +129,38 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 		})
 	}
 
+	function handleShowDeleteModal() {
+		showModal({
+			headerTitle: "EXCLUIR PEDIDO",
+			BodyComponent: (
+				<Box paddingHorizontal="s48">
+					<Text variant="title16" color="errorText" textAlign="center">
+						Deseja realmente excluir esse pedido?
+					</Text>
+					<Text variant="title16" color="errorText" textAlign="center">
+						Essa ação não poderá ser desfeita.
+					</Text>
+				</Box>
+			),
+			footerButton: {
+				twoButtonFooter: {
+					labelCancel: "Cancelar",
+					labelConfirm: "Deletar",
+					onConfirm: () => removeOrderFromStorage({ orderId: order.id }),
+				},
+			},
+		})
+	}
+
 	let isTotalPricePending = isPendingTotalPrice || isPendingPaymentTerms
 
 	return {
 		handleShowModal,
+		handleShowDeleteModal,
 		paymentTermsControl,
 		handleSubmit,
 		fareControl,
+		reset,
 		control,
 		formState,
 		isTotalPricePending,

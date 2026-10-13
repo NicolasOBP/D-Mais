@@ -34,8 +34,8 @@ export function OrderDetailsScreen() {
 	}
 
 	if (order.status === "pending") {
-		return <EditAbleOrder order={order} />
+		return <EditAbleOrder key={order.id} order={order} />
 	}
 
-	return <NonEditableOrder order={order} />
+	return <NonEditableOrder key={order.id} order={order} />
 }
