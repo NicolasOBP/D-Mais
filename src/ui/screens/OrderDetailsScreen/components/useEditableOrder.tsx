@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import {
 	type OrderDetails,
 	type OrderVariables,
+	useAuthCheckLeftQuota,
 	useOrderRemoveFromStorage,
 	useOrderUpdateStorage,
 	useOrdersSend,
@@ -30,6 +31,7 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 
 	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm(order)
 
+	const { checkLeftQuota, isPending: isPendingCheckQuota, error } = useAuthCheckLeftQuota()
 	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
 		onSuccess: (price) => {
 			setTotalPrice((prevPrice) => prevPrice + price)
@@ -46,7 +48,12 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 			},
 		})
 
-	const { mutate: removeOrderFromStorage } = useOrderRemoveFromStorage()
+	const { mutate: removeOrderFromStorage } = useOrderRemoveFromStorage({
+		onSuccess: () => {
+			closeModal()
+			router.push("/orders")
+		},
+	})
 	const { mutate: sendOrder, isPending: isPendingOrderSend } = useOrdersSend({
 		onSuccess: () => {
 			removeOrderFromStorage({ orderId: order.id })
@@ -71,6 +78,10 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 	}, [isPendingOrderUpdate, isPendingOrderSend])
 
 	function handleShowModal(data: SellSchema) {
+		checkLeftQuota(order.products.reduce((acc, prod) => acc + prod.volume, 0))
+
+		if (error) return
+
 		showModal(
 			{
 				BodyComponent: (
@@ -164,6 +175,7 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 		control,
 		formState,
 		isTotalPricePending,
+		isSendSellPending: isPendingCheckQuota,
 		totalPrice: totalPrice,
 	}
 }

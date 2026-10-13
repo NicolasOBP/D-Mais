@@ -36,12 +36,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
 			const storedAuthUser = await authContextStorage.get()
 
 			if (!storedAuthUser) {
-				throw new Error("Erro ao carregar usuário")
+				return
 			}
 
 			setAuthUser(storedAuthUser)
-		} catch (error) {
-			console.log(error)
 		} finally {
 			setIsReady(true)
 		}
