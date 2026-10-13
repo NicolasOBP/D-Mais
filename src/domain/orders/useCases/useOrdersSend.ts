@@ -13,16 +13,13 @@ import {
 
 import type { Order, OrderVariables } from "../OrdersType"
 
-import { useOrderSaveStorage } from "./useOrderSaveStorage"
-
 export function useOrdersSend(options?: MutationOptions<Order>) {
-	const { orders, auth } = useRepository()
+	const { orders } = useRepository()
 	const { authUser } = useAuth()
 	const { showToast } = useToast()
 	const queryClient = useQueryClient()
 	const { cart } = useCartService()
 	const { products: orderProducts } = useOrderItems()
-	const { mutate: saveOrderInStorage } = useOrderSaveStorage()
 
 	return useAppMutation<Order, OrderVariables>({
 		mutationFn: (order) => orders.send(order),
@@ -32,10 +29,9 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
 				message: "Pedido enviado com sucesso!",
 			})
 
-			auth.updateLeftQuota(
-				authUser!.id,
-				order.products.reduce((acc, prod) => acc + prod.volume, 0),
-			)
+			if (authUser?.leftQuota) {
+				authUser.leftQuota -= order.products.reduce((acc, prod) => acc + prod.volume, 0)
+			}
 
 			cart.deleteItems(order.products.map((prod) => prod.cartId))
 

@@ -8,8 +8,8 @@ async function set(authUser: AuthUser): Promise<void> {
 	await storage.setItem(AUTH_KEY, authUser)
 }
 
-async function get(): Promise<AuthUser | string | null> {
-	const authUser = await storage.getItem<AuthUser | string>(AUTH_KEY)
+async function get(): Promise<AuthUser | null> {
+	const authUser = await storage.getItem<AuthUser>(AUTH_KEY)
 	return authUser
 }
 

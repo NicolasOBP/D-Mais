@@ -6,7 +6,7 @@ export function useAuthCheckLeftQuota(options?: MutationOptions<void>) {
 	const { showToast } = useToast()
 
 	const { error, isPending, mutate } = useAppMutation<void, { quota: number }>({
-		mutationFn: ({ quota }) => auth.checkLeftQuota(authUser!.id, quota),
+		mutationFn: ({ quota }) => auth.checkLeftQuota(authUser, quota),
 		onError: (error) => {
 			showToast({
 				type: "warning",
