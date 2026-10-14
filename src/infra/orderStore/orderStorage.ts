@@ -47,7 +47,7 @@ async function updateOrder(order: OrderDetails): Promise<void> {
 		}
 
 		const updatedOrders = previousOrders.map((previousOrder) =>
-			previousOrder.id === order.id ? order : previousOrder,
+			previousOrder.id === order.id ? { ...order, id: idUtils.generateId() } : previousOrder,
 		)
 		await storage.setItem(ORDER_KEY, updatedOrders)
 	} catch (error) {
