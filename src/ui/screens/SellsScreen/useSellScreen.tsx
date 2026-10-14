@@ -8,7 +8,7 @@ import {
 	useSellFareControl,
 	useSellPaymentTermsControl,
 } from "@domain"
-import { useAuth, useBackToSellService, useCartStore, useOrderItems, useOrderService } from "@infra"
+import { useAuth, useBackToSellService, useCartStore, useOrderService, useOrderStore } from "@infra"
 
 import { type SellSchema, useSellForm } from "@schemas"
 
@@ -26,10 +26,18 @@ export function useSellScreen({ cartItems }: Props) {
 	const { showModal, closeModal, updateModalData } = useModal()
 
 	const { totalSelectedPrice: productsTotal } = useCartStore()
-	const { totalPrice } = useOrderItems()
+	const { totalPrice } = useOrderStore()
+
 	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm()
 
-	const { mutate: saveOrderInStorage } = useOrderSaveStorage()
+	const { mutate: saveOrderInStorage } = useOrderSaveStorage({
+		onSuccess: () => {
+			finishSell()
+
+			closeModal()
+			handleErrorShowModal()
+		},
+	})
 	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
 		onSuccess: (price) => {
 			updateOrderTotalPrice(price)
@@ -55,10 +63,6 @@ export function useSellScreen({ cartItems }: Props) {
 		},
 		onError: () => {
 			saveOrderInStorage()
-			finishSell()
-
-			closeModal()
-			handleErrorShowModal()
 		},
 	})
 

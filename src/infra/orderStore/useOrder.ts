@@ -1,21 +1,21 @@
 import type { OrderDetails } from "@domain"
 
-import { useOrderServiceZustand, useOrderStore, useOrderTotalPrice } from "./useOrderStore"
+import { orderStore, useOrderServiceZustand } from "./orderStore"
 
-export function useOrderItems(): OrderDetails {
-	const totalPrice = useOrderTotalPrice()
-	const products = useOrderStore((state) => state.products)
-	const id = useOrderStore((state) => state.id)
-	const client = useOrderStore((state) => state.client)
-	const status = useOrderStore((state) => state.status)
-	const paymentTerms = useOrderStore((state) => state.paymentTerms)
-	const paymentMethod = useOrderStore((state) => state.paymentMethod)
-	const table = useOrderStore((state) => state.table)
-	const fareSelected = useOrderStore((state) => state.fareSelected)
-	const truck = useOrderStore((state) => state.truck)
-	const pickup = useOrderStore((state) => state.pickup)
-	const driver = useOrderStore((state) => state.driver)
-	const company = useOrderStore((state) => state.company)
+export function useOrderStore(): OrderDetails {
+	const totalPrice = orderStore((state) => state.totalPrice)
+	const products = orderStore((state) => state.products)
+	const id = orderStore((state) => state.id)
+	const client = orderStore((state) => state.client)
+	const status = orderStore((state) => state.status)
+	const paymentTerms = orderStore((state) => state.paymentTerms)
+	const paymentMethod = orderStore((state) => state.paymentMethod)
+	const table = orderStore((state) => state.table)
+	const fareSelected = orderStore((state) => state.fareSelected)
+	const truck = orderStore((state) => state.truck)
+	const pickup = orderStore((state) => state.pickup)
+	const driver = orderStore((state) => state.driver)
+	const company = orderStore((state) => state.company)
 
 	return {
 		id,

@@ -6,7 +6,6 @@ import {
 	useAppMutation,
 	useAuth,
 	useCartService,
-	useOrderItems,
 	useRepository,
 	useToast,
 } from "@infra"
@@ -19,7 +18,6 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
 	const { showToast } = useToast()
 	const queryClient = useQueryClient()
 	const { cart } = useCartService()
-	const { products: orderProducts } = useOrderItems()
 
 	return useAppMutation<Order, OrderVariables>({
 		mutationFn: (order) => orders.send(order),
@@ -41,10 +39,6 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
 			options?.onSuccess?.(order)
 		},
 		onError: (error) => {
-			cart.deleteItems(orderProducts.map((prod) => prod.cartId))
-
-			queryClient.invalidateQueries({ queryKey: [QueryKeys.Cart] })
-
 			options?.onError?.(error.message)
 		},
 	})

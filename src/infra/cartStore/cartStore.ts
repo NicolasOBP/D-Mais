@@ -27,7 +27,7 @@ export type CartStoreType = typeof initialState &
 		getSelectedVolume: () => number
 	}
 
-const useCartStore = create<CartStoreType>()(
+const cartStore = create<CartStoreType>()(
 	persist(
 		(set, get) => ({
 			...initialState,
@@ -183,10 +183,10 @@ export type cartStore = Pick<
 >
 
 export function useCartStoreZustand(): cartStore {
-	const cartProducts = useCartStore((state) => state.cartProducts)
-	const selectedItems = useCartStore((state) => state.selectedItems)
-	const totalSelectedPrice = Math.abs(useCartStore((state) => state.totalSelectedPrice))
-	const totalPrice = Math.abs(useCartStore((state) => state.totalPrice))
+	const cartProducts = cartStore((state) => state.cartProducts)
+	const selectedItems = cartStore((state) => state.selectedItems)
+	const totalSelectedPrice = Math.abs(cartStore((state) => state.totalSelectedPrice))
+	const totalPrice = Math.abs(cartStore((state) => state.totalPrice))
 
 	return { cartProducts, selectedItems, totalSelectedPrice, totalPrice }
 }
@@ -196,14 +196,14 @@ export type cartServices = {
 }
 
 export function useCartServiceZustand(): cartServices {
-	const add = useCartStore((state) => state.add)
-	const deleteItem = useCartStore((state) => state.deleteItem)
-	const deleteItems = useCartStore((state) => state.deleteItems)
-	const editCartProduct = useCartStore((state) => state.editCartProduct)
-	const toggleProductSelection = useCartStore((state) => state.toggleProductSelection)
-	const getSelectedProducts = useCartStore((state) => state.getSelectedProducts)
-	const getSelectedVolume = useCartStore((state) => state.getSelectedVolume)
-	const getCartMetadata = useCartStore((state) => state.getCartMetadata)
+	const add = cartStore((state) => state.add)
+	const deleteItem = cartStore((state) => state.deleteItem)
+	const deleteItems = cartStore((state) => state.deleteItems)
+	const editCartProduct = cartStore((state) => state.editCartProduct)
+	const toggleProductSelection = cartStore((state) => state.toggleProductSelection)
+	const getSelectedProducts = cartStore((state) => state.getSelectedProducts)
+	const getSelectedVolume = cartStore((state) => state.getSelectedVolume)
+	const getCartMetadata = cartStore((state) => state.getCartMetadata)
 
 	return {
 		cart: {
