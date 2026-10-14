@@ -31,7 +31,7 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 
 	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm(order)
 
-	const { checkLeftQuota, isPending: isPendingCheckQuota, error } = useAuthCheckLeftQuota()
+	const { checkLeftQuota, isPending: isPendingCheckQuota } = useAuthCheckLeftQuota()
 	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
 		onSuccess: (price) => {
 			setTotalPrice((prevPrice) => prevPrice + price)
@@ -54,7 +54,7 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 			router.push("/orders")
 		},
 	})
-	const { mutate: sendOrder, isPending: isPendingOrderSend } = useOrdersSend({
+	const { mutateAsync: sendOrder, isPending: isPendingOrderSend } = useOrdersSend({
 		onSuccess: () => {
 			removeOrderFromStorage({ orderId: order.id })
 			closeModal()
@@ -66,37 +66,35 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 			handleErrorShowModal()
 		},
 	})
-	const { mutate: updateOrderInStorage, isPending: isPendingOrderUpdate } = useOrderUpdateStorage({
-		onSuccess: (orderToSend) => {
-			sendOrder(orderToSend)
-		},
-	})
+	const { mutate: updateOrderInStorage, isPending: isPendingOrderUpdate } = useOrderUpdateStorage()
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <unintended behavior>
 	useEffect(() => {
 		updateModalData({ isLoading: isPendingOrderUpdate || isPendingOrderSend })
 	}, [isPendingOrderUpdate, isPendingOrderSend])
 
-	function handleShowModal(data: SellSchema) {
+	async function handleShowModal(data: SellSchema) {
 		checkLeftQuota(order.products.reduce((acc, prod) => acc + prod.volume, 0))
-
-		if (error) return
-
-		showModal(
-			{
-				BodyComponent: (
-					<SendSellModalBody userLeftQuota={authUser?.leftQuota} userQuota={authUser?.quota} />
-				),
-				footerButton: {
-					twoButtonFooter: {
-						labelCancel: "Cancelar",
-						labelConfirm: "Confirmar",
-						onConfirm: () => onSubmit(data),
+			.then(() => {
+				showModal(
+					{
+						BodyComponent: (
+							<SendSellModalBody userLeftQuota={authUser?.leftQuota} userQuota={authUser?.quota} />
+						),
+						footerButton: {
+							twoButtonFooter: {
+								labelCancel: "Cancelar",
+								labelConfirm: "Confirmar",
+								onConfirm: () => onSubmit(data),
+							},
+						},
 					},
-				},
-			},
-			{ isLoading: isPendingOrderUpdate || isPendingOrderSend },
-		)
+					{ isLoading: isPendingOrderUpdate || isPendingOrderSend },
+				)
+			})
+			.catch((error) => {
+				console.log(error)
+			})
 	}
 
 	function onSubmit(data: SellSchema) {
@@ -114,7 +112,9 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 			fareSelected: data.freteSelecionado,
 		}
 
-		updateOrderInStorage({ ...order, ...orderToSend })
+		sendOrder(orderToSend).catch(() => {
+			updateOrderInStorage({ ...order, ...orderToSend })
+		})
 	}
 
 	function handleErrorShowModal() {

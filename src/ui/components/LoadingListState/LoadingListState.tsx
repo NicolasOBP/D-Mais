@@ -97,11 +97,10 @@ const screenListStyleMap: Record<
 	},
 	Orders: {
 		container: {
-			paddingBottom: theme.spacing.s12,
 			rowGap: theme.spacing.s20,
 		},
 		wrapper: {
-			gap: theme.spacing.s24,
+			gap: theme.spacing.s18,
 		},
 	},
 }

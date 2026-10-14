@@ -49,16 +49,6 @@ export function HomeScreenLoading(shimmerStyle: {
 				}}
 			/>
 
-			{/* Price skeleton */}
-			<View
-				style={{
-					height: 14,
-					backgroundColor: colors.gray4,
-					borderRadius: 8,
-					width: "50%",
-				}}
-			/>
-
 			{/* Button skeleton */}
 			<View
 				style={{
@@ -66,7 +56,7 @@ export function HomeScreenLoading(shimmerStyle: {
 					backgroundColor: colors.gray4,
 					borderRadius: borderRadii.default,
 					marginHorizontal: spacing.s32,
-					marginTop: spacing.s10,
+					marginTop: spacing.s20,
 				}}
 			/>
 		</View>
