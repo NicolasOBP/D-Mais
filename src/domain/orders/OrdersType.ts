@@ -20,7 +20,7 @@ export interface OrderDetails extends Order {
 	pickup?: Pickup
 	driver: Driver
 	company: Company
-	products: Pick<ProductCart, "cartId" | "title" | "volume" | "price">[]
+	products: Pick<ProductCart, "cartId" | "title" | "volume" | "price" | "totalPrice">[]
 }
 
 export type OrderVariables = Omit<OrderDetails, "id" | "status">

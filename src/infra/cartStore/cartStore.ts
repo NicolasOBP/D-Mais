@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-import type { ICartRepo, ProductCart, ProductCartScreen } from "@domain"
+import type { ICartRepo, ProductCartScreen } from "@domain"
 
 import { idUtils } from "@utils"
 
@@ -25,6 +25,8 @@ export type CartStoreType = typeof initialState &
 		toggleProductSelection: (productCartId: number) => void
 		getSelectedProducts: () => ProductCartScreen[]
 		getSelectedVolume: () => number
+		updateProductPrices: (products: { cartId: number; price: number; totalPrice: number }[]) => void
+		setSelectedTotalPrice: (totalPrice: number) => void
 	}
 
 const cartStore = create<CartStoreType>()(
@@ -34,17 +36,23 @@ const cartStore = create<CartStoreType>()(
 
 			add: async (product) => {
 				set((state) => {
-					const existingProduct = state.cartProducts.find((item) => item.id === product.id)
+					const existingProduct = state.cartProducts.find(
+						(item) => item.id === product.id && item.inventory.id === product.inventory.id,
+					)
 
-					if (
-						existingProduct &&
-						existingProduct.inventory.description === product.inventory.description &&
-						existingProduct.inventory.id === product.inventory.id
-					) {
-						state.totalSelectedPrice +=
-							(product.volume - existingProduct.volume) * (product.price ?? 0)
+					if (existingProduct) {
+						const previousTotal = existingProduct.totalPrice
+						const nextTotal = product.totalPrice
 
-						existingProduct.volume = product.volume
+						const previousVolume = existingProduct.volume
+						const nextVolue = product.volume
+
+						state.totalSelectedPrice += existingProduct.isSelected ? nextTotal : 0
+
+						Object.assign(existingProduct, {
+							totalPrice: previousTotal + nextTotal,
+							volume: previousVolume + nextVolue,
+						})
 
 						return {
 							cartProducts: state.cartProducts,
@@ -58,7 +66,7 @@ const cartStore = create<CartStoreType>()(
 					}
 
 					state.selectedItems += 1
-					state.totalSelectedPrice += product.volume * (product.price ?? 0)
+					state.totalSelectedPrice += product.totalPrice
 
 					return {
 						cartProducts: [...state.cartProducts, newProductCart],
@@ -72,7 +80,7 @@ const cartStore = create<CartStoreType>()(
 
 					if (productToRemove?.isSelected) {
 						state.selectedItems -= 1
-						state.totalSelectedPrice -= productToRemove.volume * (productToRemove.price ?? 0)
+						state.totalSelectedPrice -= productToRemove.totalPrice
 					}
 
 					return {
@@ -90,7 +98,7 @@ const cartStore = create<CartStoreType>()(
 					productsToRemove.forEach((prod) => {
 						if (prod.isSelected) {
 							state.selectedItems -= 1
-							state.totalSelectedPrice -= prod.volume * (prod.price ?? 0)
+							state.totalSelectedPrice -= prod.totalPrice
 						}
 					})
 
@@ -102,8 +110,8 @@ const cartStore = create<CartStoreType>()(
 				})
 			},
 
-			editCartProduct: async (productCartId, newVolume, newInventory) => {
-				let updatedProduct: ProductCart
+			editCartProduct: async (productCartId, newVolume, newInventory, newPrice, newTotalPrice) => {
+				let updatedProduct: ProductCartScreen
 
 				const productToUpdate = get().cartProducts.find((item) => item.cartId === productCartId)
 
@@ -113,20 +121,23 @@ const cartStore = create<CartStoreType>()(
 
 				set((state) => {
 					if (productToUpdate.isSelected) {
-						const price = productToUpdate.price ?? 0
-						const oldPrice = price * productToUpdate.volume
-						const newPrice = price * newVolume
+						const oldPrice = productToUpdate.totalPrice
+						const updatedTotalPrice = newTotalPrice
 
-						state.totalSelectedPrice = state.totalSelectedPrice - oldPrice + newPrice
+						state.totalSelectedPrice = state.totalSelectedPrice - oldPrice + updatedTotalPrice
 					}
 
-					updatedProduct = { ...updatedProduct, volume: newVolume, inventory: newInventory }
+					updatedProduct = {
+						...updatedProduct,
+						volume: newVolume,
+						inventory: newInventory,
+						price: newPrice,
+						totalPrice: newTotalPrice,
+					}
 
 					return {
 						cartProducts: state.cartProducts.map((item) =>
-							item.cartId === productCartId
-								? { ...item, volume: newVolume, inventory: newInventory }
-								: item,
+							item.cartId === productCartId ? updatedProduct : item,
 						),
 					}
 				})
@@ -141,11 +152,10 @@ const cartStore = create<CartStoreType>()(
 					)
 
 					if (productToToggleSelection) {
-						const price = productToToggleSelection.price ?? 0
+						const total = productToToggleSelection.totalPrice
+
 						state.selectedItems += productToToggleSelection.isSelected ? -1 : 1
-						state.totalSelectedPrice += productToToggleSelection.isSelected
-							? -productToToggleSelection.volume * price
-							: productToToggleSelection.volume * price
+						state.totalSelectedPrice += productToToggleSelection.isSelected ? -total : total
 					}
 
 					return {
@@ -167,6 +177,32 @@ const cartStore = create<CartStoreType>()(
 					.filter((item) => item.isSelected)
 					.reduce((acc, item) => acc + item.volume, 0)
 			},
+
+			updateProductPrices: (products) => {
+				set((state) => {
+					const pricesByCartId = new Map(products.map((product) => [product.cartId, product]))
+					const cartProducts = state.cartProducts.map((product) => {
+						const updatedPrice = pricesByCartId.get(product.cartId)
+
+						return updatedPrice
+							? { ...product, price: updatedPrice.price, totalPrice: updatedPrice.totalPrice }
+							: product
+					})
+
+					return {
+						cartProducts,
+						totalSelectedPrice: cartProducts
+							.filter((product) => product.isSelected)
+							.reduce(
+								(total, product) =>
+									total + (product.totalPrice ?? product.volume * (product.price ?? 0)),
+								0,
+							),
+					}
+				})
+			},
+
+			setSelectedTotalPrice: (totalPrice) => set({ totalSelectedPrice: totalPrice }),
 
 			getCartMetadata: async () => ({
 				totalItems: get().cartProducts.length,
@@ -202,6 +238,8 @@ export function useCartServiceZustand(): cartServices {
 	const editCartProduct = cartStore((state) => state.editCartProduct)
 	const toggleProductSelection = cartStore((state) => state.toggleProductSelection)
 	const getSelectedProducts = cartStore((state) => state.getSelectedProducts)
+	const updateProductPrices = cartStore((state) => state.updateProductPrices)
+	const setSelectedTotalPrice = cartStore((state) => state.setSelectedTotalPrice)
 	const getSelectedVolume = cartStore((state) => state.getSelectedVolume)
 	const getCartMetadata = cartStore((state) => state.getCartMetadata)
 
@@ -214,6 +252,8 @@ export function useCartServiceZustand(): cartServices {
 			toggleProductSelection,
 			getSelectedProducts,
 			getSelectedVolume,
+			updateProductPrices,
+			setSelectedTotalPrice,
 			getCartMetadata,
 		},
 	}

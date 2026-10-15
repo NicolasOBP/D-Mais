@@ -16,15 +16,15 @@ type UseAppMutationReturn<TData, TVariables> = {
 	>
 }
 
-export type UseAppMutationOptions<TData> = {
-	onSuccess?: (data: TData) => void
+export type UseAppMutationOptions<TData, TVariables = unknown> = {
+	onSuccess?: (data: TData, variables: TVariables) => void
 	onError?: (data: { message: string; cause: string | undefined }) => void
 	errorMessage?: string
 }
 
 type UseAppMutationParams<TData, TVariables> = {
 	mutationFn: (variable: TVariables) => Promise<TData>
-} & UseAppMutationOptions<TData>
+} & UseAppMutationOptions<TData, TVariables>
 
 export function useAppMutation<TData, TVariables>({
 	mutationFn,

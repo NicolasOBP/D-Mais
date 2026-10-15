@@ -12,11 +12,6 @@ type Props = {
 }
 
 export function ProductCartDetails({ product }: Props) {
-	const totalProductPrice =
-		product.price === undefined
-			? "Não informado"
-			: useNumberFormat.toBRLCurrency(product.price * product.volume)
-
 	const { mutate: editProduct, isPending } = useCartEditProduct({
 		onSuccess: (product) => {
 			closeModal()
@@ -44,7 +39,7 @@ export function ProductCartDetails({ product }: Props) {
 		const newVolumeNumber = Number.parseInt(volume, 10)
 
 		editProduct({
-			productCartId: product.cartId,
+			product,
 			newVolume: newVolumeNumber,
 			newInventory: inventory,
 		})
@@ -71,7 +66,7 @@ export function ProductCartDetails({ product }: Props) {
 						Preço unitário padrão*: {useNumberFormat.toBRLCurrency(product.price ?? 0)}
 					</Text>
 					<Text variant="text12Bold" color="text">
-						Total: {totalProductPrice}
+						Total: {useNumberFormat.toBRLCurrency(product.totalPrice)}
 					</Text>
 				</Box>
 
