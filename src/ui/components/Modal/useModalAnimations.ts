@@ -19,7 +19,7 @@ type Props = {
 export function useModalAnimations({ DURATION, modalOpen, progress, height }: Props) {
 	const { colors, borderRadii } = useAppTheme()
 	const backdropAnimatedStyle = useAnimatedStyle(() => ({
-		zIndex: modalOpen.value ? 100 : withDelay(DURATION, withTiming(-1, { duration: 0 })),
+		zIndex: modalOpen.value ? 10 : withDelay(DURATION, withTiming(-1, { duration: 0 })),
 		opacity: 1 - progress.value,
 	}))
 

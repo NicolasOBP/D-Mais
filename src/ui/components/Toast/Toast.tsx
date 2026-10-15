@@ -96,6 +96,6 @@ const styles = StyleSheet.create({
 		borderRadius: theme.borderRadii.default,
 		padding: theme.spacing.s8,
 		borderWidth: 2,
-		zIndex: 2,
+		zIndex: 15,
 	},
 })
