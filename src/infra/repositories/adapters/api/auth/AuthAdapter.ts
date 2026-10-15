@@ -12,6 +12,6 @@ export function adaptLoginResultToAuthUser(
 		id: loginResult.C_CDEMPR,
 		company: loginResult.C_POSTO,
 		userName,
-		message: loginResult.MENSAGEM,
+		name: loginResult.C_RAZSO,
 	}
 }

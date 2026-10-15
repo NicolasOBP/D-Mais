@@ -6,16 +6,15 @@ export type AuthAPIContent = {
 	MENSAGEM: string
 	C_POSTO: string
 	C_CDEMPR: string
-	C_RAZO: string
+	C_RAZSO: string
 }
 
 export type AuthUser = {
 	id: string
 	company: string
 	userName: string
-	name?: string
+	name: string
 	email?: string
 	quota?: number
 	leftQuota?: number
-	message?: string
 }

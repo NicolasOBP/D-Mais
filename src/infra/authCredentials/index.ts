@@ -1,2 +1,2 @@
 export * from "./Providers"
-export * from "./useAuth"
+export { useAuth } from "./useAuth"
