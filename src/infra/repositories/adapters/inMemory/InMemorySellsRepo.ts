@@ -6,6 +6,7 @@ import type {
 	PaymentMethod,
 	PaymentTerms,
 	Pickup,
+	SendCartItems,
 	TablePrices,
 	Truck,
 } from "@domain"
@@ -21,6 +22,10 @@ import { mockTrucks } from "./data/mockTrucks"
 import { delay } from "./delay"
 
 export class InMemorySellsRepo implements ISellsRepo {
+	async sendCart(_items: SendCartItems): Promise<void> {
+		await delay()
+	}
+
 	async clientList(): Promise<Client[]> {
 		await delay()
 

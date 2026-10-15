@@ -5,7 +5,7 @@ import type { ListRenderItemInfo } from "react-native"
 import { useScrollToTop } from "@react-navigation/native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 
-import { type ProductCartScreen, useAuthCheckLeftQuota } from "@domain"
+import { type ProductCartScreen, useAuthCheckLeftQuota, useSellSendCart } from "@domain"
 import { useCartService, useCartStore, useToast } from "@infra"
 
 import { useAppTheme } from "@theme"
@@ -22,7 +22,13 @@ export function CartScreen() {
 	const { showToast } = useToast()
 	const { selectedItems, totalSelectedPrice, cartProducts } = useCartStore()
 	const { cart } = useCartService()
-	const { checkLeftQuota, isPending } = useAuthCheckLeftQuota({
+	const { checkLeftQuota, isPending: isCheckingQuota } = useAuthCheckLeftQuota({
+		onSuccess: () => {
+			router.push("/sell")
+		},
+	})
+	// TODO: ADD CHECK QUOTA BACK
+	const { mutate: sendCart, isPending: isSendingCart } = useSellSendCart({
 		onSuccess: () => {
 			router.push("/sell")
 		},
@@ -50,7 +56,13 @@ export function CartScreen() {
 			return
 		}
 
-		checkLeftQuota(cart.getSelectedVolume())
+		sendCart(
+			cart.getSelectedProducts().map((product) => ({
+				C_CDPRO: product.id,
+				C_CDEST: product.inventory.id,
+				C_QTVEN: product.volume,
+			})),
+		)
 	}
 
 	return (
@@ -71,7 +83,7 @@ export function CartScreen() {
 			</Box>
 
 			<CartFooter
-				isPending={isPending}
+				isPending={isCheckingQuota || isSendingCart}
 				onCheckout={onCheckout}
 				totalItems={selectedItems}
 				totalPrice={totalSelectedPrice}

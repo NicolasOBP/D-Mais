@@ -1,3 +1,16 @@
+import type { ProductPriceRequestItem } from "../product"
+
+export type SendCartAPIContent = {
+	STATUS: string
+	MENSAGEM?: string
+}
+
+export type SendCartAPI = {
+	result: (SendCartAPIContent | string)[]
+}
+
+export type SendCartItems = ProductPriceRequestItem[]
+
 export type Client = {
 	name: string
 	corporateReason: string
