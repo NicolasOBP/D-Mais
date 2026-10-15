@@ -51,6 +51,9 @@ export function ProductCartDetails({ product }: Props) {
 				{product.title}
 			</Text>
 			<Text textAlign="center" variant="text10" color="gray2">
+				Código da base: {product.inventory.baseCode}
+			</Text>
+			<Text textAlign="center" variant="text10" color="gray2">
 				{product.inventory.id} - {product.inventory.description}
 			</Text>
 			<Text variant="text10" color="gray2">

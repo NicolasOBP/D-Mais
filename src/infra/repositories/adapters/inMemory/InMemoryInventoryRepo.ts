@@ -17,6 +17,6 @@ export class InMemoryInventoryRepo implements IInventoryRepo {
 
 		return inventory
 			.filter(({ products }) => products.some(({ id }) => id === productCode))
-			.map(({ id, description }) => ({ id, description }))
+			.map(({ id, description, baseCode }) => ({ id, description, baseCode }))
 	}
 }

@@ -26,6 +26,7 @@ export type InventoryProduct = Omit<Product, "price"> & {
 export interface Inventory {
 	id: string
 	description: string
+	baseCode: string
 	affiliate: string
 	products: InventoryProduct[]
 }

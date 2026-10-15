@@ -9,6 +9,7 @@ export const productSchema = z.object({
 		{
 			id: z.string().min(1),
 			description: z.string().min(1),
+			baseCode: z.string().min(1),
 		},
 		{ error: "Selecione um Estoque" },
 	),
