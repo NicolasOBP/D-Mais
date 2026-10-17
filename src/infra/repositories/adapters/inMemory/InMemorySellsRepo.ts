@@ -5,9 +5,9 @@ import type {
 	ISellsRepo,
 	PaymentMethod,
 	PaymentTerms,
-	Pickup,
+	SendCartItems,
 	TablePrices,
-	Truck,
+	TruckPickup,
 } from "@domain"
 
 import { mockClients } from "./data/mockClients"
@@ -21,22 +21,20 @@ import { mockTrucks } from "./data/mockTrucks"
 import { delay } from "./delay"
 
 export class InMemorySellsRepo implements ISellsRepo {
+	async sendCart(_items: SendCartItems): Promise<void> {
+		await delay()
+	}
+
 	async clientList(): Promise<Client[]> {
 		await delay()
 
 		return mockClients
 	}
 
-	async truckList(): Promise<Truck[]> {
+	async truckPickupList(): Promise<TruckPickup[]> {
 		await delay()
 
-		return mockTrucks
-	}
-
-	async pickupList(): Promise<Pickup[]> {
-		await delay()
-
-		return mockPickups
+		return [...mockTrucks, ...mockPickups]
 	}
 
 	async driverList(): Promise<Driver[]> {
@@ -66,6 +64,8 @@ export class InMemorySellsRepo implements ISellsRepo {
 	async fareControl(isFareSelected: boolean): Promise<number> {
 		await delay()
 
+		if (Math.random() < 0.5) throw new Error("Erro de servidor")
+
 		return isFareSelected ? -10 : 10
 	}
 
@@ -75,6 +75,8 @@ export class InMemorySellsRepo implements ISellsRepo {
 
 		if (!tablePrices) throw new Error("Erro ao procurar tabela")
 
-		return tablePrices
+		if (Math.random() < 0.5) throw new Error("Erro de servidor")
+
+		return { ...tablePrices, tableName: paymentTerms.table }
 	}
 }

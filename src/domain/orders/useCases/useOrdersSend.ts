@@ -7,18 +7,17 @@ import {
 	useAuth,
 	useCartService,
 	useRepository,
+	useToast,
 } from "@infra"
-
-import { useToast } from "@components"
 
 import type { Order, OrderVariables } from "../OrdersType"
 
 export function useOrdersSend(options?: MutationOptions<Order>) {
-	const { orders, cart, auth } = useRepository()
+	const { orders } = useRepository()
 	const { authUser } = useAuth()
 	const { showToast } = useToast()
 	const queryClient = useQueryClient()
-	const { removeProductsFromCart } = useCartService()
+	const { cart } = useCartService()
 
 	return useAppMutation<Order, OrderVariables>({
 		mutationFn: (order) => orders.send(order),
@@ -28,18 +27,19 @@ export function useOrdersSend(options?: MutationOptions<Order>) {
 				message: "Pedido enviado com sucesso!",
 			})
 
-			auth.updateLeftQuota(
-				authUser!.id,
-				order.products.reduce((acc, prod) => acc + prod.volume, 0),
-			)
+			if (authUser?.leftQuota) {
+				authUser.leftQuota -= order.products.reduce((acc, prod) => acc + prod.volume, 0)
+			}
 
 			cart.deleteItems(order.products.map((prod) => prod.cartId))
-			removeProductsFromCart(order.products.map((prod) => prod.cartId))
 
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.Orders] })
 			queryClient.invalidateQueries({ queryKey: [QueryKeys.Cart] })
 
 			options?.onSuccess?.(order)
+		},
+		onError: (error) => {
+			options?.onError?.(error.message)
 		},
 	})
 }

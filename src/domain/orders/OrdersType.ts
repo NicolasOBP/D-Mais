@@ -1,5 +1,5 @@
 import type { ProductCart } from "../cart"
-import type { Client, Company, Driver, PaymentMethod, PaymentTerms, Pickup, Truck } from "../sells"
+import type { Client, Company, Driver, PaymentMethod, PaymentTerms, TruckPickup } from "../sells"
 
 export type OrdersStatus = "pending" | "completed" | "cancelled"
 
@@ -8,7 +8,7 @@ export interface Order {
 	products: Pick<ProductCart, "cartId" | "title" | "volume">[]
 	client: Client
 	status: OrdersStatus
-	totalPrice: string
+	totalPrice: number
 }
 
 export interface OrderDetails extends Order {
@@ -16,11 +16,11 @@ export interface OrderDetails extends Order {
 	paymentMethod: PaymentMethod
 	table: string
 	fareSelected: boolean
-	truck: Truck
-	pickup?: Pickup
+	truck: TruckPickup
+	pickup?: TruckPickup
 	driver: Driver
 	company: Company
-	products: Pick<ProductCart, "cartId" | "title" | "volume" | "price">[]
+	products: Pick<ProductCart, "cartId" | "title" | "volume" | "price" | "totalPrice">[]
 }
 
 export type OrderVariables = Omit<OrderDetails, "id" | "status">

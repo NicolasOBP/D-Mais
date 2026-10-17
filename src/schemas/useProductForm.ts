@@ -12,7 +12,7 @@ export type UseProductFormProps = {
 
 export function useProductForm({
 	defaultVolume = "",
-	defaultInventory = { description: "", id: "" },
+	defaultInventory = { description: "", id: "", baseCode: "" },
 }: UseProductFormProps) {
 	const { control, handleSubmit, formState, reset } = useForm<ProductSchema>({
 		resolver: zodResolver(productSchema),

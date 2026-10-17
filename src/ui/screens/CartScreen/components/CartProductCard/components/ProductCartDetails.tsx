@@ -12,8 +12,6 @@ type Props = {
 }
 
 export function ProductCartDetails({ product }: Props) {
-	const totalProductPrice = useNumberFormat.toBRLCurrency(product.price * product.volume)
-
 	const { mutate: editProduct, isPending } = useCartEditProduct({
 		onSuccess: (product) => {
 			closeModal()
@@ -41,7 +39,7 @@ export function ProductCartDetails({ product }: Props) {
 		const newVolumeNumber = Number.parseInt(volume, 10)
 
 		editProduct({
-			productCartId: product.cartId,
+			product,
 			newVolume: newVolumeNumber,
 			newInventory: inventory,
 		})
@@ -53,17 +51,25 @@ export function ProductCartDetails({ product }: Props) {
 				{product.title}
 			</Text>
 			<Text textAlign="center" variant="text10" color="gray2">
+				Código da base: {product.inventory.baseCode}
+			</Text>
+			<Text textAlign="center" variant="text10" color="gray2">
 				{product.inventory.id} - {product.inventory.description}
+			</Text>
+			<Text variant="text10" color="gray2">
+				*preço unitário pagando antecipadamente
 			</Text>
 
 			<Box flexDirection="row" justifyContent="space-between" mt="s14">
-				<Box>
-					<Text variant="text12Bold" color="text" mb="s4">
+				<Box g="s4">
+					<Text variant="text12Bold" color="text">
 						Quantidade: {useNumberFormat.formatNumberWithThousands(product.volume)} L
 					</Text>
-
 					<Text variant="text12Bold" color="text">
-						Total: {totalProductPrice}
+						Preço unitário padrão*: {useNumberFormat.toBRLCurrency(product.price ?? 0)}
+					</Text>
+					<Text variant="text12Bold" color="text">
+						Total: {useNumberFormat.toBRLCurrency(product.totalPrice)}
 					</Text>
 				</Box>
 

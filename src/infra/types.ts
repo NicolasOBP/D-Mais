@@ -1,5 +1,5 @@
-export interface MutationOptions<TData> {
-	onSuccess?: (data: TData) => void
+export interface MutationOptions<TData, TVariables = unknown> {
+	onSuccess?: (data: TData, variables?: TVariables) => void
 	onError?: (message: string) => void
 	errorMessage?: string
 }

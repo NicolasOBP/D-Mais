@@ -8,15 +8,16 @@ export enum QueryKeys {
 
 	Sells = "Sells",
 	SellsClientList = "SellsClientList",
-	SellsPaymentDelayList = "SellsPaymentDelayList",
+	SellsPaymentTermsList = "SellsPaymentTermsList",
 	SellsPaymentMethodsList = "SellsPaymentMethodsList",
-	SellsTruckList = "SellsTruckList",
-	SellsPickupList = "SellsPickupList",
+	SellsTruckPickupList = "SellsTruckPickupList",
 	SellsDriverList = "SellsDriverList",
 	SellsCompanyList = "SellsCompanyList",
 
 	Orders = "Orders",
 	OrdersList = "OrdersList",
+	OrdersListStorage = "OrdersListStorage",
+	OrdersTotalStorageOrders = "OrdersTotalStorageOrders",
 
 	Inventory = "Inventory",
 	InventoryList = "InventoryList",

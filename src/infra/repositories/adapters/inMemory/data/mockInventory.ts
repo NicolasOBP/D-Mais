@@ -5,6 +5,7 @@ import { mockProducts } from "./mockProducts"
 export const mockInventory: Inventory[] = [
 	{
 		id: "A1",
+		baseCode: "001",
 		description: "Usina XYZ",
 		affiliate: "Parceiro X",
 		products: mockProducts.map((product) => ({
@@ -15,6 +16,7 @@ export const mockInventory: Inventory[] = [
 	{
 		id: "A2",
 		description: "Usina SP",
+		baseCode: "001",
 		affiliate: "Parceiro Y",
 		products: mockProducts.map((product) => ({
 			...product,
@@ -24,6 +26,7 @@ export const mockInventory: Inventory[] = [
 	{
 		id: "A3",
 		description: "Usina RJ",
+		baseCode: "001",
 		affiliate: "Parceiro Z",
 		products: mockProducts.map((product) => ({
 			...product,
@@ -33,6 +36,7 @@ export const mockInventory: Inventory[] = [
 	{
 		id: "A4",
 		description: "Usina MG",
+		baseCode: "001",
 		affiliate: "Parceiro A",
 		products: mockProducts.map((product) => ({
 			...product,
@@ -42,6 +46,7 @@ export const mockInventory: Inventory[] = [
 	{
 		id: "A5",
 		description: "Usina ES",
+		baseCode: "001",
 		affiliate: "Parceiro B",
 		products: mockProducts.map((product) => ({
 			...product,

@@ -1,8 +1,6 @@
-import { type MutationOptions, useAppMutation, useAuth, useRepository } from "@infra"
+import { type MutationOptions, useAppMutation, useAuth, useRepository, useToast } from "@infra"
 
-import { useToast } from "@components"
-
-import type { AuthUser } from "../AuthUser"
+import type { AuthUser } from "../AuthTypes"
 
 interface Variables {
 	company: string

@@ -52,7 +52,7 @@
 					"options": {
 						"identifierOrder": "lexicographic",
 						"groups": [
-							["react", "react-native", "expo*", "expo*/**"],
+							["react", "react-native", "expo*", "expo*/**", "axios"],
 							":BLANK_LINE:",
 							[
 								"@react-navigation/**",

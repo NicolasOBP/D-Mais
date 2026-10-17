@@ -1,17 +1,16 @@
-import { type CartStoreType, useCartServiceZustand, useCartStoreZustand } from "./useCartStore"
+import {
+	type cartServices,
+	type cartStore,
+	useCartServiceZustand,
+	useCartStoreZustand,
+} from "./cartStore"
 
-export function useCartItems(): Pick<
-	CartStoreType,
-	"productCartStore" | "selectedItems" | "totalSelectedPrice"
-> {
-	const { productCartStore, selectedItems, totalSelectedPrice } = useCartStoreZustand()
+export function useCartStore(): cartStore {
+	const { cartProducts, selectedItems, totalSelectedPrice, totalPrice } = useCartStoreZustand()
 
-	return { productCartStore, selectedItems, totalSelectedPrice }
+	return { cartProducts, selectedItems, totalSelectedPrice, totalPrice }
 }
 
-export function useCartService(): Omit<
-	CartStoreType,
-	"productCartStore" | "selectedItems" | "totalSelectedPrice"
-> {
+export function useCartService(): cartServices {
 	return useCartServiceZustand()
 }

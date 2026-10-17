@@ -4,15 +4,15 @@ import type {
 	Driver,
 	PaymentMethod,
 	PaymentTerms,
-	Pickup,
+	SendCartItems,
 	TablePrices,
-	Truck,
+	TruckPickup,
 } from "./SellsType"
 
 export interface ISellsRepo {
+	sendCart: (items: SendCartItems) => Promise<void>
 	clientList: () => Promise<Client[]>
-	truckList: () => Promise<Truck[]>
-	pickupList: () => Promise<Pickup[]>
+	truckPickupList: () => Promise<TruckPickup[]>
 	driverList: () => Promise<Driver[]>
 	companyList: () => Promise<Company[]>
 	paymentTermsList: () => Promise<PaymentTerms[]>

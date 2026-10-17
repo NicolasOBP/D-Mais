@@ -36,13 +36,15 @@ export class InMemoryAuthRepo implements IAuthRepo {
 		return user
 	}
 
-	async checkLeftQuota(userId: string, quota: number): Promise<void> {
+	async checkLeftQuota(user: AuthUser | null, quota: number): Promise<void> {
 		await delay()
-
-		const user = Users.find((user) => user.id === userId)
 
 		if (!user) {
 			throw new Error("Usuário não encontrado")
+		}
+
+		if (user.leftQuota === undefined) {
+			throw new Error("Quota do usuário indisponível")
 		}
 
 		if (user.leftQuota < quota) {
@@ -59,6 +61,10 @@ export class InMemoryAuthRepo implements IAuthRepo {
 
 		if (!user) {
 			throw new Error("Usuário não encontrado")
+		}
+
+		if (user.leftQuota === undefined) {
+			throw new Error("Quota do usuário indisponível")
 		}
 
 		user.leftQuota -= usedQuota

@@ -11,6 +11,8 @@ import Animated, {
 } from "react-native-reanimated"
 import { scheduleOnRN } from "react-native-worklets"
 
+import { useToast } from "@infra"
+
 import { useAppTheme } from "@theme"
 
 import { Text } from "@core-components"
@@ -18,7 +20,6 @@ import { Text } from "@core-components"
 import theme from "../../theme/theme"
 
 import { toastVariants } from "./toastVariants"
-import { useToast } from "./useToast"
 
 const TOP_OFFSET = 35
 
@@ -95,6 +96,6 @@ const styles = StyleSheet.create({
 		borderRadius: theme.borderRadii.default,
 		padding: theme.spacing.s8,
 		borderWidth: 2,
-		zIndex: 2,
+		zIndex: 15,
 	},
 })

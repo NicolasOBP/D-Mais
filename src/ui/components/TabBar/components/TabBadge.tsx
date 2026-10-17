@@ -1,11 +1,17 @@
 import { Box, Text } from "@core-components"
 
-export function TabBadge({ number }: { number: number | string | undefined }) {
+type Props = {
+	number: number | string | undefined
+	screenName: string
+}
+
+export function TabBadge({ number, screenName }: Props) {
 	if (!number) return null
+	const isOrdersScreen = screenName === "orders"
 
 	return (
 		<Box
-			bg="primary"
+			bg={isOrdersScreen ? "pendingBadgeText" : "primary"}
 			position="absolute"
 			right={-12}
 			top={-15}

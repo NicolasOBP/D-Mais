@@ -1,34 +1,42 @@
-import { useMutation } from "@tanstack/react-query"
+import { type UseMutateAsyncFunction, useMutation } from "@tanstack/react-query"
 
 type UseAppMutationReturn<TData, TVariables> = {
 	mutate: (variable: TVariables) => TData | void
 	isPending: boolean
 	error: { message: string; cause: string | undefined } | null
+	status: "error" | "idle" | "pending" | "success"
+	mutateAsync: UseMutateAsyncFunction<
+		TData,
+		{
+			message: string
+			cause: string | undefined
+		},
+		TVariables,
+		unknown
+	>
 }
 
-export type UseAppMutationOptions<TData> = {
-	onSuccess?: (data: TData) => void
+export type UseAppMutationOptions<TData, TVariables = unknown> = {
+	onSuccess?: (data: TData, variables: TVariables) => void
 	onError?: (data: { message: string; cause: string | undefined }) => void
 	errorMessage?: string
-	retry?: boolean
 }
 
 type UseAppMutationParams<TData, TVariables> = {
 	mutationFn: (variable: TVariables) => Promise<TData>
-} & UseAppMutationOptions<TData>
+} & UseAppMutationOptions<TData, TVariables>
 
 export function useAppMutation<TData, TVariables>({
 	mutationFn,
 	onError,
 	onSuccess,
-	retry,
 }: UseAppMutationParams<TData, TVariables>): UseAppMutationReturn<TData, TVariables> {
-	const { mutate, error, isPending } = useMutation({
+	const { mutate, error, isPending, status, mutateAsync } = useMutation({
 		mutationFn: mutationFn,
 		onSuccess,
 		onError,
-		retry,
+		retry: false,
 	})
 
-	return { mutate, isPending, error }
+	return { mutate, isPending, error, status, mutateAsync }
 }

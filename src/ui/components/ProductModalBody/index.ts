@@ -1,1 +1,0 @@
-export { ProductModalBody } from "./ProductModalBody"

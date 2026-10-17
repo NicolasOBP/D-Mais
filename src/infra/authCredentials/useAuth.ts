@@ -1,5 +1,7 @@
 import { useContext } from "react"
 
+import type { AuthUser } from "@domain"
+
 import { AuthContext } from "./Providers/AuthProvider"
 
 export function useAuth() {
@@ -10,4 +12,10 @@ export function useAuth() {
 	}
 
 	return context
+}
+
+export const authUser = (): AuthUser | null => {
+	const { authUser } = useAuth()
+
+	return authUser
 }

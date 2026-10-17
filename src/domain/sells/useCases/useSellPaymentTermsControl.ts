@@ -1,16 +1,22 @@
-import { type MutationOptions, useAppMutation, useCartService, useRepository } from "@infra"
+import { type MutationOptions, useAppMutation, useRepository, useToast } from "@infra"
 
 import type { PaymentTerms, TablePrices } from "../SellsType"
 
 export function useSellPaymentTermsControl(options?: MutationOptions<TablePrices>) {
 	const { sells } = useRepository()
-	const { updateTotalSelectedPrice } = useCartService()
+	const { showToast } = useToast()
 
 	return useAppMutation<TablePrices, PaymentTerms>({
-		mutationFn: (paymentTerms) => sells.paymentTermsControl(paymentTerms),
+		mutationFn: async (paymentTerms) => {
+			const tablePrices = await sells.paymentTermsControl(paymentTerms)
+			return { ...tablePrices, tableName: paymentTerms.table }
+		},
 		onSuccess: (data) => {
-			updateTotalSelectedPrice(data.price)
 			options?.onSuccess?.(data)
+		},
+		onError: (error) => {
+			showToast({ message: error.message, type: "error" })
+			options?.onError?.(error.message)
 		},
 	})
 }

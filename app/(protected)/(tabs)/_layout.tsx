@@ -1,19 +1,33 @@
 import { Tabs } from "expo-router"
+import { useMemo } from "react"
 
-import { useCartGetMetadata } from "@domain"
+import { useCartGetMetadata, useOrderGetTotalOrdersInStorage } from "@domain"
 
 import { TabBar } from "@components"
 
 export default function TabLayout() {
 	const { data: cartMetadata } = useCartGetMetadata()
+	const { data: totalOrdersInStorage } = useOrderGetTotalOrdersInStorage()
 
-	function badgeNumber() {
-		if (!cartMetadata) {
-			return undefined
-		}
+	const cartBadgeNumber = useMemo(
+		() =>
+			cartMetadata
+				? cartMetadata.totalItems >= 1
+					? cartMetadata.totalItems
+					: undefined
+				: undefined,
+		[cartMetadata],
+	)
 
-		return cartMetadata.totalItems >= 1 ? cartMetadata.totalItems : undefined
-	}
+	const ordersBadgeNumber = useMemo(
+		() =>
+			totalOrdersInStorage
+				? totalOrdersInStorage >= 1
+					? totalOrdersInStorage
+					: undefined
+				: undefined,
+		[totalOrdersInStorage],
+	)
 
 	return (
 		<Tabs
@@ -24,13 +38,13 @@ export default function TabLayout() {
 				animation: "shift",
 			}}
 		>
-			<Tabs.Screen name="orders" />
+			<Tabs.Screen name="orders" options={{ tabBarBadge: ordersBadgeNumber }} />
 			<Tabs.Screen name="orders/[id]" options={{ href: null }} />
 			<Tabs.Screen name="home" />
 			<Tabs.Screen
 				name="cart"
 				options={{
-					tabBarBadge: badgeNumber(),
+					tabBarBadge: cartBadgeNumber,
 				}}
 			/>
 			<Tabs.Screen name="sell" options={{ href: null }} />

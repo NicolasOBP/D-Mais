@@ -1,8 +1,11 @@
-import { View } from "react-native"
+import { Dimensions, View } from "react-native"
 
 import Animated from "react-native-reanimated"
 
 import { useAppTheme } from "@theme"
+
+const SCREEN_WIDTH = Dimensions.get("screen").width
+const CARD_WIDTH = SCREEN_WIDTH * 0.43
 
 export function OrderScreenLoading(shimmerStyle: {
 	transform: {
@@ -19,7 +22,7 @@ export function OrderScreenLoading(shimmerStyle: {
 				borderColor: colors.primary,
 				backgroundColor: colors.background,
 				overflow: "hidden",
-				position: "relative",
+				width: CARD_WIDTH,
 			}}
 		>
 			<Animated.View
@@ -38,13 +41,11 @@ export function OrderScreenLoading(shimmerStyle: {
 
 			<View
 				style={{
-					paddingVertical: spacing.s4,
-					paddingHorizontal: spacing.s75,
+					paddingVertical: spacing.s14,
 					alignItems: "center",
 					justifyContent: "center",
 					backgroundColor: colors.gray4,
 					width: "100%",
-					height: 20,
 					alignSelf: "flex-start",
 					zIndex: 1,
 				}}

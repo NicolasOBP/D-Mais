@@ -1,3 +1,5 @@
+import { Dimensions } from "react-native"
+
 import type { Order } from "@domain"
 
 import { useNumberFormat } from "@utils"
@@ -10,6 +12,9 @@ export interface OrdersProductCardProps {
 	order: Order
 	onPress: () => void
 }
+
+const SCREEN_WIDTH = Dimensions.get("screen").width
+const CARD_WIDTH = SCREEN_WIDTH * 0.43
 
 export function OrdersProductCard({ order, onPress }: OrdersProductCardProps) {
 	const orderStatus = statusStyleMap[order.status]
@@ -65,6 +70,7 @@ const cardBoxStyle: BoxProps = {
 	borderColor: "primary",
 	backgroundColor: "background",
 	overflow: "hidden",
+	width: CARD_WIDTH,
 }
 
 const statusBoxStyle: BoxProps = {

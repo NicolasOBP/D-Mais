@@ -3,7 +3,6 @@ import { type PropsWithChildren, createContext, useEffect, useState } from "reac
 
 import type { AuthUser } from "@domain"
 
-import { useRepository } from "../../repositories"
 import { authContextStorage } from "../authContextStorage"
 import type { AuthState } from "../authCredentialsType"
 
@@ -19,10 +18,9 @@ SplashScreen.preventAutoHideAsync()
 export function AuthProvider({ children }: PropsWithChildren) {
 	const [authUser, setAuthUser] = useState<AuthUser | null>(null)
 	const [isReady, setIsReady] = useState<boolean>(false)
-	const { auth } = useRepository()
 
 	async function saveAuthUser(user: AuthUser) {
-		await authContextStorage.set(user.id)
+		await authContextStorage.set(user)
 		setAuthUser(user)
 	}
 
@@ -33,14 +31,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
 	async function loadAuthUser() {
 		try {
-			const userId = await authContextStorage.get()
-			const user = await auth.getUserById(userId)
+			const storedAuthUser = await authContextStorage.get()
 
-			if (user) {
-				setAuthUser(user)
+			if (!storedAuthUser) {
+				return
 			}
-		} catch (error) {
-			console.log(error)
+
+			setAuthUser(storedAuthUser)
 		} finally {
 			setIsReady(true)
 		}

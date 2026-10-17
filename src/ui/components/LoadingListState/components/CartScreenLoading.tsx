@@ -89,6 +89,19 @@ export function CartScreenLoading(shimmerStyle: {
 					}}
 				/>
 
+				{/* Subtitle skeleton */}
+				<View
+					style={{
+						marginTop: spacing.s2,
+						height: 9,
+						backgroundColor: colors.gray4,
+						borderRadius: 8,
+						marginBottom: spacing.s4,
+						width: "40%",
+						alignSelf: "center",
+					}}
+				/>
+
 				{/* Details row skeleton */}
 				<View
 					style={{

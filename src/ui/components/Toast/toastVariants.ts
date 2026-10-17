@@ -1,6 +1,6 @@
-import type { ThemeColor } from "@theme"
+import type { ToastTypes } from "@infra"
 
-import type { ToastTypes } from "./useToast"
+import type { ThemeColor } from "@theme"
 
 export const toastVariants: Record<
 	ToastTypes,

@@ -14,6 +14,8 @@ export class InMemoryOrdersRepo implements IOrdersRepo {
 	async send(order: OrderVariables): Promise<Order> {
 		await delay()
 
+		if (Math.random() < 0.4 || Math.random() > 0.7) throw new Error("Erro de servidor")
+
 		const newOrder: OrderDetails = {
 			id: InnerOrders.length + Math.floor(Math.random() * 1000),
 			status: "completed",

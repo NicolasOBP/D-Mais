@@ -1,14 +1,12 @@
-import { type MutationOptions, useAppMutation, useAuth, useRepository } from "@infra"
-
-import { useToast } from "../../../ui/components/Toast/"
+import { type MutationOptions, useAppMutation, useAuth, useRepository, useToast } from "@infra"
 
 export function useAuthCheckLeftQuota(options?: MutationOptions<void>) {
 	const { auth } = useRepository()
 	const { authUser } = useAuth()
 	const { showToast } = useToast()
 
-	const { error, isPending, mutate } = useAppMutation<void, { quota: number }>({
-		mutationFn: ({ quota }) => auth.checkLeftQuota(authUser!.id, quota),
+	const { error, isPending, mutateAsync } = useAppMutation<void, { quota: number }>({
+		mutationFn: ({ quota }) => auth.checkLeftQuota(authUser, quota),
 		onError: (error) => {
 			showToast({
 				type: "warning",
@@ -23,12 +21,8 @@ export function useAuthCheckLeftQuota(options?: MutationOptions<void>) {
 		},
 	})
 
-	function checkLeftQuota(quota: number) {
-		mutate({ quota })
-	}
-
 	return {
-		checkLeftQuota,
+		checkLeftQuota: async (quota: number) => await mutateAsync({ quota }),
 		isPending,
 		error,
 	}

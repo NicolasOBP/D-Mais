@@ -1,7 +1,7 @@
-import { QueryKeys, useAppQuery, useRepository } from "@infra"
+import { QueryKeys, useAppQuery, useCartService } from "@infra"
 
 export function useCartGetMetadata() {
-	const { cart } = useRepository()
+	const { cart } = useCartService()
 
 	return useAppQuery({
 		queryKey: [QueryKeys.Cart, QueryKeys.CartMetadata],

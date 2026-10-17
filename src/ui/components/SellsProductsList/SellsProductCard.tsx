@@ -5,11 +5,11 @@ import { useNumberFormat } from "@utils"
 import { Box, type BoxProps, PressableBox, Text } from "@core-components"
 
 interface SellsProductCardProps {
-	item: Pick<ProductCart, "cartId" | "title" | "volume" | "price">
+	item: Pick<ProductCart, "cartId" | "title" | "volume" | "price" | "totalPrice">
 }
 
 export function SellsProductCard({ item }: SellsProductCardProps) {
-	const finalPrice = item.price * item.volume
+	const finalPrice = item.totalPrice
 
 	return (
 		<PressableBox {...containerBoxStyle}>
@@ -32,7 +32,7 @@ export function SellsProductCard({ item }: SellsProductCardProps) {
 						Preço
 					</Text>
 					<Text variant="title12" numberOfLines={1}>
-						{useNumberFormat.toBRLCurrency(item.price)}
+						{item.price === undefined ? "Não informado" : useNumberFormat.toBRLCurrency(item.price)}
 					</Text>
 				</Box>
 			</Box>
