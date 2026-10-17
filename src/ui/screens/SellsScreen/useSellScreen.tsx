@@ -1,6 +1,8 @@
 import { router } from "expo-router"
 import { useEffect } from "react"
 
+import { useWatch } from "react-hook-form"
+
 import {
 	type ProductCartScreen,
 	useOrderSaveStorage,
@@ -8,7 +10,16 @@ import {
 	useSellFareControl,
 	useSellPaymentTermsControl,
 } from "@domain"
-import { useAuth, useBackToSellService, useCartStore, useOrderService, useOrderStore } from "@infra"
+import {
+	disableBackgroundOrderSaving,
+	enableBackgroundOrderSaving,
+	setBackgroundOrderDraft,
+	useAuth,
+	useBackToSellService,
+	useCartStore,
+	useOrderService,
+	useOrderStore,
+} from "@infra"
 
 import { type SellSchema, useSellForm } from "@schemas"
 
@@ -29,9 +40,11 @@ export function useSellScreen({ cartItems }: Props) {
 	const { totalPrice } = useOrderStore()
 
 	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm()
+	const watchedSellFormValues = useWatch({ control })
 
 	const { mutate: saveOrderInStorage } = useOrderSaveStorage({
 		onSuccess: () => {
+			disableBackgroundOrderSaving()
 			finishSell()
 
 			closeModal()
@@ -55,6 +68,7 @@ export function useSellScreen({ cartItems }: Props) {
 		})
 	const { mutate: sendOrder, isPending: isPendingOrderSend } = useOrdersSend({
 		onSuccess: () => {
+			disableBackgroundOrderSaving()
 			finishSell()
 			clearOrder()
 			closeModal()
@@ -74,6 +88,27 @@ export function useSellScreen({ cartItems }: Props) {
 	useEffect(() => {
 		setProductsTotal(productsTotal)
 	}, [productsTotal, setProductsTotal])
+
+	useEffect(() => {
+		enableBackgroundOrderSaving()
+	}, [])
+
+	useEffect(() => {
+		const sellFormValues = getValues()
+		setBackgroundOrderDraft({
+			products: cartItems,
+			totalPrice,
+			client: sellFormValues.cliente,
+			paymentTerms: sellFormValues.condicaoPagamento,
+			paymentMethod: sellFormValues.formaPagamento,
+			company: sellFormValues.transportadora,
+			driver: sellFormValues.motorista,
+			pickup: sellFormValues.carreta,
+			table: sellFormValues.tabela,
+			truck: sellFormValues.caminhao,
+			fareSelected: sellFormValues.freteSelecionado,
+		})
+	}, [cartItems, getValues, totalPrice])
 
 	function handleShowModal(data: SellSchema) {
 		showModal(

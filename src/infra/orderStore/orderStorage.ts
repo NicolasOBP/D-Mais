@@ -6,15 +6,17 @@ import { storage } from "../storage"
 
 const ORDER_KEY = "@Order"
 
-async function saveOrder(order: OrderDetails): Promise<void> {
+async function saveOrder(order: OrderDetails): Promise<OrderDetails["id"]> {
 	try {
 		const previousOrders = await getOrders()
+		const id = idUtils.generateId()
 		const orderToSave = {
 			...order,
-			id: idUtils.generateId(),
+			id,
 		}
 		const newOrders = [...previousOrders, orderToSave]
 		await storage.setItem(ORDER_KEY, newOrders)
+		return id
 	} catch (error) {
 		throw new Error("Erro ao salvar o pedido no armazenamento local.", {
 			cause: { cause: String(error) },
