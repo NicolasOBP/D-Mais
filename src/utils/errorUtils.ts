@@ -28,7 +28,11 @@ function toErrorWithMessage(maybeError: unknown): ErrorWithMessage {
 function getErrorMessage(error: unknown) {
 	const message = toErrorWithMessage(error).message
 
-	return message.includes("404") ? "Servidor Offline" : message
+	return message.includes("404")
+		? "Servidor Offline"
+		: message.includes("502")
+			? "Erro no Servidor"
+			: message
 }
 
 export const errorUtils = { getErrorMessage }

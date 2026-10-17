@@ -10,11 +10,11 @@ const initialOrder: OrderDetails = {
 	client: { name: "", corporateReason: "", cnpjCpf: "" },
 	status: "pending",
 	totalPrice: 0,
-	paymentTerms: { id: "", description: "" },
+	paymentTerms: { id: "", description: "", table: "" },
 	paymentMethod: { id: "", description: "" },
 	table: "",
 	fareSelected: false,
-	truck: { licensePlate: "" },
+	truck: { licensePlate: "", id: "" },
 	driver: { name: "", cpf: "" },
 	company: { name: "", cnpj: "" },
 }

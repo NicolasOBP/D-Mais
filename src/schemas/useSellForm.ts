@@ -36,11 +36,11 @@ export function useSellForm(order?: OrderVariables) {
 
 const defaultValues: SellSchema = {
 	cliente: { cnpjCpf: "", name: "", corporateReason: "" },
-	condicaoPagamento: { description: "", id: "" },
+	condicaoPagamento: { description: "", id: "", table: "" },
 	formaPagamento: { description: "", id: "" },
 	tabela: "",
 	freteSelecionado: false,
-	caminhao: { licensePlate: "" },
+	caminhao: { licensePlate: "", id: "" },
 	motorista: { cpf: "", name: "" },
 	transportadora: { cnpj: "", name: "" },
 }

@@ -13,6 +13,7 @@ export const sellSchema = z.object({
 		{
 			id: z.string().min(1, "Campo obrigatório"),
 			description: z.string().min(1, "Campo obrigatório"),
+			table: z.string().min(1, "Campo obrigatório"),
 		},
 		{ error: "Campo obrigatório" },
 	),
@@ -28,6 +29,7 @@ export const sellSchema = z.object({
 	caminhao: z.object(
 		{
 			licensePlate: z.string().min(1, "Caminhão inválido"),
+			id: z.string().min(1, "Caminhão inválido"),
 		},
 		{ error: "Caminhão inválido" },
 	),
@@ -35,6 +37,7 @@ export const sellSchema = z.object({
 		.object(
 			{
 				licensePlate: z.string().min(1, "Carreta inválido"),
+				id: z.string().min(1, "Caminhão inválido"),
 			},
 			{ error: "Carreta inválido" },
 		)

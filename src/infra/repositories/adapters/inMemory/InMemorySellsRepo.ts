@@ -5,10 +5,9 @@ import type {
 	ISellsRepo,
 	PaymentMethod,
 	PaymentTerms,
-	Pickup,
 	SendCartItems,
 	TablePrices,
-	Truck,
+	TruckPickup,
 } from "@domain"
 
 import { mockClients } from "./data/mockClients"
@@ -32,16 +31,10 @@ export class InMemorySellsRepo implements ISellsRepo {
 		return mockClients
 	}
 
-	async truckList(): Promise<Truck[]> {
+	async truckPickupList(): Promise<TruckPickup[]> {
 		await delay()
 
-		return mockTrucks
-	}
-
-	async pickupList(): Promise<Pickup[]> {
-		await delay()
-
-		return mockPickups
+		return [...mockTrucks, ...mockPickups]
 	}
 
 	async driverList(): Promise<Driver[]> {
@@ -84,6 +77,6 @@ export class InMemorySellsRepo implements ISellsRepo {
 
 		if (Math.random() < 0.5) throw new Error("Erro de servidor")
 
-		return tablePrices
+		return { ...tablePrices, tableName: paymentTerms.table }
 	}
 }

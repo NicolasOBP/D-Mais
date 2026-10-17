@@ -7,7 +7,10 @@ export function useSellPaymentTermsControl(options?: MutationOptions<TablePrices
 	const { showToast } = useToast()
 
 	return useAppMutation<TablePrices, PaymentTerms>({
-		mutationFn: (paymentTerms) => sells.paymentTermsControl(paymentTerms),
+		mutationFn: async (paymentTerms) => {
+			const tablePrices = await sells.paymentTermsControl(paymentTerms)
+			return { ...tablePrices, tableName: paymentTerms.table }
+		},
 		onSuccess: (data) => {
 			options?.onSuccess?.(data)
 		},

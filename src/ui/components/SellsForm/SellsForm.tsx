@@ -4,10 +4,9 @@ import {
 	useSellClientList,
 	useSellCompanyList,
 	useSellDriverList,
-	useSellPaymentDelayList,
 	useSellPaymentMethodsList,
-	useSellPickupList,
-	useSellTruckList,
+	useSellPaymentTermsList,
+	useSellTruckPickupList,
 } from "@domain"
 
 import type { SellSchema } from "@schemas"
@@ -26,13 +25,14 @@ type Props = Pick<ControllerProps<SellSchema>, "control"> & {
 
 export function SellsForm({ control, fareControl, readOnly, paymentTermsControl }: Props) {
 	const { data: clientList, isLoading: isLoadingClient } = useSellClientList(!readOnly)
-	const { data: truckList, isLoading: isLoadingTruck } = useSellTruckList(!readOnly)
+	const { data: truckPickupList, isLoading: isLoadingTruckPickup } = useSellTruckPickupList(
+		!readOnly,
+	)
 	const { data: driverList, isLoading: isLoadingDriver } = useSellDriverList(!readOnly)
-	const { data: pickupList, isLoading: isLoadingPickup } = useSellPickupList(!readOnly)
 	const { data: companyList, isLoading: isLoadingCompany } = useSellCompanyList(!readOnly)
 	const { data: paymentMethodsList, isLoading: isLoadingPaymentMethods } =
 		useSellPaymentMethodsList(!readOnly)
-	const { data: paymentDelaysList, isLoading: isLoadingPaymentDelays } = useSellPaymentDelayList(
+	const { data: paymentTermsList, isLoading: isLoadingPaymentTerms } = useSellPaymentTermsList(
 		!readOnly,
 	)
 
@@ -63,8 +63,8 @@ export function SellsForm({ control, fareControl, readOnly, paymentTermsControl 
 						isRequired
 						readOnly={readOnly}
 						dropDownProps={{
-							dropdownItems: paymentDelaysList,
-							isLoading: isLoadingPaymentDelays,
+							dropdownItems: paymentTermsList,
+							isLoading: isLoadingPaymentTerms,
 							valueKey: "description",
 							idKey: "id",
 						}}
@@ -108,10 +108,10 @@ export function SellsForm({ control, fareControl, readOnly, paymentTermsControl 
 						isRequired
 						readOnly={readOnly}
 						dropDownProps={{
-							dropdownItems: truckList,
-							idKey: "licensePlate",
+							dropdownItems: truckPickupList,
+							idKey: "id",
 							valueKey: "licensePlate",
-							isLoading: isLoadingTruck,
+							isLoading: isLoadingTruckPickup,
 						}}
 					/>
 				</Box>
@@ -123,10 +123,10 @@ export function SellsForm({ control, fareControl, readOnly, paymentTermsControl 
 						variant="secundary"
 						readOnly={readOnly}
 						dropDownProps={{
-							dropdownItems: pickupList,
-							idKey: "licensePlate",
+							dropdownItems: truckPickupList,
+							idKey: "id",
 							valueKey: "licensePlate",
-							isLoading: isLoadingPickup,
+							isLoading: isLoadingTruckPickup,
 						}}
 					/>
 				</Box>
