@@ -9,8 +9,9 @@ import { type Product, useProductsList } from "@domain"
 import { useAppTheme } from "@theme"
 import { errorUtils, useDebounce } from "@utils"
 
-import { EmptyList, LoadingListState, SearchBar } from "@components"
+import { AppLogo, EmptyList, LoadingListState, SearchBar } from "@components"
 import { Screen } from "@containers"
+import { Box, Text } from "@core-components"
 
 import { ProductCard } from "./components/ProductCard/ProductCard"
 
@@ -42,11 +43,20 @@ export function HomeScreen() {
 
 	return (
 		<Screen>
-			<SearchBar
-				placeholder="Buscar combustível"
-				onChangeText={setSearchText}
-				searchText={searchText}
-			/>
+			<Box>
+				<Box flexGrow={1} flexShrink={1} flexDirection="row" alignItems="center">
+					<AppLogo />
+					<SearchBar
+						placeholder="Buscar combustível"
+						onChangeText={setSearchText}
+						searchText={searchText}
+						containerProps={{ flex: 1 }}
+					/>
+				</Box>
+				<Text textAlign="center" variant="mediumText10" pt="s10" pb="s4">
+					*O estoque será selecionado após a escolha do combustível
+				</Text>
+			</Box>
 
 			{isLoading ? (
 				<LoadingListState screen="Home" />
