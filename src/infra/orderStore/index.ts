@@ -1,8 +1,5 @@
 export {
-	consumeSavedBackgroundOrderNotification,
-	disableBackgroundOrderSaving,
-	enableBackgroundOrderSaving,
-	saveBackgroundOrder,
-	setBackgroundOrderDraft,
+	useBackgroundOrderService,
+	useBackgroundOrderStore,
 } from "./backgroundOrder"
 export { useOrderService, useOrderStore } from "./useOrder"

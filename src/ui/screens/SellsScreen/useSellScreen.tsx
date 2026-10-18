@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <couse yes> */
 import { router } from "expo-router"
 import { useEffect } from "react"
 
@@ -11,11 +12,9 @@ import {
 	useSellPaymentTermsControl,
 } from "@domain"
 import {
-	disableBackgroundOrderSaving,
-	enableBackgroundOrderSaving,
-	setBackgroundOrderDraft,
 	useAuth,
 	useBackToSellService,
+	useBackgroundOrderService,
 	useCartStore,
 	useOrderService,
 	useOrderStore,
@@ -35,6 +34,8 @@ export function useSellScreen({ cartItems }: Props) {
 	const { finishSell } = useBackToSellService()
 	const { setProductsTotal, setOrderDetails, clearOrder, updateOrderTotalPrice } = useOrderService()
 	const { showModal, closeModal, updateModalData } = useModal()
+	const { disableBackgroundOrderSaving, enableBackgroundOrderSaving, setBackgroundOrderDraft } =
+		useBackgroundOrderService()
 
 	const { totalSelectedPrice: productsTotal } = useCartStore()
 	const { totalPrice } = useOrderStore()
@@ -80,7 +81,6 @@ export function useSellScreen({ cartItems }: Props) {
 		},
 	})
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <unintended behavior>
 	useEffect(() => {
 		updateModalData({ isLoading: isPendingOrderSend })
 	}, [isPendingOrderSend])
