@@ -14,12 +14,11 @@ import {
 	AuthProvider,
 	InMemoryRepositories,
 	MMKVStorage,
-	QueryKeys,
 	RepositoryProvider,
-	consumeSavedBackgroundOrderNotification,
 	initializeStorage,
-	saveBackgroundOrder,
 	useAuth,
+	useBackgroundOrderService,
+	useBackgroundOrderStore,
 	useToast,
 } from "@infra"
 
@@ -47,26 +46,85 @@ const Routes = () => {
 
 function AppStateMonitor() {
 	const appState = useRef(AppState.currentState)
-	const transitionQueue = useRef(Promise.resolve())
+	// const transitionQueue = useRef(Promise.resolve())
 	const queryClient = useQueryClient()
 	const { showToast } = useToast()
 	const { showModal, closeModal } = useModal()
+	const { canRun } = useBackgroundOrderStore()
+	const { saveBackgroundOrder, reverseBackgroundOrder, showBackgroundNotification } =
+		useBackgroundOrderService()
 
 	useEffect(() => {
-		function notifySavedBackgroundOrder() {
-			return consumeSavedBackgroundOrderNotification().then(async (order) => {
-				if (!order) {
-					return
-				}
+		// function notifySavedBackgroundOrder() {
+		// 	queryClient.invalidateQueries({ queryKey: [QueryKeys.Orders] })
+		// 	showModal({
+		// 		headerTitle: "Venda salva no dispositivo",
+		// 		showCloseButton: false,
+		// 		BodyComponent: (
+		// 			<Box>
+		// 				<Text textAlign="center" variant="title14">
+		// 					A venda foi salva como pendente e está disponível na tela Pedidos.
+		// 				</Text>
+		// 			</Box>
+		// 		),
+		// 		footerButton: {
+		// 			oneButtonFooter: {
+		// 				label: "Ver Pedidos",
+		// 				onPress: () => {
+		// 					closeModal()
+		// 					router.push("/orders")
+		// 				},
+		// 			},
+		// 		},
+		// 	})
+		// }
 
-				await queryClient.invalidateQueries({ queryKey: [QueryKeys.Orders] })
+		// transitionQueue.current = transitionQueue.current.then(notifySavedBackgroundOrder).catch(() => {
+		// 	showToast({
+		// 		type: "error",
+		// 		message: "Não foi possível verificar se a venda foi salva.",
+		// 	})
+		// })
+
+		const subscription = AppState.addEventListener("change", (nextAppState: AppStateStatus) => {
+			const previousAppState = appState.current
+			appState.current = nextAppState
+
+			if (!canRun) return
+
+			if (previousAppState.match(/inactive|active/) && nextAppState === "background") {
+				saveBackgroundOrder()
+				// transitionQueue.current = transitionQueue.current
+				// 	.then(async () => {
+				// 	})
+				// 	.catch(() => {
+				// 		showToast({
+				// 			type: "error",
+				// 			message: "Não foi possível salvar a venda no dispositivo.",
+				// 		})
+				// 	})
+			}
+
+			if (previousAppState.match(/inactive|background/) && nextAppState === "active") {
+				reverseBackgroundOrder()
+			}
+		})
+
+		return () => subscription.remove()
+	}, [canRun, saveBackgroundOrder, reverseBackgroundOrder])
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <run once>
+	useEffect(() => {
+		async function showBackgroundWarnModal() {
+			if (await showBackgroundNotification()) {
 				showModal({
 					headerTitle: "Venda salva no dispositivo",
 					showCloseButton: false,
 					BodyComponent: (
 						<Box>
 							<Text textAlign="center" variant="title14">
-								A venda foi salva como pendente e está disponível na tela Pedidos.
+								A venda que você estava fazendo foi salva como pendente e está disponível na tela
+								Pedidos.
 							</Text>
 						</Box>
 					),
@@ -80,47 +138,11 @@ function AppStateMonitor() {
 						},
 					},
 				})
-			})
+			}
 		}
 
-		transitionQueue.current = transitionQueue.current.then(notifySavedBackgroundOrder).catch(() => {
-			showToast({
-				type: "error",
-				message: "Não foi possível verificar se a venda foi salva.",
-			})
-		})
-
-		const subscription = AppState.addEventListener("change", (nextAppState: AppStateStatus) => {
-			const previousAppState = appState.current
-			appState.current = nextAppState
-
-			if (previousAppState.match(/inactive|active/) && nextAppState === "background") {
-				transitionQueue.current = transitionQueue.current
-					.then(async () => {
-						await saveBackgroundOrder()
-					})
-					.catch(() => {
-						showToast({
-							type: "error",
-							message: "Não foi possível salvar a venda no dispositivo.",
-						})
-					})
-			}
-
-			if (previousAppState.match(/inactive|background/) && nextAppState === "active") {
-				transitionQueue.current = transitionQueue.current
-					.then(notifySavedBackgroundOrder)
-					.catch(() => {
-						showToast({
-							type: "error",
-							message: "Não foi possível verificar se a venda foi salva.",
-						})
-					})
-			}
-		})
-
-		return () => subscription.remove()
-	}, [closeModal, queryClient, showModal, showToast])
+		showBackgroundWarnModal()
+	}, [])
 
 	return null
 }

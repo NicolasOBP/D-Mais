@@ -1,4 +1,5 @@
 import { router } from "expo-router"
+import { Dimensions } from "react-native"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -7,11 +8,14 @@ import { useAuthSignIn } from "@domain"
 
 import { useFormUtils } from "@utils"
 
-import { FormTextInput } from "@components"
+import { AppLogo, FormTextInput } from "@components"
 import { Screen } from "@containers"
 import { Box, Button, Text } from "@core-components"
 
 import { type SignInSchema, signInSchema } from "./signInSchema"
+
+const SCREEN_SIZE = Dimensions.get("screen").width
+const IMAGE_SIZE = SCREEN_SIZE * 0.5
 
 export function SignInScreen() {
 	const { control, formState, handleSubmit } = useForm<SignInSchema>({
@@ -36,12 +40,14 @@ export function SignInScreen() {
 
 	return (
 		<Screen scrollable>
-			<Box alignItems="center">
+			<Box alignItems="center" g="s12">
 				<Text pt="s46" variant="title24Bold">
 					Login
 				</Text>
 
-				<Text pt="s46">Informe suas credenciais para acessar</Text>
+				<AppLogo size={IMAGE_SIZE} noMargin />
+
+				<Text>Informe suas credenciais para acessar</Text>
 			</Box>
 
 			<Box pt="s62" pb="s80" gap="s42">

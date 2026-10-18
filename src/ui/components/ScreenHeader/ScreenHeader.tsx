@@ -6,6 +6,7 @@ import type { ThemeColor } from "@theme"
 
 import { Box, Text } from "@core-components"
 
+import { AppLogo } from "../AppLogo"
 import { Icon } from "../Icon"
 
 export function ScreenHeader({
@@ -50,7 +51,10 @@ export function ScreenHeader({
 
 	return (
 		<Box mt="s10" ml={noMargin ? undefined : "s10"} paddingHorizontal="default">
-			<Text variant="title24Bold">{title}</Text>
+			<Box flexDirection="row">
+				<AppLogo noHorizontalPadding={noMargin} />
+				<Text variant="title24Bold">{title}</Text>
+			</Box>
 			{backEnabled && (
 				<Box ml="s10" mt="s12" alignItems="flex-start">
 					<Icon name="arrowLeft" onPress={handleGoBack} hitSlop={4} />
