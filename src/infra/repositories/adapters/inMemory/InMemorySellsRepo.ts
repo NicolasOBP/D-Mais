@@ -31,10 +31,15 @@ export class InMemorySellsRepo implements ISellsRepo {
 		return mockClients
 	}
 
-	async truckPickupList(): Promise<TruckPickup[]> {
+	async truckPickupList(valueToSearch: string): Promise<TruckPickup[]> {
 		await delay()
 
-		return [...mockTrucks, ...mockPickups]
+		const truckPickups = [...mockTrucks, ...mockPickups]
+		const search = valueToSearch.toLowerCase()
+
+		if (!search) return truckPickups
+
+		return truckPickups.filter(({ licensePlate }) => licensePlate.toLowerCase().includes(search))
 	}
 
 	async driverList(): Promise<Driver[]> {

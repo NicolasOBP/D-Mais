@@ -32,6 +32,7 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 	readOnly,
 	extraFunction,
 	dropDownProps,
+	onChangeText,
 	...textInputProps
 }: DropDownTextInputProps<FormType, TValue>) {
 	const [wasSelected, setWasSelected] = useState(false)
@@ -77,7 +78,10 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 							<TextInput
 								variant={variant}
 								value={textValue}
-								onChangeText={handleChangeText}
+								onChangeText={(text) => {
+									onChangeText?.(text)
+									handleChangeText(text)
+								}}
 								errorMessage={useFormUtils.getFirstErrorMessage(fieldState.error)}
 								RighComponent={
 									<ArrowIconAnimation

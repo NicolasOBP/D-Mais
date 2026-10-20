@@ -12,7 +12,7 @@ import type {
 export interface ISellsRepo {
 	sendCart: (items: SendCartItems) => Promise<void>
 	clientList: () => Promise<Client[]>
-	truckPickupList: () => Promise<TruckPickup[]>
+	truckPickupList: (valueToSearch: string) => Promise<TruckPickup[]>
 	driverList: () => Promise<Driver[]>
 	companyList: () => Promise<Company[]>
 	paymentTermsList: () => Promise<PaymentTerms[]>

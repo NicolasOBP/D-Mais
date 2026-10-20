@@ -72,9 +72,10 @@ export class ApiSellRepo
 		endpoint: string,
 		listName: string,
 		adapt: (item: TApiItem) => TItem,
+		params?: { filtro: string },
 	): Promise<TItem[]> {
 		try {
-			const response = await API.get<SellsListAPI<TApiItem>>(endpoint)
+			const response = await API.get<SellsListAPI<TApiItem>>(endpoint, params && { params })
 
 			const result = response.data.result[0]
 
@@ -129,11 +130,12 @@ export class ApiSellRepo
 		)
 	}
 
-	async truckPickupList(): Promise<TruckPickup[]> {
+	async truckPickupList(valueToSearch: string): Promise<TruckPickup[]> {
 		return this.list<TruckPickupAPIContent, TruckPickup>(
 			"TMetodosGerais/F_ListarCaminhoes",
 			"caminhões e carretas",
-			(vehicle) => ({ licensePlate: vehicle.C_PLACA, id: vehicle.C_RGCLI }),
+			(vehicle) => ({ licensePlate: vehicle.C_PLACA, id: vehicle.C_RGCLI + vehicle.C_PLACA }),
+			{ filtro: valueToSearch },
 		)
 	}
 

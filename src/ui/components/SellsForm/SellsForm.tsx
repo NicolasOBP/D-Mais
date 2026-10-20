@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 import {
 	type PaymentTerms,
 	type TablePrices,
@@ -10,6 +12,7 @@ import {
 } from "@domain"
 
 import type { SellSchema } from "@schemas"
+import { useDebounce } from "@utils"
 
 import { Box, type BoxProps, Text } from "@core-components"
 
@@ -23,17 +26,28 @@ type Props = Pick<ControllerProps<SellSchema>, "control"> & {
 	paymentTermsControl?: (variable: PaymentTerms) => void | TablePrices
 }
 
-export function SellsForm({ control, fareControl, readOnly, paymentTermsControl }: Props) {
+export function SellsForm({ fareControl, paymentTermsControl, control, readOnly }: Props) {
+	const [truckPlateSearch, setTruckPlateSearch] = useState("")
+	const [pickupPlateSearch, setPickupPlateSearch] = useState("")
+	const searchTruck = useDebounce(truckPlateSearch, undefined, 3)
+	const searchPickup = useDebounce(pickupPlateSearch, undefined, 3)
+
 	const { data: clientList, isLoading: isLoadingClient } = useSellClientList(!readOnly)
-	const { data: truckPickupList, isLoading: isLoadingTruckPickup } = useSellTruckPickupList(
-		!readOnly,
-	)
 	const { data: driverList, isLoading: isLoadingDriver } = useSellDriverList(!readOnly)
 	const { data: companyList, isLoading: isLoadingCompany } = useSellCompanyList(!readOnly)
 	const { data: paymentMethodsList, isLoading: isLoadingPaymentMethods } =
 		useSellPaymentMethodsList(!readOnly)
 	const { data: paymentTermsList, isLoading: isLoadingPaymentTerms } = useSellPaymentTermsList(
 		!readOnly,
+	)
+
+	const { data: truckList, isLoading: isLoadingTruck } = useSellTruckPickupList(
+		!readOnly,
+		searchTruck,
+	)
+	const { data: pickupList, isLoading: isLoadingPickup } = useSellTruckPickupList(
+		!readOnly,
+		searchPickup,
 	)
 
 	return (
@@ -98,37 +112,46 @@ export function SellsForm({ control, fareControl, readOnly, paymentTermsControl 
 				</Box>
 			</Box>
 
-			<Box flexDirection="row" gap="s12">
-				<Box flex={1}>
-					<DropDownControllerInput
-						name="caminhao"
-						control={control}
-						label="Caminhão"
-						variant="secundary"
-						isRequired
-						readOnly={readOnly}
-						dropDownProps={{
-							dropdownItems: truckPickupList,
-							idKey: "id",
-							valueKey: "licensePlate",
-							isLoading: isLoadingTruckPickup,
-						}}
-					/>
-				</Box>
-				<Box flex={1}>
-					<DropDownControllerInput
-						name="carreta"
-						control={control}
-						label="Carreta"
-						variant="secundary"
-						readOnly={readOnly}
-						dropDownProps={{
-							dropdownItems: truckPickupList,
-							idKey: "id",
-							valueKey: "licensePlate",
-							isLoading: isLoadingTruckPickup,
-						}}
-					/>
+			<Box>
+				{!readOnly && (
+					<Text variant="text14" color="primary">
+						Digite 3 palavras para fazer a busca das placas
+					</Text>
+				)}
+				<Box flexDirection="row" gap="s12">
+					<Box flex={1}>
+						<DropDownControllerInput
+							name="caminhao"
+							control={control}
+							label="Caminhão"
+							variant="secundary"
+							isRequired
+							readOnly={readOnly}
+							onChangeText={setTruckPlateSearch}
+							dropDownProps={{
+								dropdownItems: truckList,
+								idKey: "id",
+								valueKey: "licensePlate",
+								isLoading: isLoadingTruck,
+							}}
+						/>
+					</Box>
+					<Box flex={1}>
+						<DropDownControllerInput
+							name="carreta"
+							control={control}
+							label="Carreta"
+							variant="secundary"
+							readOnly={readOnly}
+							onChangeText={setPickupPlateSearch}
+							dropDownProps={{
+								dropdownItems: pickupList,
+								idKey: "id",
+								valueKey: "licensePlate",
+								isLoading: isLoadingPickup,
+							}}
+						/>
+					</Box>
 				</Box>
 			</Box>
 

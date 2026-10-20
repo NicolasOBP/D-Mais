@@ -18,7 +18,7 @@ export const AppRepositories: Repositories = {
 	sells: {
 		fareControl: inMemorySellRepo.fareControl,
 		paymentTermsControl: inMemorySellRepo.paymentTermsControl,
-		truckPickupList: () => inMemorySellRepo.truckPickupList(),
+		truckPickupList: (valueToSearch) => apiSellRepo.truckPickupList(valueToSearch),
 		companyList: () => apiSellRepo.companyList(),
 		driverList: () => apiSellRepo.driverList(),
 		paymentMethodsList: () => apiSellRepo.paymentMethodsList(),
