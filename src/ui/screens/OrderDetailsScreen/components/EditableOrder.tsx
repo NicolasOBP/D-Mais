@@ -54,7 +54,7 @@ export function EditAbleOrder({ order }: { order: OrderDetails }) {
 					variant="primary"
 					paddingVertical="s14"
 					paddingHorizontal="s8"
-					isLoading={isSendSellPending}
+					isLoading={isSendSellPending || isTotalPricePending}
 					onPress={handleSubmit(handleShowModal)}
 				/>
 			</Box>

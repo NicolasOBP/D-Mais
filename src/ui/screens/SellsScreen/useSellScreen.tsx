@@ -1,10 +1,9 @@
 /** biome-ignore-all lint/correctness/useExhaustiveDependencies: <couse yes> */
 import { router } from "expo-router"
-import { useEffect } from "react"
-
-import { useWatch } from "react-hook-form"
+import { useEffect, useState } from "react"
 
 import {
+	type PaymentTerms,
 	type ProductCartScreen,
 	useOrderSaveStorage,
 	useOrdersSend,
@@ -41,7 +40,9 @@ export function useSellScreen({ cartItems }: Props) {
 	const { totalPrice } = useOrderStore()
 
 	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm()
-	const watchedSellFormValues = useWatch({ control })
+	const [lastSuccessPaymentTerms, setLastSuccessPaymentTerms] = useState<PaymentTerms>(
+		getValues("condicaoPagamento"),
+	)
 
 	const { mutate: saveOrderInStorage } = useOrderSaveStorage({
 		onSuccess: () => {
@@ -65,6 +66,10 @@ export function useSellScreen({ cartItems }: Props) {
 			onSuccess: (data) => {
 				updateOrderTotalPrice(data.price)
 				setValue("tabela", data.tableName, { shouldValidate: true })
+				setLastSuccessPaymentTerms(getValues("condicaoPagamento"))
+			},
+			onError: () => {
+				setValue("condicaoPagamento", lastSuccessPaymentTerms)
 			},
 		})
 	const { mutate: sendOrder, isPending: isPendingOrderSend } = useOrdersSend({

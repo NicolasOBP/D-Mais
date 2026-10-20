@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import {
 	type OrderDetails,
 	type OrderVariables,
+	type PaymentTerms,
 	useAuthCheckLeftQuota,
 	useOrderRemoveFromStorage,
 	useOrderUpdateStorage,
@@ -25,11 +26,13 @@ type Props = {
 }
 
 export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props) {
+	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm(order)
 	const [totalPrice, setTotalPrice] = useState(defaultTotalPrice)
+	const [lastSuccessPaymentTerms, setLastSuccessPaymentTerms] = useState<PaymentTerms>(
+		getValues("condicaoPagamento"),
+	)
 	const { authUser } = useAuth()
 	const { showModal, closeModal, updateModalData } = useModal()
-
-	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm(order)
 
 	const { checkLeftQuota, isPending: isPendingCheckQuota } = useAuthCheckLeftQuota()
 	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
@@ -45,6 +48,10 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 			onSuccess: (data) => {
 				setTotalPrice((prevPrice) => prevPrice + data.price)
 				setValue("tabela", data.tableName, { shouldValidate: true })
+				setLastSuccessPaymentTerms(getValues("condicaoPagamento"))
+			},
+			onError: () => {
+				setValue("condicaoPagamento", lastSuccessPaymentTerms)
 			},
 		})
 
