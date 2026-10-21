@@ -1,3 +1,5 @@
+import type { AuthUser } from "../auth"
+import type { ProductCart } from "../cart"
 import type { ProductPriceRequestItem } from "../product"
 
 export type SendCartAPIContent = {
@@ -92,10 +94,24 @@ export type PaymentMethodAPIContent = {
 	CAM2: string
 }
 
+export type FinalOrderPriceResult = {
+	orderTotalPrice: number
+	farePrice: number
+	orderProductItems: ProductCart[]
+}
+
+export type CalcFinalOrderVariables = {
+	requestProducts: ProductCart | ProductCart[]
+	authUser: AuthUser
+	client: Client
+	paymentTerms: PaymentTerms
+	isFareSelected: boolean
+}
+
 export type Client = {
 	name: string
 	corporateReason: string
-	cnpjCpf: string
+	rg: string
 }
 
 export type TruckPickup = {
@@ -105,12 +121,12 @@ export type TruckPickup = {
 
 export type Driver = {
 	name: string
-	cpf: string
+	rg: string
 }
 
 export type Company = {
 	name: string
-	cnpj: string
+	rg: string
 }
 
 export type PaymentTerms = {
@@ -122,10 +138,4 @@ export type PaymentTerms = {
 export type PaymentMethod = {
 	id: string
 	description: string
-}
-
-export type TablePrices = {
-	paymentTermsId: PaymentTerms["id"]
-	tableName: string
-	price: number
 }

@@ -13,27 +13,46 @@ import { TotalPriceLoadingAnimation } from "./TotalPriceLoadingAnimation"
 type Props = {
 	cartItems: Pick<ProductCart, "cartId" | "title" | "volume" | "price" | "totalPrice">[]
 	totalPrice: number
+	farePrice: number
 	isPendingTotalPrice?: boolean
 }
 
-export function SellsProductsList({ cartItems, totalPrice, isPendingTotalPrice }: Props) {
+export function SellsProductsList({
+	cartItems,
+	totalPrice,
+	farePrice,
+	isPendingTotalPrice,
+}: Props) {
 	const { spacing } = useAppTheme()
 
 	return (
 		<Box pb="s8">
-			<Box flexDirection="row" justifyContent="space-between" alignItems="center" pr="s16">
-				<Text variant="title12" mb="s12" paddingHorizontal="default">
+			<Box mb="s6" flexDirection="row" justifyContent="space-between" alignItems="center" pr="s16">
+				<Text variant="title12" paddingHorizontal="default">
 					Produtos
 				</Text>
-				<Box flexDirection="row" alignItems="center" gap="s4">
-					<Text variant="title12">Total:</Text>
-					{isPendingTotalPrice ? (
-						<TotalPriceLoadingAnimation />
-					) : (
-						<Text variant="title14" color="green">
-							{useNumberFormat.toBRLCurrency(totalPrice)}
-						</Text>
-					)}
+				<Box flexDirection="row" alignItems="center" gap="s10">
+					<Box flexDirection="row" alignItems="center" gap="s4">
+						<Text variant="title12">Vl.Unit Frete:</Text>
+						{isPendingTotalPrice ? (
+							<TotalPriceLoadingAnimation width={55} />
+						) : (
+							<Text variant="title14" color="green">
+								{useNumberFormat.toBRLCurrency(farePrice)}
+							</Text>
+						)}
+					</Box>
+
+					<Box flexDirection="row" alignItems="center" gap="s4">
+						<Text variant="title12">Total:</Text>
+						{isPendingTotalPrice ? (
+							<TotalPriceLoadingAnimation />
+						) : (
+							<Text variant="title14" color="green">
+								{useNumberFormat.toBRLCurrency(totalPrice)}
+							</Text>
+						)}
+					</Box>
 				</Box>
 			</Box>
 			<ScrollView
@@ -45,7 +64,13 @@ export function SellsProductsList({ cartItems, totalPrice, isPendingTotalPrice }
 				<FlatList
 					key={cartItems.length}
 					data={cartItems}
-					renderItem={({ item }) => <SellsProductCard key={item.cartId} item={item} />}
+					renderItem={({ item }) => (
+						<SellsProductCard
+							isPendingTotalPrice={isPendingTotalPrice}
+							key={item.cartId}
+							item={item}
+						/>
+					)}
 					keyExtractor={(item) => item.cartId.toString()}
 					numColumns={Math.ceil(cartItems.length / 2)}
 					contentContainerStyle={{

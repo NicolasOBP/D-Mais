@@ -8,7 +8,12 @@ import {
 	withTiming,
 } from "react-native-reanimated"
 
-import { useBackToSellService, useBackToSellState, useCartService } from "@infra"
+import {
+	useBackToSellService,
+	useBackToSellState,
+	useBackgroundOrderService,
+	useCartService,
+} from "@infra"
 
 import { useAppTheme } from "@theme"
 
@@ -33,6 +38,7 @@ export function BackToSell() {
 	const pathname = usePathname()
 	const { hasVisitedSell, showBackToSellButton, completedSell } = useBackToSellState()
 	const { markVisitedSell, setShowBackToSell, resetBackToSell } = useBackToSellService()
+	const { disableBackgroundOrderSaving } = useBackgroundOrderService()
 	const progress = useSharedValue(showBackToSellButton ? 1 : 0)
 
 	useEffect(() => {
@@ -46,6 +52,7 @@ export function BackToSell() {
 
 		if (activeRoute === "cart") {
 			resetBackToSell()
+			disableBackgroundOrderSaving()
 			return
 		}
 
@@ -55,7 +62,15 @@ export function BackToSell() {
 		}
 
 		setShowBackToSell(false)
-	}, [pathname, hasVisitedSell, markVisitedSell, resetBackToSell, setShowBackToSell, completedSell])
+	}, [
+		pathname,
+		hasVisitedSell,
+		markVisitedSell,
+		resetBackToSell,
+		disableBackgroundOrderSaving,
+		setShowBackToSell,
+		completedSell,
+	])
 
 	useEffect(() => {
 		progress.value = withTiming(showBackToSellButton ? 1 : 0, {

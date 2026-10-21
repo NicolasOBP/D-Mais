@@ -8,11 +8,19 @@ import Animated, {
 	withTiming,
 } from "react-native-reanimated"
 
-import { useAppTheme } from "@theme"
+import { type ThemeColor, useAppTheme } from "@theme"
 
 import { Box } from "@core-components"
 
-export function TotalPriceLoadingAnimation() {
+export function TotalPriceLoadingAnimation({
+	width = 70,
+	hight = 20,
+	bgColor = "lightGreen",
+}: {
+	width?: number
+	hight?: number
+	bgColor?: ThemeColor
+}) {
 	const { colors } = useAppTheme()
 	const shimmerPosition = useSharedValue(-1)
 
@@ -31,7 +39,7 @@ export function TotalPriceLoadingAnimation() {
 	}))
 
 	return (
-		<Box bg="lightGreen" width={70} height={18} borderRadius="checkbox" overflow="hidden">
+		<Box bg={bgColor} width={width} height={hight} borderRadius="checkbox" overflow="hidden">
 			<Animated.View
 				style={[
 					{

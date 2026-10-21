@@ -10,12 +10,12 @@ export function useOrderStore(): OrderDetails {
 	const status = orderStore((state) => state.status)
 	const paymentTerms = orderStore((state) => state.paymentTerms)
 	const paymentMethod = orderStore((state) => state.paymentMethod)
-	const table = orderStore((state) => state.table)
 	const fareSelected = orderStore((state) => state.fareSelected)
 	const truck = orderStore((state) => state.truck)
 	const pickup = orderStore((state) => state.pickup)
 	const driver = orderStore((state) => state.driver)
 	const company = orderStore((state) => state.company)
+	const farePrice = orderStore((state) => state.farePrice)
 
 	return {
 		id,
@@ -25,12 +25,12 @@ export function useOrderStore(): OrderDetails {
 		totalPrice,
 		paymentTerms,
 		paymentMethod,
-		table,
 		fareSelected,
 		truck,
 		pickup,
 		driver,
 		company,
+		farePrice,
 	}
 }
 

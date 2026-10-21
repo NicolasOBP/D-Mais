@@ -2,11 +2,11 @@ import type {
 	Client,
 	Company,
 	Driver,
+	FinalOrderPriceResult,
 	ISellsRepo,
 	PaymentMethod,
 	PaymentTerms,
 	SendCartItems,
-	TablePrices,
 	TruckPickup,
 } from "@domain"
 
@@ -16,6 +16,7 @@ import { mockDrivers } from "./data/mockDrivers"
 import { mockPaymentMethods } from "./data/mockPaymentMethods"
 import { mockPaymentTerms } from "./data/mockPaymentTerms"
 import { mockPickups } from "./data/mockPickups"
+import { mockProducts } from "./data/mockProducts"
 import { mockTablePrices } from "./data/mockTablesPrices"
 import { mockTrucks } from "./data/mockTrucks"
 import { delay } from "./delay"
@@ -66,22 +67,40 @@ export class InMemorySellsRepo implements ISellsRepo {
 		return mockPaymentMethods
 	}
 
-	async fareControl(isFareSelected: boolean): Promise<number> {
+	async calcFinalOrderPrice({
+		isFareSelected,
+		paymentTerms,
+		requestProducts,
+	}: Parameters<ISellsRepo["calcFinalOrderPrice"]>[0]): Promise<FinalOrderPriceResult> {
 		await delay()
 
-		if (Math.random() < 0.5) throw new Error("Erro de servidor")
+		const products = Array.isArray(requestProducts) ? requestProducts : [requestProducts]
+		const orderProductItems = products.map((requestedProduct) => {
+			const product = mockProducts.find(({ id }) => id === requestedProduct.id)
 
-		return isFareSelected ? -10 : 10
-	}
+			if (product?.price === undefined) {
+				throw new Error(`Preço indisponível para o produto ${requestedProduct.id}.`)
+			}
 
-	async paymentTermsControl(paymentTerms: PaymentTerms): Promise<TablePrices> {
-		await delay()
-		const tablePrices = mockTablePrices.find((item) => item.paymentTermsId === paymentTerms.id)
+			return {
+				...requestedProduct,
+				price: product.price,
+				totalPrice: product.price * requestedProduct.volume,
+			}
+		})
 
-		if (!tablePrices) throw new Error("Erro ao procurar tabela")
+		const paymentAdjustment =
+			mockTablePrices.find(({ paymentTermsId }) => paymentTermsId === paymentTerms.id)?.price ?? 0
+		const farePrice = isFareSelected ? 10 : 0
+		const productsTotal = orderProductItems.reduce(
+			(total, product) => total + product.totalPrice,
+			0,
+		)
 
-		if (Math.random() < 0.5) throw new Error("Erro de servidor")
-
-		return { ...tablePrices, tableName: paymentTerms.table }
+		return {
+			orderTotalPrice: productsTotal + paymentAdjustment + farePrice,
+			farePrice,
+			orderProductItems,
+		}
 	}
 }

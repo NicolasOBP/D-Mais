@@ -1,20 +1,19 @@
-/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <couse yes> */
 import { router } from "expo-router"
 import { useEffect, useState } from "react"
+
+import { useWatch } from "react-hook-form"
 
 import {
 	type PaymentTerms,
 	type ProductCartScreen,
 	useOrderSaveStorage,
 	useOrdersSend,
-	useSellFareControl,
-	useSellPaymentTermsControl,
+	useSellCalcFinalOrder,
 } from "@domain"
 import {
 	useAuth,
 	useBackToSellService,
 	useBackgroundOrderService,
-	useCartStore,
 	useOrderService,
 	useOrderStore,
 } from "@infra"
@@ -24,25 +23,47 @@ import { type SellSchema, useSellForm } from "@schemas"
 import { Icon, SendSellModalBody, useModal } from "@components"
 import { Box } from "@core-components"
 
-type Props = {
-	cartItems: ProductCartScreen[]
-}
-
-export function useSellScreen({ cartItems }: Props) {
+export function useSellScreen(orderItems: ProductCartScreen[]) {
+	const { showModal, closeModal, updateModalData } = useModal()
 	const { authUser } = useAuth()
 	const { finishSell } = useBackToSellService()
-	const { setProductsTotal, setOrderDetails, clearOrder, updateOrderTotalPrice } = useOrderService()
-	const { showModal, closeModal, updateModalData } = useModal()
-	const { disableBackgroundOrderSaving, enableBackgroundOrderSaving, setBackgroundOrderDraft } =
-		useBackgroundOrderService()
 
-	const { totalSelectedPrice: productsTotal } = useCartStore()
-	const { totalPrice } = useOrderStore()
+	const { updateOrderFormDataDetails, clearOrder, updateProductsPrice } = useOrderService()
+	const { totalPrice, farePrice, products: orderProducts } = useOrderStore()
+	const { disableBackgroundOrderSaving, enableBackgroundOrderSaving } = useBackgroundOrderService()
 
 	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm()
+	const client = useWatch({ control, name: "cliente" })
+	const paymentTerms = useWatch({ control, name: "condicaoPagamento" })
+	const paymentMethod = useWatch({ control, name: "formaPagamento" })
+	const company = useWatch({ control, name: "transportadora" })
+	const driver = useWatch({ control, name: "motorista" })
+	const pickup = useWatch({ control, name: "carreta" })
+	const truck = useWatch({ control, name: "caminhao" })
+	const isFareSelected = useWatch({ control, name: "freteSelecionado" })
 	const [lastSuccessPaymentTerms, setLastSuccessPaymentTerms] = useState<PaymentTerms>(
 		getValues("condicaoPagamento"),
 	)
+
+	const { mutate: calcFinalOrderPrice, isPending: isPendingTotalFinalPrice } =
+		useSellCalcFinalOrder({
+			onSuccess: (orderResult) => {
+				updateProductsPrice(orderResult)
+				setLastSuccessPaymentTerms(paymentTerms)
+			},
+			onError: () => {
+				setValue("condicaoPagamento", lastSuccessPaymentTerms)
+				setValue("tabela", lastSuccessPaymentTerms.table)
+			},
+		})
+	const { mutate: calculateFarePrice, isPending: isPendingFarePrice } = useSellCalcFinalOrder({
+		onSuccess: (orderResult) => {
+			updateProductsPrice(orderResult)
+		},
+		onError: () => {
+			setValue("freteSelecionado", !getValues("freteSelecionado"))
+		},
+	})
 
 	const { mutate: saveOrderInStorage } = useOrderSaveStorage({
 		onSuccess: () => {
@@ -53,25 +74,7 @@ export function useSellScreen({ cartItems }: Props) {
 			handleErrorShowModal()
 		},
 	})
-	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
-		onSuccess: (price) => {
-			updateOrderTotalPrice(price)
-		},
-		onError: () => {
-			setValue("freteSelecionado", !getValues("freteSelecionado"))
-		},
-	})
-	const { mutate: paymentTermsControl, isPending: isPendingPaymentTerms } =
-		useSellPaymentTermsControl({
-			onSuccess: (data) => {
-				updateOrderTotalPrice(data.price)
-				setValue("tabela", data.tableName, { shouldValidate: true })
-				setLastSuccessPaymentTerms(getValues("condicaoPagamento"))
-			},
-			onError: () => {
-				setValue("condicaoPagamento", lastSuccessPaymentTerms)
-			},
-		})
+
 	const { mutate: sendOrder, isPending: isPendingOrderSend } = useOrdersSend({
 		onSuccess: () => {
 			disableBackgroundOrderSaving()
@@ -88,32 +91,45 @@ export function useSellScreen({ cartItems }: Props) {
 
 	useEffect(() => {
 		updateModalData({ isLoading: isPendingOrderSend })
-	}, [isPendingOrderSend])
+	}, [isPendingOrderSend, updateModalData])
 
-	useEffect(() => {
-		setProductsTotal(productsTotal)
-	}, [productsTotal, setProductsTotal])
-
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <run once>
 	useEffect(() => {
 		enableBackgroundOrderSaving()
 	}, [])
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <just call when really intended>
 	useEffect(() => {
-		const sellFormValues = getValues()
-		setBackgroundOrderDraft({
-			products: cartItems,
-			totalPrice,
-			client: sellFormValues.cliente,
-			paymentTerms: sellFormValues.condicaoPagamento,
-			paymentMethod: sellFormValues.formaPagamento,
-			company: sellFormValues.transportadora,
-			driver: sellFormValues.motorista,
-			pickup: sellFormValues.carreta,
-			table: sellFormValues.tabela,
-			truck: sellFormValues.caminhao,
-			fareSelected: sellFormValues.freteSelecionado,
+		calcFinalOrderPrice({
+			client: client,
+			isFareSelected: isFareSelected,
+			paymentTerms: paymentTerms,
+			requestProducts: orderItems,
 		})
-	}, [cartItems, getValues, totalPrice])
+	}, [orderItems, calcFinalOrderPrice, client, paymentTerms])
+
+	useEffect(() => {
+		updateOrderFormDataDetails({
+			client: client,
+			paymentTerms: paymentTerms,
+			paymentMethod: paymentMethod,
+			company: company,
+			driver: driver,
+			pickup: pickup,
+			truck: truck,
+			fareSelected: isFareSelected,
+		})
+	}, [
+		client,
+		paymentTerms,
+		paymentMethod,
+		company,
+		driver,
+		pickup,
+		truck,
+		isFareSelected,
+		updateOrderFormDataDetails,
+	])
 
 	function handleShowModal(data: SellSchema) {
 		showModal(
@@ -135,7 +151,7 @@ export function useSellScreen({ cartItems }: Props) {
 
 	function onSubmit(data: SellSchema) {
 		const order = {
-			products: cartItems,
+			products: orderItems,
 			totalPrice: totalPrice,
 			client: data.cliente,
 			paymentTerms: data.condicaoPagamento,
@@ -146,9 +162,9 @@ export function useSellScreen({ cartItems }: Props) {
 			table: data.tabela,
 			truck: data.caminhao,
 			fareSelected: data.freteSelecionado,
+			farePrice: farePrice,
 		}
 
-		setOrderDetails(order)
 		sendOrder(order)
 	}
 
@@ -176,16 +192,28 @@ export function useSellScreen({ cartItems }: Props) {
 		})
 	}
 
-	let isTotalPricePending = isPendingTotalPrice || isPendingPaymentTerms
+	function handleCalculateFarePrice(fareSelected: boolean) {
+		calculateFarePrice({
+			client: client,
+			isFareSelected: fareSelected,
+			paymentTerms: paymentTerms,
+			requestProducts: orderItems,
+		})
+	}
+
+	let isTotalPricePending = isPendingTotalFinalPrice || isPendingFarePrice
 
 	return {
 		handleShowModal,
-		paymentTermsControl,
 		handleSubmit,
-		fareControl,
+		handleCalculateFarePrice,
+		getValues,
+		setValue,
 		control,
 		formState,
 		isTotalPricePending,
-		totalPrice: totalPrice,
+		totalPrice,
+		farePrice,
+		orderProducts,
 	}
 }

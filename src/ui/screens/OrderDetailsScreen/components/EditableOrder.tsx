@@ -11,12 +11,15 @@ export function EditAbleOrder({ order }: { order: OrderDetails }) {
 		handleSubmit,
 		handleShowModal,
 		handleShowDeleteModal,
-		fareControl,
-		paymentTermsControl,
+		handleCalculateFarePrice,
+		getValues,
+		setValue,
 		isTotalPricePending,
 		isSendSellPending,
 		control,
 		totalPrice,
+		farePrice,
+		orderProducts,
 	} = useEditableOrder({
 		cartItems: order.products,
 		order,
@@ -28,14 +31,17 @@ export function EditAbleOrder({ order }: { order: OrderDetails }) {
 			<ScreenHeader title="Pedido Pendente" status={order.status} canGoBack />
 
 			<SellsForm
-				fareControl={fareControl}
+				getValues={getValues}
+				setValue={setValue}
 				control={control}
-				paymentTermsControl={paymentTermsControl}
+				isTotalPricePending={isTotalPricePending}
+				handleCalculateFarePrice={handleCalculateFarePrice}
 			/>
 
 			<SellsProductsList
-				cartItems={order.products}
+				cartItems={orderProducts}
 				totalPrice={totalPrice}
+				farePrice={farePrice}
 				isPendingTotalPrice={isTotalPricePending}
 			/>
 

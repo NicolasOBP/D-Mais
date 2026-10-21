@@ -1,11 +1,12 @@
 import type {
+	CalcFinalOrderVariables,
 	Client,
 	Company,
 	Driver,
+	FinalOrderPriceResult,
 	PaymentMethod,
 	PaymentTerms,
 	SendCartItems,
-	TablePrices,
 	TruckPickup,
 } from "./SellsType"
 
@@ -17,6 +18,5 @@ export interface ISellsRepo {
 	companyList: () => Promise<Company[]>
 	paymentTermsList: () => Promise<PaymentTerms[]>
 	paymentMethodsList: () => Promise<PaymentMethod[]>
-	fareControl: (isFareSelected: boolean) => Promise<number>
-	paymentTermsControl: (paymentTerms: PaymentTerms) => Promise<TablePrices>
+	calcFinalOrderPrice: (variables: CalcFinalOrderVariables) => Promise<FinalOrderPriceResult>
 }

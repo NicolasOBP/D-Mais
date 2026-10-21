@@ -14,13 +14,13 @@ export interface Order {
 export interface OrderDetails extends Order {
 	paymentTerms: PaymentTerms
 	paymentMethod: PaymentMethod
-	table: string
 	fareSelected: boolean
 	truck: TruckPickup
 	pickup?: TruckPickup
 	driver: Driver
 	company: Company
-	products: Pick<ProductCart, "cartId" | "title" | "volume" | "price" | "totalPrice">[]
+	products: ProductCart[]
+	farePrice: number
 }
 
 export type OrderVariables = Omit<OrderDetails, "id" | "status">

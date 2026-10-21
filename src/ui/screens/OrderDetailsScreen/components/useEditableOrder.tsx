@@ -1,6 +1,8 @@
 import { router } from "expo-router"
 import { useEffect, useState } from "react"
 
+import { useWatch } from "react-hook-form"
+
 import {
 	type OrderDetails,
 	type OrderVariables,
@@ -9,8 +11,7 @@ import {
 	useOrderRemoveFromStorage,
 	useOrderUpdateStorage,
 	useOrdersSend,
-	useSellFareControl,
-	useSellPaymentTermsControl,
+	useSellCalcFinalOrder,
 } from "@domain"
 import { useAuth } from "@infra"
 
@@ -27,7 +28,12 @@ type Props = {
 
 export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props) {
 	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm(order)
+	const client = useWatch({ control, name: "cliente" })
+	const paymentTerms = useWatch({ control, name: "condicaoPagamento" })
+	const isFareSelected = useWatch({ control, name: "freteSelecionado" })
 	const [totalPrice, setTotalPrice] = useState(defaultTotalPrice)
+	const [farePrice, setFarePrice] = useState(order.farePrice)
+	const [orderProducts, setOrderProducts] = useState(cartItems)
 	const [lastSuccessPaymentTerms, setLastSuccessPaymentTerms] = useState<PaymentTerms>(
 		getValues("condicaoPagamento"),
 	)
@@ -35,25 +41,28 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 	const { showModal, closeModal, updateModalData } = useModal()
 
 	const { checkLeftQuota, isPending: isPendingCheckQuota } = useAuthCheckLeftQuota()
-	const { mutate: fareControl, isPending: isPendingTotalPrice } = useSellFareControl({
-		onSuccess: (price) => {
-			setTotalPrice((prevPrice) => prevPrice + price)
+	const { mutate: calcFinalOrderPrice, isPending: isPendingTotalPrice } = useSellCalcFinalOrder({
+		onSuccess: (result) => {
+			setTotalPrice(result.orderTotalPrice)
+			setFarePrice(result.farePrice)
+			setOrderProducts(result.orderProductItems)
+			setLastSuccessPaymentTerms(paymentTerms)
+		},
+		onError: () => {
+			setValue("condicaoPagamento", lastSuccessPaymentTerms)
+			setValue("tabela", lastSuccessPaymentTerms.table)
+		},
+	})
+	const { mutate: calculateFarePrice, isPending: isPendingFarePrice } = useSellCalcFinalOrder({
+		onSuccess: (result) => {
+			setTotalPrice(result.orderTotalPrice)
+			setFarePrice(result.farePrice)
+			setOrderProducts(result.orderProductItems)
 		},
 		onError: () => {
 			setValue("freteSelecionado", !getValues("freteSelecionado"))
 		},
 	})
-	const { mutate: paymentTermsControl, isPending: isPendingPaymentTerms } =
-		useSellPaymentTermsControl({
-			onSuccess: (data) => {
-				setTotalPrice((prevPrice) => prevPrice + data.price)
-				setValue("tabela", data.tableName, { shouldValidate: true })
-				setLastSuccessPaymentTerms(getValues("condicaoPagamento"))
-			},
-			onError: () => {
-				setValue("condicaoPagamento", lastSuccessPaymentTerms)
-			},
-		})
 
 	const { mutate: removeOrderFromStorage } = useOrderRemoveFromStorage({
 		onSuccess: () => {
@@ -79,6 +88,16 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 	useEffect(() => {
 		updateModalData({ isLoading: isPendingOrderUpdate || isPendingOrderSend })
 	}, [isPendingOrderUpdate, isPendingOrderSend])
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: fare changes are recalculated by handleCalculateFarePrice
+	useEffect(() => {
+		calcFinalOrderPrice({
+			client,
+			isFareSelected,
+			paymentTerms,
+			requestProducts: cartItems,
+		})
+	}, [calcFinalOrderPrice, client, paymentTerms, cartItems])
 
 	async function handleShowModal(data: SellSchema) {
 		checkLeftQuota(order.products.reduce((acc, prod) => acc + prod.volume, 0))
@@ -106,7 +125,7 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 
 	function onSubmit(data: SellSchema) {
 		const orderToSend: OrderVariables = {
-			products: cartItems,
+			products: orderProducts,
 			totalPrice: totalPrice,
 			client: data.cliente,
 			paymentTerms: data.condicaoPagamento,
@@ -114,9 +133,9 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 			company: data.transportadora,
 			driver: data.motorista,
 			pickup: data.carreta,
-			table: data.tabela,
 			truck: data.caminhao,
 			fareSelected: data.freteSelecionado,
+			farePrice,
 		}
 
 		sendOrder(orderToSend).catch(() => {
@@ -170,19 +189,31 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 		})
 	}
 
-	let isTotalPricePending = isPendingTotalPrice || isPendingPaymentTerms
+	function handleCalculateFarePrice(fareSelected: boolean) {
+		calculateFarePrice({
+			client,
+			isFareSelected: fareSelected,
+			paymentTerms,
+			requestProducts: cartItems,
+		})
+	}
+
+	const isTotalPricePending = isPendingTotalPrice || isPendingFarePrice
 
 	return {
 		handleShowModal,
 		handleShowDeleteModal,
-		paymentTermsControl,
 		handleSubmit,
-		fareControl,
+		handleCalculateFarePrice,
 		reset,
+		getValues,
+		setValue,
 		control,
 		formState,
 		isTotalPricePending,
 		isSendSellPending: isPendingCheckQuota,
-		totalPrice: totalPrice,
+		totalPrice,
+		farePrice,
+		orderProducts,
 	}
 }

@@ -5,7 +5,7 @@ export const sellSchema = z.object({
 		{
 			name: z.string().min(1, "Cliente inválido"),
 			corporateReason: z.string().min(1, "Cliente inválido"),
-			cnpjCpf: z.string().min(1, "Cliente inválido"),
+			rg: z.string().min(1, "Cliente inválido"),
 		},
 		{ error: "Cliente inválido" },
 	),
@@ -45,14 +45,14 @@ export const sellSchema = z.object({
 	motorista: z.object(
 		{
 			name: z.string().min(1, "Motorista inválido"),
-			cpf: z.string().min(1, "Motorista inválido"),
+			rg: z.string().min(1, "Motorista inválido"),
 		},
 		{ error: "Motorista inválido" },
 	),
 	transportadora: z.object(
 		{
 			name: z.string().min(1, "Transportadora inválida"),
-			cnpj: z.string().min(1, "Transportadora inválida"),
+			rg: z.string().min(1, "Transportadora inválida"),
 		},
 		{ error: "Transportadora inválida" },
 	),

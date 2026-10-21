@@ -58,11 +58,15 @@ function AppStateMonitor() {
 			if (!canRun) return
 
 			if (previousAppState.match(/inactive|active/) && nextAppState === "background") {
-				saveBackgroundOrder()
+				void saveBackgroundOrder().catch((error) => {
+					console.error("Não foi possível salvar a venda em segundo plano.", error)
+				})
 			}
 
 			if (previousAppState.match(/inactive|background/) && nextAppState === "active") {
-				reverseBackgroundOrder()
+				void reverseBackgroundOrder().catch((error) => {
+					console.error("Não foi possível remover o rascunho de venda.", error)
+				})
 			}
 		})
 

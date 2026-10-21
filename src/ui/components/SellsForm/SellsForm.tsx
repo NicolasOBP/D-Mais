@@ -1,8 +1,8 @@
 import { useState } from "react"
 
+import type { UseFormGetValues, UseFormSetValue } from "react-hook-form"
+
 import {
-	type PaymentTerms,
-	type TablePrices,
 	useSellClientList,
 	useSellCompanyList,
 	useSellDriverList,
@@ -21,12 +21,20 @@ import { DropDownControllerInput } from "../DropDownInputs"
 import { type ControllerProps, FormTextInput } from "../Form"
 
 type Props = Pick<ControllerProps<SellSchema>, "control"> & {
-	fareControl?: (variable: { isFareSelected: boolean }) => number | void
+	getValues?: UseFormGetValues<SellSchema>
+	setValue?: UseFormSetValue<SellSchema>
+	handleCalculateFarePrice?: (fareSelected: boolean) => void
 	readOnly?: boolean
-	paymentTermsControl?: (variable: PaymentTerms) => void | TablePrices
+	isTotalPricePending?: boolean
 }
 
-export function SellsForm({ fareControl, paymentTermsControl, control, readOnly }: Props) {
+export function SellsForm({
+	handleCalculateFarePrice,
+	setValue,
+	control,
+	readOnly,
+	isTotalPricePending,
+}: Props) {
 	const [truckPlateSearch, setTruckPlateSearch] = useState("")
 	const [pickupPlateSearch, setPickupPlateSearch] = useState("")
 	const searchTruck = useDebounce(truckPlateSearch, undefined, 3)
@@ -61,7 +69,7 @@ export function SellsForm({ fareControl, paymentTermsControl, control, readOnly 
 				readOnly={readOnly}
 				dropDownProps={{
 					dropdownItems: clientList,
-					idKey: "cnpjCpf",
+					idKey: "rg",
 					valueKey: "corporateReason",
 					isLoading: isLoadingClient,
 				}}
@@ -82,7 +90,7 @@ export function SellsForm({ fareControl, paymentTermsControl, control, readOnly 
 							valueKey: "description",
 							idKey: "id",
 						}}
-						extraFunction={paymentTermsControl}
+						extraFunction={(paymentTerms) => setValue?.("tabela", paymentTerms.table)}
 					/>
 				</Box>
 				<Box flex={1}>
@@ -164,7 +172,7 @@ export function SellsForm({ fareControl, paymentTermsControl, control, readOnly 
 				readOnly={readOnly}
 				dropDownProps={{
 					dropdownItems: driverList,
-					idKey: "cpf",
+					idKey: "rg",
 					valueKey: "name",
 					isLoading: isLoadingDriver,
 				}}
@@ -179,7 +187,7 @@ export function SellsForm({ fareControl, paymentTermsControl, control, readOnly 
 				readOnly={readOnly}
 				dropDownProps={{
 					dropdownItems: companyList,
-					idKey: "cnpj",
+					idKey: "rg",
 					valueKey: "name",
 					isLoading: isLoadingCompany,
 				}}
@@ -190,9 +198,10 @@ export function SellsForm({ fareControl, paymentTermsControl, control, readOnly 
 				name="freteSelecionado"
 				variant="rounded"
 				size={20}
-				extraFunction={(isFareSelected) => fareControl?.({ isFareSelected })}
+				extraFunction={(isFareSelected) => handleCalculateFarePrice?.(!isFareSelected)}
 				pressableProps={checkBoxPressableProps}
 				readOnly={readOnly}
+				disabled={isTotalPricePending}
 			>
 				<Text variant="title12">Adicionar o custo do frete (com entrega)</Text>
 			</ControllerCheckBox>

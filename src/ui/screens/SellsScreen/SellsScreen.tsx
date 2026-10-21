@@ -1,4 +1,6 @@
-import { useCartService } from "@infra"
+import { useMemo } from "react"
+
+import { useCartStore } from "@infra"
 
 import { useFormUtils } from "@utils"
 
@@ -9,32 +11,42 @@ import { Box, Button } from "@core-components"
 import { useSellScreen } from "./useSellScreen"
 
 export function SellsScreen() {
-	const { cart } = useCartService()
-	const cartItems = cart.getSelectedProducts()
+	const { cartProducts } = useCartStore()
+	const cartItems = useMemo(
+		() => cartProducts.filter((product) => product.isSelected),
+		[cartProducts],
+	)
+
 	const {
 		handleShowModal,
 		handleSubmit,
-		fareControl,
-		paymentTermsControl,
+		handleCalculateFarePrice,
+		getValues,
+		setValue,
 		control,
 		totalPrice,
+		farePrice,
 		isTotalPricePending,
 		formState,
-	} = useSellScreen({ cartItems })
+		orderProducts,
+	} = useSellScreen(cartItems)
 
 	return (
 		<Screen scrollable noHorizontalPadding>
 			<ScreenHeader title="Venda" goBackTo="/cart" noMargin />
 
 			<SellsForm
+				setValue={setValue}
+				getValues={getValues}
 				control={control}
-				fareControl={fareControl}
-				paymentTermsControl={paymentTermsControl}
+				isTotalPricePending={isTotalPricePending}
+				handleCalculateFarePrice={handleCalculateFarePrice}
 			/>
 
 			<SellsProductsList
-				cartItems={cartItems}
+				cartItems={orderProducts}
 				totalPrice={totalPrice}
+				farePrice={farePrice}
 				isPendingTotalPrice={isTotalPricePending}
 			/>
 
