@@ -6,15 +6,10 @@ import { ApiProductRepo } from "./api/product/ApiProductRepo"
 import { ApiSellRepo } from "./api/sell/ApiSellRepo"
 import { InMemoryRepositories } from "./inMemory"
 
-const apiInventoryRepo = new ApiInventoryRepo()
-
 export const AppRepositories: Repositories = {
 	...InMemoryRepositories,
 	auth: new ApiAuthRepo(),
 	product: new ApiProductRepo(),
 	sells: new ApiSellRepo(),
-	inventory: {
-		...InMemoryRepositories.inventory,
-		listInventories: (productCode) => apiInventoryRepo.listInventories(productCode),
-	},
+	inventory: new ApiInventoryRepo(),
 }

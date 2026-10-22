@@ -6,12 +6,6 @@ import { delay } from "./delay"
 let inventory: Inventory[] = mockInventory
 
 export class InMemoryInventoryRepo implements IInventoryRepo {
-	async listFullInventories(): Promise<Inventory[]> {
-		await delay()
-
-		return inventory
-	}
-
 	async listInventories(productCode: string): Promise<InventoryWithoutProducts[]> {
 		await delay()
 
