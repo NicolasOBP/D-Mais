@@ -48,7 +48,7 @@ export function EditAbleOrder({ order }: { order: OrderDetails }) {
 			<Box flexDirection="row" gap="s16" paddingHorizontal="default" paddingVertical="s20">
 				<Button
 					flex={1}
-					lable="Excluir venda"
+					lable="Excluir pedido"
 					variant="error"
 					onPress={handleShowDeleteModal}
 					paddingVertical="s14"
@@ -56,7 +56,7 @@ export function EditAbleOrder({ order }: { order: OrderDetails }) {
 				/>
 				<Button
 					flex={1}
-					lable="Enviar venda"
+					lable="Enviar pedido"
 					variant="primary"
 					paddingVertical="s14"
 					paddingHorizontal="s8"

@@ -104,7 +104,7 @@ export function BackToSell() {
 		>
 			<Box alignItems="center" justifyContent="center">
 				<Text variant="text12Bold" textAlign="center">
-					Voltar para{`\n`}Venda
+					Voltar para{`\n`}Pedido
 				</Text>
 			</Box>
 		</AnimatedPressableBox>

@@ -30,10 +30,10 @@ export function SendSellModalBody({ userLeftQuota, userQuota }: SendSellModalBod
 
 			<Box>
 				<Text textAlign="center" variant="title14">
-					Deseja realmente enviar a venda?
+					Deseja realmente enviar o pedido?
 				</Text>
 				<Text textAlign="center" variant="title14">
-					Ela entrará como pendente na Distribuidora
+					Ele entrará como pendente na Distribuidora
 				</Text>
 			</Box>
 		</Box>

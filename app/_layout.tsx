@@ -11,8 +11,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import "react-native-reanimated"
 
 import {
-	AppRepositories,
 	AuthProvider,
+	InMemoryRepositories,
 	MMKVStorage,
 	RepositoryProvider,
 	initializeStorage,
@@ -78,12 +78,12 @@ function AppStateMonitor() {
 		async function showBackgroundWarnModal() {
 			if (await showBackgroundNotification()) {
 				showModal({
-					headerTitle: "Venda salva no dispositivo",
+					headerTitle: "Pedido salvo no dispositivo",
 					showCloseButton: false,
 					BodyComponent: (
 						<Box>
 							<Text textAlign="center" variant="title14">
-								A venda que você estava fazendo foi salva como pendente e está disponível na tela
+								O pedido que você estava fazendo foi salvo como pendente e está disponível na tela
 								Pedidos.
 							</Text>
 						</Box>
@@ -121,7 +121,7 @@ export default function RootLayout() {
 	}
 
 	return (
-		<RepositoryProvider value={AppRepositories}>
+		<RepositoryProvider value={InMemoryRepositories}>
 			<QueryClientProvider client={queryClient}>
 				<AuthProvider>
 					<ThemeProvider theme={theme}>

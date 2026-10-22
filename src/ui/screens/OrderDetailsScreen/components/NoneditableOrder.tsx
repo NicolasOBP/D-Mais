@@ -25,7 +25,7 @@ export function NonEditableOrder({ order }: { order: OrderDetails }) {
 
 			<Box flex={1} alignItems="center" paddingVertical="s20">
 				<Button
-					lable="Venda enviada"
+					lable="Pedido enviado"
 					variant="disabled"
 					disabled
 					paddingVertical="s14"

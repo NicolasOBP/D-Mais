@@ -33,7 +33,7 @@ export function SellsScreen() {
 
 	return (
 		<Screen scrollable noHorizontalPadding>
-			<ScreenHeader title="Venda" goBackTo="/cart" noMargin />
+			<ScreenHeader title="Pedido" goBackTo="/cart" noMargin />
 
 			<SellsForm
 				setValue={setValue}
@@ -56,7 +56,7 @@ export function SellsScreen() {
 					variant="primary"
 					paddingVertical="s14"
 					paddingHorizontal="s20"
-					lable="Enviar venda"
+					lable="Enviar pedido"
 					onPress={handleSubmit(handleShowModal)}
 				/>
 			</Box>

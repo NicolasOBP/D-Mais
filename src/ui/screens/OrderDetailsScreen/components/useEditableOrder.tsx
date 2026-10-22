@@ -153,7 +153,7 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 
 	function handleErrorShowModal() {
 		showModal({
-			headerTitle: `Erro ao enviar venda, tente novamente entrando em "Pedidos"`,
+			headerTitle: `Erro ao enviar pedido, tente novamente entrando em "Pedidos"`,
 			showCloseButton: false,
 			BodyComponent: (
 				<Box alignSelf="center">
