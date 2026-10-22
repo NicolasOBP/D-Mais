@@ -1,24 +1,14 @@
-import { useState } from "react"
-
 import type { UseFormGetValues, UseFormSetValue } from "react-hook-form"
 
-import {
-	useSellClientList,
-	useSellCompanyList,
-	useSellDriverList,
-	useSellPaymentMethodsList,
-	useSellPaymentTermsList,
-	useSellTruckPickupList,
-} from "@domain"
-
 import type { SellSchema } from "@schemas"
-import { useDebounce } from "@utils"
 
 import { Box, type BoxProps, Text } from "@core-components"
 
 import { ControllerCheckBox } from "../ControllerCheckBox"
 import { DropDownControllerInput } from "../DropDownInputs"
 import { type ControllerProps, FormTextInput } from "../Form"
+
+import { useSellForm } from "./useSellForm"
 
 type Props = Pick<ControllerProps<SellSchema>, "control"> & {
 	getValues?: UseFormGetValues<SellSchema>
@@ -35,56 +25,27 @@ export function SellsForm({
 	readOnly,
 	isTotalPricePending,
 }: Props) {
-	const [truckPlateSearch, setTruckPlateSearch] = useState("")
-	const [pickupPlateSearch, setPickupPlateSearch] = useState("")
-	const searchTruck = useDebounce(truckPlateSearch, undefined, 3)
-	const searchPickup = useDebounce(pickupPlateSearch, undefined, 3)
-
 	const {
-		data: clientList,
-		isLoading: isLoadingClient,
-		error: isErrorClient,
-		refetch: refetchClient,
-	} = useSellClientList(!readOnly)
-	const {
-		data: driverList,
-		isLoading: isLoadingDriver,
-		error: isErrorDriver,
-		refetch: refetchDriver,
-	} = useSellDriverList(!readOnly)
-	const {
-		data: companyList,
-		isLoading: isLoadingCompany,
-		error: isErrorCompany,
-		refetch: refetchCompany,
-	} = useSellCompanyList(!readOnly)
-	const {
-		data: paymentMethodsList,
-		isLoading: isLoadingPaymentMethods,
-		error: isErrorPayMethods,
-		refetch: refetchPaymentMethods,
-	} = useSellPaymentMethodsList(!readOnly)
-	const {
-		data: paymentTermsList,
-		isLoading: isLoadingPaymentTerms,
-		error: isErrorPayTerms,
-		refetch: refetchPaymentTerms,
-	} = useSellPaymentTermsList(!readOnly)
-	const {
-		data: truckList,
-		isLoading: isLoadingTruck,
-		error: isErrorTruck,
-		refetch: refetchTruck,
-	} = useSellTruckPickupList(!readOnly, searchTruck)
-	const {
-		data: pickupList,
-		isLoading: isLoadingPickup,
-		error: isErrorPickup,
-		refetch: refetchPickup,
-	} = useSellTruckPickupList(!readOnly, searchPickup)
+		setTruckPlateSearch,
+		setPickupPlateSearch,
+		setClientSearch,
+		setDriverSearch,
+		setCompanySearch,
+		client,
+		driver,
+		company,
+		truck,
+		pickup,
+		paymentTerms,
+		paymentMethods,
+	} = useSellForm(!readOnly)
 
 	return (
 		<Box pt="s14" pb="s20" gap="s20" paddingHorizontal="default">
+			{!readOnly && (
+				<Text variant="title14">Digite no mínimo 3 letras para realizar as buscas</Text>
+			)}
+
 			<DropDownControllerInput
 				name="cliente"
 				control={control}
@@ -92,13 +53,14 @@ export function SellsForm({
 				variant="secundary"
 				isRequired
 				readOnly={readOnly}
-				isError={!!isErrorClient}
-				onErrorPress={refetchClient}
+				onChangeText={setClientSearch}
+				isError={client.isError}
+				onErrorPress={client.refetch}
 				dropDownProps={{
-					dropdownItems: clientList,
+					dropdownItems: client.list,
 					idKey: "rg",
 					valueKey: "corporateReason",
-					isLoading: isLoadingClient,
+					isLoading: client.isLoading,
 				}}
 			/>
 
@@ -111,11 +73,11 @@ export function SellsForm({
 						variant="secundary"
 						isRequired
 						readOnly={readOnly}
-						isError={!!isErrorPayTerms}
-						onErrorPress={refetchPaymentTerms}
+						isError={paymentTerms.isError}
+						onErrorPress={paymentTerms.refetch}
 						dropDownProps={{
-							dropdownItems: paymentTermsList,
-							isLoading: isLoadingPaymentTerms,
+							dropdownItems: paymentTerms.list,
+							isLoading: paymentTerms.isLoading,
 							valueKey: "description",
 							idKey: "id",
 						}}
@@ -139,11 +101,11 @@ export function SellsForm({
 						variant="secundary"
 						isRequired
 						readOnly={readOnly}
-						isError={!!isErrorPayMethods}
-						onErrorPress={refetchPaymentMethods}
+						isError={paymentMethods.isError}
+						onErrorPress={paymentMethods.refetch}
 						dropDownProps={{
-							dropdownItems: paymentMethodsList,
-							isLoading: isLoadingPaymentMethods,
+							dropdownItems: paymentMethods.list,
+							isLoading: paymentMethods.isLoading,
 							valueKey: "description",
 							idKey: "id",
 						}}
@@ -152,11 +114,6 @@ export function SellsForm({
 			</Box>
 
 			<Box>
-				{!readOnly && (
-					<Text variant="text14" color="primary">
-						Digite 3 palavras para fazer a busca das placas
-					</Text>
-				)}
 				<Box flexDirection="row" gap="s12">
 					<Box flex={1}>
 						<DropDownControllerInput
@@ -167,13 +124,13 @@ export function SellsForm({
 							isRequired
 							readOnly={readOnly}
 							onChangeText={setTruckPlateSearch}
-							isError={!!isErrorTruck}
-							onErrorPress={refetchTruck}
+							isError={truck.isError}
+							onErrorPress={truck.refetch}
 							dropDownProps={{
-								dropdownItems: truckList,
+								dropdownItems: truck.list,
 								idKey: "id",
 								valueKey: "licensePlate",
-								isLoading: isLoadingTruck,
+								isLoading: truck.isLoading,
 							}}
 						/>
 					</Box>
@@ -185,13 +142,13 @@ export function SellsForm({
 							variant="secundary"
 							readOnly={readOnly}
 							onChangeText={setPickupPlateSearch}
-							isError={!!isErrorPickup}
-							onErrorPress={refetchPickup}
+							isError={pickup.isError}
+							onErrorPress={pickup.refetch}
 							dropDownProps={{
-								dropdownItems: pickupList,
+								dropdownItems: pickup.list,
 								idKey: "id",
 								valueKey: "licensePlate",
-								isLoading: isLoadingPickup,
+								isLoading: pickup.isLoading,
 							}}
 						/>
 					</Box>
@@ -205,13 +162,14 @@ export function SellsForm({
 				variant="secundary"
 				isRequired
 				readOnly={readOnly}
-				isError={!!isErrorDriver}
-				onErrorPress={refetchDriver}
+				onChangeText={setDriverSearch}
+				isError={driver.isError}
+				onErrorPress={driver.refetch}
 				dropDownProps={{
-					dropdownItems: driverList,
+					dropdownItems: driver.list,
 					idKey: "rg",
 					valueKey: "name",
-					isLoading: isLoadingDriver,
+					isLoading: driver.isLoading,
 				}}
 			/>
 
@@ -222,13 +180,14 @@ export function SellsForm({
 				variant="secundary"
 				isRequired
 				readOnly={readOnly}
-				isError={!!isErrorCompany}
-				onErrorPress={refetchCompany}
+				onChangeText={setCompanySearch}
+				isError={company.isError}
+				onErrorPress={company.refetch}
 				dropDownProps={{
-					dropdownItems: companyList,
+					dropdownItems: company.list,
 					idKey: "rg",
 					valueKey: "name",
-					isLoading: isLoadingCompany,
+					isLoading: company.isLoading,
 				}}
 			/>
 

@@ -26,10 +26,16 @@ export class InMemorySellsRepo implements ISellsRepo {
 		await delay()
 	}
 
-	async clientList(): Promise<Client[]> {
+	async clientList(valueToSearch: string): Promise<Client[]> {
 		await delay()
 
-		return mockClients
+		const search = valueToSearch.toLowerCase()
+
+		if (!search) return mockClients
+
+		return mockClients.filter(({ name, corporateReason, rg }) =>
+			`${name} ${corporateReason} ${rg}`.toLowerCase().includes(search),
+		)
 	}
 
 	async truckPickupList(valueToSearch: string): Promise<TruckPickup[]> {
@@ -43,16 +49,24 @@ export class InMemorySellsRepo implements ISellsRepo {
 		return truckPickups.filter(({ licensePlate }) => licensePlate.toLowerCase().includes(search))
 	}
 
-	async driverList(): Promise<Driver[]> {
+	async driverList(valueToSearch: string): Promise<Driver[]> {
 		await delay()
 
-		return mockDrivers
+		const search = valueToSearch.toLowerCase()
+
+		if (!search) return mockDrivers
+
+		return mockDrivers.filter(({ name, rg }) => `${name} ${rg}`.toLowerCase().includes(search))
 	}
 
-	async companyList(): Promise<Company[]> {
+	async companyList(valueToSearch: string): Promise<Company[]> {
 		await delay()
 
-		return mockCompanies
+		const search = valueToSearch.toLowerCase()
+
+		if (!search) return mockCompanies
+
+		return mockCompanies.filter(({ name, rg }) => `${name} ${rg}`.toLowerCase().includes(search))
 	}
 
 	async paymentTermsList(): Promise<PaymentTerms[]> {

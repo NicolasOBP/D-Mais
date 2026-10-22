@@ -60,20 +60,7 @@ function parseSendCartResult(result: SendCartAPIContent | string): SendCartAPICo
 	}
 }
 
-export class ApiSellRepo
-	implements
-		Pick<
-			ISellsRepo,
-			| "clientList"
-			| "companyList"
-			| "driverList"
-			| "paymentMethodsList"
-			| "paymentTermsList"
-			| "sendCart"
-			| "truckPickupList"
-			| "calcFinalOrderPrice"
-		>
-{
+export class ApiSellRepo implements ISellsRepo {
 	private async list<TApiItem, TItem>(
 		endpoint: string,
 		listName: string,
@@ -124,7 +111,7 @@ export class ApiSellRepo
 		}
 	}
 
-	async clientList(): Promise<Client[]> {
+	async clientList(valueToSearch: string): Promise<Client[]> {
 		return this.list<ClientAPIContent, Client>(
 			"TMetodosGerais/F_ListarClientes",
 			"clientes",
@@ -133,6 +120,7 @@ export class ApiSellRepo
 				corporateReason: client.C_RAZSO,
 				rg: client.C_RGCLI,
 			}),
+			{ filtro: valueToSearch },
 		)
 	}
 
@@ -145,7 +133,7 @@ export class ApiSellRepo
 		)
 	}
 
-	async driverList(): Promise<Driver[]> {
+	async driverList(valueToSearch: string): Promise<Driver[]> {
 		return this.list<DriverAPIContent, Driver>(
 			"TMetodosGerais/F_ListarMotoristas",
 			"motoristas",
@@ -153,10 +141,11 @@ export class ApiSellRepo
 				name: driver.C_NMFANT,
 				rg: driver.C_RGCLI,
 			}),
+			{ filtro: valueToSearch },
 		)
 	}
 
-	async companyList(): Promise<Company[]> {
+	async companyList(valueToSearch: string): Promise<Company[]> {
 		return this.list<CompanyAPIContent, Company>(
 			"TMetodosGerais/F_ListarTransportadoras",
 			"transportadoras",
@@ -164,6 +153,7 @@ export class ApiSellRepo
 				name: company.C_NMFANT,
 				rg: company.C_RGCLI,
 			}),
+			{ filtro: valueToSearch },
 		)
 	}
 
@@ -250,6 +240,7 @@ export class ApiSellRepo
 		isFareSelected,
 		paymentTerms,
 		requestProducts,
+		paymentMethod,
 	}: CalcFinalOrderVariables): Promise<FinalOrderPriceResult> {
 		const products = Array.isArray(requestProducts) ? requestProducts : [requestProducts]
 
@@ -259,6 +250,7 @@ export class ApiSellRepo
 				C_CDEMPR: authUser.id,
 				C_RGCLI: client.rg,
 				C_CONDPAGTO: paymentTerms.id,
+				C_TPPAGTO: paymentMethod.id,
 				C_TPFRETE: isFareSelected ? "1" : "2",
 				C_ITENS: products.map((item) => ({
 					C_CDPRO: item.id,
