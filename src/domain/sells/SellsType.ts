@@ -105,6 +105,7 @@ export type CalcFinalOrderVariables = {
 	authUser: AuthUser
 	client: Client
 	paymentTerms: PaymentTerms
+	paymentMethod: PaymentMethod
 	isFareSelected: boolean
 }
 

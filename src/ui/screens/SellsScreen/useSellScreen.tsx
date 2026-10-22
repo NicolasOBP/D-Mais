@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useWatch } from "react-hook-form"
 
 import {
+	type PaymentMethod,
 	type PaymentTerms,
 	type ProductCartScreen,
 	useOrderSaveStorage,
@@ -44,14 +45,19 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 	const [lastSuccessPaymentTerms, setLastSuccessPaymentTerms] = useState<PaymentTerms>(
 		getValues("condicaoPagamento"),
 	)
+	const [lastSuccessPaymentMethod, setLastSuccessPaymentMethod] = useState<PaymentMethod>(
+		getValues("formaPagamento"),
+	)
 
 	const { mutate: calcFinalOrderPrice, isPending: isPendingTotalFinalPrice } =
 		useSellCalcFinalOrder({
 			onSuccess: (orderResult) => {
 				updateProductsPrice(orderResult)
 				setLastSuccessPaymentTerms(paymentTerms)
+				setLastSuccessPaymentMethod(paymentMethod)
 			},
 			onError: () => {
+				setValue("formaPagamento", lastSuccessPaymentMethod)
 				setValue("condicaoPagamento", lastSuccessPaymentTerms)
 				setValue("tabela", lastSuccessPaymentTerms.table)
 			},
@@ -104,9 +110,10 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 			client: client,
 			isFareSelected: isFareSelected,
 			paymentTerms: paymentTerms,
+			paymentMethod: paymentMethod,
 			requestProducts: orderItems,
 		})
-	}, [orderItems, calcFinalOrderPrice, client, paymentTerms])
+	}, [orderItems, calcFinalOrderPrice, client.rg, paymentTerms.id, paymentMethod.id])
 
 	useEffect(() => {
 		updateOrderFormDataDetails({
@@ -197,6 +204,7 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 			client: client,
 			isFareSelected: fareSelected,
 			paymentTerms: paymentTerms,
+			paymentMethod: paymentMethod,
 			requestProducts: orderItems,
 		})
 	}

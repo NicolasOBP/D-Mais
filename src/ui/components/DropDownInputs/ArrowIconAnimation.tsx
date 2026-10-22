@@ -83,7 +83,7 @@ export function ArrowIconAnimation({
 					pointerEvents={isError ? "auto" : "none"}
 					style={[style.containersStyle, refreshAnimation]}
 				>
-					<Icon name="refresh" color="primary" size={24} onPress={onErrorPress} hitSlop={10} />
+					<Icon name="refresh" color={color} size={24} onPress={onErrorPress} hitSlop={10} />
 				</Animated.View>
 			</Box>
 		</Box>

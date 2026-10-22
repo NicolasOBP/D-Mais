@@ -6,6 +6,7 @@ import { useWatch } from "react-hook-form"
 import {
 	type OrderDetails,
 	type OrderVariables,
+	type PaymentMethod,
 	type PaymentTerms,
 	useAuthCheckLeftQuota,
 	useOrderRemoveFromStorage,
@@ -30,12 +31,16 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 	const { control, formState, handleSubmit, reset, setValue, getValues } = useSellForm(order)
 	const client = useWatch({ control, name: "cliente" })
 	const paymentTerms = useWatch({ control, name: "condicaoPagamento" })
+	const paymentMethod = useWatch({ control, name: "formaPagamento" })
 	const isFareSelected = useWatch({ control, name: "freteSelecionado" })
 	const [totalPrice, setTotalPrice] = useState(defaultTotalPrice)
 	const [farePrice, setFarePrice] = useState(order.farePrice)
 	const [orderProducts, setOrderProducts] = useState(cartItems)
 	const [lastSuccessPaymentTerms, setLastSuccessPaymentTerms] = useState<PaymentTerms>(
 		getValues("condicaoPagamento"),
+	)
+	const [lastSuccessPaymentMethod, setLastSuccessPaymentMethod] = useState<PaymentMethod>(
+		getValues("formaPagamento"),
 	)
 	const { authUser } = useAuth()
 	const { showModal, closeModal, updateModalData } = useModal()
@@ -47,8 +52,10 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 			setFarePrice(result.farePrice)
 			setOrderProducts(result.orderProductItems)
 			setLastSuccessPaymentTerms(paymentTerms)
+			setLastSuccessPaymentMethod(paymentMethod)
 		},
 		onError: () => {
+			setValue("formaPagamento", lastSuccessPaymentMethod)
 			setValue("condicaoPagamento", lastSuccessPaymentTerms)
 			setValue("tabela", lastSuccessPaymentTerms.table)
 		},
@@ -95,9 +102,10 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 			client,
 			isFareSelected,
 			paymentTerms,
+			paymentMethod,
 			requestProducts: cartItems,
 		})
-	}, [calcFinalOrderPrice, client, paymentTerms, cartItems])
+	}, [calcFinalOrderPrice, client, paymentTerms, paymentMethod, cartItems])
 
 	async function handleShowModal(data: SellSchema) {
 		checkLeftQuota(order.products.reduce((acc, prod) => acc + prod.volume, 0))
@@ -194,6 +202,7 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 			client,
 			isFareSelected: fareSelected,
 			paymentTerms,
+			paymentMethod,
 			requestProducts: cartItems,
 		})
 	}

@@ -8,7 +8,13 @@ export function useSellCalcFinalOrder(options?: MutationOptions<FinalOrderPriceR
 	const { showToast } = useToast()
 
 	return useAppMutation<FinalOrderPriceResult, Omit<CalcFinalOrderVariables, "authUser">>({
-		mutationFn: async ({ client, isFareSelected, paymentTerms, requestProducts }) => {
+		mutationFn: async ({
+			client,
+			isFareSelected,
+			paymentTerms,
+			requestProducts,
+			paymentMethod,
+		}) => {
 			if (!authUser) throw new Error("usuário não validado")
 
 			return await sells.calcFinalOrderPrice({
@@ -16,6 +22,7 @@ export function useSellCalcFinalOrder(options?: MutationOptions<FinalOrderPriceR
 				authUser,
 				client,
 				isFareSelected,
+				paymentMethod,
 				paymentTerms,
 			})
 		},
@@ -32,5 +39,6 @@ export function useSellCalcFinalOrder(options?: MutationOptions<FinalOrderPriceR
 
 			options?.onError?.(error.message)
 		},
+		retry: 1,
 	})
 }
