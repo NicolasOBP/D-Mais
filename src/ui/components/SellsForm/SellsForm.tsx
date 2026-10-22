@@ -40,23 +40,48 @@ export function SellsForm({
 	const searchTruck = useDebounce(truckPlateSearch, undefined, 3)
 	const searchPickup = useDebounce(pickupPlateSearch, undefined, 3)
 
-	const { data: clientList, isLoading: isLoadingClient } = useSellClientList(!readOnly)
-	const { data: driverList, isLoading: isLoadingDriver } = useSellDriverList(!readOnly)
-	const { data: companyList, isLoading: isLoadingCompany } = useSellCompanyList(!readOnly)
-	const { data: paymentMethodsList, isLoading: isLoadingPaymentMethods } =
-		useSellPaymentMethodsList(!readOnly)
-	const { data: paymentTermsList, isLoading: isLoadingPaymentTerms } = useSellPaymentTermsList(
-		!readOnly,
-	)
-
-	const { data: truckList, isLoading: isLoadingTruck } = useSellTruckPickupList(
-		!readOnly,
-		searchTruck,
-	)
-	const { data: pickupList, isLoading: isLoadingPickup } = useSellTruckPickupList(
-		!readOnly,
-		searchPickup,
-	)
+	const {
+		data: clientList,
+		isLoading: isLoadingClient,
+		error: isErrorClient,
+		refetch: refetchClient,
+	} = useSellClientList(!readOnly)
+	const {
+		data: driverList,
+		isLoading: isLoadingDriver,
+		error: isErrorDriver,
+		refetch: refetchDriver,
+	} = useSellDriverList(!readOnly)
+	const {
+		data: companyList,
+		isLoading: isLoadingCompany,
+		error: isErrorCompany,
+		refetch: refetchCompany,
+	} = useSellCompanyList(!readOnly)
+	const {
+		data: paymentMethodsList,
+		isLoading: isLoadingPaymentMethods,
+		error: isErrorPayMethods,
+		refetch: refetchPaymentMethods,
+	} = useSellPaymentMethodsList(!readOnly)
+	const {
+		data: paymentTermsList,
+		isLoading: isLoadingPaymentTerms,
+		error: isErrorPayTerms,
+		refetch: refetchPaymentTerms,
+	} = useSellPaymentTermsList(!readOnly)
+	const {
+		data: truckList,
+		isLoading: isLoadingTruck,
+		error: isErrorTruck,
+		refetch: refetchTruck,
+	} = useSellTruckPickupList(!readOnly, searchTruck)
+	const {
+		data: pickupList,
+		isLoading: isLoadingPickup,
+		error: isErrorPickup,
+		refetch: refetchPickup,
+	} = useSellTruckPickupList(!readOnly, searchPickup)
 
 	return (
 		<Box pt="s14" pb="s20" gap="s20" paddingHorizontal="default">
@@ -67,6 +92,8 @@ export function SellsForm({
 				variant="secundary"
 				isRequired
 				readOnly={readOnly}
+				isError={!!isErrorClient}
+				onErrorPress={refetchClient}
 				dropDownProps={{
 					dropdownItems: clientList,
 					idKey: "rg",
@@ -84,6 +111,8 @@ export function SellsForm({
 						variant="secundary"
 						isRequired
 						readOnly={readOnly}
+						isError={!!isErrorPayTerms}
+						onErrorPress={refetchPaymentTerms}
 						dropDownProps={{
 							dropdownItems: paymentTermsList,
 							isLoading: isLoadingPaymentTerms,
@@ -110,6 +139,8 @@ export function SellsForm({
 						variant="secundary"
 						isRequired
 						readOnly={readOnly}
+						isError={!!isErrorPayMethods}
+						onErrorPress={refetchPaymentMethods}
 						dropDownProps={{
 							dropdownItems: paymentMethodsList,
 							isLoading: isLoadingPaymentMethods,
@@ -136,6 +167,8 @@ export function SellsForm({
 							isRequired
 							readOnly={readOnly}
 							onChangeText={setTruckPlateSearch}
+							isError={!!isErrorTruck}
+							onErrorPress={refetchTruck}
 							dropDownProps={{
 								dropdownItems: truckList,
 								idKey: "id",
@@ -152,6 +185,8 @@ export function SellsForm({
 							variant="secundary"
 							readOnly={readOnly}
 							onChangeText={setPickupPlateSearch}
+							isError={!!isErrorPickup}
+							onErrorPress={refetchPickup}
 							dropDownProps={{
 								dropdownItems: pickupList,
 								idKey: "id",
@@ -170,6 +205,8 @@ export function SellsForm({
 				variant="secundary"
 				isRequired
 				readOnly={readOnly}
+				isError={!!isErrorDriver}
+				onErrorPress={refetchDriver}
 				dropDownProps={{
 					dropdownItems: driverList,
 					idKey: "rg",
@@ -185,6 +222,8 @@ export function SellsForm({
 				variant="secundary"
 				isRequired
 				readOnly={readOnly}
+				isError={!!isErrorCompany}
+				onErrorPress={refetchCompany}
 				dropDownProps={{
 					dropdownItems: companyList,
 					idKey: "rg",

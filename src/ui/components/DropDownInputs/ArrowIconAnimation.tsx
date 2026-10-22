@@ -1,9 +1,15 @@
+import { useEffect } from "react"
+import { StyleSheet } from "react-native"
+
 import Animated, {
+	Easing,
 	ReanimatedLogLevel,
 	type SharedValue,
 	configureReanimatedLogger,
 	interpolate,
 	useAnimatedStyle,
+	useSharedValue,
+	withTiming,
 } from "react-native-reanimated"
 
 import { Box } from "@core-components"
@@ -21,18 +27,38 @@ type Props = {
 	closeDropdown: () => void
 	openDropdown: () => void
 	isOpen: SharedValue<boolean>
+	isError: boolean
+	onErrorPress: () => void
 	color?: IconProps["color"]
 }
 
 export function ArrowIconAnimation({
-	progress,
 	closeDropdown,
-	isOpen,
 	openDropdown,
+	progress,
+	isOpen,
+	isError,
+	onErrorPress,
 	color,
 }: Props) {
-	const arrowAnimattion = useAnimatedStyle(() => ({
-		transform: [{ rotate: `${interpolate(progress.value, [0, 1], [0, -180])}deg` }],
+	const iconTransition = useSharedValue(isError ? 1 : 0)
+
+	useEffect(() => {
+		iconTransition.value = withTiming(isError ? 1 : 0, {
+			duration: 500,
+			easing: Easing.inOut(Easing.cubic),
+		})
+	}, [iconTransition, isError])
+
+	const arrowAnimation = useAnimatedStyle(() => ({
+		transform: [
+			{ rotate: `${interpolate(progress.value, [0, 1], [0, -180])}deg` },
+			{ scale: interpolate(iconTransition.value, [0, 0.5, 1], [1, 0, 0]) },
+		],
+	}))
+
+	const refreshAnimation = useAnimatedStyle(() => ({
+		transform: [{ scale: interpolate(iconTransition.value, [0, 0.5, 1], [0, 0, 1]) }],
 	}))
 
 	function handleIconAction() {
@@ -45,9 +71,33 @@ export function ArrowIconAnimation({
 
 	return (
 		<Box pr="s4">
-			<Animated.View style={arrowAnimattion}>
-				<Icon name="chevronDown" onPress={handleIconAction} color={color} />
-			</Animated.View>
+			<Box width={24} height={24} alignItems="center" justifyContent="center">
+				<Animated.View
+					pointerEvents={isError ? "none" : "auto"}
+					style={[style.containersStyle, arrowAnimation]}
+				>
+					<Icon name="chevronDown" onPress={handleIconAction} color={color} />
+				</Animated.View>
+
+				<Animated.View
+					pointerEvents={isError ? "auto" : "none"}
+					style={[style.containersStyle, refreshAnimation]}
+				>
+					<Icon name="refresh" color="primary" size={24} onPress={onErrorPress} hitSlop={10} />
+				</Animated.View>
+			</Box>
 		</Box>
 	)
 }
+
+const style = StyleSheet.create({
+	containersStyle: {
+		position: "absolute",
+		top: 0,
+		right: 0,
+		bottom: 0,
+		left: 0,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+})

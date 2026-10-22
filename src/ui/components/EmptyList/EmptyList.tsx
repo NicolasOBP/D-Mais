@@ -16,12 +16,12 @@ export function EmptyList({ desc, refreshFunction, showRefreshButton }: Props) {
 			alignContent="center"
 			alignItems="center"
 			pt="s20"
-			g="s80"
+			g="s88"
 		>
 			<Text variant="title16">{desc}</Text>
 			{showRefreshButton && (
 				<PressableBox alignItems="center" onPress={refreshFunction}>
-					<Icon name="refresh" color="primary" size={60} />
+					<Icon name="refresh" color="primary" size={80} />
 					<Text variant="text12" color="primary" textAlign="center">
 						Recarregar
 					</Text>

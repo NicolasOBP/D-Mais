@@ -28,7 +28,12 @@ export function useProductVolumeModal({
 	})
 	const { showModal, updateModalData, closeModal } = useModal()
 
-	const { inventoryList, isLoading: isLoadingInventory } = useInventoryList({
+	const {
+		inventoryList,
+		isLoading: isLoadingInventory,
+		error: isErrorInventory,
+		refetch: refetchInventory,
+	} = useInventoryList({
 		productCode: product.id,
 		isEnable: isModalOpen,
 	})
@@ -41,7 +46,13 @@ export function useProductVolumeModal({
 				{
 					headerTitle: `Editar Produto`,
 					headerSubtitle: product.title,
-					BodyComponent: <ProductModalBody inventoryList={inventoryList} control={control} />,
+					BodyComponent: (
+						<ProductModalBody
+							inventoryList={inventoryList}
+							control={control}
+							onErrorPress={refetchInventory}
+						/>
+					),
 					footerButton: {
 						oneButtonFooter: {
 							label: "Confirmar",
@@ -49,13 +60,26 @@ export function useProductVolumeModal({
 						},
 					},
 				},
-				{ formState, reset, isLoading, updatedInventoryList: inventoryList, isLoadingInventory },
+				{
+					formState,
+					reset,
+					isLoading,
+					updatedInventoryList: inventoryList,
+					isLoadingInventory,
+					isErrorInventory,
+				},
 			)
 		} else {
 			showModal(
 				{
 					headerTitle: `${product.title}`,
-					BodyComponent: <ProductModalBody inventoryList={inventoryList} control={control} />,
+					BodyComponent: (
+						<ProductModalBody
+							inventoryList={inventoryList}
+							control={control}
+							onErrorPress={refetchInventory}
+						/>
+					),
 					footerButton: {
 						oneButtonFooter: {
 							label: "Confirmar",
@@ -63,7 +87,14 @@ export function useProductVolumeModal({
 						},
 					},
 				},
-				{ formState, reset, isLoading, updatedInventoryList: inventoryList, isLoadingInventory },
+				{
+					formState,
+					reset,
+					isLoading,
+					updatedInventoryList: inventoryList,
+					isLoadingInventory,
+					isErrorInventory,
+				},
 			)
 		}
 	}
@@ -75,8 +106,9 @@ export function useProductVolumeModal({
 			isLoading,
 			updatedInventoryList: inventoryList,
 			isLoadingInventory,
+			isErrorInventory,
 		})
-	}, [formState, isLoading, inventoryList, isLoadingInventory])
+	}, [formState, isLoading, inventoryList, isLoadingInventory, isErrorInventory])
 
 	return { handleShowModal, closeModal, reset }
 }

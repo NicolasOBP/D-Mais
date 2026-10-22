@@ -11,12 +11,15 @@ import { useModal } from "../Modal/useModal"
 export function ProductModalBody({
 	control,
 	inventoryList,
+	onErrorPress,
 }: Pick<ControllerProps<ProductSchema>, "control"> & {
 	inventoryList: InventoryWithoutProducts[] | undefined
+	onErrorPress: () => void
 }) {
 	const { modalData } = useModal()
 	const updatedInventoryList: InventoryWithoutProducts[] = modalData.updatedInventoryList
 	const isLoadingInventory: boolean = modalData.isLoadingInventory
+	const isErrorInventory: unknown = modalData.isErrorInventory
 
 	return (
 		<Box gap="s14" style={{ marginTop: -20 }}>
@@ -25,6 +28,8 @@ export function ProductModalBody({
 				control={control}
 				textFieldStyle={{ paddingVertical: "s8" }}
 				label="Estoque"
+				isError={!!isErrorInventory}
+				onErrorPress={onErrorPress}
 				dropDownProps={{
 					dropdownItems: inventoryList || updatedInventoryList,
 					idKey: "id",

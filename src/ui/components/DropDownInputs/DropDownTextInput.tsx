@@ -14,7 +14,10 @@ type DropDownTextInputProps<TValue> = Omit<TextInputProps, "RighComponent" | "er
 		| "onSelectItem"
 		| "searchText"
 		| "maxHeight"
-	>
+	> & {
+		isError: boolean
+		onErrorPress: () => void
+	}
 
 export function DropDownTextInput<TValue>({
 	variant = "primary",
@@ -26,6 +29,8 @@ export function DropDownTextInput<TValue>({
 	onSelectItem,
 	searchText,
 	maxHeight,
+	isError,
+	onErrorPress,
 	...textInputProps
 }: DropDownTextInputProps<TValue>) {
 	const { bodyProgress, closeDropdown, openDropdown, progress, setTopOffset, topOffset, isOpen } =
@@ -41,6 +46,8 @@ export function DropDownTextInput<TValue>({
 				value={searchText}
 				RighComponent={
 					<ArrowIconAnimation
+						isError={isError}
+						onErrorPress={onErrorPress}
 						closeDropdown={closeDropdown}
 						isOpen={isOpen}
 						openDropdown={openDropdown}
