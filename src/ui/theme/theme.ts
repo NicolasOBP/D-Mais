@@ -13,7 +13,7 @@ const palette = {
 
 	// Primary
 	blue: "#2E3250",
-	lightBlue: "rgba(46, 50, 80, 0.21)",
+	lightBlue: "#4ab3d1",
 
 	// Secondary
 	carrot: "#F86F2D",

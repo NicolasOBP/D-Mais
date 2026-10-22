@@ -17,7 +17,7 @@ export function useSellForm(order?: OrderVariables) {
 					formaPagamento: order.paymentMethod,
 					freteSelecionado: order.fareSelected,
 					motorista: order.driver,
-					tabela: order.table,
+					tabela: order.paymentTerms.table,
 					transportadora: order.company,
 				}
 			: defaultValues,
@@ -35,12 +35,12 @@ export function useSellForm(order?: OrderVariables) {
 }
 
 const defaultValues: SellSchema = {
-	cliente: { cnpjCpf: "", name: "", corporateReason: "" },
+	cliente: { rg: "", name: "", corporateReason: "" },
 	condicaoPagamento: { description: "", id: "", table: "" },
 	formaPagamento: { description: "", id: "" },
 	tabela: "",
 	freteSelecionado: false,
 	caminhao: { licensePlate: "", id: "" },
-	motorista: { cpf: "", name: "" },
-	transportadora: { cnpj: "", name: "" },
+	motorista: { rg: "", name: "" },
+	transportadora: { rg: "", name: "" },
 }

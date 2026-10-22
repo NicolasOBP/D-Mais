@@ -17,11 +17,15 @@ export function NonEditableOrder({ order }: { order: OrderDetails }) {
 
 			<SellsForm readOnly={true} control={control} />
 
-			<SellsProductsList cartItems={order.products} totalPrice={order.totalPrice} />
+			<SellsProductsList
+				cartItems={order.products}
+				totalPrice={order.totalPrice}
+				farePrice={order.farePrice}
+			/>
 
 			<Box flex={1} alignItems="center" paddingVertical="s20">
 				<Button
-					lable="Venda enviada"
+					lable="Pedido enviado"
 					variant="disabled"
 					disabled
 					paddingVertical="s14"

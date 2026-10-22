@@ -49,7 +49,7 @@ export class InMemoryAuthRepo implements IAuthRepo {
 
 		if (user.leftQuota < quota) {
 			throw new Error("Quota insuficiente", {
-				cause: "Você não possui quota suficiente para realizar esta venda",
+				cause: "Você não possui quota suficiente para realizar este pedido",
 			})
 		}
 	}

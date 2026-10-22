@@ -31,6 +31,7 @@ export function ControllerCheckBox<FormType extends FieldValues>({
 	extraFunction,
 	ownToggleFunction,
 	readOnly,
+	disabled,
 }: Props<FormType>) {
 	return (
 		<Controller
@@ -58,12 +59,12 @@ export function ControllerCheckBox<FormType extends FieldValues>({
 
 				return children ? (
 					<PressableBox
-						{...pressableProps}
 						onPress={() => {
 							toggle()
 							extraFunction?.(field.value)
 						}}
-						disabled={readOnly}
+						disabled={readOnly || disabled}
+						{...pressableProps}
 					>
 						{checkBox}
 						{children}

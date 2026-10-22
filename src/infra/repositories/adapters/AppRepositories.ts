@@ -5,29 +5,22 @@ import { ApiInventoryRepo } from "./api/inventory/ApiInventoryRepo"
 import { ApiProductRepo } from "./api/product/ApiProductRepo"
 import { ApiSellRepo } from "./api/sell/ApiSellRepo"
 import { InMemoryRepositories } from "./inMemory"
-import { InMemorySellsRepo } from "./inMemory/InMemorySellsRepo"
 
-const apiInventoryRepo = new ApiInventoryRepo()
 const apiSellRepo = new ApiSellRepo()
-const inMemorySellRepo = new InMemorySellsRepo()
 
 export const AppRepositories: Repositories = {
 	...InMemoryRepositories,
 	auth: new ApiAuthRepo(),
 	product: new ApiProductRepo(),
 	sells: {
-		fareControl: inMemorySellRepo.fareControl,
-		paymentTermsControl: inMemorySellRepo.paymentTermsControl,
-		truckPickupList: () => inMemorySellRepo.truckPickupList(),
-		companyList: () => apiSellRepo.companyList(),
-		driverList: () => apiSellRepo.driverList(),
+		calcFinalOrderPrice: (variables) => apiSellRepo.calcFinalOrderPrice(variables),
+		sendCart: (items) => apiSellRepo.sendCart(items),
+		truckPickupList: (valueToSearch) => apiSellRepo.truckPickupList(valueToSearch),
+		companyList: (valueToSearch) => apiSellRepo.companyList(valueToSearch),
+		driverList: (valueToSearch) => apiSellRepo.driverList(valueToSearch),
 		paymentMethodsList: () => apiSellRepo.paymentMethodsList(),
 		paymentTermsList: () => apiSellRepo.paymentTermsList(),
-		clientList: () => apiSellRepo.clientList(),
-		sendCart: (items) => apiSellRepo.sendCart(items),
+		clientList: (valueToSearch) => apiSellRepo.clientList(valueToSearch),
 	},
-	inventory: {
-		...InMemoryRepositories.inventory,
-		listInventories: (productCode) => apiInventoryRepo.listInventories(productCode),
-	},
+	inventory: new ApiInventoryRepo(),
 }

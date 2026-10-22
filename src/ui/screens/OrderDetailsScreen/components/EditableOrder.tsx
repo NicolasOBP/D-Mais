@@ -11,12 +11,15 @@ export function EditAbleOrder({ order }: { order: OrderDetails }) {
 		handleSubmit,
 		handleShowModal,
 		handleShowDeleteModal,
-		fareControl,
-		paymentTermsControl,
+		handleCalculateFarePrice,
+		getValues,
+		setValue,
 		isTotalPricePending,
 		isSendSellPending,
 		control,
 		totalPrice,
+		farePrice,
+		orderProducts,
 	} = useEditableOrder({
 		cartItems: order.products,
 		order,
@@ -28,21 +31,24 @@ export function EditAbleOrder({ order }: { order: OrderDetails }) {
 			<ScreenHeader title="Pedido Pendente" status={order.status} canGoBack />
 
 			<SellsForm
-				fareControl={fareControl}
+				getValues={getValues}
+				setValue={setValue}
 				control={control}
-				paymentTermsControl={paymentTermsControl}
+				isTotalPricePending={isTotalPricePending}
+				handleCalculateFarePrice={handleCalculateFarePrice}
 			/>
 
 			<SellsProductsList
-				cartItems={order.products}
+				cartItems={orderProducts}
 				totalPrice={totalPrice}
+				farePrice={farePrice}
 				isPendingTotalPrice={isTotalPricePending}
 			/>
 
 			<Box flexDirection="row" gap="s16" paddingHorizontal="default" paddingVertical="s20">
 				<Button
 					flex={1}
-					lable="Excluir venda"
+					lable="Excluir pedido"
 					variant="error"
 					onPress={handleShowDeleteModal}
 					paddingVertical="s14"
@@ -50,11 +56,11 @@ export function EditAbleOrder({ order }: { order: OrderDetails }) {
 				/>
 				<Button
 					flex={1}
-					lable="Enviar venda"
+					lable="Enviar pedido"
 					variant="primary"
 					paddingVertical="s14"
 					paddingHorizontal="s8"
-					isLoading={isSendSellPending}
+					isLoading={isSendSellPending || isTotalPricePending}
 					onPress={handleSubmit(handleShowModal)}
 				/>
 			</Box>

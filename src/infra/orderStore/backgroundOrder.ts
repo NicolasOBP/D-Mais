@@ -1,107 +1,24 @@
 import { create } from "zustand"
 
-import type { OrderDetails, OrderVariables } from "@domain"
+import type { OrderDetails } from "@domain"
 
 import { storage } from "../storage"
 
 import { orderStorage } from "./orderStorage"
+import { orderStore } from "./orderStore"
 
 const SAVED_BACKGROUND_ORDER_KEY = "@BackgroundOrder"
 
-// export const backgroundOrder = {
-// 	canRun: false,
-// 	draft: undefined as OrderVariables | undefined,
-// 	savedOrderId: undefined as OrderDetails["id"] | undefined,
-// }
-
-// export function enableBackgroundOrderSaving() {
-// 	backgroundOrder.canRun = true
-// }
-
-// export function disableBackgroundOrderSaving() {
-// 	backgroundOrder.canRun = false
-// 	backgroundOrder.draft = undefined
-// }
-
-// export function setBackgroundOrderDraft(order: OrderVariables) {
-// 	backgroundOrder.draft = order
-// }
-
-// export async function saveBackgroundOrder(): Promise<boolean> {
-// 	const { canRun, draft } = backgroundOrder
-// 	const savedOrder = await storage.getItem<{
-// 		id: OrderDetails["id"]
-// 		notificationPending: boolean
-// 	}>(SAVED_BACKGROUND_ORDER_KEY)
-
-// 	if (
-// 		!canRun ||
-// 		!draft ||
-// 		draft.products.length === 0 ||
-// 		backgroundOrder.savedOrderId !== undefined ||
-// 		savedOrder
-// 	) {
-// 		return false
-// 	}
-
-// 	console.log("salvou")
-
-// 	const savedOrderId = await orderStorage.saveOrder({
-// 		...draft,
-// 		id: 0,
-// 		status: "pending",
-// 	})
-// 	await storage.setItem(SAVED_BACKGROUND_ORDER_KEY, {
-// 		id: savedOrderId,
-// 		notificationPending: true,
-// 	})
-// 	backgroundOrder.savedOrderId = savedOrderId
-
-// 	return true
-// }
-
-// export async function consumeSavedBackgroundOrderNotification(): Promise<OrderDetails | undefined> {
-// 	const savedOrder = await storage.getItem<{
-// 		id: OrderDetails["id"]
-// 		notificationPending: boolean
-// 	}>(SAVED_BACKGROUND_ORDER_KEY)
-
-// 	if (!savedOrder) {
-// 		return undefined
-// 	}
-
-// 	const orders = await orderStorage.getOrders()
-// 	const order = orders.find(({ id }) => id === savedOrder.id)
-
-// 	if (!order) {
-// 		await storage.removeItem(SAVED_BACKGROUND_ORDER_KEY)
-// 		backgroundOrder.savedOrderId = undefined
-// 		return undefined
-// 	}
-
-// 	backgroundOrder.savedOrderId = savedOrder.id
-// 	if (!savedOrder.notificationPending) {
-// 		return undefined
-// 	}
-
-// 	await storage.setItem(SAVED_BACKGROUND_ORDER_KEY, {
-// 		...savedOrder,
-// 		notificationPending: false,
-// 	})
-
-// 	return order
-// }
-
 const initialBackgroundOrderStore = {
 	canRun: false,
-	draft: undefined as OrderVariables | undefined,
 	savedOrderId: undefined as OrderDetails["id"] | undefined,
 }
+
+let saveInProgress: Promise<boolean> | undefined
 
 type BackgroundOrderStoreType = typeof initialBackgroundOrderStore & {
 	enableBackgroundOrderSaving: () => void
 	disableBackgroundOrderSaving: () => void
-	setBackgroundOrderDraft: (order: OrderVariables) => void
 	saveBackgroundOrder: () => Promise<boolean>
 	reverseBackgroundOrder: () => Promise<void>
 	showBackgroundNotification: () => Promise<boolean>
@@ -125,69 +42,87 @@ const backgroundOrderStore = create<BackgroundOrderStoreType>()((set, get) => ({
 		return false
 	},
 	saveBackgroundOrder: async () => {
-		const savedOrder = await storage.getItem<{
-			id: OrderDetails["id"]
-			notificationPending: boolean
-		}>(SAVED_BACKGROUND_ORDER_KEY)
-		const { canRun, draft, savedOrderId } = get()
+		if (saveInProgress) return saveInProgress
 
-		if (!canRun || !draft || savedOrderId !== undefined || savedOrder) {
-			return false
+		saveInProgress = (async () => {
+			const { canRun, savedOrderId } = get()
+
+			if (!canRun || savedOrderId !== undefined) {
+				return false
+			}
+
+			const savedOrder = await storage.getItem<{
+				id: OrderDetails["id"]
+				notificationPending: boolean
+			}>(SAVED_BACKGROUND_ORDER_KEY)
+
+			if (savedOrder) return false
+
+			const order = orderStore.getState().getOrder()
+
+			if (order.products.length === 0) return false
+
+			const newSavedOrderId = await orderStorage.saveOrder({
+				...order,
+				id: 0,
+				status: "pending",
+			})
+
+			try {
+				await storage.setItem(SAVED_BACKGROUND_ORDER_KEY, {
+					id: newSavedOrderId,
+					notificationPending: true,
+				})
+			} catch (error) {
+				await orderStorage.removeOrder(newSavedOrderId)
+				throw error
+			}
+
+			set({ savedOrderId: newSavedOrderId })
+			return true
+		})()
+
+		try {
+			return await saveInProgress
+		} finally {
+			saveInProgress = undefined
 		}
-
-		const newSavedOrderId = await orderStorage.saveOrder({
-			...draft,
-			id: 0,
-			status: "pending",
-		})
-		await storage.setItem(SAVED_BACKGROUND_ORDER_KEY, {
-			id: newSavedOrderId,
-			notificationPending: true,
-		})
-
-		set({ savedOrderId: newSavedOrderId })
-
-		return true
 	},
 	reverseBackgroundOrder: async () => {
+		if (saveInProgress) await saveInProgress
+
 		const savedOrder = await storage.getItem<{
 			id: OrderDetails["id"]
 			notificationPending: boolean
 		}>(SAVED_BACKGROUND_ORDER_KEY)
 		const { savedOrderId } = get()
 
-		if (savedOrder) {
-			await storage.removeItem(SAVED_BACKGROUND_ORDER_KEY)
+		if (!savedOrder || savedOrder.id !== savedOrderId) return
 
-			if (savedOrder.id === savedOrderId) {
-				orderStorage.removeOrder(savedOrder.id)
-				set({ savedOrderId: undefined })
-			}
-		}
+		await orderStorage.removeOrder(savedOrder.id)
+		await storage.removeItem(SAVED_BACKGROUND_ORDER_KEY)
+		set({ savedOrderId: undefined })
 	},
 	disableBackgroundOrderSaving: () => set(initialBackgroundOrderStore),
 	enableBackgroundOrderSaving: () => set({ canRun: true }),
-	setBackgroundOrderDraft: (order) => set({ draft: order }),
 }))
 
 export function useBackgroundOrderStore(): Pick<
 	BackgroundOrderStoreType,
-	"canRun" | "draft" | "savedOrderId"
+	"canRun" | "savedOrderId"
 > {
 	const canRun = backgroundOrderStore((state) => state.canRun)
-	const draft = backgroundOrderStore((state) => state.draft)
 	const savedOrderId = backgroundOrderStore((state) => state.savedOrderId)
 
 	return {
 		canRun,
-		draft,
 		savedOrderId,
 	}
 }
 
 export function useBackgroundOrderService(): Omit<
 	BackgroundOrderStoreType,
-	"canRun" | "draft" | "savedOrderId"
+	"canRun" | "savedOrderId"
 > {
 	const disableBackgroundOrderSaving = backgroundOrderStore(
 		(state) => state.disableBackgroundOrderSaving,
@@ -196,7 +131,6 @@ export function useBackgroundOrderService(): Omit<
 		(state) => state.enableBackgroundOrderSaving,
 	)
 	const saveBackgroundOrder = backgroundOrderStore((state) => state.saveBackgroundOrder)
-	const setBackgroundOrderDraft = backgroundOrderStore((state) => state.setBackgroundOrderDraft)
 	const reverseBackgroundOrder = backgroundOrderStore((state) => state.reverseBackgroundOrder)
 	const showBackgroundNotification = backgroundOrderStore(
 		(state) => state.showBackgroundNotification,
@@ -207,7 +141,6 @@ export function useBackgroundOrderService(): Omit<
 		enableBackgroundOrderSaving,
 		saveBackgroundOrder,
 		reverseBackgroundOrder,
-		setBackgroundOrderDraft,
 		showBackgroundNotification,
 	}
 }

@@ -14,6 +14,7 @@ import { LoadingIcon } from "../../../../assets/icons/LoadingIcon"
 import { OrderFillIcon } from "../../../../assets/icons/OrderFillIcon"
 import { OrderIcon } from "../../../../assets/icons/OrderIcon"
 import { PencilIcon } from "../../../../assets/icons/PencilIcon"
+import { RefreshIcon } from "../../../../assets/icons/RefreshIcon"
 import { SearchIcon } from "../../../../assets/icons/SearchIcon"
 import { TrashIcon } from "../../../../assets/icons/TrashIcon"
 
@@ -36,6 +37,7 @@ export const iconRegistry = {
 	chevronDown: ChevronDownIcon,
 	loading: LoadingIcon,
 	errorRound: ErrorRoundIcon,
+	refresh: RefreshIcon,
 }
 
 export type IconType = typeof iconRegistry

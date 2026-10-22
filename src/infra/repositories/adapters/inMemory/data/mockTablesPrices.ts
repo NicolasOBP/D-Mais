@@ -1,6 +1,4 @@
-import type { TablePrices } from "@domain"
-
-export const mockTablePrices: TablePrices[] = [
+export const mockTablePrices = [
 	{
 		paymentTermsId: "001",
 		price: 10,

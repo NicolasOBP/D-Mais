@@ -8,6 +8,7 @@ import Animated, { LinearTransition } from "react-native-reanimated"
 import { type Order, useOrdersList, useOrdersListStorage } from "@domain"
 
 import { useAppTheme } from "@theme"
+import { errorUtils } from "@utils"
 
 import { EmptyList, LoadingListState, ScreenHeader } from "@components"
 import { Screen } from "@containers"
@@ -17,7 +18,7 @@ import { OrdersProductCard } from "./components"
 
 export function OrderScreen() {
 	const { spacing } = useAppTheme()
-	const { data: orders, isLoading, refetch } = useOrdersList()
+	const { data: orders, isLoading, refetch, error } = useOrdersList()
 	const { data: storageOrders } = useOrdersListStorage()
 
 	const flatListRef = useRef(null)
@@ -36,6 +37,18 @@ export function OrderScreen() {
 
 	function organizeData(): Order[] {
 		return [...(storageOrders ?? []), ...(orders ?? [])]
+	}
+
+	function renderEmptyComponent() {
+		let desc: string
+
+		if (error) {
+			desc = `Erro ao carregar produtos. ${errorUtils.getErrorMessage(error)}`
+		} else {
+			desc = "Nenhum pedido encontrado"
+		}
+
+		return <EmptyList desc={desc} showRefreshButton refreshFunction={refetch} />
 	}
 
 	return (
@@ -60,7 +73,7 @@ export function OrderScreen() {
 							rowGap: spacing.s20,
 						}}
 						refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
-						ListEmptyComponent={<EmptyList desc="Nenhum pedido encontrado" />}
+						ListEmptyComponent={renderEmptyComponent()}
 					/>
 				)}
 			</Box>

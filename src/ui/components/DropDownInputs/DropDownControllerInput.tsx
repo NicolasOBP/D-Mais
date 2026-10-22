@@ -22,6 +22,8 @@ type DropDownTextInputProps<FormType extends FieldValues, TValue> = Omit<
 			"dropdownItems" | "valueKey" | "idKey" | "showTextWithId" | "maxHeight" | "isLoading"
 		>
 		extraFunction?: (value: TValue) => void
+		isError: boolean
+		onErrorPress: () => void
 	}
 
 export function DropDownControllerInput<FormType extends FieldValues, TValue>({
@@ -30,8 +32,11 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 	rules,
 	variant = "primary",
 	readOnly,
+	isError,
+	onErrorPress,
 	extraFunction,
 	dropDownProps,
+	onChangeText,
 	...textInputProps
 }: DropDownTextInputProps<FormType, TValue>) {
 	const [wasSelected, setWasSelected] = useState(false)
@@ -48,7 +53,6 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 
 	const animatedStyle = useDropDownInputAnimation(progress)
 
-	//TODO: add focus function to textInput when pressing arrow icon
 	return (
 		<Box>
 			<Controller
@@ -73,15 +77,24 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 						field.onChange(text)
 					}
 
+					const errorMessage = isError
+						? "Erro ao carregar lista, recarregue"
+						: useFormUtils.getFirstErrorMessage(fieldState.error)
+
 					return (
 						<>
 							<TextInput
 								variant={variant}
 								value={textValue}
-								onChangeText={handleChangeText}
-								errorMessage={useFormUtils.getFirstErrorMessage(fieldState.error)}
+								onChangeText={(text) => {
+									onChangeText?.(text)
+									handleChangeText(text)
+								}}
+								errorMessage={errorMessage}
 								RighComponent={
 									<ArrowIconAnimation
+										isError={isError}
+										onErrorPress={onErrorPress}
 										closeDropdown={readOnly ? () => {} : closeDropdown}
 										isOpen={isOpen}
 										openDropdown={readOnly ? () => {} : openDropdown}

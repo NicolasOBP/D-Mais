@@ -2,11 +2,11 @@ import type {
 	Client,
 	Company,
 	Driver,
+	FinalOrderPriceResult,
 	ISellsRepo,
 	PaymentMethod,
 	PaymentTerms,
 	SendCartItems,
-	TablePrices,
 	TruckPickup,
 } from "@domain"
 
@@ -16,6 +16,7 @@ import { mockDrivers } from "./data/mockDrivers"
 import { mockPaymentMethods } from "./data/mockPaymentMethods"
 import { mockPaymentTerms } from "./data/mockPaymentTerms"
 import { mockPickups } from "./data/mockPickups"
+import { mockProducts } from "./data/mockProducts"
 import { mockTablePrices } from "./data/mockTablesPrices"
 import { mockTrucks } from "./data/mockTrucks"
 import { delay } from "./delay"
@@ -25,28 +26,47 @@ export class InMemorySellsRepo implements ISellsRepo {
 		await delay()
 	}
 
-	async clientList(): Promise<Client[]> {
+	async clientList(valueToSearch: string): Promise<Client[]> {
 		await delay()
 
-		return mockClients
+		const search = valueToSearch.toLowerCase()
+
+		if (!search) return mockClients
+
+		return mockClients.filter(({ name, corporateReason, rg }) =>
+			`${name} ${corporateReason} ${rg}`.toLowerCase().includes(search),
+		)
 	}
 
-	async truckPickupList(): Promise<TruckPickup[]> {
+	async truckPickupList(valueToSearch: string): Promise<TruckPickup[]> {
 		await delay()
 
-		return [...mockTrucks, ...mockPickups]
+		const truckPickups = [...mockTrucks, ...mockPickups]
+		const search = valueToSearch.toLowerCase()
+
+		if (!search) return truckPickups
+
+		return truckPickups.filter(({ licensePlate }) => licensePlate.toLowerCase().includes(search))
 	}
 
-	async driverList(): Promise<Driver[]> {
+	async driverList(valueToSearch: string): Promise<Driver[]> {
 		await delay()
 
-		return mockDrivers
+		const search = valueToSearch.toLowerCase()
+
+		if (!search) return mockDrivers
+
+		return mockDrivers.filter(({ name, rg }) => `${name} ${rg}`.toLowerCase().includes(search))
 	}
 
-	async companyList(): Promise<Company[]> {
+	async companyList(valueToSearch: string): Promise<Company[]> {
 		await delay()
 
-		return mockCompanies
+		const search = valueToSearch.toLowerCase()
+
+		if (!search) return mockCompanies
+
+		return mockCompanies.filter(({ name, rg }) => `${name} ${rg}`.toLowerCase().includes(search))
 	}
 
 	async paymentTermsList(): Promise<PaymentTerms[]> {
@@ -61,22 +81,40 @@ export class InMemorySellsRepo implements ISellsRepo {
 		return mockPaymentMethods
 	}
 
-	async fareControl(isFareSelected: boolean): Promise<number> {
+	async calcFinalOrderPrice({
+		isFareSelected,
+		paymentTerms,
+		requestProducts,
+	}: Parameters<ISellsRepo["calcFinalOrderPrice"]>[0]): Promise<FinalOrderPriceResult> {
 		await delay()
 
-		if (Math.random() < 0.5) throw new Error("Erro de servidor")
+		const products = Array.isArray(requestProducts) ? requestProducts : [requestProducts]
+		const orderProductItems = products.map((requestedProduct) => {
+			const product = mockProducts.find(({ id }) => id === requestedProduct.id)
 
-		return isFareSelected ? -10 : 10
-	}
+			if (product?.price === undefined) {
+				throw new Error(`Preço indisponível para o produto ${requestedProduct.id}.`)
+			}
 
-	async paymentTermsControl(paymentTerms: PaymentTerms): Promise<TablePrices> {
-		await delay()
-		const tablePrices = mockTablePrices.find((item) => item.paymentTermsId === paymentTerms.id)
+			return {
+				...requestedProduct,
+				price: product.price,
+				totalPrice: product.price * requestedProduct.volume,
+			}
+		})
 
-		if (!tablePrices) throw new Error("Erro ao procurar tabela")
+		const paymentAdjustment =
+			mockTablePrices.find(({ paymentTermsId }) => paymentTermsId === paymentTerms.id)?.price ?? 0
+		const farePrice = isFareSelected ? 10 : 0
+		const productsTotal = orderProductItems.reduce(
+			(total, product) => total + product.totalPrice,
+			0,
+		)
 
-		if (Math.random() < 0.5) throw new Error("Erro de servidor")
-
-		return { ...tablePrices, tableName: paymentTerms.table }
+		return {
+			orderTotalPrice: productsTotal + paymentAdjustment + farePrice,
+			farePrice,
+			orderProductItems,
+		}
 	}
 }

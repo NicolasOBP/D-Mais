@@ -1,13 +1,4 @@
-import {
-	type PaymentTerms,
-	type TablePrices,
-	useSellClientList,
-	useSellCompanyList,
-	useSellDriverList,
-	useSellPaymentMethodsList,
-	useSellPaymentTermsList,
-	useSellTruckPickupList,
-} from "@domain"
+import type { UseFormGetValues, UseFormSetValue } from "react-hook-form"
 
 import type { SellSchema } from "@schemas"
 
@@ -17,27 +8,44 @@ import { ControllerCheckBox } from "../ControllerCheckBox"
 import { DropDownControllerInput } from "../DropDownInputs"
 import { type ControllerProps, FormTextInput } from "../Form"
 
+import { useSellForm } from "./useSellForm"
+
 type Props = Pick<ControllerProps<SellSchema>, "control"> & {
-	fareControl?: (variable: { isFareSelected: boolean }) => number | void
+	getValues?: UseFormGetValues<SellSchema>
+	setValue?: UseFormSetValue<SellSchema>
+	handleCalculateFarePrice?: (fareSelected: boolean) => void
 	readOnly?: boolean
-	paymentTermsControl?: (variable: PaymentTerms) => void | TablePrices
+	isTotalPricePending?: boolean
 }
 
-export function SellsForm({ control, fareControl, readOnly, paymentTermsControl }: Props) {
-	const { data: clientList, isLoading: isLoadingClient } = useSellClientList(!readOnly)
-	const { data: truckPickupList, isLoading: isLoadingTruckPickup } = useSellTruckPickupList(
-		!readOnly,
-	)
-	const { data: driverList, isLoading: isLoadingDriver } = useSellDriverList(!readOnly)
-	const { data: companyList, isLoading: isLoadingCompany } = useSellCompanyList(!readOnly)
-	const { data: paymentMethodsList, isLoading: isLoadingPaymentMethods } =
-		useSellPaymentMethodsList(!readOnly)
-	const { data: paymentTermsList, isLoading: isLoadingPaymentTerms } = useSellPaymentTermsList(
-		!readOnly,
-	)
+export function SellsForm({
+	handleCalculateFarePrice,
+	setValue,
+	control,
+	readOnly,
+	isTotalPricePending,
+}: Props) {
+	const {
+		setTruckPlateSearch,
+		setPickupPlateSearch,
+		setClientSearch,
+		setDriverSearch,
+		setCompanySearch,
+		client,
+		driver,
+		company,
+		truck,
+		pickup,
+		paymentTerms,
+		paymentMethods,
+	} = useSellForm(!readOnly)
 
 	return (
 		<Box pt="s14" pb="s20" gap="s20" paddingHorizontal="default">
+			{!readOnly && (
+				<Text variant="title14">Digite no mínimo 3 letras para realizar as buscas</Text>
+			)}
+
 			<DropDownControllerInput
 				name="cliente"
 				control={control}
@@ -45,11 +53,14 @@ export function SellsForm({ control, fareControl, readOnly, paymentTermsControl 
 				variant="secundary"
 				isRequired
 				readOnly={readOnly}
+				onChangeText={setClientSearch}
+				isError={client.isError}
+				onErrorPress={client.refetch}
 				dropDownProps={{
-					dropdownItems: clientList,
-					idKey: "cnpjCpf",
+					dropdownItems: client.list,
+					idKey: "rg",
 					valueKey: "corporateReason",
-					isLoading: isLoadingClient,
+					isLoading: client.isLoading,
 				}}
 			/>
 
@@ -62,13 +73,15 @@ export function SellsForm({ control, fareControl, readOnly, paymentTermsControl 
 						variant="secundary"
 						isRequired
 						readOnly={readOnly}
+						isError={paymentTerms.isError}
+						onErrorPress={paymentTerms.refetch}
 						dropDownProps={{
-							dropdownItems: paymentTermsList,
-							isLoading: isLoadingPaymentTerms,
+							dropdownItems: paymentTerms.list,
+							isLoading: paymentTerms.isLoading,
 							valueKey: "description",
 							idKey: "id",
 						}}
-						extraFunction={paymentTermsControl}
+						extraFunction={(paymentTerms) => setValue?.("tabela", paymentTerms.table)}
 					/>
 				</Box>
 				<Box flex={1}>
@@ -88,9 +101,11 @@ export function SellsForm({ control, fareControl, readOnly, paymentTermsControl 
 						variant="secundary"
 						isRequired
 						readOnly={readOnly}
+						isError={paymentMethods.isError}
+						onErrorPress={paymentMethods.refetch}
 						dropDownProps={{
-							dropdownItems: paymentMethodsList,
-							isLoading: isLoadingPaymentMethods,
+							dropdownItems: paymentMethods.list,
+							isLoading: paymentMethods.isLoading,
 							valueKey: "description",
 							idKey: "id",
 						}}
@@ -98,37 +113,45 @@ export function SellsForm({ control, fareControl, readOnly, paymentTermsControl 
 				</Box>
 			</Box>
 
-			<Box flexDirection="row" gap="s12">
-				<Box flex={1}>
-					<DropDownControllerInput
-						name="caminhao"
-						control={control}
-						label="Caminhão"
-						variant="secundary"
-						isRequired
-						readOnly={readOnly}
-						dropDownProps={{
-							dropdownItems: truckPickupList,
-							idKey: "id",
-							valueKey: "licensePlate",
-							isLoading: isLoadingTruckPickup,
-						}}
-					/>
-				</Box>
-				<Box flex={1}>
-					<DropDownControllerInput
-						name="carreta"
-						control={control}
-						label="Carreta"
-						variant="secundary"
-						readOnly={readOnly}
-						dropDownProps={{
-							dropdownItems: truckPickupList,
-							idKey: "id",
-							valueKey: "licensePlate",
-							isLoading: isLoadingTruckPickup,
-						}}
-					/>
+			<Box>
+				<Box flexDirection="row" gap="s12">
+					<Box flex={1}>
+						<DropDownControllerInput
+							name="caminhao"
+							control={control}
+							label="Caminhão"
+							variant="secundary"
+							isRequired
+							readOnly={readOnly}
+							onChangeText={setTruckPlateSearch}
+							isError={truck.isError}
+							onErrorPress={truck.refetch}
+							dropDownProps={{
+								dropdownItems: truck.list,
+								idKey: "id",
+								valueKey: "licensePlate",
+								isLoading: truck.isLoading,
+							}}
+						/>
+					</Box>
+					<Box flex={1}>
+						<DropDownControllerInput
+							name="carreta"
+							control={control}
+							label="Carreta"
+							variant="secundary"
+							readOnly={readOnly}
+							onChangeText={setPickupPlateSearch}
+							isError={pickup.isError}
+							onErrorPress={pickup.refetch}
+							dropDownProps={{
+								dropdownItems: pickup.list,
+								idKey: "id",
+								valueKey: "licensePlate",
+								isLoading: pickup.isLoading,
+							}}
+						/>
+					</Box>
 				</Box>
 			</Box>
 
@@ -139,11 +162,14 @@ export function SellsForm({ control, fareControl, readOnly, paymentTermsControl 
 				variant="secundary"
 				isRequired
 				readOnly={readOnly}
+				onChangeText={setDriverSearch}
+				isError={driver.isError}
+				onErrorPress={driver.refetch}
 				dropDownProps={{
-					dropdownItems: driverList,
-					idKey: "cpf",
+					dropdownItems: driver.list,
+					idKey: "rg",
 					valueKey: "name",
-					isLoading: isLoadingDriver,
+					isLoading: driver.isLoading,
 				}}
 			/>
 
@@ -154,11 +180,14 @@ export function SellsForm({ control, fareControl, readOnly, paymentTermsControl 
 				variant="secundary"
 				isRequired
 				readOnly={readOnly}
+				onChangeText={setCompanySearch}
+				isError={company.isError}
+				onErrorPress={company.refetch}
 				dropDownProps={{
-					dropdownItems: companyList,
-					idKey: "cnpj",
+					dropdownItems: company.list,
+					idKey: "rg",
 					valueKey: "name",
-					isLoading: isLoadingCompany,
+					isLoading: company.isLoading,
 				}}
 			/>
 
@@ -167,9 +196,10 @@ export function SellsForm({ control, fareControl, readOnly, paymentTermsControl 
 				name="freteSelecionado"
 				variant="rounded"
 				size={20}
-				extraFunction={(isFareSelected) => fareControl?.({ isFareSelected })}
+				extraFunction={(isFareSelected) => handleCalculateFarePrice?.(!isFareSelected)}
 				pressableProps={checkBoxPressableProps}
 				readOnly={readOnly}
+				disabled={isTotalPricePending}
 			>
 				<Text variant="title12">Adicionar o custo do frete (com entrega)</Text>
 			</ControllerCheckBox>

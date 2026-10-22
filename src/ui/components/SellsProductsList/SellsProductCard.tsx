@@ -4,11 +4,14 @@ import { useNumberFormat } from "@utils"
 
 import { Box, type BoxProps, PressableBox, Text } from "@core-components"
 
+import { TotalPriceLoadingAnimation } from "./TotalPriceLoadingAnimation"
+
 interface SellsProductCardProps {
 	item: Pick<ProductCart, "cartId" | "title" | "volume" | "price" | "totalPrice">
+	isPendingTotalPrice: boolean | undefined
 }
 
-export function SellsProductCard({ item }: SellsProductCardProps) {
+export function SellsProductCard({ item, isPendingTotalPrice }: SellsProductCardProps) {
 	const finalPrice = item.totalPrice
 
 	return (
@@ -31,18 +34,28 @@ export function SellsProductCard({ item }: SellsProductCardProps) {
 					<Text variant="text12" color="gray1" mb="s4">
 						Preço
 					</Text>
-					<Text variant="title12" numberOfLines={1}>
-						{item.price === undefined ? "Não informado" : useNumberFormat.toBRLCurrency(item.price)}
-					</Text>
+					{isPendingTotalPrice ? (
+						<TotalPriceLoadingAnimation width={45} hight={18} bgColor="primaryLight" />
+					) : (
+						<Text variant="title12" numberOfLines={1}>
+							{item.price === undefined
+								? "Não informado"
+								: useNumberFormat.toBRLCurrency(item.price)}
+						</Text>
+					)}
 				</Box>
 			</Box>
 			<Box>
 				<Text variant="text12" color="gray1" mb="s4">
 					Total
 				</Text>
-				<Text variant="title12" color="green" numberOfLines={1}>
-					{useNumberFormat.toBRLCurrency(finalPrice)}
-				</Text>
+				{isPendingTotalPrice ? (
+					<TotalPriceLoadingAnimation width={60} hight={18} />
+				) : (
+					<Text variant="title12" color="green" numberOfLines={1}>
+						{useNumberFormat.toBRLCurrency(finalPrice)}
+					</Text>
+				)}
 			</Box>
 		</PressableBox>
 	)

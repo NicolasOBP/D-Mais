@@ -38,7 +38,7 @@ export function HomeScreen() {
 			desc = "Nenhum produto encontrado"
 		}
 
-		return <EmptyList desc={desc} />
+		return <EmptyList desc={desc} showRefreshButton refreshFunction={refetch} />
 	}
 
 	return (
