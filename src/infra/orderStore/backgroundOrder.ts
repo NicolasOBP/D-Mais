@@ -14,8 +14,6 @@ const initialBackgroundOrderStore = {
 	savedOrderId: undefined as OrderDetails["id"] | undefined,
 }
 
-let saveInProgress: Promise<boolean> | undefined
-
 type BackgroundOrderStoreType = typeof initialBackgroundOrderStore & {
 	enableBackgroundOrderSaving: () => void
 	disableBackgroundOrderSaving: () => void
@@ -28,13 +26,11 @@ const backgroundOrderStore = create<BackgroundOrderStoreType>()((set, get) => ({
 	...initialBackgroundOrderStore,
 
 	showBackgroundNotification: async () => {
-		const savedOrder = await storage.getItem<{
-			id: OrderDetails["id"]
-			notificationPending: boolean
-		}>(SAVED_BACKGROUND_ORDER_KEY)
-		const { canRun, savedOrderId } = get()
+		const savedOrderId = await storage.getItem<number>(SAVED_BACKGROUND_ORDER_KEY)
 
-		if (savedOrder && !canRun && !savedOrderId) {
+		const { canRun } = get()
+
+		if (savedOrderId && !canRun) {
 			await storage.removeItem(SAVED_BACKGROUND_ORDER_KEY)
 			return true
 		}
@@ -42,64 +38,43 @@ const backgroundOrderStore = create<BackgroundOrderStoreType>()((set, get) => ({
 		return false
 	},
 	saveBackgroundOrder: async () => {
-		if (saveInProgress) return saveInProgress
+		const { canRun, savedOrderId } = get()
 
-		saveInProgress = (async () => {
-			const { canRun, savedOrderId } = get()
+		if (!canRun || savedOrderId !== undefined) {
+			return false
+		}
 
-			if (!canRun || savedOrderId !== undefined) {
-				return false
-			}
+		const prevSavedOrderId = await storage.getItem<number>(SAVED_BACKGROUND_ORDER_KEY)
 
-			const savedOrder = await storage.getItem<{
-				id: OrderDetails["id"]
-				notificationPending: boolean
-			}>(SAVED_BACKGROUND_ORDER_KEY)
+		if (prevSavedOrderId) return false
 
-			if (savedOrder) return false
+		const order = orderStore.getState().getOrder()
 
-			const order = orderStore.getState().getOrder()
+		if (order.products.length === 0) return false
 
-			if (order.products.length === 0) return false
-
-			const newSavedOrderId = await orderStorage.saveOrder({
-				...order,
-				id: 0,
-				status: "pending",
-			})
-
-			try {
-				await storage.setItem(SAVED_BACKGROUND_ORDER_KEY, {
-					id: newSavedOrderId,
-					notificationPending: true,
-				})
-			} catch (error) {
-				await orderStorage.removeOrder(newSavedOrderId)
-				throw error
-			}
-
-			set({ savedOrderId: newSavedOrderId })
-			return true
-		})()
+		const newSavedOrderId = await orderStorage.saveOrder({
+			...order,
+			id: 0,
+			status: "pending",
+		})
 
 		try {
-			return await saveInProgress
-		} finally {
-			saveInProgress = undefined
+			await storage.setItem(SAVED_BACKGROUND_ORDER_KEY, newSavedOrderId)
+		} catch (error) {
+			await orderStorage.removeOrder(newSavedOrderId)
+			throw error
 		}
+
+		set({ savedOrderId: newSavedOrderId })
+		return true
 	},
 	reverseBackgroundOrder: async () => {
-		if (saveInProgress) await saveInProgress
-
-		const savedOrder = await storage.getItem<{
-			id: OrderDetails["id"]
-			notificationPending: boolean
-		}>(SAVED_BACKGROUND_ORDER_KEY)
+		const prevSavedOrderId = await storage.getItem<number>(SAVED_BACKGROUND_ORDER_KEY)
 		const { savedOrderId } = get()
 
-		if (!savedOrder || savedOrder.id !== savedOrderId) return
+		if (!prevSavedOrderId || prevSavedOrderId !== savedOrderId) return
 
-		await orderStorage.removeOrder(savedOrder.id)
+		await orderStorage.removeOrder(prevSavedOrderId)
 		await storage.removeItem(SAVED_BACKGROUND_ORDER_KEY)
 		set({ savedOrderId: undefined })
 	},

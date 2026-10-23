@@ -1,6 +1,7 @@
 import { router } from "expo-router"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
+import { useFocusEffect } from "@react-navigation/native"
 import { useWatch } from "react-hook-form"
 
 import {
@@ -99,10 +100,11 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 		updateModalData({ isLoading: isPendingOrderSend })
 	}, [isPendingOrderSend, updateModalData])
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <run once>
-	useEffect(() => {
-		enableBackgroundOrderSaving()
-	}, [])
+	useFocusEffect(
+		useCallback(() => {
+			enableBackgroundOrderSaving()
+		}, [enableBackgroundOrderSaving]),
+	)
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <just call when really intended>
 	useEffect(() => {
