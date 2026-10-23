@@ -126,13 +126,13 @@ export default function RootLayout() {
 				<AuthProvider>
 					<ThemeProvider theme={theme}>
 						<WrapperApp>
-							<AppStateMonitor />
 							<StatusBar style="dark" />
 							<Routes />
 
 							<BackToSell />
 							<Modal />
 							<Toast />
+							<AppStateMonitor />
 						</WrapperApp>
 					</ThemeProvider>
 				</AuthProvider>
