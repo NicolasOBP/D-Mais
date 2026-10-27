@@ -18,7 +18,7 @@ import { useAuth } from "@infra"
 
 import { type SellSchema, useSellForm } from "@schemas"
 
-import { Icon, SendSellModalBody, useModal } from "@components"
+import { OrderSendErrorModalBody, SendSellModalBody, useModal } from "@components"
 import { Box, Text } from "@core-components"
 
 type Props = {
@@ -84,9 +84,9 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 			reset()
 			router.push("/orders")
 		},
-		onError: () => {
+		onError: (error) => {
 			closeModal()
-			handleErrorShowModal()
+			handleErrorShowModal(error)
 		},
 	})
 	const { mutate: updateOrderInStorage, isPending: isPendingOrderUpdate } = useOrderUpdateStorage()
@@ -107,28 +107,29 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 		})
 	}, [calcFinalOrderPrice, client, paymentTerms, paymentMethod, cartItems])
 
+	// TODO: add check left quota back after service is available
 	async function handleShowModal(data: SellSchema) {
-		checkLeftQuota(order.products.reduce((acc, prod) => acc + prod.volume, 0))
-			.then(() => {
-				showModal(
-					{
-						BodyComponent: (
-							<SendSellModalBody userLeftQuota={authUser?.leftQuota} userQuota={authUser?.quota} />
-						),
-						footerButton: {
-							twoButtonFooter: {
-								labelCancel: "Cancelar",
-								labelConfirm: "Confirmar",
-								onConfirm: () => onSubmit(data),
-							},
-						},
+		// checkLeftQuota(order.products.reduce((acc, prod) => acc + prod.volume, 0))
+		// 	.then(() => {
+		showModal(
+			{
+				BodyComponent: (
+					<SendSellModalBody userLeftQuota={authUser?.leftQuota} userQuota={authUser?.quota} />
+				),
+				footerButton: {
+					twoButtonFooter: {
+						labelCancel: "Cancelar",
+						labelConfirm: "Confirmar",
+						onConfirm: () => onSubmit(data),
 					},
-					{ isLoading: isPendingOrderUpdate || isPendingOrderSend },
-				)
-			})
-			.catch((error) => {
-				console.log(error)
-			})
+				},
+			},
+			{ isLoading: isPendingOrderUpdate || isPendingOrderSend },
+		)
+		// })
+		// .catch((error) => {
+		// 	console.log(error)
+		// })
 	}
 
 	function onSubmit(data: SellSchema) {
@@ -151,15 +152,11 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 		})
 	}
 
-	function handleErrorShowModal() {
+	function handleErrorShowModal(errorMessage: string) {
 		showModal({
 			headerTitle: `Erro ao enviar pedido, tente novamente entrando em "Pedidos"`,
 			showCloseButton: false,
-			BodyComponent: (
-				<Box alignSelf="center">
-					<Icon name="errorRound" size={70} color="red" />
-				</Box>
-			),
+			BodyComponent: <OrderSendErrorModalBody errorMessage={errorMessage} />,
 			footerButton: {
 				oneButtonFooter: {
 					label: "Confirmar",

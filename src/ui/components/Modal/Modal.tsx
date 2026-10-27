@@ -59,7 +59,7 @@ export function Modal() {
 						p="s16"
 						borderRadius="default"
 						width={widthValue}
-						gap="s40"
+						gap="s32"
 						onLayout={(e) => {
 							const heitgh = e.nativeEvent.layout.height
 

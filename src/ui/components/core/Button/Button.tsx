@@ -63,11 +63,15 @@ export function Button({
 			{...buttonProps}
 			disabled={disabled}
 			style={[animatedBackgroundColor, buttonProps.style]}
+			justifyContent="center"
+			alignItems="center"
 		>
 			{isLoading ? (
 				<ActivityIndicator color={colors.contrastPrimary} size={22} />
 			) : (
-				<Text variant={textVariant}>{lable}</Text>
+				<Text textAlign="center" variant={textVariant}>
+					{lable}
+				</Text>
 			)}
 		</PressableBoxAnimated>
 	)

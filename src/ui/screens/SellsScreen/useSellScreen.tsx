@@ -22,8 +22,12 @@ import {
 
 import { type SellSchema, useSellForm } from "@schemas"
 
-import { Icon, SendSellModalBody, useModal } from "@components"
-import { Box } from "@core-components"
+import {
+	OrderSendErrorModalBody,
+	OrderSendErrorModalFooter,
+	SendSellModalBody,
+	useModal,
+} from "@components"
 
 export function useSellScreen(orderItems: ProductCartScreen[]) {
 	const { showModal, closeModal, updateModalData } = useModal()
@@ -78,7 +82,7 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 			finishSell()
 
 			closeModal()
-			handleErrorShowModal()
+			// handleErrorShowModal()
 		},
 	})
 
@@ -91,8 +95,9 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 			reset()
 			router.push("/orders")
 		},
-		onError: () => {
-			saveOrderInStorage()
+		onError: (error) => {
+			handleErrorShowModal(error)
+			// saveOrderInStorage()
 		},
 	})
 
@@ -177,29 +182,30 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 		sendOrder(order)
 	}
 
-	function handleErrorShowModal() {
+	function handleErrorShowModal(errorMessage: string) {
 		showModal({
-			headerTitle: `Erro ao enviar pedido, tente novamente entrando em "Pedidos"`,
+			headerTitle: `Erro ao enviar pedido. Você pode voltar para venda ou ir para "Pedidos"`,
 			showCloseButton: false,
-			BodyComponent: (
-				<Box alignSelf="center">
-					<Icon name="errorRound" size={70} color="red" />
-				</Box>
+			BodyComponent: <OrderSendErrorModalBody errorMessage={errorMessage} />,
+			FooterComponent: (
+				<OrderSendErrorModalFooter
+					backToSell={closeModal}
+					sendToPending={() => console.log("AA")}
+				/>
 			),
-			footerButton: {
-				oneButtonFooter: {
-					label: "Confirmar",
-					onPress: () => {
-						reset()
-						clearOrder()
-
-						closeModal()
-						router.push("/orders")
-					},
-				},
-			},
 		})
 	}
+
+	// {
+	// 				label: "Confirmar",
+	// 				onPress: () => {
+	// 					reset()
+	// 					clearOrder()
+
+	// 					closeModal()
+	// 					router.push("/orders")
+	// 				},
+	// 			},
 
 	function handleCalculateFarePrice(fareSelected: boolean) {
 		calculateFarePrice({

@@ -81,7 +81,9 @@ export function SellsForm({
 							valueKey: "description",
 							idKey: "id",
 						}}
-						extraFunction={(paymentTerms) => setValue?.("tabela", paymentTerms.table)}
+						extraFunction={(paymentTerms) =>
+							setValue?.("tabela", paymentTerms.table, { shouldValidate: true })
+						}
 					/>
 				</Box>
 				<Box flex={1}>

@@ -28,6 +28,16 @@ function toErrorWithMessage(maybeError: unknown): ErrorWithMessage {
 function getErrorMessage(error: unknown) {
 	const message = toErrorWithMessage(error).message
 
+	const normalizedMessage = message ? message.normalize("NFC") : ""
+	const regex = /cliente sem limite de crédito.*?limite:\s*(R\$\s*[\d.,]+)/i
+	const match = normalizedMessage.match(regex)
+
+	if (match) {
+		const limitValue = match[1]
+
+		return `Cliente sem limite de crédito. O limite atual é de ${limitValue}.`
+	}
+
 	return message.includes("404")
 		? "Servidor Offline"
 		: message.includes("502")
