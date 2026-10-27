@@ -3,6 +3,23 @@ import type { Client, Company, Driver, PaymentMethod, PaymentTerms, TruckPickup 
 
 export type OrdersStatus = "pending" | "completed" | "cancelled"
 
+export type CreateOrderResult = {
+	STATUS: "OK"
+	IDREC: string
+	VALOR_FINAL: number
+}
+
+export type CreateOrderAPIContent = {
+	STATUS: string
+	IDREC?: string
+	VALOR_FINAL?: number
+	MENSAGEM?: string
+}
+
+export type CreateOrderAPI = {
+	result: (CreateOrderAPIContent | string)[]
+}
+
 export interface Order {
 	id: number
 	products: Pick<ProductCart, "cartId" | "title" | "volume">[]

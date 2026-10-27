@@ -64,7 +64,6 @@ export function useCartEditProduct(options?: MutationOptions<ProductCart>) {
 				type: "error",
 				description: error.cause,
 			})
-			console.log(error)
 		},
 	})
 }

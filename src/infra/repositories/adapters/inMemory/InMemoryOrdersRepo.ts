@@ -1,4 +1,4 @@
-import type { IOrdersRepo, Order, OrderDetails, OrderVariables } from "@domain"
+import type { CreateOrderResult, IOrdersRepo, OrderDetails, OrderVariables } from "@domain"
 
 import { delay } from "./delay"
 
@@ -11,7 +11,7 @@ export class InMemoryOrdersRepo implements IOrdersRepo {
 		return [...InnerOrders]
 	}
 
-	async send(order: OrderVariables): Promise<Order> {
+	async send(order: OrderVariables): Promise<CreateOrderResult> {
 		await delay()
 
 		const newOrder: OrderDetails = {
@@ -21,7 +21,11 @@ export class InMemoryOrdersRepo implements IOrdersRepo {
 		}
 		InnerOrders = [...InnerOrders, newOrder]
 
-		return newOrder
+		return {
+			STATUS: "OK",
+			IDREC: String(newOrder.id),
+			VALOR_FINAL: order.totalPrice,
+		}
 	}
 
 	async complete(id: number): Promise<void> {
