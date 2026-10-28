@@ -54,13 +54,18 @@ export function SellsForm({
 				isRequired
 				readOnly={readOnly}
 				onChangeText={setClientSearch}
-				isError={client.isError}
-				onErrorPress={client.refetch}
+				placeholder="Digite o nome do Cliente"
+				arrowProps={{
+					isError: client.isError,
+					onErrorPress: client.refetch,
+					notShowArrow: true,
+				}}
 				dropDownProps={{
 					dropdownItems: client.list,
 					idKey: "rg",
 					valueKey: "corporateReason",
 					isLoading: client.isLoading,
+					customEmptyMessage: "Digite primeiro 3 letras",
 				}}
 			/>
 
@@ -73,15 +78,19 @@ export function SellsForm({
 						variant="secundary"
 						isRequired
 						readOnly={readOnly}
-						isError={paymentTerms.isError}
-						onErrorPress={paymentTerms.refetch}
+						arrowProps={{
+							isError: paymentTerms.isError,
+							onErrorPress: paymentTerms.refetch,
+						}}
 						dropDownProps={{
 							dropdownItems: paymentTerms.list,
 							isLoading: paymentTerms.isLoading,
 							valueKey: "description",
 							idKey: "id",
 						}}
-						extraFunction={(paymentTerms) => setValue?.("tabela", paymentTerms.table)}
+						extraFunction={(paymentTerms) =>
+							setValue?.("tabela", paymentTerms.table, { shouldValidate: true })
+						}
 					/>
 				</Box>
 				<Box flex={1}>
@@ -101,8 +110,10 @@ export function SellsForm({
 						variant="secundary"
 						isRequired
 						readOnly={readOnly}
-						isError={paymentMethods.isError}
-						onErrorPress={paymentMethods.refetch}
+						arrowProps={{
+							isError: paymentMethods.isError,
+							onErrorPress: paymentMethods.refetch,
+						}}
 						dropDownProps={{
 							dropdownItems: paymentMethods.list,
 							isLoading: paymentMethods.isLoading,
@@ -124,13 +135,18 @@ export function SellsForm({
 							isRequired
 							readOnly={readOnly}
 							onChangeText={setTruckPlateSearch}
-							isError={truck.isError}
-							onErrorPress={truck.refetch}
+							placeholder="Digite a placa"
+							arrowProps={{
+								isError: truck.isError,
+								onErrorPress: truck.refetch,
+								notShowArrow: true,
+							}}
 							dropDownProps={{
 								dropdownItems: truck.list,
 								idKey: "id",
 								valueKey: "licensePlate",
 								isLoading: truck.isLoading,
+								customEmptyMessage: "Digite primeiro 3 letras",
 							}}
 						/>
 					</Box>
@@ -142,13 +158,18 @@ export function SellsForm({
 							variant="secundary"
 							readOnly={readOnly}
 							onChangeText={setPickupPlateSearch}
-							isError={pickup.isError}
-							onErrorPress={pickup.refetch}
+							placeholder="Digite a placa"
+							arrowProps={{
+								isError: pickup.isError,
+								onErrorPress: pickup.refetch,
+								notShowArrow: true,
+							}}
 							dropDownProps={{
 								dropdownItems: pickup.list,
 								idKey: "id",
 								valueKey: "licensePlate",
 								isLoading: pickup.isLoading,
+								customEmptyMessage: "Digite primeiro 3 letras",
 							}}
 						/>
 					</Box>
@@ -163,13 +184,18 @@ export function SellsForm({
 				isRequired
 				readOnly={readOnly}
 				onChangeText={setDriverSearch}
-				isError={driver.isError}
-				onErrorPress={driver.refetch}
+				placeholder="Digite o nome do Motorista"
+				arrowProps={{
+					isError: driver.isError,
+					onErrorPress: driver.refetch,
+					notShowArrow: true,
+				}}
 				dropDownProps={{
 					dropdownItems: driver.list,
 					idKey: "rg",
 					valueKey: "name",
 					isLoading: driver.isLoading,
+					customEmptyMessage: "Digite primeiro 3 letras",
 				}}
 			/>
 
@@ -181,13 +207,18 @@ export function SellsForm({
 				isRequired
 				readOnly={readOnly}
 				onChangeText={setCompanySearch}
-				isError={company.isError}
-				onErrorPress={company.refetch}
+				placeholder="Digite o nome da Transportadora"
+				arrowProps={{
+					isError: company.isError,
+					onErrorPress: company.refetch,
+					notShowArrow: true,
+				}}
 				dropDownProps={{
 					dropdownItems: company.list,
 					idKey: "rg",
 					valueKey: "name",
 					isLoading: company.isLoading,
+					customEmptyMessage: "Digite primeiro 3 letras",
 				}}
 			/>
 

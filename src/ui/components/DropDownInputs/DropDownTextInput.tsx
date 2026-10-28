@@ -1,6 +1,6 @@
 import { Box, DropDown, type DropDownProps, TextInput, type TextInputProps } from "@core-components"
 
-import { ArrowIconAnimation } from "./ArrowIconAnimation"
+import { ArrowIconAnimation, type ArrowIconAnimationProps } from "./ArrowIconAnimation"
 import { useDropDownInputAnimation } from "./useDropDownInputAnimation"
 import { useDropDownTextInput } from "./useDropDownTextInput"
 
@@ -15,8 +15,7 @@ type DropDownTextInputProps<TValue> = Omit<TextInputProps, "RighComponent" | "er
 		| "searchText"
 		| "maxHeight"
 	> & {
-		isError: boolean
-		onErrorPress: () => void
+		arrowProps: Pick<ArrowIconAnimationProps, "isError" | "notShowArrow" | "onErrorPress">
 	}
 
 export function DropDownTextInput<TValue>({
@@ -29,8 +28,7 @@ export function DropDownTextInput<TValue>({
 	onSelectItem,
 	searchText,
 	maxHeight,
-	isError,
-	onErrorPress,
+	arrowProps,
 	...textInputProps
 }: DropDownTextInputProps<TValue>) {
 	const { bodyProgress, closeDropdown, openDropdown, progress, setTopOffset, topOffset, isOpen } =
@@ -46,8 +44,7 @@ export function DropDownTextInput<TValue>({
 				value={searchText}
 				RighComponent={
 					<ArrowIconAnimation
-						isError={isError}
-						onErrorPress={onErrorPress}
+						{...arrowProps}
 						closeDropdown={closeDropdown}
 						isOpen={isOpen}
 						openDropdown={openDropdown}

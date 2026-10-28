@@ -31,7 +31,7 @@ export class InMemorySellsRepo implements ISellsRepo {
 
 		const search = valueToSearch.toLowerCase()
 
-		if (!search) return mockClients
+		if (search.length < 3) return []
 
 		return mockClients.filter(({ name, corporateReason, rg }) =>
 			`${name} ${corporateReason} ${rg}`.toLowerCase().includes(search),
@@ -44,7 +44,7 @@ export class InMemorySellsRepo implements ISellsRepo {
 		const truckPickups = [...mockTrucks, ...mockPickups]
 		const search = valueToSearch.toLowerCase()
 
-		if (!search) return truckPickups
+		if (search.length < 3) return []
 
 		return truckPickups.filter(({ licensePlate }) => licensePlate.toLowerCase().includes(search))
 	}
@@ -54,7 +54,7 @@ export class InMemorySellsRepo implements ISellsRepo {
 
 		const search = valueToSearch.toLowerCase()
 
-		if (!search) return mockDrivers
+		if (search.length < 3) return []
 
 		return mockDrivers.filter(({ name, rg }) => `${name} ${rg}`.toLowerCase().includes(search))
 	}
@@ -64,7 +64,7 @@ export class InMemorySellsRepo implements ISellsRepo {
 
 		const search = valueToSearch.toLowerCase()
 
-		if (!search) return mockCompanies
+		if (search.length < 3) return []
 
 		return mockCompanies.filter(({ name, rg }) => `${name} ${rg}`.toLowerCase().includes(search))
 	}

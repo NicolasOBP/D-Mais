@@ -22,8 +22,12 @@ import {
 
 import { type SellSchema, useSellForm } from "@schemas"
 
-import { Icon, SendSellModalBody, useModal } from "@components"
-import { Box } from "@core-components"
+import {
+	OrderSendErrorModalBody,
+	OrderSendErrorModalFooter,
+	SendSellModalBody,
+	useModal,
+} from "@components"
 
 export function useSellScreen(orderItems: ProductCartScreen[]) {
 	const { showModal, closeModal, updateModalData } = useModal()
@@ -72,13 +76,16 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 		},
 	})
 
-	const { mutate: saveOrderInStorage } = useOrderSaveStorage({
+	const { mutate: saveOrderInStorage, isPending: isPendingOrderStorage } = useOrderSaveStorage({
 		onSuccess: () => {
 			disableBackgroundOrderSaving()
 			finishSell()
+			reset()
+			clearOrder()
 
 			closeModal()
-			handleErrorShowModal()
+			router.push("/orders")
+			// handleErrorShowModal()
 		},
 	})
 
@@ -91,14 +98,15 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 			reset()
 			router.push("/orders")
 		},
-		onError: () => {
-			saveOrderInStorage()
+		onError: (error) => {
+			handleErrorShowModal(error)
+			// saveOrderInStorage()
 		},
 	})
 
 	useEffect(() => {
-		updateModalData({ isLoading: isPendingOrderSend })
-	}, [isPendingOrderSend, updateModalData])
+		updateModalData({ isLoading: isPendingOrderSend || isPendingOrderStorage })
+	}, [isPendingOrderSend, isPendingOrderStorage, updateModalData])
 
 	useFocusEffect(
 		useCallback(() => {
@@ -177,29 +185,30 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 		sendOrder(order)
 	}
 
-	function handleErrorShowModal() {
-		showModal({
-			headerTitle: `Erro ao enviar pedido, tente novamente entrando em "Pedidos"`,
-			showCloseButton: false,
-			BodyComponent: (
-				<Box alignSelf="center">
-					<Icon name="errorRound" size={70} color="red" />
-				</Box>
-			),
-			footerButton: {
-				oneButtonFooter: {
-					label: "Confirmar",
-					onPress: () => {
-						reset()
-						clearOrder()
-
-						closeModal()
-						router.push("/orders")
-					},
-				},
+	function handleErrorShowModal(errorMessage: string) {
+		showModal(
+			{
+				headerTitle: `Erro ao enviar pedido. Você pode voltar para venda ou ir para "Pedidos"`,
+				showCloseButton: false,
+				BodyComponent: <OrderSendErrorModalBody errorMessage={errorMessage} />,
+				FooterComponent: (
+					<OrderSendErrorModalFooter backToSell={closeModal} sendToPending={saveOrderInStorage} />
+				),
 			},
-		})
+			{ isLoading: isPendingOrderStorage },
+		)
 	}
+
+	// {
+	// 				label: "Confirmar",
+	// 				onPress: () => {
+	// 					reset()
+	// 					clearOrder()
+
+	// 					closeModal()
+	// 					router.push("/orders")
+	// 				},
+	// 			},
 
 	function handleCalculateFarePrice(fareSelected: boolean) {
 		calculateFarePrice({
