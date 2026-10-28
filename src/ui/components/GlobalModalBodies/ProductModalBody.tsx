@@ -28,8 +28,10 @@ export function ProductModalBody({
 				control={control}
 				textFieldStyle={{ paddingVertical: "s8" }}
 				label="Estoque"
-				isError={!!isErrorInventory}
-				onErrorPress={onErrorPress}
+				arrowProps={{
+					isError: !!isErrorInventory,
+					onErrorPress,
+				}}
 				dropDownProps={{
 					dropdownItems: inventoryList || updatedInventoryList,
 					idKey: "id",

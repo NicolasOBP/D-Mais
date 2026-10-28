@@ -76,12 +76,15 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 		},
 	})
 
-	const { mutate: saveOrderInStorage } = useOrderSaveStorage({
+	const { mutate: saveOrderInStorage, isPending: isPendingOrderStorage } = useOrderSaveStorage({
 		onSuccess: () => {
 			disableBackgroundOrderSaving()
 			finishSell()
+			reset()
+			clearOrder()
 
 			closeModal()
+			router.push("/orders")
 			// handleErrorShowModal()
 		},
 	})
@@ -102,8 +105,8 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 	})
 
 	useEffect(() => {
-		updateModalData({ isLoading: isPendingOrderSend })
-	}, [isPendingOrderSend, updateModalData])
+		updateModalData({ isLoading: isPendingOrderSend || isPendingOrderStorage })
+	}, [isPendingOrderSend, isPendingOrderStorage, updateModalData])
 
 	useFocusEffect(
 		useCallback(() => {
@@ -183,17 +186,17 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 	}
 
 	function handleErrorShowModal(errorMessage: string) {
-		showModal({
-			headerTitle: `Erro ao enviar pedido. Você pode voltar para venda ou ir para "Pedidos"`,
-			showCloseButton: false,
-			BodyComponent: <OrderSendErrorModalBody errorMessage={errorMessage} />,
-			FooterComponent: (
-				<OrderSendErrorModalFooter
-					backToSell={closeModal}
-					sendToPending={() => console.log("AA")}
-				/>
-			),
-		})
+		showModal(
+			{
+				headerTitle: `Erro ao enviar pedido. Você pode voltar para venda ou ir para "Pedidos"`,
+				showCloseButton: false,
+				BodyComponent: <OrderSendErrorModalBody errorMessage={errorMessage} />,
+				FooterComponent: (
+					<OrderSendErrorModalFooter backToSell={closeModal} sendToPending={saveOrderInStorage} />
+				),
+			},
+			{ isLoading: isPendingOrderStorage },
+		)
 	}
 
 	// {

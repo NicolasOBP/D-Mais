@@ -8,7 +8,7 @@ import { Box, DropDown, type DropDownProps, TextInput, type TextInputProps } fro
 
 import type { ControllerProps } from "../Form"
 
-import { ArrowIconAnimation } from "./ArrowIconAnimation"
+import { ArrowIconAnimation, type ArrowIconAnimationProps } from "./ArrowIconAnimation"
 import { useDropDownInputAnimation } from "./useDropDownInputAnimation"
 import { useDropDownTextInput } from "./useDropDownTextInput"
 
@@ -19,11 +19,16 @@ type DropDownTextInputProps<FormType extends FieldValues, TValue> = Omit<
 	ControllerProps<FormType> & {
 		dropDownProps: Pick<
 			DropDownProps<TValue>,
-			"dropdownItems" | "valueKey" | "idKey" | "showTextWithId" | "maxHeight" | "isLoading"
+			| "dropdownItems"
+			| "customEmptyMessage"
+			| "valueKey"
+			| "idKey"
+			| "showTextWithId"
+			| "maxHeight"
+			| "isLoading"
 		>
+		arrowProps: Pick<ArrowIconAnimationProps, "isError" | "notShowArrow" | "onErrorPress">
 		extraFunction?: (value: TValue) => void
-		isError: boolean
-		onErrorPress: () => void
 	}
 
 export function DropDownControllerInput<FormType extends FieldValues, TValue>({
@@ -32,11 +37,10 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 	rules,
 	variant = "primary",
 	readOnly,
-	isError,
-	onErrorPress,
 	extraFunction,
 	dropDownProps,
 	onChangeText,
+	arrowProps,
 	...textInputProps
 }: DropDownTextInputProps<FormType, TValue>) {
 	const [wasSelected, setWasSelected] = useState(false)
@@ -77,7 +81,7 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 						field.onChange(text)
 					}
 
-					const errorMessage = isError
+					const errorMessage = arrowProps.isError
 						? "Erro ao carregar lista, recarregue"
 						: useFormUtils.getFirstErrorMessage(fieldState.error)
 
@@ -93,8 +97,7 @@ export function DropDownControllerInput<FormType extends FieldValues, TValue>({
 								errorMessage={errorMessage}
 								RighComponent={
 									<ArrowIconAnimation
-										isError={isError}
-										onErrorPress={onErrorPress}
+										{...arrowProps}
 										closeDropdown={readOnly ? () => {} : closeDropdown}
 										isOpen={isOpen}
 										openDropdown={readOnly ? () => {} : openDropdown}

@@ -1,6 +1,7 @@
 import { Box, Button, Text } from "@core-components"
 
 import { Icon } from "../Icon"
+import { useModal } from "../Modal"
 
 export function OrderSendErrorModalBody({ errorMessage }: { errorMessage: string }) {
 	return (
@@ -19,6 +20,9 @@ type FooterProps = {
 }
 
 export function OrderSendErrorModalFooter({ backToSell, sendToPending }: FooterProps) {
+	const { modalData } = useModal()
+	const isLoadingPending: boolean = modalData.isLoading
+
 	return (
 		<Box flexDirection="row" g="s32" paddingHorizontal="s10">
 			<Button
@@ -36,6 +40,7 @@ export function OrderSendErrorModalFooter({ backToSell, sendToPending }: FooterP
 				p="s8"
 				flexGrow={1}
 				flexShrink={1}
+				isLoading={isLoadingPending}
 			/>
 		</Box>
 	)

@@ -22,14 +22,15 @@ configureReanimatedLogger({
 	strict: false,
 })
 
-type Props = {
+export type ArrowIconAnimationProps = {
 	progress: SharedValue<number>
 	closeDropdown: () => void
 	openDropdown: () => void
-	isOpen: SharedValue<boolean>
-	isError: boolean
 	onErrorPress: () => void
+	isOpen: SharedValue<boolean>
 	color?: IconProps["color"]
+	isError: boolean
+	notShowArrow?: boolean
 }
 
 export function ArrowIconAnimation({
@@ -40,7 +41,8 @@ export function ArrowIconAnimation({
 	isError,
 	onErrorPress,
 	color,
-}: Props) {
+	notShowArrow = false,
+}: ArrowIconAnimationProps) {
 	const iconTransition = useSharedValue(isError ? 1 : 0)
 
 	useEffect(() => {
@@ -72,12 +74,14 @@ export function ArrowIconAnimation({
 	return (
 		<Box pr="s4">
 			<Box width={24} height={24} alignItems="center" justifyContent="center">
-				<Animated.View
-					pointerEvents={isError ? "none" : "auto"}
-					style={[style.containersStyle, arrowAnimation]}
-				>
-					<Icon name="chevronDown" onPress={handleIconAction} color={color} />
-				</Animated.View>
+				{!notShowArrow && (
+					<Animated.View
+						pointerEvents={isError ? "none" : "auto"}
+						style={[style.containersStyle, arrowAnimation]}
+					>
+						<Icon name="chevronDown" onPress={handleIconAction} color={color} />
+					</Animated.View>
+				)}
 
 				<Animated.View
 					pointerEvents={isError ? "auto" : "none"}

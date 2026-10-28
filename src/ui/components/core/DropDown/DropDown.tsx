@@ -23,6 +23,7 @@ export type DropDownProps<TValue> = {
 	variant: DropDownVariant
 	showTextWithId?: boolean
 	isLoading?: boolean
+	customEmptyMessage?: string
 	/** Maximum dropdown height in pixels. Defaults to 100. */
 	maxHeight?: number
 }
@@ -40,6 +41,7 @@ export function DropDown<TValue>({
 	maxHeight = 100,
 	showTextWithId = false,
 	isLoading,
+	customEmptyMessage,
 }: DropDownProps<TValue>) {
 	const [items, setItems] = useState(dropdownItems)
 	const searchDebounced = useDebounce(typeof searchText === "string" ? searchText : "")
@@ -50,6 +52,10 @@ export function DropDown<TValue>({
 		height,
 		dropDownVariantStyle.textInput.borderColorOnFocus,
 	)
+
+	const showCustomMessage =
+		Boolean(customEmptyMessage) &&
+		(typeof searchText !== "string" || (typeof searchText === "string" && searchText.length < 3))
 
 	let diffColors = true
 
@@ -152,7 +158,11 @@ export function DropDown<TValue>({
 								paddingHorizontal="s8"
 								paddingVertical="s4"
 							>
-								<Text variant="text14">Nenhum item encontrado</Text>
+								{showCustomMessage ? (
+									<Text variant="text14">{customEmptyMessage}</Text>
+								) : (
+									<Text variant="text14">Nenhum item encontrado</Text>
+								)}
 							</Box>
 						)}
 					</ScrollView>
