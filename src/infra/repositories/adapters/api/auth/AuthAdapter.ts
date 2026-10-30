@@ -21,5 +21,7 @@ export function adaptLoginResultToAuthUser(
 		company: loginResult.C_POSTO,
 		userName,
 		name: loginResult.C_RAZSO,
+		quota: 100,
+		leftQuota: 100,
 	}
 }
