@@ -1,5 +1,3 @@
-import axios from "axios"
-
 import type {
 	AuthUser,
 	IProductRepo,
@@ -10,60 +8,44 @@ import type {
 	ProductPriceResult,
 } from "@domain"
 
-import { errorUtils } from "@utils"
-
-import type { ErrorType } from "../APITypes"
 import { API } from "../apiConfig"
+import { handleApiError } from "../apiError"
 
-import { adaptFuelResultToProduct, adaptProductPriceResult } from "./ProductAdapter"
+import {
+	adaptFuelResultToProduct,
+	adaptProductPriceRequest,
+	adaptProductPriceResult,
+} from "./ProductAdapter"
 
 export class ApiProductRepo implements IProductRepo {
 	async list(searchProduct: string | null): Promise<Product[]> {
 		try {
 			const response = await API.get<ProductAPI>("TMetodosGerais/F_ListarCombustiveis")
-			const responseData = response.data
+			const products = response.data.result[0]
 
-			if (responseData.result.length === 0) {
+			if (!Array.isArray(products)) {
 				throw new Error("O servidor retornou uma lista de combustíveis inválida.")
 			}
 
-			const products = responseData.result[0].map(adaptFuelResultToProduct)
+			const adaptedProducts = products.map(adaptFuelResultToProduct)
 
 			if (!searchProduct) {
-				return products
+				return adaptedProducts
 			}
 
-			return products.filter((product) =>
-				product.title.toLocaleLowerCase().includes(searchProduct.toLocaleLowerCase()),
+			const normalizedSearch = searchProduct.toLocaleLowerCase()
+			return adaptedProducts.filter((product) =>
+				product.title.toLocaleLowerCase().includes(normalizedSearch),
 			)
 		} catch (error) {
-			if (axios.isAxiosError<ErrorType>(error)) {
-				const errorMessage = errorUtils.getErrorMessage(error.message)
-				if (errorMessage !== error.message) {
-					throw new Error(errorMessage, {
-						cause: `O servidor de combustíveis retornou um erro (HTTP ${error.response?.status}).`,
-					})
-				}
-
-				const serverResult = error.response?.data.result[0]
-
-				if (serverResult && serverResult.STATUS !== "OK") {
-					throw new Error(serverResult.MENSAGEM || "Não foi possível listar combustíveis.")
-				}
-
-				if (error.response) {
-					throw new Error(
-						`O servidor de combustíveis retornou um erro (HTTP ${error.response.status}).`,
-						{ cause: error.message },
-					)
-				}
-
-				throw new Error("Não foi possível conectar ao servidor de combustíveis.", {
-					cause: error.message,
-				})
-			}
-
-			throw error
+			handleApiError(error, {
+				fallbackServerMessage: "Não foi possível listar combustíveis.",
+				connectionErrorMessage: "Não foi possível conectar ao servidor de combustíveis.",
+				httpErrorMessage: (status) =>
+					`O servidor de combustíveis retornou um erro (HTTP ${status}).`,
+				translatedErrorCause: (status) =>
+					`O servidor de combustíveis retornou um erro (HTTP ${status}).`,
+			})
 		}
 	}
 
@@ -74,18 +56,12 @@ export class ApiProductRepo implements IProductRepo {
 		const products = Array.isArray(requestProducts) ? requestProducts : [requestProducts]
 
 		try {
-			const response = await API.put<ProductPriceAPI>("TMetodosGerais/F_Calcular_Preco", {
-				C_POSTO: authUser.company,
-				C_CDEMPR: authUser.id,
-				C_ITENS: products.map((item) => ({
-					C_CDPRO: item.id,
-					C_CDEST: item.inventory.id,
-					C_QTVEN: item.volume,
-				})),
-			})
+			const response = await API.put<ProductPriceAPI>(
+				"TMetodosGerais/F_Calcular_Preco",
+				adaptProductPriceRequest(authUser, products),
+			)
 
 			const priceResult = response.data.result[0]
-
 			if (!priceResult) {
 				throw new Error("O servidor retornou uma resposta de preço inválida.")
 			}
@@ -100,37 +76,12 @@ export class ApiProductRepo implements IProductRepo {
 
 			return adaptProductPriceResult(priceResult)
 		} catch (error) {
-			if (error instanceof Error && !axios.isAxiosError(error)) {
-				throw error
-			}
-
-			if (axios.isAxiosError<ErrorType>(error)) {
-				const errorMessage = errorUtils.getErrorMessage(error.message)
-				if (errorMessage !== error.message) {
-					throw new Error(errorMessage, {
-						cause: `O servidor de preços retornou um erro (HTTP ${error.response?.status}).`,
-					})
-				}
-
-				const serverResult = error.response?.data.result[0]
-
-				if (serverResult && serverResult.STATUS !== "OK") {
-					throw new Error(serverResult.MENSAGEM || "Não foi possível calcular o preço.")
-				}
-
-				if (error.response) {
-					throw new Error(
-						`O servidor de preços retornou um erro (HTTP ${error.response.status}).`,
-						{ cause: error.message },
-					)
-				}
-
-				throw new Error("Não foi possível conectar ao servidor de preços.", {
-					cause: error.message,
-				})
-			}
-
-			throw error
+			handleApiError(error, {
+				fallbackServerMessage: "Não foi possível calcular o preço.",
+				connectionErrorMessage: "Não foi possível conectar ao servidor de preços.",
+				httpErrorMessage: (status) => `O servidor de preços retornou um erro (HTTP ${status}).`,
+				translatedErrorCause: (status) => `O servidor de preços retornou um erro (HTTP ${status}).`,
+			})
 		}
 	}
 }

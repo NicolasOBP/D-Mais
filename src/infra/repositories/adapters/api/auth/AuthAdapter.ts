@@ -1,5 +1,13 @@
 import type { AuthAPIContent, AuthUser } from "@domain"
 
+export function adaptSignInRequest(company: string, password: string, userName: string) {
+	return {
+		C_POSTO: company,
+		C_RGCLI: userName,
+		C_SENHA: password,
+	}
+}
+
 export function adaptLoginResultToAuthUser(
 	loginResult: AuthAPIContent,
 	userName: string,
