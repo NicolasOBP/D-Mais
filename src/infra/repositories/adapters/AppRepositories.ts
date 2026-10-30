@@ -5,13 +5,10 @@ import { ApiInventoryRepo } from "./api/inventory/ApiInventoryRepo"
 import { ApiOrdersRepo } from "./api/orders/ApiOrdersRepo"
 import { ApiProductRepo } from "./api/product/ApiProductRepo"
 import { ApiSellRepo } from "./api/sell/ApiSellRepo"
-import { InMemoryRepositories } from "./inMemory"
 
 const apiSellRepo = new ApiSellRepo()
-const apiOrdersRepo = new ApiOrdersRepo()
 
 export const AppRepositories: Repositories = {
-	...InMemoryRepositories,
 	auth: new ApiAuthRepo(),
 	product: new ApiProductRepo(),
 	sells: {
@@ -24,11 +21,6 @@ export const AppRepositories: Repositories = {
 		paymentTermsList: () => apiSellRepo.paymentTermsList(),
 		clientList: (valueToSearch) => apiSellRepo.clientList(valueToSearch),
 	},
-	orders: {
-		complete: InMemoryRepositories.orders.complete,
-		remove: InMemoryRepositories.orders.remove,
-		list: (authUser) => apiOrdersRepo.list(authUser),
-		send: (order, authUser) => apiOrdersRepo.send(order, authUser),
-	},
+	orders: new ApiOrdersRepo(),
 	inventory: new ApiInventoryRepo(),
 }

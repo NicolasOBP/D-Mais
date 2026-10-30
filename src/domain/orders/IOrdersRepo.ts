@@ -5,6 +5,4 @@ import type { CreateOrderResult, Order, OrderVariables } from "./OrdersType"
 export interface IOrdersRepo {
 	list: (authUser: AuthUser) => Promise<Order[]>
 	send: (order: OrderVariables, authUser: AuthUser) => Promise<CreateOrderResult>
-	complete: (id: number) => Promise<void>
-	remove: (id: number) => Promise<void>
 }
