@@ -1,9 +1,9 @@
 import type { AuthUser } from "../auth"
 
-import type { CreateOrderResult, OrderDetails, OrderVariables } from "./OrdersType"
+import type { CreateOrderResult, Order, OrderVariables } from "./OrdersType"
 
 export interface IOrdersRepo {
-	list: () => Promise<OrderDetails[]>
+	list: (authUser: AuthUser) => Promise<Order[]>
 	send: (order: OrderVariables, authUser: AuthUser) => Promise<CreateOrderResult>
 	complete: (id: number) => Promise<void>
 	remove: (id: number) => Promise<void>

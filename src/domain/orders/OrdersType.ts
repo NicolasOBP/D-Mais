@@ -21,9 +21,13 @@ export type CreateOrderAPI = {
 }
 
 export interface Order {
-	id: number
-	products: Pick<ProductCart, "cartId" | "title" | "volume">[]
-	client: Client
+	id: string | number
+	products: {
+		cartId: string | number
+		title: string
+		volume: number
+	}[]
+	client: Pick<Client, "name">
 	status: OrdersStatus
 	totalPrice: number
 }
@@ -34,6 +38,7 @@ export interface OrderDetails extends Order {
 	fareSelected: boolean
 	truck: TruckPickup
 	pickup?: TruckPickup
+	client: Client
 	driver: Driver
 	company: Company
 	products: ProductCart[]
@@ -41,3 +46,18 @@ export interface OrderDetails extends Order {
 }
 
 export type OrderVariables = Omit<OrderDetails, "id" | "status">
+
+export type OrderListAPIContent = {
+	c_idrec: string
+	c_nmfant: string
+	c_vltotal: number
+	status: string
+	itens: {
+		c_desc: string
+		c_qtven: number
+	}[]
+}
+
+export type OrderListAPI = {
+	result: OrderListAPIContent[][]
+}

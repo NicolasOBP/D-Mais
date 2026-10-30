@@ -25,9 +25,9 @@ export const AppRepositories: Repositories = {
 		clientList: (valueToSearch) => apiSellRepo.clientList(valueToSearch),
 	},
 	orders: {
-		list: InMemoryRepositories.orders.list,
 		complete: InMemoryRepositories.orders.complete,
 		remove: InMemoryRepositories.orders.remove,
+		list: (authUser) => apiOrdersRepo.list(authUser),
 		send: (order, authUser) => apiOrdersRepo.send(order, authUser),
 	},
 	inventory: new ApiInventoryRepo(),

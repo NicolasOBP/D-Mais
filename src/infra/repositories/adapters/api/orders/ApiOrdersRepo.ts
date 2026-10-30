@@ -6,12 +6,49 @@ import type {
 	CreateOrderAPIContent,
 	CreateOrderResult,
 	IOrdersRepo,
+	Order,
+	OrderListAPI,
+	OrderListAPIContent,
 	OrderVariables,
 } from "@domain"
 
-import { errorUtils } from "@utils"
+import { errorUtils, idUtils } from "@utils"
 
 import { API } from "../apiConfig"
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null
+}
+
+function adaptOrderListResult(item: OrderListAPIContent): Order {
+	const status = item.status.toLocaleUpperCase()
+	const orderStatus =
+		status === "ENVIADO"
+			? "completed"
+			: status === "PENDENTE"
+				? "pending"
+				: status === "CANCELADO"
+					? "cancelled"
+					: null
+
+	if (!orderStatus) {
+		throw new Error("O servidor retornou um status inválido ao listar pedidos.")
+	}
+
+	return {
+		id: item.c_idrec,
+		client: { name: item.c_nmfant },
+		totalPrice: item.c_vltotal,
+		status: orderStatus,
+		products: item.itens.map((item) => {
+			return {
+				cartId: idUtils.generateId(),
+				title: item.c_desc,
+				volume: item.c_qtven,
+			}
+		}),
+	}
+}
 
 function parseCreateOrderResult(result: CreateOrderAPIContent | string): CreateOrderAPIContent {
 	let parsedResult: unknown = result
@@ -50,7 +87,48 @@ function parseCreateOrderResult(result: CreateOrderAPIContent | string): CreateO
 	return { STATUS: status, IDREC: id, VALOR_FINAL: finalValue, MENSAGEM: message }
 }
 
-export class ApiOrdersRepo implements Pick<IOrdersRepo, "send"> {
+export class ApiOrdersRepo implements Pick<IOrdersRepo, "list" | "send"> {
+	async list(authUser: AuthUser): Promise<Order[]> {
+		try {
+			const response = await API.get<OrderListAPI>("TMetodosGerais/F_ListarPedidos", {
+				params: { cdempr: authUser.id },
+			})
+
+			const result = response.data?.result?.[0]
+			if (!Array.isArray(result)) {
+				throw new Error("O servidor retornou uma lista de pedidos inválida.")
+			}
+
+			return result.map(adaptOrderListResult)
+		} catch (error) {
+			if (error instanceof Error && !axios.isAxiosError(error)) {
+				throw error
+			}
+
+			if (axios.isAxiosError(error)) {
+				const errorMessage = errorUtils.getErrorMessage(error.message)
+				if (errorMessage !== error.message) {
+					throw new Error(errorMessage, {
+						cause: `O servidor de pedidos retornou um erro (HTTP ${error.response?.status}).`,
+					})
+				}
+
+				if (error.response) {
+					throw new Error(
+						`O servidor de pedidos retornou um erro (HTTP ${error.response.status}).`,
+						{ cause: error.message },
+					)
+				}
+
+				throw new Error("Não foi possível conectar ao servidor de pedidos.", {
+					cause: error.message,
+				})
+			}
+
+			throw error
+		}
+	}
+
 	async send(order: OrderVariables, authUser: AuthUser): Promise<CreateOrderResult> {
 		try {
 			const response = await API.put<CreateOrderAPI>("TMetodosGerais/F_Cria_Pedido", {
