@@ -1,9 +1,28 @@
-import type { Product, ProductAPIContent, ProductPriceResult, ProductPriceResultAPI } from "@domain"
+import type {
+	AuthUser,
+	Product,
+	ProductAPIContent,
+	ProductCartVariables,
+	ProductPriceResult,
+	ProductPriceResultAPI,
+} from "@domain"
 
 export function adaptFuelResultToProduct(fuel: ProductAPIContent): Product {
 	return {
 		id: fuel.C_CDPRO,
 		title: fuel.C_DESC,
+	}
+}
+
+export function adaptProductPriceRequest(authUser: AuthUser, products: ProductCartVariables[]) {
+	return {
+		C_POSTO: authUser.company,
+		C_CDEMPR: authUser.id,
+		C_ITENS: products.map((item) => ({
+			C_CDPRO: item.id,
+			C_CDEST: item.inventory.id,
+			C_QTVEN: item.volume,
+		})),
 	}
 }
 

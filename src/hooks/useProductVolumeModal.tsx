@@ -42,6 +42,11 @@ export function useProductVolumeModal({
 		setIsModalOpen(true)
 
 		if (isEdit) {
+			reset({
+				volume: defaultVolume ?? "",
+				inventory: defaultInventory ?? { description: "", id: "", baseCode: "" },
+			})
+
 			showModal(
 				{
 					headerTitle: `Editar Produto`,

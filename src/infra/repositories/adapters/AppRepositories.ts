@@ -8,11 +8,17 @@ import { ApiSellRepo } from "./api/sell/ApiSellRepo"
 import { InMemoryRepositories } from "./inMemory"
 
 const apiSellRepo = new ApiSellRepo()
-const apiOrdersRepo = new ApiOrdersRepo()
+const apiAuthRepo = new ApiAuthRepo()
 
 export const AppRepositories: Repositories = {
-	...InMemoryRepositories,
-	auth: new ApiAuthRepo(),
+	auth: {
+		checkLeftQuota: (user, quota) => InMemoryRepositories.auth.checkLeftQuota(user, quota),
+		updateLeftQuota: (userId, usedQuota) =>
+			InMemoryRepositories.auth.updateLeftQuota(userId, usedQuota),
+		getUserById: (userId) => apiAuthRepo.getUserById(userId),
+		signIn: (company, password, userName) => apiAuthRepo.signIn(company, password, userName),
+		signOut: apiAuthRepo.signOut,
+	},
 	product: new ApiProductRepo(),
 	sells: {
 		calcFinalOrderPrice: (variables) => apiSellRepo.calcFinalOrderPrice(variables),
@@ -24,11 +30,6 @@ export const AppRepositories: Repositories = {
 		paymentTermsList: () => apiSellRepo.paymentTermsList(),
 		clientList: (valueToSearch) => apiSellRepo.clientList(valueToSearch),
 	},
-	orders: {
-		list: InMemoryRepositories.orders.list,
-		complete: InMemoryRepositories.orders.complete,
-		remove: InMemoryRepositories.orders.remove,
-		send: (order, authUser) => apiOrdersRepo.send(order, authUser),
-	},
+	orders: new ApiOrdersRepo(),
 	inventory: new ApiInventoryRepo(),
 }

@@ -1,72 +1,41 @@
-import axios from "axios"
-
 import type { AuthAPI, AuthUser, IAuthRepo } from "@domain"
 
-import { errorUtils } from "@utils"
-
-import type { ErrorType } from "../APITypes"
 import { API } from "../apiConfig"
+import { handleApiError } from "../apiError"
 
-import { adaptLoginResultToAuthUser } from "./AuthAdapter"
+import { adaptLoginResultToAuthUser, adaptSignInRequest } from "./AuthAdapter"
 
 export class ApiAuthRepo implements IAuthRepo {
 	private authUser: AuthUser | null = null
 
 	async signIn(company: string, password: string, userName: string): Promise<AuthUser> {
 		try {
-			const response = await API.put<AuthAPI>("TMetodosGerais/F_Login", {
-				C_POSTO: company,
-				C_RGCLI: userName,
-				C_SENHA: password,
-			})
+			const response = await API.put<AuthAPI>(
+				"TMetodosGerais/F_Login",
+				adaptSignInRequest(company, password, userName),
+			)
 
-			const responseData = response.data
-
-			if (responseData.result.length === 0) {
+			const loginResult = response.data.result[0]
+			if (!loginResult) {
 				throw new Error("O servidor retornou uma resposta de login inválida.")
 			}
-
-			const loginResult = responseData.result[0]
 
 			if (loginResult.STATUS !== "OK") {
 				throw new Error(loginResult.MENSAGEM || "Não foi possível autenticar o usuário.")
 			}
 
 			const authUser = adaptLoginResultToAuthUser(loginResult, userName)
-
 			this.authUser = authUser
+
 			return authUser
 		} catch (error) {
-			if (error instanceof Error && !axios.isAxiosError(error)) {
-				throw error
-			}
-
-			if (axios.isAxiosError<ErrorType>(error)) {
-				const errorMessage = errorUtils.getErrorMessage(error.message)
-				if (errorMessage !== error.message) {
-					throw new Error(errorMessage, {
-						cause: `O servidor de combustíveis retornou um erro (HTTP ${error.response?.status}).`,
-					})
-				}
-
-				const serverResult = error.response?.data.result[0]
-
-				if (serverResult && serverResult.STATUS !== "OK") {
-					throw new Error(serverResult.MENSAGEM || "Não foi possível autenticar o usuário.")
-				}
-
-				if (error.response) {
-					throw new Error(`O servidor de login retornou um erro (HTTP ${error.response.status}).`, {
-						cause: error.message,
-					})
-				}
-
-				throw new Error("Não foi possível conectar ao servidor de login.", {
-					cause: error.message,
-				})
-			}
-
-			throw error
+			handleApiError(error, {
+				fallbackServerMessage: "Não foi possível autenticar o usuário.",
+				connectionErrorMessage: "Não foi possível conectar ao servidor de login.",
+				httpErrorMessage: (status) => `O servidor de login retornou um erro (HTTP ${status}).`,
+				translatedErrorCause: (status) =>
+					`O servidor de combustíveis retornou um erro (HTTP ${status}).`,
+			})
 		}
 	}
 

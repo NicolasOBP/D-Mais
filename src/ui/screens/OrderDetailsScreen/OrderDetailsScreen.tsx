@@ -12,9 +12,8 @@ export function OrderDetailsScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>()
 	const { data: orders, isLoading } = useOrdersList()
 	const { data: storageOrders, isLoading: isLoadingStorage } = useOrdersListStorage()
-	const order =
-		orders?.find((item) => item.id === Number(id)) ??
-		storageOrders?.find((item) => item.id === Number(id))
+	const order = storageOrders?.find((item) => item.id === Number(id))
+	// orders?.find((item) => item.id === Number(id)) ??
 
 	if (isLoading || isLoadingStorage) {
 		return (

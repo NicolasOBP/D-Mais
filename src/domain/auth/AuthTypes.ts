@@ -14,7 +14,6 @@ export type AuthUser = {
 	company: string
 	userName: string
 	name: string
-	email?: string
-	quota?: number
-	leftQuota?: number
+	quota: number
+	leftQuota: number
 }

@@ -2,7 +2,6 @@ import type { AuthUser } from "@domain"
 
 export const mockAuthUsers: AuthUser[] = [
 	{
-		email: "esse@gmail.com",
 		name: "Fulano da Silva",
 		id: "1",
 		company: "d++",
@@ -11,7 +10,6 @@ export const mockAuthUsers: AuthUser[] = [
 		leftQuota: 100,
 	},
 	{
-		email: "aquele@gmail.com",
 		name: "Siclano da Silva",
 		id: "2",
 		company: "d--",

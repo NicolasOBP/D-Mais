@@ -32,28 +32,18 @@ export function OrdersProductCard({ order, onPress }: OrdersProductCardProps) {
 					{order.client.name}
 				</Text>
 
-				<Box flexDirection="row" justifyContent="space-between" pb="s12">
-					<Box flex={1}>
-						{order.products.map((product) => (
-							<Text key={`${product.cartId}`} variant="text10" color="primary" mb="s2">
+				<Box pb="s12" g="s4">
+					{order.products.map((product) => (
+						<Box flexDirection="row" alignItems="center" key={product.cartId}>
+							<Text variant="text10" color="primary" flexGrow={1} flexShrink={1}>
 								{product.title}
 							</Text>
-						))}
-					</Box>
 
-					<Box>
-						{order.products.map((product) => (
-							<Text
-								key={`volume-${product.cartId}`}
-								variant="text10"
-								color="primary"
-								mb="s2"
-								textAlign="right"
-							>
+							<Text variant="text10" color="primary" textAlign="right">
 								{product.volume} L
 							</Text>
-						))}
-					</Box>
+						</Box>
+					))}
 				</Box>
 
 				<Text variant="title14" textAlign="right">
