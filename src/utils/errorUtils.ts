@@ -16,21 +16,14 @@ function toErrorWithMessage(maybeError: unknown): ErrorWithMessage {
 		return maybeError
 	}
 
-	try {
-		return new Error(JSON.stringify(maybeError))
-	} catch {
-		// fallback in case there's an error stringifying the maybeError
-		// like with circular references for example.
-		return new Error(String(maybeError))
-	}
+	return new Error(String(maybeError))
 }
 
 function getErrorMessage(error: unknown): string {
 	const message = toErrorWithMessage(error).message
 
 	const normalizedMessage = message ? message.normalize("NFC") : ""
-	const regex = ErrorAux.clientCredit.causeRegEx!
-	const match = normalizedMessage.match(regex)
+	const match = normalizedMessage.match(ErrorAux.clientCredit.causeRegEx!)
 
 	if (match) {
 		const limitValue = match[1]
@@ -45,10 +38,32 @@ function getErrorMessage(error: unknown): string {
 			: (message ?? "")
 }
 
-export const errorUtils = { getErrorMessage }
+export type OrderSendErrorAction = "both" | "backToSell" | "sendToPending"
+
+const orderSendErrorCategories: Record<OrderSendErrorAction, readonly string[]> = {
+	both: ["Cliente sem limite de crédito"],
+	backToSell: ["Produtos com bases diferentes detectadas"],
+	sendToPending: [],
+}
+
+function getOrderSendErrorAction(errorMessage: string): OrderSendErrorAction {
+	const normalizedMessage = errorMessage.normalize("NFC").toLowerCase()
+
+	for (const action of ["both", "backToSell", "sendToPending"] as const) {
+		const matchesCategory = orderSendErrorCategories[action].some((cause) =>
+			normalizedMessage.includes(cause.normalize("NFC").toLowerCase()),
+		)
+
+		if (matchesCategory) return action
+	}
+
+	return "sendToPending"
+}
+
+export const errorUtils = { getErrorMessage, getOrderSendErrorAction }
 
 type ErrorTypes = "offline" | "serverError" | "clientCredit"
-const ErrorAux: Record<
+export const ErrorAux: Record<
 	ErrorTypes,
 	{ cause?: string; causeRegEx?: RegExp; message?: string; messageFn?: (value: string) => string }
 > = {

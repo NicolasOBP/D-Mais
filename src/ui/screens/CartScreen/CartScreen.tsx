@@ -24,10 +24,16 @@ export function CartScreen() {
 	const { cart } = useCartService()
 	const { checkLeftQuota, isPending: isCheckingQuota } = useAuthCheckLeftQuota({
 		onSuccess: () => {
-			router.push("/sell")
+			sendCart(
+				cart.getSelectedProducts().map((product) => ({
+					C_CDPRO: product.id,
+					C_CDEST: product.inventory.id,
+					C_QTVEN: product.volume,
+				})),
+			)
 		},
 	})
-	// TODO: ADD CHECK QUOTA BACK
+
 	const { mutate: sendCart, isPending: isSendingCart } = useSellSendCart({
 		onSuccess: () => {
 			router.push("/sell")
@@ -56,13 +62,7 @@ export function CartScreen() {
 			return
 		}
 
-		sendCart(
-			cart.getSelectedProducts().map((product) => ({
-				C_CDPRO: product.id,
-				C_CDEST: product.inventory.id,
-				C_QTVEN: product.volume,
-			})),
-		)
+		checkLeftQuota(cart.getSelectedVolume())
 	}
 
 	return (

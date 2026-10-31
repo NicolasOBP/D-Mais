@@ -85,7 +85,6 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 
 			closeModal()
 			router.push("/orders")
-			// handleErrorShowModal()
 		},
 	})
 
@@ -100,7 +99,6 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 		},
 		onError: (error) => {
 			handleErrorShowModal(error)
-			// saveOrderInStorage()
 		},
 	})
 
@@ -116,13 +114,15 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <just call when really intended>
 	useEffect(() => {
-		calcFinalOrderPrice({
-			client: client,
-			isFareSelected: isFareSelected,
-			paymentTerms: paymentTerms,
-			paymentMethod: paymentMethod,
-			requestProducts: orderItems,
-		})
+		if (orderItems.length > 0) {
+			calcFinalOrderPrice({
+				client: client,
+				isFareSelected: isFareSelected,
+				paymentTerms: paymentTerms,
+				paymentMethod: paymentMethod,
+				requestProducts: orderItems,
+			})
+		}
 	}, [orderItems, calcFinalOrderPrice, client.rg, paymentTerms.id, paymentMethod.id])
 
 	useEffect(() => {
@@ -188,27 +188,20 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 	function handleErrorShowModal(errorMessage: string) {
 		showModal(
 			{
-				headerTitle: `Erro ao enviar pedido. Você pode voltar para venda ou ir para "Pedidos"`,
+				headerTitle: "Erro ao enviar pedido",
 				showCloseButton: false,
 				BodyComponent: <OrderSendErrorModalBody errorMessage={errorMessage} />,
 				FooterComponent: (
-					<OrderSendErrorModalFooter backToSell={closeModal} sendToPending={saveOrderInStorage} />
+					<OrderSendErrorModalFooter
+						errorMessage={errorMessage}
+						backToSell={closeModal}
+						sendToPending={saveOrderInStorage}
+					/>
 				),
 			},
 			{ isLoading: isPendingOrderStorage },
 		)
 	}
-
-	// {
-	// 				label: "Confirmar",
-	// 				onPress: () => {
-	// 					reset()
-	// 					clearOrder()
-
-	// 					closeModal()
-	// 					router.push("/orders")
-	// 				},
-	// 			},
 
 	function handleCalculateFarePrice(fareSelected: boolean) {
 		calculateFarePrice({

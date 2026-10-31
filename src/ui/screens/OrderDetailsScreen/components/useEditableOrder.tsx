@@ -161,7 +161,7 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 	function handleErrorShowModal(errorMessage: string, orderToSend: OrderVariables) {
 		showModal(
 			{
-				headerTitle: "Erro ao enviar pedido. Você pode voltar para o pedido ou mantê-lo pendente.",
+				headerTitle: "Erro ao enviar pedido",
 				showCloseButton: false,
 				BodyComponent: <OrderSendErrorModalBody errorMessage={errorMessage} />,
 				FooterComponent: (
