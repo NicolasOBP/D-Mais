@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from "expo-router"
 
-import { useOrdersList, useOrdersListStorage } from "@domain"
+import { useOrdersListStorage } from "@domain"
 
 import { EmptyList, LoadingListState, ScreenHeader } from "@components"
 import { Screen } from "@containers"
@@ -10,12 +10,13 @@ import { NonEditableOrder } from "./components/NoneditableOrder"
 
 export function OrderDetailsScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>()
-	const { data: orders, isLoading } = useOrdersList()
+	// const { data: orders, isLoading } = useOrdersList()
 	const { data: storageOrders, isLoading: isLoadingStorage } = useOrdersListStorage()
 	const order = storageOrders?.find((item) => item.id === Number(id))
 	// orders?.find((item) => item.id === Number(id)) ??
-
-	if (isLoading || isLoadingStorage) {
+	// TODO: FIX THESE THINGS
+	// if (isLoading || isLoadingStorage) {
+	if (isLoadingStorage) {
 		return (
 			<Screen>
 				<LoadingListState screen="Orders" />

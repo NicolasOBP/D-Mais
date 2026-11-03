@@ -1,4 +1,11 @@
-import { type MutationOptions, useAppMutation, useAuth, useRepository, useToast } from "@infra"
+import {
+	type MutationOptions,
+	useAppMutation,
+	useAuth,
+	useRepository,
+	useServerConfigStore,
+	useToast,
+} from "@infra"
 
 import type { AuthUser } from "../AuthTypes"
 
@@ -14,7 +21,13 @@ export function useAuthSignIn(options?: MutationOptions<AuthUser>) {
 	const { saveAuthUser } = useAuth()
 
 	return useAppMutation<AuthUser, Variables>({
-		mutationFn: ({ company, password, userName }) => auth.signIn(company, password, userName),
+		mutationFn: ({ company, password, userName }) => {
+			if (!useServerConfigStore.getState().serverAddress.trim()) {
+				throw new Error("Configure o servidor nas configurações antes de entrar.")
+			}
+
+			return auth.signIn(company, password, userName)
+		},
 		onSuccess: (authUser) => {
 			showToast({
 				message: `Bem vindo ${authUser.name}`,

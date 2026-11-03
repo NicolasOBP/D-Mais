@@ -6,12 +6,15 @@ import { delay } from "./delay"
 let Users: AuthUser[] = [...mockAuthUsers]
 
 export class InMemoryAuthRepo implements IAuthRepo {
+	private authUser: AuthUser | null = null
+
 	async signIn(company: string, _password: string, userName: string): Promise<AuthUser> {
 		await delay()
 
 		const user = Users.find((user) => user.company === company && user.userName === userName)
 
 		if (user) {
+			this.authUser = user
 			return user
 		}
 
@@ -23,17 +26,11 @@ export class InMemoryAuthRepo implements IAuthRepo {
 	async getUserById(userId: string | null): Promise<AuthUser | null> {
 		await delay()
 
-		if (!userId) {
+		if (!userId || this.authUser?.id !== userId) {
 			return null
 		}
 
-		const user = Users.find((user) => user.id === userId)
-
-		if (!user) {
-			throw new Error("Usuário não encontrado")
-		}
-
-		return user
+		return this.authUser
 	}
 
 	async checkLeftQuota(user: AuthUser | null, quota: number): Promise<void> {
@@ -72,5 +69,6 @@ export class InMemoryAuthRepo implements IAuthRepo {
 
 	async signOut(): Promise<void> {
 		await delay()
+		this.authUser = null
 	}
 }

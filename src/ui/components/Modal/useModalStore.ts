@@ -2,6 +2,7 @@
 import { create } from "zustand"
 
 import type { ModalFooterProps } from "./components/ModalFooter"
+import { MODAL_ANIMATION_DURATION } from "./useModalAnimations"
 
 export type Modal = {
 	modal: {
@@ -40,7 +41,11 @@ export type ModalStoreType = typeof initialModalState & {
 
 const useModalStoreBase = create<ModalStoreType>()((set) => ({
 	...initialModalState,
-	closeModal: () => set(() => initialModalState),
+	closeModal: async () => {
+		set((state) => ({ modal: { ...state.modal, isModalOpen: false } }))
+		await new Promise<void>((resolve) => setTimeout(resolve, MODAL_ANIMATION_DURATION))
+		set(() => initialModalState)
+	},
 	showModal: (modal, modalData) =>
 		set(() => ({
 			modal: { isModalOpen: true, ...modal },

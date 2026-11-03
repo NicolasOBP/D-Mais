@@ -14,7 +14,6 @@ import {
 	useOrdersSend,
 	useSellCalcFinalOrder,
 } from "@domain"
-import { useAuth } from "@infra"
 
 import { type SellSchema, useSellForm } from "@schemas"
 
@@ -47,7 +46,7 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 	const [lastSuccessPaymentMethod, setLastSuccessPaymentMethod] = useState<PaymentMethod>(
 		getValues("formaPagamento"),
 	)
-	const { authUser } = useAuth()
+	// const { authUser } = useAuth()
 	const { showModal, closeModal, updateModalData } = useModal()
 
 	const { asyncCheckLeftQuota, isPending: isPendingCheckQuota } = useAuthCheckLeftQuota()
@@ -119,9 +118,7 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 			.then(() => {
 				showModal(
 					{
-						BodyComponent: (
-							<SendSellModalBody userLeftQuota={authUser?.leftQuota} userQuota={authUser?.quota} />
-						),
+						BodyComponent: <SendSellModalBody />,
 						footerButton: {
 							twoButtonFooter: {
 								labelCancel: "Cancelar",

@@ -121,8 +121,8 @@ export default function RootLayout() {
 	}
 
 	return (
-		<RepositoryProvider value={InMemoryRepositories}>
-			<QueryClientProvider client={queryClient}>
+		<QueryClientProvider client={queryClient}>
+			<RepositoryProvider value={InMemoryRepositories}>
 				<AuthProvider>
 					<ThemeProvider theme={theme}>
 						<WrapperApp>
@@ -136,7 +136,7 @@ export default function RootLayout() {
 						</WrapperApp>
 					</ThemeProvider>
 				</AuthProvider>
-			</QueryClientProvider>
-		</RepositoryProvider>
+			</RepositoryProvider>
+		</QueryClientProvider>
 	)
 }

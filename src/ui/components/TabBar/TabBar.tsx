@@ -31,6 +31,11 @@ const tabBarIconMap: TabBarIconMap = {
 		iconUnfocus: "cart",
 		label: "Carrinho",
 	},
+	profile: {
+		iconFocus: "profileFill",
+		iconUnfocus: "profile",
+		label: "Perfil",
+	},
 }
 
 export function TabBar({ navigation, state, descriptors }: BottomTabBarProps) {

@@ -19,6 +19,7 @@ const initialState: {
 	totalSelectedPrice: 0,
 	totalPrice: 0,
 }
+const CART_STORAGE_KEY = "@cart"
 
 export type CartStoreType = typeof initialState &
 	ICartRepo & {
@@ -27,6 +28,7 @@ export type CartStoreType = typeof initialState &
 		getSelectedVolume: () => number
 		updateProductPrices: (products: { cartId: number; price: number; totalPrice: number }[]) => void
 		setSelectedTotalPrice: (totalPrice: number) => void
+		clearCart: () => Promise<void>
 	}
 
 const cartStore = create<CartStoreType>()(
@@ -204,12 +206,17 @@ const cartStore = create<CartStoreType>()(
 
 			setSelectedTotalPrice: (totalPrice) => set({ totalSelectedPrice: totalPrice }),
 
+			clearCart: async () => {
+				set(initialState)
+				await zustandStorage.removeItem(CART_STORAGE_KEY)
+			},
+
 			getCartMetadata: async () => ({
 				totalItems: get().cartProducts.length,
 				totalPrice: get().totalPrice,
 			}),
 		}),
-		{ name: "@cart", storage: createJSONStorage(() => zustandStorage) },
+		{ name: CART_STORAGE_KEY, storage: createJSONStorage(() => zustandStorage) },
 	),
 )
 
@@ -242,6 +249,7 @@ export function useCartServiceZustand(): cartServices {
 	const setSelectedTotalPrice = cartStore((state) => state.setSelectedTotalPrice)
 	const getSelectedVolume = cartStore((state) => state.getSelectedVolume)
 	const getCartMetadata = cartStore((state) => state.getCartMetadata)
+	const clearCart = cartStore((state) => state.clearCart)
 
 	return {
 		cart: {
@@ -255,6 +263,7 @@ export function useCartServiceZustand(): cartServices {
 			updateProductPrices,
 			setSelectedTotalPrice,
 			getCartMetadata,
+			clearCart,
 		},
 	}
 }

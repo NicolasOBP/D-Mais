@@ -13,7 +13,6 @@ import {
 	useSellCalcFinalOrder,
 } from "@domain"
 import {
-	useAuth,
 	useBackToSellService,
 	useBackgroundOrderService,
 	useOrderService,
@@ -31,7 +30,7 @@ import {
 
 export function useSellScreen(orderItems: ProductCartScreen[]) {
 	const { showModal, closeModal, updateModalData } = useModal()
-	const { authUser } = useAuth()
+	// const { authUser } = useAuth()
 	const { finishSell } = useBackToSellService()
 
 	const { updateOrderFormDataDetails, clearOrder, updateProductsPrice } = useOrderService()
@@ -151,9 +150,7 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 	function handleShowModal(data: SellSchema) {
 		showModal(
 			{
-				BodyComponent: (
-					<SendSellModalBody userLeftQuota={authUser?.leftQuota} userQuota={authUser?.quota} />
-				),
+				BodyComponent: <SendSellModalBody />,
 				footerButton: {
 					twoButtonFooter: {
 						labelCancel: "Cancelar",
