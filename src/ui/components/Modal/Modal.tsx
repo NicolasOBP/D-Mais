@@ -11,17 +11,15 @@ import { Box } from "@core-components"
 import { ModalFooter } from "./components/ModalFooter"
 import { ModalHeader } from "./components/ModalHeader"
 import { useModal } from "./useModal"
-import { useModalAnimations } from "./useModalAnimations"
+import { MODAL_ANIMATION_DURATION, useModalAnimations } from "./useModalAnimations"
 import { validateModalState } from "./useModalError"
 
-export const MODAL_ANIMATION_DURATION = 1000
 const WIDTH_SCREEN = Dimensions.get("screen").width
 
 export function Modal() {
 	const { spacing } = useAppTheme()
 	const { modal } = useModal()
 	const modalOpen = useSharedValue(false)
-	const modalHeight = useSharedValue(0)
 	const progress = useDerivedValue(() =>
 		withTiming(Number(!modalOpen.value), {
 			duration: MODAL_ANIMATION_DURATION,
@@ -30,10 +28,8 @@ export function Modal() {
 	const widthValue = WIDTH_SCREEN - spacing.s16 * 2
 
 	const { backdropAnimatedStyle, modalAnimatedStyle } = useModalAnimations({
-		DURATION: MODAL_ANIMATION_DURATION,
 		modalOpen,
 		progress,
-		height: modalHeight,
 	})
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <unintended behavior>
@@ -41,7 +37,6 @@ export function Modal() {
 		if (modal.isModalOpen) {
 			validateModalState(modal)
 
-			modalHeight.value = 0
 			modalOpen.value = !modalOpen.value
 		} else {
 			modalOpen.value = false
@@ -55,19 +50,7 @@ export function Modal() {
 				style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
 			>
 				<Animated.View style={modalAnimatedStyle}>
-					<Box
-						p="s16"
-						borderRadius="default"
-						width={widthValue}
-						gap="s32"
-						onLayout={(e) => {
-							const heitgh = e.nativeEvent.layout.height
-
-							if (heitgh >= modalHeight.value) {
-								modalHeight.value = heitgh
-							}
-						}}
-					>
+					<Box p="s16" borderRadius="default" width={widthValue} gap="s32">
 						{modal.HeaderComponent ?? (
 							<ModalHeader
 								title={modal.headerTitle}

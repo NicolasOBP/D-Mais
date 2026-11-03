@@ -21,3 +21,9 @@ export const useServerConfigStore = create<ServerConfigState>()(
 		},
 	),
 )
+
+export function useServerConfigService(): Pick<ServerConfigState, "setServerAddress"> {
+	const setServerAddress = useServerConfigStore((state) => state.setServerAddress)
+
+	return { setServerAddress }
+}

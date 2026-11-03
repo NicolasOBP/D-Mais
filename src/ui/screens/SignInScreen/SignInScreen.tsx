@@ -1,4 +1,5 @@
 import { router } from "expo-router"
+import { useCallback, useEffect } from "react"
 import { Dimensions } from "react-native"
 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -41,13 +42,19 @@ export function SignInScreen() {
 		signIn({ company, password, userName })
 	}
 
-	function openServerConfig() {
+	const openServerConfig = useCallback(() => {
 		showModal({
 			headerTitle: "Configuração do Servidor",
 			headerSubtitle: "Informe o IP e a Porta",
 			BodyComponent: <ServerConfigModalBody serverAddress={serverAddress} />,
 		})
-	}
+	}, [serverAddress, showModal])
+
+	useEffect(() => {
+		if (!serverAddress.trim()) {
+			openServerConfig()
+		}
+	}, [serverAddress, openServerConfig])
 
 	return (
 		<Screen scrollable>

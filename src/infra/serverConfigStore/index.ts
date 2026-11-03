@@ -1,1 +1,1 @@
-export { useServerConfigStore } from "./serverConfigStore"
+export { useServerConfigService, useServerConfigStore } from "./serverConfigStore"

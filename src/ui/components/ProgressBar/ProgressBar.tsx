@@ -6,7 +6,7 @@ import { useAppTheme } from "@theme"
 
 import { Box, type BoxProps, Text } from "@core-components"
 
-import { MODAL_ANIMATION_DURATION } from "../Modal"
+import { MODAL_ANIMATION_DURATION } from "../Modal/useModalAnimations"
 
 import { useProgressBarAnimation } from "./useProgressBarAnimation"
 

@@ -11,15 +11,17 @@ import { useAppTheme } from "@theme"
 
 type Props = {
 	modalOpen: SharedValue<boolean>
-	DURATION: number
 	progress: DerivedValue<number>
-	height?: SharedValue<number>
 }
 
-export function useModalAnimations({ DURATION, modalOpen, progress, height }: Props) {
+export const MODAL_ANIMATION_DURATION = 1000
+
+export function useModalAnimations({ modalOpen, progress }: Props) {
 	const { colors, borderRadii } = useAppTheme()
 	const backdropAnimatedStyle = useAnimatedStyle(() => ({
-		zIndex: modalOpen.value ? 10 : withDelay(DURATION, withTiming(-1, { duration: 0 })),
+		zIndex: modalOpen.value
+			? 10
+			: withDelay(MODAL_ANIMATION_DURATION, withTiming(-1, { duration: 0 })),
 		opacity: 1 - progress.value,
 	}))
 
@@ -29,7 +31,6 @@ export function useModalAnimations({ DURATION, modalOpen, progress, height }: Pr
 				scale: interpolate(progress.value, [1, 0], [0.3, 1]),
 			},
 		],
-		height: height?.value,
 		backgroundColor: colors.background,
 		borderRadius: borderRadii.default,
 	}))

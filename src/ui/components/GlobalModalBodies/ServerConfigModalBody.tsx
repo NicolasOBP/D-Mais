@@ -1,4 +1,4 @@
-import { useServerConfigStore } from "@infra"
+import { useServerConfigService, useToast } from "@infra"
 
 import { type ServerConfigSchema, useServerConfigForm } from "@schemas"
 import { useFormUtils } from "@utils"
@@ -9,13 +9,18 @@ import { FormTextInput } from "../Form"
 import { useModal } from "../Modal"
 
 export function ServerConfigModalBody({ serverAddress }: { serverAddress: string }) {
-	const setServerAddress = useServerConfigStore((state) => state.setServerAddress)
+	const { setServerAddress } = useServerConfigService()
+	const { showToast } = useToast()
 	const { closeModal } = useModal()
 	const { control, formState, handleSubmit } = useServerConfigForm(serverAddress)
 
 	function onSubmit({ serverAddress: address }: ServerConfigSchema) {
 		setServerAddress(address)
 		closeModal()
+		showToast({
+			type: "success",
+			message: "Configuração do servidor salva com sucesso!",
+		})
 	}
 
 	return (
@@ -31,14 +36,16 @@ export function ServerConfigModalBody({ serverAddress }: { serverAddress: string
 				LeftComponent={<Text>http://</Text>}
 			/>
 
-			<Button
-				variant="primary"
-				lable="Salvar"
-				paddingVertical="s12"
-				paddingHorizontal="s24"
-				disabled={!formState.isValid || useFormUtils.isFormValid(formState)}
-				onPress={handleSubmit(onSubmit)}
-			/>
+			<Box alignSelf="center">
+				<Button
+					variant="primary"
+					lable="Salvar"
+					paddingVertical="s12"
+					paddingHorizontal="s40"
+					disabled={!formState.isValid || useFormUtils.isFormValid(formState)}
+					onPress={handleSubmit(onSubmit)}
+				/>
+			</Box>
 		</Box>
 	)
 }
