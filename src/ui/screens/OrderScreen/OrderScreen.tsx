@@ -53,7 +53,7 @@ export function OrderScreen() {
 
 	return (
 		<Screen>
-			<ScreenHeader noMargin title="Pedidos" />
+			<ScreenHeader noMargin title="Histórico de Pedidos" />
 
 			<Box flex={1} pt="s16">
 				{isLoading ? (

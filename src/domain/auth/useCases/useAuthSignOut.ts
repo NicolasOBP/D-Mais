@@ -2,6 +2,7 @@ import {
 	type MutationOptions,
 	useAppMutation,
 	useAuth,
+	useBackToSellService,
 	useCartService,
 	useOrderService,
 	useRepository,
@@ -11,6 +12,7 @@ import {
 export function useAuthSignOut(options?: MutationOptions<void>) {
 	const { auth } = useRepository()
 	const { removeAuthUser } = useAuth()
+	const { resetBackToSell } = useBackToSellService()
 	const { cart } = useCartService()
 	const { clearOrdersFromStorage } = useOrderService()
 	const { showToast } = useToast()
@@ -18,6 +20,7 @@ export function useAuthSignOut(options?: MutationOptions<void>) {
 	return useAppMutation<void, void>({
 		mutationFn: async () => {
 			await Promise.all([cart.clearCart(), clearOrdersFromStorage()])
+			resetBackToSell()
 			await auth.signOut()
 			await removeAuthUser()
 		},
