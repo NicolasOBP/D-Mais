@@ -39,6 +39,16 @@ async function removeOrder(orderId: OrderDetails["id"]): Promise<void> {
 	}
 }
 
+async function clearOrders(): Promise<void> {
+	try {
+		await storage.removeItem(ORDER_KEY)
+	} catch (error) {
+		throw new Error("Erro ao limpar os pedidos do armazenamento local.", {
+			cause: String(error),
+		})
+	}
+}
+
 async function updateOrder(order: OrderDetails): Promise<void> {
 	try {
 		const previousOrders = await getOrders()
@@ -63,5 +73,6 @@ export const orderStorage = {
 	saveOrder,
 	getOrders,
 	removeOrder,
+	clearOrders,
 	updateOrder,
 }
