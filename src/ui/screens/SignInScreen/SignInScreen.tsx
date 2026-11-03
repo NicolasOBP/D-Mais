@@ -5,10 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
 import { useAuthSignIn } from "@domain"
+import { useServerConfigStore } from "@infra"
 
 import { useFormUtils } from "@utils"
 
-import { AppLogo, FormTextInput } from "@components"
+import { AppLogo, FormTextInput, Icon, ServerConfigModalBody, useModal } from "@components"
 import { Screen } from "@containers"
 import { Box, Button, Text } from "@core-components"
 
@@ -18,6 +19,8 @@ const SCREEN_SIZE = Dimensions.get("screen").width
 const IMAGE_SIZE = SCREEN_SIZE * 0.5
 
 export function SignInScreen() {
+	const serverAddress = useServerConfigStore((state) => state.serverAddress)
+	const { showModal } = useModal()
 	const { control, formState, handleSubmit } = useForm<SignInSchema>({
 		resolver: zodResolver(signInSchema),
 		defaultValues: {
@@ -38,10 +41,22 @@ export function SignInScreen() {
 		signIn({ company, password, userName })
 	}
 
+	function openServerConfig() {
+		showModal({
+			headerTitle: "Configuração do Servidor",
+			headerSubtitle: "Informe o IP e a Porta",
+			BodyComponent: <ServerConfigModalBody serverAddress={serverAddress} />,
+		})
+	}
+
 	return (
 		<Screen scrollable>
+			<Box alignSelf="flex-end" mt="s16" bg="gray3" p="s4" borderRadius="rounded">
+				<Icon name="setting" color="primary" size={30} onPress={openServerConfig} />
+			</Box>
+
 			<Box alignItems="center" g="s12">
-				<Text pt="s46" variant="title24Bold">
+				<Text pt="s16" variant="title24Bold">
 					Login
 				</Text>
 

@@ -18,6 +18,7 @@ import { ProfileFillIcon } from "../../../../assets/icons/ProfileFillIcon"
 import { ProfileIcon } from "../../../../assets/icons/ProfileIcon"
 import { RefreshIcon } from "../../../../assets/icons/RefreshIcon"
 import { SearchIcon } from "../../../../assets/icons/SearchIcon"
+import { SettingsIcon } from "../../../../assets/icons/SettingsIcon"
 import { TrashIcon } from "../../../../assets/icons/TrashIcon"
 
 export const iconRegistry = {
@@ -42,6 +43,7 @@ export const iconRegistry = {
 	refresh: RefreshIcon,
 	profile: ProfileIcon,
 	profileFill: ProfileFillIcon,
+	setting: SettingsIcon,
 }
 
 export type IconType = typeof iconRegistry
