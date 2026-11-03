@@ -47,6 +47,7 @@ export default function TabLayout() {
 					tabBarBadge: cartBadgeNumber,
 				}}
 			/>
+			<Tabs.Screen name="profile" />
 			<Tabs.Screen name="sell" options={{ href: null }} />
 		</Tabs>
 	)
