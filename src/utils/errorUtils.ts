@@ -42,7 +42,7 @@ export type OrderSendErrorAction = "both" | "backToSell" | "sendToPending"
 
 const orderSendErrorCategories: Record<OrderSendErrorAction, readonly string[]> = {
 	both: ["Cliente sem limite de crédito"],
-	backToSell: ["Produtos com bases diferentes detectadas"],
+	backToSell: ["Produtos com bases diferentes detectadas", "Bases diferentes detectadas"],
 	sendToPending: [],
 }
 
@@ -70,7 +70,7 @@ export const ErrorAux: Record<
 	clientCredit: {
 		causeRegEx: /cliente sem limite de crédito.*?limite:\s*(R\$\s*[\d.,]+)/i,
 		messageFn(value) {
-			return `Cliente sem limite de crédito. O limite atual é de ${value}.\nTroque a forma de pagamento para dinheiro para concluir a compra.`
+			return `Cliente sem limite de crédito. O limite atual é de ${value}.\nTroque a forma de pagamento para DINHEIRO para concluir a compra.`
 		},
 	},
 	offline: {
