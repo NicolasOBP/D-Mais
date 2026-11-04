@@ -29,7 +29,10 @@ src/domain/
 ## Regras de implementação
 
 - Defina tipos puros em TypeScript para entidades e contratos de dados
-- Use useCases para encapsular regras de negócio e chamadas de repositórios
+- Use useCases para encapsular regras de negócio e chamadas de repositórios; não acesse API/HTTP diretamente nesta camada
+- Para operações remotas, siga o padrão atual dos hooks em `src/domain/<feature>/useCases`: obtenha o repositório com `useRepository` e use `useAppQuery` para consultas ou `useAppMutation` para alterações
+- Mantenha query keys e o fluxo de invalidação consistentes com os helpers existentes; examine use cases próximos antes de adicionar um novo padrão
+- Nem todo use case precisa ser um hook: use a forma mais simples que se encaixa no comportamento e siga o padrão existente da funcionalidade
 - Mantenha nomes em PascalCase para tipos e interfaces e camelCase para funções
 - Se houver uma abstração de repositório, declare-a em src/domain/Repositories.ts ou no módulo específico
 
@@ -48,6 +51,7 @@ export interface Product {
 
 - [ ] Módulo está em src/domain/<moduleName>
 - [ ] Tipos e interfaces estão bem nomeados
+- [ ] Operações remotas usam o repositório injetado e os wrappers de query/mutation existentes
 - [ ] Há index.ts exportando o módulo
 - [ ] Não há dependência direta de UI
 - [ ] O módulo é exposto em src/domain/index.ts
