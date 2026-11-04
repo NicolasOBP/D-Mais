@@ -111,18 +111,20 @@ export function useSellScreen(orderItems: ProductCartScreen[]) {
 		}, [enableBackgroundOrderSaving]),
 	)
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <just call when really intended>
-	useEffect(() => {
-		if (orderItems.length > 0) {
-			calcFinalOrderPrice({
-				client: client,
-				isFareSelected: isFareSelected,
-				paymentTerms: paymentTerms,
-				paymentMethod: paymentMethod,
-				requestProducts: orderItems,
-			})
-		}
-	}, [orderItems, calcFinalOrderPrice, client.rg, paymentTerms.id, paymentMethod.id])
+	useFocusEffect(
+		// biome-ignore lint/correctness/useExhaustiveDependencies: <doest run when field are not selected>
+		useCallback(() => {
+			if (orderItems.length > 0) {
+				calcFinalOrderPrice({
+					client: client,
+					isFareSelected: isFareSelected,
+					paymentTerms: paymentTerms,
+					paymentMethod: paymentMethod,
+					requestProducts: orderItems,
+				})
+			}
+		}, [orderItems, calcFinalOrderPrice, client.rg, paymentTerms.id, paymentMethod.id]),
+	)
 
 	useEffect(() => {
 		updateOrderFormDataDetails({
