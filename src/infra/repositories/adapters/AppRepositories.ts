@@ -15,6 +15,7 @@ export const AppRepositories: Repositories = {
 		checkLeftQuota: (user, quota) => InMemoryRepositories.auth.checkLeftQuota(user, quota),
 		updateLeftQuota: (userId, usedQuota) =>
 			InMemoryRepositories.auth.updateLeftQuota(userId, usedQuota),
+		checkServer: () => apiAuthRepo.checkServer(),
 		getUserById: (userId) => apiAuthRepo.getUserById(userId),
 		signIn: (company, password, userName) => apiAuthRepo.signIn(company, password, userName),
 		signOut: apiAuthRepo.signOut,

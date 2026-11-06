@@ -4,9 +4,14 @@ import { API } from "../apiConfig"
 import { handleApiError } from "../apiError"
 
 import { adaptLoginResultToAuthUser, adaptSignInRequest } from "./AuthAdapter"
+import { checkServerApi } from "./checkServerApi"
 
 export class ApiAuthRepo implements IAuthRepo {
 	private authUser: AuthUser | null = null
+
+	async checkServer(): Promise<void> {
+		return checkServerApi()
+	}
 
 	async signIn(company: string, password: string, userName: string): Promise<AuthUser> {
 		try {

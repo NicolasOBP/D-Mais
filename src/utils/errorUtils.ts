@@ -35,7 +35,9 @@ function getErrorMessage(error: unknown): string {
 		? (ErrorAux.offline.message ?? "")
 		: message.includes(ErrorAux.serverError.cause!)
 			? (ErrorAux.serverError.message ?? "")
-			: (message ?? "")
+			: message.includes(ErrorAux.serverConfigError.cause!)
+				? (ErrorAux.serverConfigError.message ?? "")
+				: (message ?? "")
 }
 
 export type OrderSendErrorAction = "both" | "backToSell" | "sendToPending"
@@ -62,8 +64,9 @@ function getOrderSendErrorAction(errorMessage: string): OrderSendErrorAction {
 
 export const errorUtils = { getErrorMessage, getOrderSendErrorAction }
 
-type ErrorTypes = "offline" | "serverError" | "clientCredit"
-export const ErrorAux: Record<
+type ErrorTypes = "offline" | "serverError" | "clientCredit" | "serverConfigError"
+
+const ErrorAux: Record<
 	ErrorTypes,
 	{ cause?: string; causeRegEx?: RegExp; message?: string; messageFn?: (value: string) => string }
 > = {
@@ -80,5 +83,9 @@ export const ErrorAux: Record<
 	serverError: {
 		cause: "502",
 		message: "Erro no Servidor",
+	},
+	serverConfigError: {
+		cause: "Network Error",
+		message: "Erro ao estabelecer comunicação com o Servidor.",
 	},
 }
