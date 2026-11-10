@@ -61,3 +61,35 @@ export type OrderListAPIContent = {
 export type OrderListAPI = {
 	result: OrderListAPIContent[][]
 }
+
+export type OrderDetailAPIContent = {
+	c_idrec: string
+	c_vltotal: number
+	c_dttran: string
+	status: string
+	c_rgcli: string
+	c_razso: string
+	c_nmfant: string
+	c_condpagto: string
+	c_km: string
+	c_tppagto: string
+	c_placa: string
+	c_placa_b: string
+	c_rgent: string
+	c_rgaux: string
+	c_tpfrete: string
+	c_vlfrete: number
+	itens: {
+		c_itrec: string
+		c_cdpro: string
+		c_desc: string
+		c_cdest: string
+		c_qtven: number
+		c_vlunit: number
+		c_vltotal: number
+	}[]
+}
+
+export type OrderDetailAPI = {
+	result: OrderDetailAPIContent[]
+}

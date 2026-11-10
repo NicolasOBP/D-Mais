@@ -3,6 +3,8 @@ import type {
 	CreateOrderAPIContent,
 	CreateOrderResult,
 	Order,
+	OrderDetailAPIContent,
+	OrderDetails,
 	OrderListAPIContent,
 	OrderVariables,
 } from "@domain"
@@ -11,6 +13,10 @@ import { idUtils } from "@utils"
 
 export function adaptOrderListRequest(authUser: AuthUser) {
 	return { params: { cdempr: authUser.id } }
+}
+
+export function adaptOrderDetailsRequest(idrec: string, cdempr: string) {
+	return { params: { idrec, cdempr } }
 }
 
 export function adaptCreateOrderRequest(order: OrderVariables, authUser: AuthUser) {
@@ -59,6 +65,93 @@ export function adaptOrderListResult(item: OrderListAPIContent): Order {
 			title: product.c_desc,
 			volume: product.c_qtven,
 		})),
+	}
+}
+
+export function adaptOrderDetailsResult(item: OrderDetailAPIContent): OrderDetails {
+	const status = item.status.toLocaleUpperCase()
+	const orderStatus =
+		status === "ENVIADO"
+			? "completed"
+			: status === "PENDENTE"
+				? "pending"
+				: status === "CANCELADO"
+					? "cancelled"
+					: null
+
+	if (!orderStatus) {
+		throw new Error("O servidor retornou um status inválido ao detalhar o pedido.")
+	}
+
+	if (
+		!Number.isFinite(item.c_vltotal) ||
+		!Number.isFinite(item.c_vlfrete) ||
+		!Array.isArray(item.itens)
+	) {
+		throw new Error("O servidor retornou dados inválidos ao detalhar o pedido.")
+	}
+
+	return {
+		id: item.c_idrec,
+		status: orderStatus,
+		totalPrice: item.c_vltotal,
+		farePrice: item.c_vlfrete,
+		fareSelected: item.c_tpfrete === "1",
+		client: {
+			rg: item.c_rgcli,
+			name: item.c_nmfant,
+			corporateReason: item.c_razso,
+		},
+		paymentTerms: {
+			id: item.c_condpagto,
+			description: item.c_condpagto,
+			table: item.c_km,
+		},
+		paymentMethod: {
+			id: item.c_tppagto,
+			description: item.c_tppagto,
+		},
+		truck: {
+			id: item.c_placa,
+			licensePlate: item.c_placa,
+		},
+		pickup: item.c_placa_b
+			? {
+					id: item.c_placa_b,
+					licensePlate: item.c_placa_b,
+				}
+			: undefined,
+		driver: {
+			rg: item.c_rgent,
+			name: item.c_rgent,
+		},
+		company: {
+			rg: item.c_rgaux,
+			name: item.c_rgaux,
+		},
+		products: item.itens.map((product, index) => {
+			if (
+				!Number.isFinite(product.c_qtven) ||
+				!Number.isFinite(product.c_vlunit) ||
+				!Number.isFinite(product.c_vltotal)
+			) {
+				throw new Error("O servidor retornou itens inválidos ao detalhar o pedido.")
+			}
+
+			return {
+				id: product.c_cdpro,
+				title: product.c_desc,
+				price: product.c_vlunit,
+				volume: product.c_qtven,
+				totalPrice: product.c_vltotal,
+				cartId: index,
+				inventory: {
+					id: product.c_cdest,
+					description: product.c_cdest,
+					baseCode: product.c_cdest,
+				},
+			}
+		}),
 	}
 }
 

@@ -11,6 +11,17 @@ export class InMemoryOrdersRepo implements IOrdersRepo {
 		return [...InnerOrders]
 	}
 
+	async details(idrec: string): Promise<OrderDetails> {
+		await delay()
+
+		const order = InnerOrders.find((item) => String(item.id) === idrec)
+		if (!order) {
+			throw new Error("Pedido não encontrado.")
+		}
+
+		return order
+	}
+
 	async send(order: OrderVariables): Promise<CreateOrderResult> {
 		await delay()
 

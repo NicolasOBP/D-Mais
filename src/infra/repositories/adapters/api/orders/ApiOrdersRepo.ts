@@ -4,6 +4,8 @@ import type {
 	CreateOrderResult,
 	IOrdersRepo,
 	Order,
+	OrderDetailAPI,
+	OrderDetails,
 	OrderListAPI,
 	OrderVariables,
 } from "@domain"
@@ -14,12 +16,14 @@ import { handleApiError } from "../apiError"
 import {
 	adaptCreateOrderRequest,
 	adaptCreateOrderResult,
+	adaptOrderDetailsRequest,
+	adaptOrderDetailsResult,
 	adaptOrderListRequest,
 	adaptOrderListResult,
 	getCreateOrderApiErrorMessage,
 } from "./OrdersAdapter"
 
-export class ApiOrdersRepo implements Pick<IOrdersRepo, "list" | "send"> {
+export class ApiOrdersRepo implements IOrdersRepo {
 	async list(authUser: AuthUser): Promise<Order[]> {
 		try {
 			const response = await API.get<OrderListAPI>(
@@ -36,6 +40,30 @@ export class ApiOrdersRepo implements Pick<IOrdersRepo, "list" | "send"> {
 		} catch (error) {
 			handleApiError(error, {
 				fallbackServerMessage: "Não foi possível listar pedidos.",
+				connectionErrorMessage: "Não foi possível conectar ao servidor de pedidos.",
+				httpErrorMessage: (status) => `O servidor de pedidos retornou um erro (HTTP ${status}).`,
+				translatedErrorCause: (status) =>
+					`O servidor de pedidos retornou um erro (HTTP ${status}).`,
+			})
+		}
+	}
+
+	async details(idrec: string, cdempr: string): Promise<OrderDetails> {
+		try {
+			const response = await API.get<OrderDetailAPI>(
+				"TMetodosGerais/F_DetalharPedido",
+				adaptOrderDetailsRequest(idrec, cdempr),
+			)
+
+			const result = response.data?.result?.[0]
+			if (!result) {
+				throw new Error("O servidor retornou uma resposta vazia ao detalhar o pedido.")
+			}
+
+			return adaptOrderDetailsResult(result)
+		} catch (error) {
+			handleApiError(error, {
+				fallbackServerMessage: "Não foi possível detalhar o pedido.",
 				connectionErrorMessage: "Não foi possível conectar ao servidor de pedidos.",
 				httpErrorMessage: (status) => `O servidor de pedidos retornou um erro (HTTP ${status}).`,
 				translatedErrorCause: (status) =>

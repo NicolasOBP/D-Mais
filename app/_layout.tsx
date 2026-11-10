@@ -11,8 +11,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import "react-native-reanimated"
 
 import {
+	AppRepositories,
 	AuthProvider,
-	InMemoryRepositories,
 	MMKVStorage,
 	RepositoryProvider,
 	initializeStorage,
@@ -122,7 +122,7 @@ export default function RootLayout() {
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<RepositoryProvider value={InMemoryRepositories}>
+			<RepositoryProvider value={AppRepositories}>
 				<AuthProvider>
 					<ThemeProvider theme={theme}>
 						<WrapperApp>

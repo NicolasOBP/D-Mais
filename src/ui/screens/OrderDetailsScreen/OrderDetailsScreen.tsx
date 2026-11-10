@@ -1,22 +1,31 @@
 import { useLocalSearchParams } from "expo-router"
 
-import { useOrdersListStorage } from "@domain"
+import { useOrderDetails, useOrdersListStorage } from "@domain"
+
+import { errorUtils } from "@utils"
 
 import { EmptyList, LoadingListState, ScreenHeader } from "@components"
 import { Screen } from "@containers"
 
 import { EditAbleOrder } from "./components/EditableOrder"
-import { NonEditableOrder } from "./components/NoneditableOrder"
+import { NonEditableOrder } from "./components/NonEditableOrder"
 
 export function OrderDetailsScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>()
-	// const { data: orders, isLoading } = useOrdersList()
 	const { data: storageOrders, isLoading: isLoadingStorage } = useOrdersListStorage()
-	const order = storageOrders?.find((item) => item.id === Number(id))
-	// orders?.find((item) => item.id === Number(id)) ??
-	// TODO: FIX THESE THINGS
-	// if (isLoading || isLoadingStorage) {
-	if (isLoadingStorage) {
+	const storedOrder = storageOrders?.find((item) => String(item.id) === id)
+	const pendingOrder = storedOrder?.status === "pending" ? storedOrder : undefined
+	const {
+		data: apiDetails,
+		isLoading: isLoadingDetails,
+		error: detailsError,
+	} = useOrderDetails(id, Boolean(!pendingOrder))
+
+	if (pendingOrder) {
+		return <EditAbleOrder key={pendingOrder.id} order={pendingOrder} />
+	}
+
+	if (isLoadingStorage || isLoadingDetails) {
 		return (
 			<Screen>
 				<LoadingListState screen="Orders" />
@@ -24,17 +33,20 @@ export function OrderDetailsScreen() {
 		)
 	}
 
+	const order = apiDetails ?? storedOrder
 	if (!order) {
 		return (
 			<Screen>
 				<ScreenHeader title="Pedido" canGoBack />
-				<EmptyList desc="Pedido não encontrado" />
+				<EmptyList
+					desc={
+						detailsError
+							? `Erro ao carregar pedido. ${errorUtils.getErrorMessage(detailsError)}`
+							: "Pedido não encontrado"
+					}
+				/>
 			</Screen>
 		)
-	}
-
-	if (order.status === "pending") {
-		return <EditAbleOrder key={order.id} order={order} />
 	}
 
 	return <NonEditableOrder key={order.id} order={order} />
