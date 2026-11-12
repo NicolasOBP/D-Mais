@@ -95,7 +95,7 @@ export function adaptOrderDetailsResult(item: OrderDetailAPIContent): OrderDetai
 		id: item.c_idrec,
 		status: orderStatus,
 		totalPrice: item.c_vltotal,
-		farePrice: item.c_vlfrete,
+		farePrice: item.c_vlunfrete,
 		fareSelected: item.c_tpfrete === "1",
 		client: {
 			rg: item.c_rgcli,

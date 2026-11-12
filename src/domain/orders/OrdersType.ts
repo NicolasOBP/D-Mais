@@ -79,6 +79,7 @@ export type OrderDetailAPIContent = {
 	c_rgaux: string
 	c_tpfrete: string
 	c_vlfrete: number
+	c_vlunfrete: number
 	itens: {
 		c_itrec: string
 		c_cdpro: string
