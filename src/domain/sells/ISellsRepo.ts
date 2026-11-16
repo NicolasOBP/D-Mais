@@ -16,7 +16,7 @@ export interface ISellsRepo {
 	truckPickupList: (valueToSearch: string) => Promise<TruckPickup[]>
 	driverList: (valueToSearch: string) => Promise<Driver[]>
 	companyList: (valueToSearch: string) => Promise<Company[]>
-	paymentTermsList: () => Promise<PaymentTerms[]>
-	paymentMethodsList: () => Promise<PaymentMethod[]>
+	paymentTermsList: (valueToSearch?: string) => Promise<PaymentTerms[]>
+	paymentMethodsList: (valueToSearch?: string) => Promise<PaymentMethod[]>
 	calcFinalOrderPrice: (variables: CalcFinalOrderVariables) => Promise<FinalOrderPriceResult>
 }

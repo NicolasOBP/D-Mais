@@ -19,6 +19,7 @@ export function OrderDetailsScreen() {
 		data: apiDetails,
 		isLoading: isLoadingDetails,
 		error: detailsError,
+		refetch,
 	} = useOrderDetails(id, Boolean(!pendingOrder))
 
 	if (pendingOrder) {
@@ -39,6 +40,8 @@ export function OrderDetailsScreen() {
 			<Screen>
 				<ScreenHeader title="Pedido" canGoBack />
 				<EmptyList
+					refreshFunction={refetch}
+					showRefreshButton
 					desc={
 						detailsError
 							? `Erro ao carregar pedido. ${errorUtils.getErrorMessage(detailsError)}`
