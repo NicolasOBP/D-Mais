@@ -26,58 +26,34 @@ Use esta skill para cenários como:
 
 ## 🔄 Fluxo recomendado
 
-### 1. Definir o domínio
+As camadas abaixo são opcionais conforme a necessidade da funcionalidade. Não crie schema, store ou repositório apenas para preencher uma sequência fixa.
 
-Use create-domains para criar:
+### 1. Definir o domínio e os dados
 
-- tipos e interfaces
-- contratos de repositório
-- use cases de negócio
+Use create-domains para definir tipos, contratos de repositório e use cases quando houver regra ou acesso a dados. Operações remotas devem passar pelo repositório injetado e pelos hooks de query/mutation do app; não chame a API diretamente pela tela.
 
-Estruture em src/domain/<featureName>.
+Se houver integração com o servidor, use create-api para adicionar o repositório e os adapters da API em `src/infra/repositories/adapters/api`.
 
-### 2. Criar validações e formulário
+### 2. Adicionar formulário ou estado compartilhado quando necessário
 
-Use create-schemas para adicionar:
+Use create-schemas somente para formulários ou validações estruturadas. Use create-store somente para estado compartilhado que precise sobreviver à tela ou ser acessado por múltiplas áreas:
 
-- schemas Zod
-- hooks de formulário com react-hook-form
-- tipos inferidos do schema
-
-Estruture em src/schemas.
-
-### 3. Criar estado global ou compartilhado
-
-Use create-store para adicionar:
-
-- Zustand store
-- estado inicial
-- actions tipadas
-- hooks de leitura/escrita
-
-Estruture em src/infra/<featureStore>.
-
-### 4. Criar componentes
+### 3. Criar componentes e tela
 
 Use create-components para componentes específicos de tela e create-core-components para componentes reutilizáveis base.
 
 - componentes específicos: src/ui/components
 - componentes core: src/ui/components/core
 
-### 5. Criar a tela
+Use create-screens para implementar a tela em `src/ui/screens/<ScreenName>`. A navegação Expo Router fica em `app/`: mantenha os arquivos de rota/layout como wrappers finos que importam telas de `@screens`.
 
-Use create-screens para montar a tela final com:
+### 4. Integrar e validar
 
-- layout
-- integração com formulário
-- uso do store ou use cases
-- navegação com expo-router
-
-Estruture em src/ui/screens/<ScreenName>.
+Conecte a tela ao caso de uso, query/mutation ou store necessário e integre a rota. O fluxo de dados remoto usado no app é: tela → hook de use case em `src/domain/*/useCases` → repositório injetado por `RepositoryProvider` → adapter de infraestrutura. Queries e mutations usam os wrappers compartilhados em `src/infra/useCases`.
 
 ## 🧱 Regras gerais da feature
 
-- siga a arquitetura atual do projeto: domain → schemas → infra → UI
+- siga a separação atual: `app/` para rotas/layouts, `src/domain` para contratos e use cases, `src/infra` para providers/repositórios/stores e `src/ui` para telas/componentes/containers
 - use os aliases do TypeScript já configurados:
   - @core-components
   - @components
@@ -150,24 +126,27 @@ Exemplo incorreto:
 - para inputs, use TextInput e FormTextInput já adaptados ao tema
 - para componentes visuais, prefira Box e PressableBox com props do Restyle
 
-## 📁 Estrutura esperada
+## 📁 Estrutura possível
 
 ```text
+app/
+  (protected)/(tabs)/<route>.tsx  # wrapper que importa uma tela
 src/
   domain/<feature>/
-  schemas/
-  infra/<featureStore>/
+  schemas/                        # somente se houver formulário/validação
+  infra/<featureStore>/           # somente se houver estado compartilhado
   ui/components/<featureComponents>/
   ui/screens/<ScreenName>/
 ```
 
 ## ✅ Checklist de implementação
 
-- [ ] O domínio foi definido
-- [ ] Os schemas e validações foram criados
-- [ ] O store ou estado compartilhado foi criado
+- [ ] O domínio/use case foi definido quando há regra de negócio ou acesso a dados
+- [ ] Schemas e validações foram criados quando há formulário/validação
+- [ ] Store foi criado quando há estado compartilhado
 - [ ] Os componentes foram adicionados com os padrões do app
-- [ ] A tela foi criada e integrada
+- [ ] A tela está em src/ui/screens e a rota Expo Router em app/
+- [ ] Queries/mutations usam os wrappers e repositórios compartilhados quando aplicável
 - [ ] Os exports foram ajustados nos index.ts apropriados
 - [ ] A feature está consistente com o restante da aplicação
 - [ ] A validação final foi feita rodando npx tsc --noEmit
@@ -182,11 +161,11 @@ src/
 
 ## 🧭 Ordem de execução recomendada
 
-1. criar domínio
-2. criar schema/form
-3. criar store
-4. criar componentes
-5. criar tela
-6. ajustar exports e integração
+1. identificar as camadas necessárias; não criar camadas sem necessidade
+2. criar contratos e use cases para regra de negócio/dados
+3. criar integração de API, schema ou store somente quando necessário
+4. criar componentes e tela
+5. conectar a rota em app/, ajustar exports e integração
+6. validar tipagem e comportamento
 
 Essa skill é a melhor opção para criar uma feature completa de forma consistente com a arquitetura atual do projeto.

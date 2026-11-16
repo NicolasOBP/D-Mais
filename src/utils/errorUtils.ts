@@ -35,14 +35,16 @@ function getErrorMessage(error: unknown): string {
 		? (ErrorAux.offline.message ?? "")
 		: message.includes(ErrorAux.serverError.cause!)
 			? (ErrorAux.serverError.message ?? "")
-			: (message ?? "")
+			: message.includes(ErrorAux.serverConfigError.cause!)
+				? (ErrorAux.serverConfigError.message ?? "")
+				: (message ?? "")
 }
 
 export type OrderSendErrorAction = "both" | "backToSell" | "sendToPending"
 
 const orderSendErrorCategories: Record<OrderSendErrorAction, readonly string[]> = {
 	both: ["Cliente sem limite de crédito"],
-	backToSell: ["Produtos com bases diferentes detectadas"],
+	backToSell: ["Produtos com bases diferentes detectadas", "Bases diferentes detectadas"],
 	sendToPending: [],
 }
 
@@ -62,15 +64,16 @@ function getOrderSendErrorAction(errorMessage: string): OrderSendErrorAction {
 
 export const errorUtils = { getErrorMessage, getOrderSendErrorAction }
 
-type ErrorTypes = "offline" | "serverError" | "clientCredit"
-export const ErrorAux: Record<
+type ErrorTypes = "offline" | "serverError" | "clientCredit" | "serverConfigError"
+
+const ErrorAux: Record<
 	ErrorTypes,
 	{ cause?: string; causeRegEx?: RegExp; message?: string; messageFn?: (value: string) => string }
 > = {
 	clientCredit: {
 		causeRegEx: /cliente sem limite de crédito.*?limite:\s*(R\$\s*[\d.,]+)/i,
 		messageFn(value) {
-			return `Cliente sem limite de crédito. O limite atual é de ${value}.\nTroque a forma de pagamento para dinheiro para concluir a compra.`
+			return `Cliente sem limite de crédito. O limite atual é de ${value}.\nTroque a forma de pagamento para DINHEIRO para concluir a compra.`
 		},
 	},
 	offline: {
@@ -80,5 +83,9 @@ export const ErrorAux: Record<
 	serverError: {
 		cause: "502",
 		message: "Erro no Servidor",
+	},
+	serverConfigError: {
+		cause: "Network Error",
+		message: "Erro ao estabelecer comunicação com o Servidor.",
 	},
 }

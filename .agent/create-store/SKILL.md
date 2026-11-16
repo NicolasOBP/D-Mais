@@ -24,7 +24,8 @@ src/infra/
   - initialState com o estado inicial
   - type do store com ações e dados
   - create<StoreType>() com as actions
-  - hooks separados para leitura e escrita
+  - hooks de leitura com seletores e hooks de serviço/ação separados quando isso reduzir re-renders e acoplar consumidores ao mínimo necessário
+- Use persistência apenas quando o estado precisar sobreviver ao ciclo de vida da tela/app. Para persistir, siga a integração já usada pelo store de carrinho e o adapter de storage do projeto; não adicione outro mecanismo de persistência.
 
 ## Estrutura base
 
@@ -51,7 +52,8 @@ const useExampleStore = create<ExampleStoreType>()((set, get) => ({
 ## Regras importantes
 
 - Nunca mutar diretamente o estado; sempre use set
-- Separe hooks de leitura e hooks de ação para evitar re-render desnecessário
+- Selecione apenas o estado necessário nos hooks de leitura e mantenha ações acessíveis por hooks de serviço quando esse for o padrão da feature
+- Não persista estado sem requisito explícito; quando necessário, use o adapter de storage existente
 - Use types bem explícitos para o estado e as actions
 - Exporte o módulo via src/infra/<store>/index.ts
 
@@ -61,4 +63,5 @@ const useExampleStore = create<ExampleStoreType>()((set, get) => ({
 - [ ] Usa Zustand com types explícitos
 - [ ] Tem estado inicial bem definido
 - [ ] As actions são tipadas
+- [ ] Persistência (se necessária) usa o adapter e o padrão já adotados pelo app
 - [ ] Há um index.ts exportando os hooks

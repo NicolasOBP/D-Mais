@@ -158,7 +158,7 @@ export function SellsForm({
 							variant="secundary"
 							readOnly={readOnly}
 							onChangeText={setPickupPlateSearch}
-							placeholder="Digite a placa"
+							placeholder={readOnly ? "" : "Digite a placa"}
 							arrowProps={{
 								isError: pickup.isError,
 								onErrorPress: pickup.refetch,

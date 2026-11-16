@@ -26,6 +26,12 @@ export function useOrderSaveStorage(options?: MutationOptions<void>) {
 			queryClient.invalidateQueries({
 				queryKey: [QueryKeys.Orders],
 			})
+			queryClient.invalidateQueries({
+				queryKey: [QueryKeys.OrdersListStorage],
+			})
+			queryClient.invalidateQueries({
+				queryKey: [QueryKeys.OrdersTotalStorageOrders],
+			})
 			options?.onSuccess?.()
 		},
 		onError: (error) => {

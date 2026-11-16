@@ -1,4 +1,5 @@
-import { useServerConfigService, useToast } from "@infra"
+import { useAuthCheckServer } from "@domain"
+import { useServerConfigService } from "@infra"
 
 import { type ServerConfigSchema, useServerConfigForm } from "@schemas"
 import { useFormUtils } from "@utils"
@@ -10,17 +11,16 @@ import { useModal } from "../Modal"
 
 export function ServerConfigModalBody({ serverAddress }: { serverAddress: string }) {
 	const { setServerAddress } = useServerConfigService()
-	const { showToast } = useToast()
 	const { closeModal } = useModal()
 	const { control, formState, handleSubmit } = useServerConfigForm(serverAddress)
+	const { mutate: checkServer, isPending } = useAuthCheckServer({
+		onSuccess: closeModal,
+		onError: () => setServerAddress(serverAddress),
+	})
 
 	function onSubmit({ serverAddress: address }: ServerConfigSchema) {
 		setServerAddress(address)
-		closeModal()
-		showToast({
-			type: "success",
-			message: "Configuração do servidor salva com sucesso!",
-		})
+		checkServer()
 	}
 
 	return (
@@ -42,7 +42,8 @@ export function ServerConfigModalBody({ serverAddress }: { serverAddress: string
 					lable="Salvar"
 					paddingVertical="s12"
 					paddingHorizontal="s40"
-					disabled={!formState.isValid || useFormUtils.isFormValid(formState)}
+					disabled={!formState.isValid || useFormUtils.isFormValid(formState) || isPending}
+					isLoading={isPending}
 					onPress={handleSubmit(onSubmit)}
 				/>
 			</Box>

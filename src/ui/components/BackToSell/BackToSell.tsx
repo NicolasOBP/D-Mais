@@ -8,6 +8,7 @@ import {
 	withTiming,
 } from "react-native-reanimated"
 
+import { useSellSendCart } from "@domain"
 import {
 	useBackToSellService,
 	useBackToSellState,
@@ -29,17 +30,32 @@ const ANIMATION_DURATION = 600
 
 export function BackToSell() {
 	const { spacing } = useAppTheme()
-	const { checkLeftQuota } = useAuthCheckLeftQuota({
-		onSuccess: () => {
-			router.push("/sell")
-		},
-	})
 	const { cart } = useCartService()
 	const pathname = usePathname()
 	const { hasVisitedSell, showBackToSellButton, completedSell } = useBackToSellState()
 	const { markVisitedSell, setShowBackToSell, resetBackToSell } = useBackToSellService()
 	const { disableBackgroundOrderSaving } = useBackgroundOrderService()
 	const progress = useSharedValue(showBackToSellButton ? 1 : 0)
+
+	const { checkLeftQuota } = useAuthCheckLeftQuota({
+		onSuccess: () => {
+			sendCart(
+				cart.getSelectedProducts().map((product) => ({
+					C_CDPRO: product.id,
+					C_CDEST: product.inventory.id,
+					C_QTVEN: product.volume,
+				})),
+			)
+		},
+	})
+	const { mutate: sendCart } = useSellSendCart({
+		onSuccess: () => {
+			router.push("/sell")
+		},
+		onError: () => {
+			resetBackToSell()
+		},
+	})
 
 	useEffect(() => {
 		const activeRoute = pathname?.split("/").filter(Boolean).pop() ?? ""

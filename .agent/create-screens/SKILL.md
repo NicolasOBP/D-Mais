@@ -24,6 +24,9 @@ src/ui/screens/
 - Use o container Screen de @containers para envolver o conteúdo
 - Use Box, Text, Button e outros componentes do projeto em vez de View/TouchableOpacity
 - Tente manter a tela enxuta: lógica de formulário, navegação e loading devem viver em hooks ou useCases
+- A tela implementada fica em `src/ui/screens`; os arquivos de rota e layout do Expo Router ficam em `app/`
+- Mantenha cada arquivo de rota em `app/` como wrapper fino, importando a tela pelo alias `@screens` e renderizando-a
+- Para dados remotos, conecte a tela aos hooks de use case do domínio; não faça chamadas HTTP diretamente na tela
 
 ## Importações esperadas
 
@@ -48,6 +51,7 @@ import { FormTextInput } from "@components";
 
 - O index.ts da pasta da tela deve exportar o componente principal
 - O index.ts de src/ui/screens deve exportar a tela criada
+- A rota em app/ deve importar a tela exportada de `@screens`; preserve a convenção de nomes e grupos de rota existente
 
 ## Checklist
 
@@ -55,4 +59,5 @@ import { FormTextInput } from "@components";
 - [ ] Usa Screen do container
 - [ ] Usa componentes core e componentes específicos do app
 - [ ] Não mistura lógica de negócio no componente
+- [ ] A rota Expo Router em app/ é um wrapper e aponta para a tela em src/ui/screens
 - [ ] Exporta corretamente em src/ui/screens/index.ts

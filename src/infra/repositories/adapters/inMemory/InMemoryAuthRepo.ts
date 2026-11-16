@@ -1,5 +1,7 @@
 import type { AuthUser, IAuthRepo } from "@domain"
 
+import { checkServerApi } from "../api/auth/checkServerApi"
+
 import { mockAuthUsers } from "./data/mockAuthUsers"
 import { delay } from "./delay"
 
@@ -7,6 +9,10 @@ let Users: AuthUser[] = [...mockAuthUsers]
 
 export class InMemoryAuthRepo implements IAuthRepo {
 	private authUser: AuthUser | null = null
+
+	async checkServer(): Promise<void> {
+		return checkServerApi()
+	}
 
 	async signIn(company: string, _password: string, userName: string): Promise<AuthUser> {
 		await delay()

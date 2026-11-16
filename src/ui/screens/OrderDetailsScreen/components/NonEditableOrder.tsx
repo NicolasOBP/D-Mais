@@ -7,7 +7,18 @@ import { Screen } from "@containers"
 import { Box, Button } from "@core-components"
 
 export function NonEditableOrder({ order }: { order: OrderDetails }) {
-	const title = order.status === "completed" ? "Pedido Enviado" : "Pedido Cancelado"
+	const title =
+		order.status === "completed"
+			? "Pedido Enviado"
+			: order.status === "pending"
+				? "Pedido Pendente"
+				: "Pedido Cancelado"
+	const buttonLabel =
+		order.status === "completed"
+			? "Pedido enviado"
+			: order.status === "pending"
+				? "Pedido pendente"
+				: "Pedido cancelado"
 
 	const { control } = useSellForm(order)
 
@@ -25,7 +36,7 @@ export function NonEditableOrder({ order }: { order: OrderDetails }) {
 
 			<Box flex={1} alignItems="center" paddingVertical="s20">
 				<Button
-					lable="Pedido enviado"
+					lable={buttonLabel}
 					variant="disabled"
 					disabled
 					paddingVertical="s14"

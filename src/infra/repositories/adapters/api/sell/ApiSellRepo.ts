@@ -101,19 +101,21 @@ export class ApiSellRepo implements ISellsRepo {
 		)
 	}
 
-	async paymentTermsList(): Promise<PaymentTerms[]> {
+	async paymentTermsList(valueToSearch?: string): Promise<PaymentTerms[]> {
 		return this.list<PaymentTermsAPIContent, PaymentTerms>(
 			"TMetodosGerais/F_ListarCondPagto",
 			"condições de pagamento",
 			adaptPaymentTermsResult,
+			valueToSearch !== undefined ? { filtro: valueToSearch } : undefined,
 		)
 	}
 
-	async paymentMethodsList(): Promise<PaymentMethod[]> {
+	async paymentMethodsList(valueToSearch?: string): Promise<PaymentMethod[]> {
 		return this.list<PaymentMethodAPIContent, PaymentMethod>(
 			"TMetodosGerais/F_ListarFormaPagto",
 			"formas de pagamento",
 			adaptPaymentMethodResult,
+			valueToSearch !== undefined ? { filtro: valueToSearch } : undefined,
 		)
 	}
 
