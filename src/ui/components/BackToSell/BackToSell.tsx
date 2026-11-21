@@ -1,10 +1,12 @@
 import { router, usePathname } from "expo-router"
 import { useEffect } from "react"
 
-import {
+import Animated, {
 	Easing,
+	cancelAnimation,
 	createAnimatedComponent,
 	useSharedValue,
+	withRepeat,
 	withTiming,
 } from "react-native-reanimated"
 
@@ -21,6 +23,7 @@ import { useAppTheme } from "@theme"
 import { Box, PressableBox, Text } from "@core-components"
 
 import { useAuthCheckLeftQuota } from "../../../domain/auth/useCases/useAuthCheckLeftQuota"
+import { Icon } from "../Icon"
 
 import { useBackToSellAnimation } from "./useBackToSellAnimation"
 
@@ -48,7 +51,7 @@ export function BackToSell() {
 			)
 		},
 	})
-	const { mutate: sendCart } = useSellSendCart({
+	const { mutate: sendCart, isPending } = useSellSendCart({
 		onSuccess: () => {
 			router.push("/sell")
 		},
@@ -56,6 +59,8 @@ export function BackToSell() {
 			resetBackToSell()
 		},
 	})
+
+	const loadingProgress = useSharedValue(isPending ? 1 : 0)
 
 	useEffect(() => {
 		const activeRoute = pathname?.split("/").filter(Boolean).pop() ?? ""
@@ -95,18 +100,34 @@ export function BackToSell() {
 		})
 	}, [progress, showBackToSellButton])
 
+	useEffect(() => {
+		if (isPending) {
+			loadingProgress.value = withRepeat(
+				withTiming(360, { duration: 1000, easing: Easing.linear }),
+				-1,
+				false,
+			)
+		} else {
+			cancelAnimation(loadingProgress)
+			loadingProgress.value = withTiming(0, { duration: 300 })
+		}
+	}, [loadingProgress, isPending])
+
 	function handlePress() {
 		checkLeftQuota(cart.getSelectedVolume())
 	}
 
-	const animatedStyle = useBackToSellAnimation(progress)
+	const { showBackToSellButtonAnimation, loadingAnimation } = useBackToSellAnimation({
+		progress,
+		loadingProgress,
+	})
 
 	return (
 		<AnimatedPressableBox
 			onPress={handlePress}
 			disabled={!showBackToSellButton}
 			style={[
-				animatedStyle,
+				showBackToSellButtonAnimation,
 				{
 					position: "absolute",
 					top: spacing.s96,
@@ -119,9 +140,15 @@ export function BackToSell() {
 			]}
 		>
 			<Box alignItems="center" justifyContent="center">
-				<Text variant="text12Bold" textAlign="center">
-					Voltar para{`\n`}Pedido
-				</Text>
+				{isPending ? (
+					<Animated.View style={loadingAnimation}>
+						<Icon name="loading" size={35} color="contrastPrimary" />
+					</Animated.View>
+				) : (
+					<Text variant="text12Bold" textAlign="center">
+						Voltar para{`\n`}Pedido
+					</Text>
+				)}
 			</Box>
 		</AnimatedPressableBox>
 	)

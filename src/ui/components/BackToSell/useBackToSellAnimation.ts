@@ -2,10 +2,16 @@ import { type SharedValue, interpolate, useAnimatedStyle } from "react-native-re
 
 import { useAppTheme } from "@theme"
 
-export function useBackToSellAnimation(progress: SharedValue<number>) {
+export function useBackToSellAnimation({
+	loadingProgress,
+	progress,
+}: {
+	progress: SharedValue<number>
+	loadingProgress: SharedValue<number>
+}) {
 	const { spacing, borderRadii, colors } = useAppTheme()
 
-	return useAnimatedStyle(() => ({
+	const showBackToSellButtonAnimation = useAnimatedStyle(() => ({
 		transform: [
 			{
 				translateX: interpolate(progress.value, [0, 1], [spacing.s75, -30]),
@@ -16,4 +22,10 @@ export function useBackToSellAnimation(progress: SharedValue<number>) {
 		borderTopLeftRadius: borderRadii.default,
 		borderBottomLeftRadius: borderRadii.default,
 	}))
+
+	const loadingAnimation = useAnimatedStyle(() => ({
+		transform: [{ rotate: `${loadingProgress.value}deg` }],
+	}))
+
+	return { showBackToSellButtonAnimation, loadingAnimation }
 }
