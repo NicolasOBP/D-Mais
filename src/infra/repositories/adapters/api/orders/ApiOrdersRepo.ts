@@ -23,6 +23,9 @@ import {
 	getCreateOrderApiErrorMessage,
 } from "./OrdersAdapter"
 
+// TODO: remove error testes
+let numSend = 0
+
 export class ApiOrdersRepo implements IOrdersRepo {
 	async list(authUser: AuthUser): Promise<Order[]> {
 		try {
@@ -74,6 +77,10 @@ export class ApiOrdersRepo implements IOrdersRepo {
 
 	async send(order: OrderVariables, authUser: AuthUser): Promise<CreateOrderResult> {
 		try {
+			if (numSend++ === 3) {
+				throw new Error("Erro de servidor.")
+			}
+
 			const response = await API.put<CreateOrderAPI>(
 				"TMetodosGerais/F_Cria_Pedido",
 				adaptCreateOrderRequest(order, authUser),
