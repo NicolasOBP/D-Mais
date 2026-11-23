@@ -15,6 +15,7 @@ import {
 	adaptFuelResultToProduct,
 	adaptProductPriceRequest,
 	adaptProductPriceResult,
+	isMissingProductPriceMessage,
 } from "./ProductAdapter"
 
 export class ApiProductRepo implements IProductRepo {
@@ -67,6 +68,17 @@ export class ApiProductRepo implements IProductRepo {
 			}
 
 			if (priceResult.STATUS !== "OK") {
+				if (isMissingProductPriceMessage(priceResult.MENSAGEM)) {
+					return {
+						cartTotalPrice: null,
+						productItems: products.map(({ id }) => ({
+							productCode: id,
+							price: null,
+							totalPrice: null,
+						})),
+					}
+				}
+
 				throw new Error(priceResult.MENSAGEM || "Não foi possível calcular o preço.")
 			}
 

@@ -12,8 +12,8 @@ import { TotalPriceLoadingAnimation } from "./TotalPriceLoadingAnimation"
 
 type Props = {
 	cartItems: Pick<ProductCart, "cartId" | "title" | "volume" | "price" | "totalPrice">[]
-	totalPrice: number
-	farePrice: number
+	totalPrice: number | null
+	farePrice: number | null
 	isPendingTotalPrice?: boolean
 }
 
@@ -38,7 +38,9 @@ export function SellsProductsList({
 							<TotalPriceLoadingAnimation width={55} />
 						) : (
 							<Text variant="title14" color="green">
-								{useNumberFormat.toBRLCurrency(farePrice)}
+								{farePrice == null
+									? useNumberFormat.toBRLCurrency(0)
+									: useNumberFormat.toBRLCurrency(farePrice)}
 							</Text>
 						)}
 					</Box>
@@ -49,7 +51,9 @@ export function SellsProductsList({
 							<TotalPriceLoadingAnimation />
 						) : (
 							<Text variant="title14" color="green">
-								{useNumberFormat.toBRLCurrency(totalPrice)}
+								{totalPrice == null
+									? useNumberFormat.toBRLCurrency(0)
+									: useNumberFormat.toBRLCurrency(totalPrice)}
 							</Text>
 						)}
 					</Box>

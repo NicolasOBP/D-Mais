@@ -95,8 +95,8 @@ export type PaymentMethodAPIContent = {
 }
 
 export type FinalOrderPriceResult = {
-	orderTotalPrice: number
-	farePrice: number
+	orderTotalPrice: number | null
+	farePrice: number | null
 	orderProductItems: ProductCart[]
 }
 

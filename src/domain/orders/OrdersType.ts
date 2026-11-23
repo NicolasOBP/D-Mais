@@ -6,7 +6,7 @@ export type OrdersStatus = "pending" | "completed" | "cancelled"
 export type CreateOrderResult = {
 	STATUS: "OK"
 	IDREC: string
-	VALOR_FINAL: number
+	VALOR_FINAL: number | null
 }
 
 export type CreateOrderAPIContent = {
@@ -29,7 +29,7 @@ export interface Order {
 	}[]
 	client: Pick<Client, "name">
 	status: OrdersStatus
-	totalPrice: number
+	totalPrice: number | null
 }
 
 export interface OrderDetails extends Order {
@@ -42,7 +42,7 @@ export interface OrderDetails extends Order {
 	driver: Driver
 	company: Company
 	products: ProductCart[]
-	farePrice: number
+	farePrice: number | null
 }
 
 export type OrderVariables = Omit<OrderDetails, "id" | "status">

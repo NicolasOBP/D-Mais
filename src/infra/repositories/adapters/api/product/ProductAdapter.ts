@@ -44,6 +44,10 @@ export function parseProductPrice(value: string | number): number {
 	return price
 }
 
+export function isMissingProductPriceMessage(message?: string): boolean {
+	return message?.toLocaleLowerCase().includes("não possui preço cadastrado na tabela") ?? false
+}
+
 export function adaptProductPriceResult(priceResult: ProductPriceResultAPI): ProductPriceResult {
 	return {
 		cartTotalPrice: parseProductPrice(priceResult.VALOR_TOTAL_PEDIDO),

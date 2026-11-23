@@ -22,7 +22,7 @@ const initialOrder: OrderDetails = {
 type OrderStoreType = OrderDetails & {
 	productsTotal: number
 	priceAdjustments: number
-	updateOrderProductsDetails: (totalPrice: number, products: ProductCart[]) => void
+	updateOrderProductsDetails: (totalPrice: number | null, products: ProductCart[]) => void
 	updateOrderFormDataDetails: (
 		formData: Omit<OrderDetails, "id" | "products" | "status" | "totalPrice" | "farePrice">,
 	) => void
@@ -51,7 +51,7 @@ export const orderStore = create<OrderStoreType>()((set, get) => ({
 	updateOrderTotalPrice: (priceAdjustment) =>
 		set((state) => ({
 			priceAdjustments: state.priceAdjustments + priceAdjustment,
-			totalPrice: state.totalPrice + priceAdjustment,
+			totalPrice: state.totalPrice === null ? null : state.totalPrice + priceAdjustment,
 		})),
 	updateOrderProductsDetails: (totalPrice, products) => set({ totalPrice, products }),
 	updateOrderFormDataDetails: ({

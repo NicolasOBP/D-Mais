@@ -5,7 +5,7 @@ export interface ProductCart extends Product {
 	volume: number
 	inventory: InventoryWithoutProducts
 	cartId: number
-	totalPrice: number
+	totalPrice: number | null
 }
 export interface ProductCartScreen extends ProductCart {
 	isSelected: boolean
