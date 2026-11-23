@@ -57,7 +57,9 @@ export function ProductCartDetails({ product }: Props) {
 				{product.inventory.id} - {product.inventory.description}
 			</Text>
 			<Text variant="text10" color="gray2">
-				*preço unitário pagando antecipadamente
+				{product.price == null
+					? "*preço definido após escolha de cond. pagto"
+					: "*preço unitário pagando antecipadamente"}
 			</Text>
 
 			<Box flexDirection="row" justifyContent="space-between" mt="s14">
@@ -66,10 +68,14 @@ export function ProductCartDetails({ product }: Props) {
 						Quantidade: {useNumberFormat.formatNumberWithThousands(product.volume)} L
 					</Text>
 					<Text variant="text12Bold" color="text">
-						Preço unitário padrão*: {useNumberFormat.toBRLCurrency(product.price ?? 0)}
+						Preço unitário padrão*:{" "}
+						{product.price == null ? "Indisponível" : useNumberFormat.toBRLCurrency(product.price)}
 					</Text>
 					<Text variant="text12Bold" color="text">
-						Total: {useNumberFormat.toBRLCurrency(product.totalPrice)}
+						Total:{" "}
+						{product.totalPrice == null
+							? "Indisponível"
+							: useNumberFormat.toBRLCurrency(product.totalPrice)}
 					</Text>
 				</Box>
 

@@ -9,8 +9,8 @@ export interface ICartRepo {
 		productCartId: ProductCart["cartId"],
 		newVolume: number,
 		newInventory: InventoryWithoutProducts,
-		newPrice: number,
-		newTotalPrice: number,
+		newPrice: number | null,
+		newTotalPrice: number | null,
 	) => Promise<ProductCart>
 	deleteItem: (productCartId: ProductCart["cartId"]) => Promise<void>
 	deleteItems: (productCartIds: ProductCart["cartId"][]) => Promise<void>

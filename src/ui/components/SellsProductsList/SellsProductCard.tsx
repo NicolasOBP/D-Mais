@@ -38,9 +38,7 @@ export function SellsProductCard({ item, isPendingTotalPrice }: SellsProductCard
 						<TotalPriceLoadingAnimation width={45} hight={18} bgColor="primaryLight" />
 					) : (
 						<Text variant="title12" numberOfLines={1}>
-							{item.price === undefined
-								? "Não informado"
-								: useNumberFormat.toBRLCurrency(item.price)}
+							{item.price == null ? "Não informado" : useNumberFormat.toBRLCurrency(item.price)}
 						</Text>
 					)}
 				</Box>
@@ -53,7 +51,7 @@ export function SellsProductCard({ item, isPendingTotalPrice }: SellsProductCard
 					<TotalPriceLoadingAnimation width={60} hight={18} />
 				) : (
 					<Text variant="title12" color="green" numberOfLines={1}>
-						{useNumberFormat.toBRLCurrency(finalPrice)}
+						{finalPrice == null ? "Não informado" : useNumberFormat.toBRLCurrency(finalPrice)}
 					</Text>
 				)}
 			</Box>

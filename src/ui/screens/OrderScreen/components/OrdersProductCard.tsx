@@ -47,7 +47,9 @@ export function OrdersProductCard({ order, onPress }: OrdersProductCardProps) {
 				</Box>
 
 				<Text variant="title14" textAlign="right">
-					{useNumberFormat.toBRLCurrency(order.totalPrice)}
+					{order.totalPrice == null
+						? "Indisponível"
+						: useNumberFormat.toBRLCurrency(order.totalPrice)}
 				</Text>
 			</Box>
 		</PressableBox>

@@ -42,14 +42,14 @@ export type ProductPriceResultAPI = {
 	ITENS: ProductPriceItemAPI[]
 }
 export type ProductPriceResult = {
-	cartTotalPrice: number
+	cartTotalPrice: number | null
 	productItems: ProductPriceResultItem[]
 }
 
 export type ProductPriceResultItem = {
 	productCode: string
-	price: number
-	totalPrice: number
+	price: number | null
+	totalPrice: number | null
 }
 
 export type ProductPriceAPI = {
@@ -59,5 +59,5 @@ export type ProductPriceAPI = {
 export interface Product {
 	id: string
 	title: string
-	price?: number
+	price?: number | null
 }

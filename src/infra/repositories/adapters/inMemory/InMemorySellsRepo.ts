@@ -92,7 +92,7 @@ export class InMemorySellsRepo implements ISellsRepo {
 		const orderProductItems = products.map((requestedProduct) => {
 			const product = mockProducts.find(({ id }) => id === requestedProduct.id)
 
-			if (product?.price === undefined) {
+			if (product?.price == null) {
 				throw new Error(`Preço indisponível para o produto ${requestedProduct.id}.`)
 			}
 

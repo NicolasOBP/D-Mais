@@ -26,7 +26,9 @@ export type CartStoreType = typeof initialState &
 		toggleProductSelection: (productCartId: number) => void
 		getSelectedProducts: () => ProductCartScreen[]
 		getSelectedVolume: () => number
-		updateProductPrices: (products: { cartId: number; price: number; totalPrice: number }[]) => void
+		updateProductPrices: (
+			products: { cartId: number; price: number | null; totalPrice: number | null }[],
+		) => void
 		setSelectedTotalPrice: (totalPrice: number) => void
 		clearCart: () => Promise<void>
 	}
@@ -45,14 +47,19 @@ const cartStore = create<CartStoreType>()(
 					if (existingProduct) {
 						const previousTotal = existingProduct.totalPrice
 						const nextTotal = product.totalPrice
+						const combinedTotal =
+							previousTotal === null || nextTotal === null ? null : previousTotal + nextTotal
 
 						const previousVolume = existingProduct.volume
 						const nextVolue = product.volume
 
-						state.totalSelectedPrice += existingProduct.isSelected ? nextTotal : 0
+						if (existingProduct.isSelected) {
+							state.totalSelectedPrice += (combinedTotal ?? 0) - (previousTotal ?? 0)
+						}
 
 						Object.assign(existingProduct, {
-							totalPrice: previousTotal + nextTotal,
+							price: product.price === null ? null : existingProduct.price,
+							totalPrice: combinedTotal,
 							volume: previousVolume + nextVolue,
 						})
 
@@ -68,7 +75,7 @@ const cartStore = create<CartStoreType>()(
 					}
 
 					state.selectedItems += 1
-					state.totalSelectedPrice += product.totalPrice
+					state.totalSelectedPrice += product.totalPrice ?? 0
 
 					return {
 						cartProducts: [...state.cartProducts, newProductCart],
@@ -82,7 +89,7 @@ const cartStore = create<CartStoreType>()(
 
 					if (productToRemove?.isSelected) {
 						state.selectedItems -= 1
-						state.totalSelectedPrice -= productToRemove.totalPrice
+						state.totalSelectedPrice -= productToRemove.totalPrice ?? 0
 					}
 
 					return {
@@ -100,7 +107,7 @@ const cartStore = create<CartStoreType>()(
 					productsToRemove.forEach((prod) => {
 						if (prod.isSelected) {
 							state.selectedItems -= 1
-							state.totalSelectedPrice -= prod.totalPrice
+							state.totalSelectedPrice -= prod.totalPrice ?? 0
 						}
 					})
 
@@ -126,7 +133,8 @@ const cartStore = create<CartStoreType>()(
 						const oldPrice = productToUpdate.totalPrice
 						const updatedTotalPrice = newTotalPrice
 
-						state.totalSelectedPrice = state.totalSelectedPrice - oldPrice + updatedTotalPrice
+						state.totalSelectedPrice =
+							state.totalSelectedPrice - (oldPrice ?? 0) + (updatedTotalPrice ?? 0)
 					}
 
 					updatedProduct = {
@@ -157,7 +165,9 @@ const cartStore = create<CartStoreType>()(
 						const total = productToToggleSelection.totalPrice
 
 						state.selectedItems += productToToggleSelection.isSelected ? -1 : 1
-						state.totalSelectedPrice += productToToggleSelection.isSelected ? -total : total
+						state.totalSelectedPrice += productToToggleSelection.isSelected
+							? -(total ?? 0)
+							: (total ?? 0)
 					}
 
 					return {

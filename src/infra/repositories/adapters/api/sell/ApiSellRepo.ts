@@ -22,6 +22,7 @@ import type {
 
 import { API } from "../apiConfig"
 import { handleApiError } from "../apiError"
+import { isMissingProductPriceMessage } from "../product/ProductAdapter"
 
 import {
 	adaptClientResult,
@@ -162,6 +163,18 @@ export class ApiSellRepo implements ISellsRepo {
 			}
 
 			if (priceResult.STATUS !== "OK") {
+				if (isMissingProductPriceMessage(priceResult.MENSAGEM)) {
+					return {
+						orderTotalPrice: null,
+						farePrice: null,
+						orderProductItems: products.map((product) => ({
+							...product,
+							price: null,
+							totalPrice: null,
+						})),
+					}
+				}
+
 				throw new Error(priceResult.MENSAGEM || "Não foi possível calcular o preço.")
 			}
 

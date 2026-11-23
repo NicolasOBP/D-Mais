@@ -28,7 +28,7 @@ import { Box, Text } from "@core-components"
 type Props = {
 	cartItems: OrderDetails["products"]
 	order: OrderDetails
-	defaultTotalPrice: number
+	defaultTotalPrice: number | null
 }
 
 export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props) {
