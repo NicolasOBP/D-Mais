@@ -47,7 +47,7 @@ export function ProductCartDetails({ product }: Props) {
 
 	return (
 		<Box {...containerBoxStyle}>
-			<Text variant="text16Bold" color="text" numberOfLines={1} textAlign="center">
+			<Text variant="text16Bold" color="text" textAlign="center">
 				{product.title}
 			</Text>
 			<Text textAlign="center" variant="text10" color="gray2">
@@ -56,14 +56,14 @@ export function ProductCartDetails({ product }: Props) {
 			<Text textAlign="center" variant="text10" color="gray2">
 				{product.inventory.id} - {product.inventory.description}
 			</Text>
-			<Text variant="text10" color="gray2">
+			<Text variant="text10" color="gray2" textAlign="center">
 				{product.price == null
 					? "*preço definido após escolha de cond. pagto"
 					: "*preço unitário pagando antecipadamente"}
 			</Text>
 
 			<Box flexDirection="row" justifyContent="space-between" mt="s14">
-				<Box g="s4">
+				<Box g="s4" flexGrow={1} flexShrink={1}>
 					<Text variant="text12Bold" color="text">
 						Quantidade: {useNumberFormat.formatNumberWithThousands(product.volume)} L
 					</Text>
