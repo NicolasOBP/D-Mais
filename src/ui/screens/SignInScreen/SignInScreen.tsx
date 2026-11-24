@@ -73,11 +73,27 @@ export function SignInScreen() {
 			</Box>
 
 			<Box pt="s62" pb="s80" gap="s42">
-				<FormTextInput control={control} name="company" placeholder="Empresa" />
+				<FormTextInput
+					autoCapitalize="characters"
+					control={control}
+					name="company"
+					placeholder="Empresa"
+				/>
 
-				<FormTextInput control={control} name="userName" placeholder="Usuário" />
+				<FormTextInput
+					autoCapitalize="characters"
+					control={control}
+					name="userName"
+					placeholder="Usuário"
+				/>
 
-				<FormTextInput control={control} name="password" placeholder="Senha" isPassword />
+				<FormTextInput
+					autoCapitalize="characters"
+					control={control}
+					name="password"
+					placeholder="Senha"
+					isPassword
+				/>
 			</Box>
 
 			<Button
