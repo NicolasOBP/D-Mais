@@ -7,7 +7,7 @@ import { Box, type BoxProps, PressableBox, Text } from "@core-components"
 import { TotalPriceLoadingAnimation } from "./TotalPriceLoadingAnimation"
 
 interface SellsProductCardProps {
-	item: Pick<ProductCart, "cartId" | "title" | "volume" | "price" | "totalPrice">
+	item: Omit<ProductCart, "id">
 	isPendingTotalPrice: boolean | undefined
 }
 
@@ -43,24 +43,34 @@ export function SellsProductCard({ item, isPendingTotalPrice }: SellsProductCard
 					)}
 				</Box>
 			</Box>
-			<Box>
-				<Text variant="text12" color="gray1" mb="s4">
-					Total
-				</Text>
-				{isPendingTotalPrice ? (
-					<TotalPriceLoadingAnimation width={60} hight={18} />
-				) : (
-					<Text variant="title12" color="green" numberOfLines={1}>
-						{finalPrice == null ? "Não informado" : useNumberFormat.toBRLCurrency(finalPrice)}
+			<Box flexDirection="row" justifyContent="space-between" gap="s12" flexGrow={1} flexShrink={1}>
+				<Box flexGrow={1} flexShrink={1}>
+					<Text variant="text12" color="gray1" mb="s4">
+						Estoque
 					</Text>
-				)}
+					<Text variant="title12" color="primary" numberOfLines={1}>
+						{item.inventory.baseCode} - {item.inventory.id}
+					</Text>
+				</Box>
+				<Box>
+					<Text variant="text12" color="gray1" mb="s4">
+						Total
+					</Text>
+					{isPendingTotalPrice ? (
+						<TotalPriceLoadingAnimation width={60} hight={18} />
+					) : (
+						<Text variant="title12" color="green" numberOfLines={1}>
+							{finalPrice == null ? "Não informado" : useNumberFormat.toBRLCurrency(finalPrice)}
+						</Text>
+					)}
+				</Box>
 			</Box>
 		</PressableBox>
 	)
 }
 
 const containerBoxStyle: BoxProps = {
-	padding: "s16",
+	paddingHorizontal: "s12",
 	paddingVertical: "s8",
 	borderRadius: "default",
 	backgroundColor: "gray5",

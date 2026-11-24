@@ -11,7 +11,7 @@ import { SellsProductCard } from "./SellsProductCard"
 import { TotalPriceLoadingAnimation } from "./TotalPriceLoadingAnimation"
 
 type Props = {
-	cartItems: Pick<ProductCart, "cartId" | "title" | "volume" | "price" | "totalPrice">[]
+	cartItems: Omit<ProductCart, "id">[]
 	totalPrice: number | null
 	farePrice: number | null
 	isPendingTotalPrice?: boolean
