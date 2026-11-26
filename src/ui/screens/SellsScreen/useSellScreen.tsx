@@ -30,7 +30,6 @@ import {
 
 export function useSellScreen(orderItems: ProductCartScreen[]) {
 	const { showModal, closeModal, updateModalData } = useModal()
-	// const { authUser } = useAuth()
 	const { finishSell } = useBackToSellService()
 
 	const { updateOrderFormDataDetails, clearOrder, updateProductsPrice } = useOrderService()

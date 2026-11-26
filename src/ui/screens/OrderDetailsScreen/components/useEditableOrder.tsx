@@ -46,7 +46,6 @@ export function useEditableOrder({ cartItems, order, defaultTotalPrice }: Props)
 	const [lastSuccessPaymentMethod, setLastSuccessPaymentMethod] = useState<PaymentMethod>(
 		getValues("formaPagamento"),
 	)
-	// const { authUser } = useAuth()
 	const { showModal, closeModal, updateModalData } = useModal()
 
 	const { asyncCheckLeftQuota, isPending: isPendingCheckQuota } = useAuthCheckLeftQuota()

@@ -5,19 +5,9 @@ import { handleApiError } from "../apiError"
 
 import { adaptInventoryResult, adaptListInventoriesRequest } from "./InventoryAdapter"
 
-// TODO: remove error
-let showError = false
-let passIf = true
-
 export class ApiInventoryRepo implements Pick<IInventoryRepo, "listInventories"> {
 	async listInventories(productCode: string) {
 		try {
-			if (showError && passIf) {
-				passIf = false
-				throw new Error("Erro de servidor")
-			}
-			showError = !showError
-
 			const response = await API.put<InventoryAPI>(
 				"TMetodosGerais/F_ListarEstoques",
 				adaptListInventoriesRequest(productCode),

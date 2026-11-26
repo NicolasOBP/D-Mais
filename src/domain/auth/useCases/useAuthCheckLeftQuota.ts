@@ -1,12 +1,9 @@
 import { type MutationOptions, useAppMutation, useToast } from "@infra"
 
 export function useAuthCheckLeftQuota(options?: MutationOptions<void>) {
-	// const { auth } = useRepository()
-	// const { authUser } = useAuth()
 	const { showToast } = useToast()
 
 	const { error, isPending, mutateAsync, mutate } = useAppMutation<void, { quota: number }>({
-		// mutationFn: ({ quota }) => auth.checkLeftQuota(authUser, quota),
 		mutationFn: async () => {},
 		onError: (error) => {
 			showToast({

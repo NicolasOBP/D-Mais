@@ -2,7 +2,6 @@ import { create } from "axios"
 
 import { useServerConfigStore } from "../../../serverConfigStore"
 
-// TODO: change https to http
 const DEFAULT_BASE_URL = "https://denture-caretaker-aeration.ngrok-free.dev/datasnap/rest/"
 const getBaseUrl = (serverAddress: string) =>
 	serverAddress ? `https://${serverAddress}/datasnap/rest/` : DEFAULT_BASE_URL

@@ -1,28 +1,8 @@
 import { Box, Text } from "@core-components"
 
-// type SendSellModalBodyProps = {
-// 	userLeftQuota?: number
-// 	userQuota?: number
-// }
-
 export function SendSellModalBody() {
-	// const { spacing } = useAppTheme()
-	// const quota = userQuota ?? 0
-	// const leftQuota = userLeftQuota ?? 0
-
 	return (
 		<Box gap="s12">
-			{/* <Box>
-				<ProgressBar
-					total={quota}
-					remaining={leftQuota}
-					label={`Quota restante: ${useNumberFormat.formatNumberWithThousands(leftQuota)} L`}
-					textBelowBar={`${useNumberFormat.formatNumberWithThousands(quota - leftQuota)} L usados`}
-					height={18}
-					style={{ marginTop: -spacing.s20 }}
-				/>
-			</Box> */}
-
 			<Box>
 				<Text textAlign="center" variant="title14">
 					Deseja realmente enviar o pedido?
